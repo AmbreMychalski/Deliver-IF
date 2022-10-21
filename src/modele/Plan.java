@@ -19,17 +19,17 @@ public class Plan {
 
 	private Intersection entrepot;
 	private String nom;
-	private String nomFichier;
 	private Map<Long, Intersection> intersections =  new HashMap<Long, Intersection>();
 	private List<Segment> segments =  new ArrayList<Segment>();
 	
-	public Plan(String nomFichier) {
-		String [] split_text = nomFichier.split("\\\\");
-		nom = split_text[split_text.length -1 ].split(Pattern.quote("."))[0];
-		this.nomFichier = nomFichier;
+	public Plan() {
+		
 	}
 	
-	public void parseXML() {
+	public void parseXML(String nomFichier) {
+		String [] split_text = nomFichier.split("\\\\");
+		nom = split_text[split_text.length -1 ].split(Pattern.quote("."))[0];
+		
 		Node node = null;
 		NodeList list=null;	
 		
@@ -37,7 +37,7 @@ public class Plan {
 
 			DocumentBuilderFactory fact = DocumentBuilderFactory.newInstance();
 			DocumentBuilder builder = fact.newDocumentBuilder();
-			Document doc = builder.parse(this.nomFichier);
+			Document doc = builder.parse(nomFichier);
 			Element el = doc.getDocumentElement();
 			list = el.getChildNodes();
 			NamedNodeMap attributs;
@@ -77,8 +77,12 @@ public class Plan {
 			}
 			this.entrepot = this.intersections.get(entrepotId);
 		}
+		
 		catch(Exception e) {
 			System.err.println("Erreur lors du parsing du fichier");
+			this.intersections =  new HashMap<Long, Intersection>();
+			this.segments =  new ArrayList<Segment>();
+			this.entrepot = null;
 		}
 	}
 
@@ -96,14 +100,6 @@ public class Plan {
 
 	public void setNom(String nom) {
 		this.nom = nom;
-	}
-
-	public String getNomFichier() {
-		return nomFichier;
-	}
-
-	public void setNomFichier(String nomFichier) {
-		this.nomFichier = nomFichier;
 	}
 
 	public Map<Long, Intersection> getIntersections() {
