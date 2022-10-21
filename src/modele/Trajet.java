@@ -2,21 +2,13 @@ package modele;
 
 import java.util.List;
 
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.Setter;
+
+@Getter
+@Setter
+@AllArgsConstructor
 public class Trajet {
-	List<Segment> segments;
-
-	public Trajet(List<Segment> segments) {
-		super();
-		this.segments = segments;
-	}
-
-	public List<Segment> getSegments() {
-		return segments;
-	}
-
-	public void setSegments(List<Segment> segments) {
-		this.segments = segments;
-	}
-	
-	
+	List<Segment> segments;	
 }

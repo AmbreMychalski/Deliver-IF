@@ -15,16 +15,19 @@ import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
+@Getter
+@Setter
+@NoArgsConstructor
 public class Plan {
 
 	private Intersection entrepot;
 	private String nom;
 	private Map<Long, Intersection> intersections =  new HashMap<Long, Intersection>();
 	private List<Segment> segments =  new ArrayList<Segment>();
-	
-	public Plan() {
-		
-	}
 	
 	public void parseXML(String nomFichier) {
 		String [] split_text = nomFichier.split("\\\\");
@@ -86,37 +89,7 @@ public class Plan {
 		}
 	}
 
-	public Intersection getEntrepot() {
-		return entrepot;
-	}
 
-	public void setEntrepot(Intersection entrepot) {
-		this.entrepot = entrepot;
-	}
-
-	public String getNom() {
-		return nom;
-	}
-
-	public void setNom(String nom) {
-		this.nom = nom;
-	}
-
-	public Map<Long, Intersection> getIntersections() {
-		return intersections;
-	}
-
-	public void setIntersections(Map<Long, Intersection> intersections) {
-		this.intersections = intersections;
-	}
-
-	public List<Segment> getSegments() {
-		return segments;
-	}
-
-	public void setSegments(List<Segment> segments) {
-		this.segments = segments;
-	}
 	
 	
 }
