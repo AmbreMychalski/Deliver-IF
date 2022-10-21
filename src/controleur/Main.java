@@ -1,4 +1,6 @@
-package modele;
+package controleur;
+
+import modele.Plan;
 
 public class Main {
 

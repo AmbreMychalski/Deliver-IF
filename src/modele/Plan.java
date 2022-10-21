@@ -24,7 +24,6 @@ public class Plan {
 	List<Segment> segments =  new ArrayList<Segment>();
 	
 	public Plan(String nomFichier) {
-		System.out.println(nomFichier);
 		String [] split_text = nomFichier.split("\\\\");
 		nom = split_text[split_text.length -1 ].split(Pattern.quote("."))[0];
 	
@@ -80,7 +79,7 @@ public class Plan {
 			this.entrepot = this.intersections.get(entrepotId);
 		}
 		catch(Exception e) {
-			e.printStackTrace();
+			System.err.println("Erreur lors du parsing du fichier");
 		}
 	}	
 }
