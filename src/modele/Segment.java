@@ -1,28 +1,54 @@
 package modele;
 
 public class Segment {
-	static Long idCommun=0l;
-	Long id;
-	Intersection origine;
-	Intersection destination;
-	float longueur;
-	String nom;
 	
-	public Segment( Intersection origine, Intersection destination, float longueur, String nom) {
-		this.id= Segment.idCommun;
-		Segment.idCommun ++;
-		
+	private Intersection origine;
+	private Intersection destination;
+	private float longueur;
+	private String nom;
+	
+	public Segment( Intersection origine, Intersection destination, float longueur, String nom) {		
 		this.origine = origine;
 		this.destination = destination;
 		this.longueur= longueur;
 		this.nom = nom;
 				
-		
-				
+	}
+	
+	public Intersection getOrigine() {
+		return origine;
+	}
+
+	public void setOrigine(Intersection origine) {
+		this.origine = origine;
+	}
+
+	public Intersection getDestination() {
+		return destination;
+	}
+
+	public void setDestination(Intersection destination) {
+		this.destination = destination;
+	}
+
+	public float getLongueur() {
+		return longueur;
+	}
+
+	public void setLongueur(float longueur) {
+		this.longueur = longueur;
+	}
+
+	public String getNom() {
+		return nom;
+	}
+
+	public void setNom(String nom) {
+		this.nom = nom;
 	}
 	
 	public String toString() {
-		return("Segment n°"+this.id+" : Orgine "+this.origine.idIntersection +" | Destination :"+this.destination.idIntersection+" | Longueur = "+this.longueur+" Nom : "+this.nom);
+		return("Segment : Orgine "+this.origine.getIdIntersection() +" | Destination :"+this.destination.getIdIntersection()+" | Longueur = "+this.longueur+" Nom : "+this.nom);
 	}
 }
 

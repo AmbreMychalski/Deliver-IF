@@ -17,11 +17,11 @@ import org.w3c.dom.NodeList;
 
 public class Plan {
 
-	Intersection entrepot;
-	String nom;
-	String nomFichier;
-	Map<Long, Intersection> intersections =  new HashMap<Long, Intersection>();
-	List<Segment> segments =  new ArrayList<Segment>();
+	private Intersection entrepot;
+	private String nom;
+	private String nomFichier;
+	private Map<Long, Intersection> intersections =  new HashMap<Long, Intersection>();
+	private List<Segment> segments =  new ArrayList<Segment>();
 	
 	public Plan(String nomFichier) {
 		String [] split_text = nomFichier.split("\\\\");
@@ -80,6 +80,48 @@ public class Plan {
 		catch(Exception e) {
 			System.err.println("Erreur lors du parsing du fichier");
 		}
-	}	
+	}
+
+	public Intersection getEntrepot() {
+		return entrepot;
+	}
+
+	public void setEntrepot(Intersection entrepot) {
+		this.entrepot = entrepot;
+	}
+
+	public String getNom() {
+		return nom;
+	}
+
+	public void setNom(String nom) {
+		this.nom = nom;
+	}
+
+	public String getNomFichier() {
+		return nomFichier;
+	}
+
+	public void setNomFichier(String nomFichier) {
+		this.nomFichier = nomFichier;
+	}
+
+	public Map<Long, Intersection> getIntersections() {
+		return intersections;
+	}
+
+	public void setIntersections(Map<Long, Intersection> intersections) {
+		this.intersections = intersections;
+	}
+
+	public List<Segment> getSegments() {
+		return segments;
+	}
+
+	public void setSegments(List<Segment> segments) {
+		this.segments = segments;
+	}
+	
+	
 }
 
