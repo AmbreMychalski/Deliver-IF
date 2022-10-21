@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<map>
+<warehouse address="0"/>
+<intersection id="1" latitude="3" longitude="8"/>
+<intersection id="2" latitude="5" longitude="10"/>
+<intersection id="3" latitude="10" longitude="5"/>
+<intersection id="4" latitude="5" longitude="15"/>
+<intersection id="5" latitude="2" longitude="21"/>
+<intersection id="6" latitude="13" longitude="21"/>
+<segment destination="0" length="4" name="Rue Danton" origin="1"/>
+<segment destination="1" length="4" name="Rue Danton" origin="0"/>
+
+<segment destination="1" length="2" name="Rue Danton" origin="3"/>
+<segment destination="3" length="2" name="Rue Danton" origin="1"/>
+
+<segment destination="3" length="2" name="Rue Danton" origin="1"/>
+
+</map>
