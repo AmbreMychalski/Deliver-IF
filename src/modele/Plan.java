@@ -26,7 +26,6 @@ public class Plan {
 	public Plan(String nomFichier) {
 		String [] split_text = nomFichier.split("\\\\");
 		nom = split_text[split_text.length -1 ].split(Pattern.quote("."))[0];
-	
 		this.nomFichier = nomFichier;
 	}
 	
