@@ -37,7 +37,6 @@ public class Plan {
 		NodeList list=null;	
 		
 		try {
-
 			DocumentBuilderFactory fact = DocumentBuilderFactory.newInstance();
 			DocumentBuilder builder = fact.newDocumentBuilder();
 			Document doc = builder.parse(nomFichier);
@@ -46,28 +45,29 @@ public class Plan {
 			NamedNodeMap attributs;
 			Long entrepotId = null;
 			
-			for (int i=0; i<list.getLength(); i++) {
+			for (int i = 0; i < list.getLength(); i++) {
 				node = list.item(i);
+				
 				if(node.getNodeType() == Node.ELEMENT_NODE) {
-					
 					if(node.getNodeName() == "warehouse") {
-						
 						entrepotId = Long.parseLong(node.getAttributes().getNamedItem("address").getNodeValue());
-
-					}
-					else if(node.getNodeName() == "intersection") {
+					} else if(node.getNodeName() == "intersection") {
+						Long intersectionId; 
+						float latitude; 
+						float longitude;
 						
-						Long intersectionId; float latitude; float longitude;
 						attributs = node.getAttributes();
 						intersectionId = Long.parseLong(attributs.getNamedItem("id").getNodeValue());
 						latitude = Float.parseFloat(attributs.getNamedItem("latitude").getNodeValue());
 						longitude = Float.parseFloat(attributs.getNamedItem("longitude").getNodeValue());
 						
 						this.intersections.put(intersectionId, new Intersection(intersectionId, latitude, longitude));
-					}
-					else if(node.getNodeName()== "segment") {
+					} else if(node.getNodeName()== "segment") {
+						Long destinationId; 
+						float longueur; 
+						String nom; 
+						Long origineId;
 						
-						Long destinationId; float longueur; String nom; Long origineId;
 						attributs = node.getAttributes();
 						destinationId = Long.parseLong(attributs.getNamedItem("destination").getNodeValue());
 						origineId = Long.parseLong(attributs.getNamedItem("origin").getNodeValue());
@@ -78,19 +78,14 @@ public class Plan {
 					}
 				}
 			}
+			
 			this.entrepot = this.intersections.get(entrepotId);
-		}
-		
-		catch(Exception e) {
+		} catch (Exception e) {
 			System.err.println("Erreur lors du parsing du fichier");
 			this.intersections =  new HashMap<Long, Intersection>();
 			this.segments =  new ArrayList<Segment>();
 			this.entrepot = null;
 		}
 	}
-
-
-	
-	
 }
 
