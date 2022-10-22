@@ -18,16 +18,22 @@ import org.w3c.dom.NodeList;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.ToString;
 
 @Getter
 @Setter
 @NoArgsConstructor
+@ToString
 public class Plan {
 
 	private Intersection entrepot;
 	private String nom;
 	private Map<Long, Intersection> intersections =  new HashMap<Long, Intersection>();
 	private List<Segment> segments =  new ArrayList<Segment>();
+	
+	public Plan(String fichier) {
+		this.parseXML(fichier);
+	}
 	
 	public void parseXML(String nomFichier) {
 		String [] split_text = nomFichier.split("\\\\");
@@ -81,7 +87,7 @@ public class Plan {
 			
 			this.entrepot = this.intersections.get(entrepotId);
 		} catch (Exception e) {
-			System.err.println("Erreur lors du parsing du fichier");
+			System.err.println("Erreur lors du parsing du fichier \n"+e);
 			this.intersections =  new HashMap<Long, Intersection>();
 			this.segments =  new ArrayList<Segment>();
 			this.entrepot = null;

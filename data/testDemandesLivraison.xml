@@ -1,0 +1,9 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no' ?>
+<listeDemandes>
+	<demandeLivraison intersectionId="479185301" heureDebut="11" heureFin="12"/>
+	<demandeLivraison intersectionId="26086126" heureDebut="10" heureFin="11"/>
+	<demandeLivraison intersectionId="26086129" heureDebut="8" heureFin="9"/>
+	<demandeLivraison intersectionId="2069548756" heureDebut="14" heureFin="15"/>
+	<demandeLivraison intersectionId="55475004" heureDebut="7" heureFin="8"/>
+	<demandeLivraison intersectionId="459797860" heureDebut="11" heureFin="12"/>
+</listeDemandes>
