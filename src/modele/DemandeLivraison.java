@@ -11,5 +11,6 @@ import lombok.ToString;
 @ToString
 public class DemandeLivraison {
 	private Intersection intersection;
-	private int [] plageHoraire;
+	private int debutPlageHoraire;
+	private int finPlageHoraire;
 }

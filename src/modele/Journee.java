@@ -63,8 +63,7 @@ public class Journee {
 						heureDebut = Integer.parseInt(attributs.getNamedItem("heureDebut").getNodeValue());
 						heureFin = Integer.parseInt(attributs.getNamedItem("heureFin").getNodeValue());
 						if(heureFin-heureDebut != 1) throw new Exception("Plage horaire incompatible");
-						int[] plageHoraire = {heureDebut, heureFin};
-						this.demandesLivraison.add(new DemandeLivraison(this.plan.getIntersections().get(intersectionId), plageHoraire));
+						this.demandesLivraison.add(new DemandeLivraison(this.plan.getIntersections().get(intersectionId), heureDebut, heureFin));
 						
 					}
 				}
@@ -88,8 +87,8 @@ public class Journee {
 	            	Element demandeLivraison = document.createElement("demandeLivraison");
 	            	root.appendChild(demandeLivraison);
 	            	demandeLivraison.setAttribute("intersectionId", demande.getIntersection().getIdIntersection().toString());
-	            	demandeLivraison.setAttribute("heureDebut", Integer.toString(demande.getPlageHoraire()[0]));
-	            	demandeLivraison.setAttribute("heureFin", Integer.toString(demande.getPlageHoraire()[1]));
+	            	demandeLivraison.setAttribute("heureDebut", Integer.toString(demande.getDebutPlageHoraire()));
+	            	demandeLivraison.setAttribute("heureFin", Integer.toString(demande.getFinPlageHoraire()));
 	            }
 	            
 
