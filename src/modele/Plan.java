@@ -1,5 +1,6 @@
 package modele;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -31,13 +32,13 @@ public class Plan {
 	private Map<Long, Intersection> intersections =  new HashMap<Long, Intersection>();
 	private List<Segment> segments =  new ArrayList<Segment>();
 	
-	public Plan(String fichier) {
+	
+	public Plan(File fichier) {
 		this.parseXML(fichier);
 	}
-	
-	public void parseXML(String nomFichier) {
-		String [] split_text = nomFichier.split("\\\\");
-		nom = split_text[split_text.length -1 ].split(Pattern.quote("."))[0];
+
+	public void parseXML(File fichier) {
+		nom = fichier.getName().split(Pattern.quote("."))[0];
 		
 		Node node = null;
 		NodeList list=null;	
@@ -45,7 +46,7 @@ public class Plan {
 		try {
 			DocumentBuilderFactory fact = DocumentBuilderFactory.newInstance();
 			DocumentBuilder builder = fact.newDocumentBuilder();
-			Document doc = builder.parse(nomFichier);
+			Document doc = builder.parse(fichier);
 			Element el = doc.getDocumentElement();
 			list = el.getChildNodes();
 			NamedNodeMap attributs;

@@ -6,6 +6,4 @@
 	<demandeLivraison heureDebut="14" heureFin="15" intersectionId="2069548756" />
 	<demandeLivraison heureDebut="7" heureFin="8" intersectionId="55475004" />
 	<demandeLivraison heureDebut="11" heureFin="12" intersectionId="459797860" />
-	<demandeLivraison heureDebut="1" heureFin="2" intersectionId="25175778" />
-	<demandeLivraison heureDebut="5" heureFin="6" intersectionId="25175778" />
 </listeDemandes>

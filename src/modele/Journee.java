@@ -22,12 +22,14 @@ import org.w3c.dom.NodeList;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 
 @Getter
 @Setter
 @AllArgsConstructor
+@NoArgsConstructor
 @ToString
 public class Journee {
 	private int nbMaxLivreur;
@@ -37,7 +39,8 @@ public class Journee {
 	private List<Tournee> tournees;
 	//private TemplateTSP template;
 	
-	public void chargerDemandesLivraison(String nomFichier) {
+	
+	public void chargerDemandesLivraison(File fichier) {
 		if(this.demandesLivraison == null) {
 			this.demandesLivraison = new ArrayList<>();
 		}
@@ -47,7 +50,7 @@ public class Journee {
 		try {
 			DocumentBuilderFactory fact = DocumentBuilderFactory.newInstance();
 			DocumentBuilder builder = fact.newDocumentBuilder();
-			Document doc = builder.parse(nomFichier);
+			Document doc = builder.parse(fichier);
 			Element el = doc.getDocumentElement();
 			list = el.getChildNodes();
 			NamedNodeMap attributs;
@@ -73,7 +76,7 @@ public class Journee {
 		}
 	}
 	
-	public void sauvegarderDemandesLivraison(String nomFichier) {
+	public void sauvegarderDemandesLivraison(File fichier) {
 		
 		 try {
 			 
@@ -95,7 +98,7 @@ public class Journee {
 	            TransformerFactory transformerFactory = TransformerFactory.newInstance();
 	            Transformer transformer = transformerFactory.newTransformer();
 	            DOMSource domSource = new DOMSource(document);
-	            StreamResult streamResult = new StreamResult(new File(nomFichier));
+	            StreamResult streamResult = new StreamResult(fichier);
 
 	            transformer.transform(domSource, streamResult);
 	 

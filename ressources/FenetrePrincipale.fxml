@@ -64,8 +64,8 @@
                      <children>
                         <TableView fx:id="tableViewDemandesLivraison" prefHeight="573.0" prefWidth="255.0">
                           <columns>
-                            <TableColumn prefWidth="111.0" text="Identifiant" />
-                            <TableColumn prefWidth="138.0" text="Plage horaire" />
+                            <TableColumn  prefWidth="111.0" text="Identifiant" />
+                            <TableColumn  prefWidth="138.0" text="Plage horaire" />
                           </columns>
                         </TableView>
                      </children>
