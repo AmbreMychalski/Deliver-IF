@@ -62,7 +62,7 @@
               <content>
                 <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="646.0" prefWidth="249.0">
                      <children>
-                        <TableView fx:id="tableViewDemandesLivraison" prefHeight="609.0" prefWidth="255.0">
+                        <TableView fx:id="tableViewDemandesLivraison" prefHeight="573.0" prefWidth="255.0">
                           <columns>
                             <TableColumn prefWidth="111.0" text="Identifiant" />
                             <TableColumn prefWidth="138.0" text="Plage horaire" />

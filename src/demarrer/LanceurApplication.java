@@ -12,8 +12,11 @@ public class LanceurApplication extends Application {
 	@Override
 	public void start(Stage primaryStage) throws Exception {
 		try {
-
-	        Parent root = FXMLLoader.load(getClass().getResource("/FenetrePrincipale.fxml"));
+			
+			FXMLLoader loader = new FXMLLoader(getClass().getResource("/FenetrePrincipale.fxml"));
+	        Parent root = (Parent)loader.load();
+			ControleurFenetrePrincipale controleur = loader.getController();
+			controleur.setStage(primaryStage);
 	        primaryStage.setTitle("Calcul de tournées");
 	        primaryStage.setScene(new Scene(root));
 	        primaryStage.show();
