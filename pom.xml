@@ -58,7 +58,7 @@
 		
 		<resources>
             <resource>
-                <directory>resources</directory>
+                <directory>ressources</directory>
                 <includes>
                     <include>**/*.fxml</include>
                 </includes>
