@@ -1,7 +1,7 @@
-package vue;
+package demarrer;
+
 
 import controleur.ControleurFenetrePrincipale;
-import vue.VueFenetrePrincipale;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -13,17 +13,11 @@ public class LanceurApplication extends Application {
 	public void start(Stage primaryStage) throws Exception {
 		try {
 
-	        FXMLLoader loader = new FXMLLoader(getClass().getResource("../FenetrePrincipale.fxml"));
-	
-	        Scene scene = new Scene(loader.load());
+	        Parent root = FXMLLoader.load(getClass().getResource("/FenetrePrincipale.fxml"));
 	        primaryStage.setTitle("Calcul de tournées");
-	
-	        VueFenetrePrincipale controller = loader.getController();
-	
-	        controller.setStage(primaryStage);
-	
-	        primaryStage.setScene(scene);
+	        primaryStage.setScene(new Scene(root));
 	        primaryStage.show();
+			
 	    } catch(Exception e) {
 	        e.printStackTrace();
 	    }

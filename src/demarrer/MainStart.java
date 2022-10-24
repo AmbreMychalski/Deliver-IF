@@ -1,6 +1,6 @@
-package controleur;
+package demarrer;
 
-import demarrer.LanceurApplication;
+
 import javafx.application.Application;
 
 public class MainStart {

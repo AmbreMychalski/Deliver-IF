@@ -58,7 +58,7 @@
 		
 		<resources>
             <resource>
-                <directory>src/vue/fxml</directory>
+                <directory>resources</directory>
                 <includes>
                     <include>**/*.fxml</include>
                 </includes>
