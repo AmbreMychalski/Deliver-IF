@@ -9,8 +9,7 @@ import java.util.Map;
 import lombok.Getter;
 import lombok.Setter;
 
-@Getter
-@Setter
+
 public class CompleteGraph implements Graph {
     private static final int MAX_COST = 40;
     private static final int MIN_COST = 10;
