@@ -1,3 +1,9 @@
+/*
+ * ControleurFenetrePrincipale
+ * 
+ * Version 1.0
+ */
+
 package controleur;
 
 import java.io.File;
@@ -35,6 +41,11 @@ import modele.Journee;
 import modele.Plan;
 import modele.Segment;
 
+/**
+ * Contrôleur de la vue principale de l'application.
+ * @author H4113
+ *
+ */
 public class ControleurFenetrePrincipale {
 
 	final double TAILLE_CERCLE_INTERSECTION = 5;
@@ -91,11 +102,16 @@ public class ControleurFenetrePrincipale {
 
 	@FXML
 	private void initialize() {
-		buttonAjouterLivraison.setOnAction(event -> actionBoutonAjouterLivraison(event));
-		buttonChargerDemandes.setOnAction(event -> actionBoutonChargerDemande(event));
-		buttonSauvegarderDemandes.setOnAction(event -> actionBoutonSauvegarderDemandes(event));
-		canvasPlan.setOnMouseClicked(event -> actionClicSurCanvas(event));
-		buttonChargerPlan.setOnAction(event -> actionBoutonChargerPlan(event));
+		buttonAjouterLivraison.setOnAction(
+		        event -> actionBoutonAjouterLivraison(event));
+		buttonChargerDemandes.setOnAction(
+		        event -> actionBoutonChargerDemande(event));
+		buttonSauvegarderDemandes.setOnAction(
+		        event -> actionBoutonSauvegarderDemandes(event));
+		canvasPlan.setOnMouseClicked(
+		        event -> actionClicSurCanvas(event));
+		buttonChargerPlan.setOnAction(
+		        event -> actionBoutonChargerPlan(event));
 	}
 
 
@@ -103,7 +119,8 @@ public class ControleurFenetrePrincipale {
     private void actionBoutonChargerPlan(ActionEvent event) {
 		FileChooser fileChooser = new FileChooser();
 		fileChooser.setInitialDirectory(new File(".\\data"));
-		fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("Fichier XML", "*.xml", "*.XML"));
+		fileChooser.getExtensionFilters().add(
+		        new FileChooser.ExtensionFilter("Fichier XML", "*.xml", "*.XML"));
 		fileChooser.setTitle("Charger un plan");
 		File fichier = fileChooser.showOpenDialog(this.thisStage);
 		System.out.println("Fichier choisi = " + fichier.getAbsolutePath());
@@ -111,13 +128,17 @@ public class ControleurFenetrePrincipale {
 		planCharge = new Plan(fichier);
 		System.out.println("Plan chargé : " + planCharge);
 
-		this.latMax = planCharge.getIntersections().values().stream().map(intersection -> intersection.getLatitude())
+		this.latMax = planCharge.getIntersections().values().stream()
+		        .map(intersection -> intersection.getLatitude())
 				.max((a, b) -> Float.compare(a, b)).orElse(0f);
-		this.latMin = planCharge.getIntersections().values().stream().map(intersection -> intersection.getLatitude())
+		this.latMin = planCharge.getIntersections().values().stream()
+		        .map(intersection -> intersection.getLatitude())
 				.min((a, b) -> Float.compare(a, b)).orElse(0f);
-		this.longMax = planCharge.getIntersections().values().stream().map(intersection -> intersection.getLongitude())
+		this.longMax = planCharge.getIntersections().values().stream()
+		        .map(intersection -> intersection.getLongitude())
 				.max((a, b) -> Float.compare(a, b)).orElse(0f);
-		this.longMin = planCharge.getIntersections().values().stream().map(intersection -> intersection.getLongitude())
+		this.longMin = planCharge.getIntersections().values().stream()
+		        .map(intersection -> intersection.getLongitude())
 				.min((a, b) -> Float.compare(a, b)).orElse(0f);
 
 		this.largeurPlan = this.latMax - this.latMin;
@@ -132,9 +153,13 @@ public class ControleurFenetrePrincipale {
 		GraphicsContext gc = canvasPlan.getGraphicsContext2D();
 
 		for (Intersection intersection : planCharge.getIntersections().values()) {
-			gc.strokeOval(convertirLatitudeEnX(intersection.getLatitude()) - (this.TAILLE_CERCLE_INTERSECTION / 2),
-					convertirLongitudeEnY(intersection.getLongitude()) - (this.TAILLE_CERCLE_INTERSECTION / 2),
-					this.TAILLE_CERCLE_INTERSECTION, this.TAILLE_CERCLE_INTERSECTION);
+			gc.strokeOval(
+			        convertirLatitudeEnX(intersection.getLatitude()) 
+			         - (this.TAILLE_CERCLE_INTERSECTION / 2),
+					convertirLongitudeEnY(intersection.getLongitude()) 
+					 - (this.TAILLE_CERCLE_INTERSECTION / 2),
+					this.TAILLE_CERCLE_INTERSECTION, 
+					this.TAILLE_CERCLE_INTERSECTION);
 		}
 		for (Segment segment : planCharge.getSegments()) {
 			gc.strokeLine(convertirLatitudeEnX(segment.getOrigine().getLatitude()),
@@ -146,33 +171,51 @@ public class ControleurFenetrePrincipale {
 		gc.setStroke(this.COULEUR_DEPOT);
 		gc.setFill(this.COULEUR_DEPOT);
 		gc.strokeOval(
-				convertirLatitudeEnX(planCharge.getEntrepot().getLatitude()) - (this.TAILLE_CERCLE_INTERSECTION / 2),
-				convertirLongitudeEnY(planCharge.getEntrepot().getLongitude()) - (this.TAILLE_CERCLE_INTERSECTION / 2),
-				this.TAILLE_CERCLE_INTERSECTION, this.TAILLE_CERCLE_INTERSECTION);
+				convertirLatitudeEnX(planCharge.getEntrepot().getLatitude()) 
+				 - (this.TAILLE_CERCLE_INTERSECTION / 2),
+				convertirLongitudeEnY(planCharge.getEntrepot().getLongitude()) 
+				 - (this.TAILLE_CERCLE_INTERSECTION / 2),
+				this.TAILLE_CERCLE_INTERSECTION, 
+				this.TAILLE_CERCLE_INTERSECTION);
 	}
 
+    /**
+     * Action à effectuer lors du clic sur le Canvas.
+     * @param event MouseEvent associé
+     */
 	private void actionClicSurCanvas(MouseEvent event) {
 		if (this.planCharge != null) {
-			System.out.println("Clic sur le canvas, (x,y)=(" + event.getX() + "," + event.getY() + ") (lat,long)="
-					+ convertirXEnLatitude(event.getX()) + "," + convertirYEnLongitude(event.getY()));
-			Intersection intersectionTrouvee = this.trouverIntersectionCoordoneesPixels(event.getX(), event.getY());
+			System.out.println("Clic sur le canvas, (x,y)=(" 
+			        + event.getX() + "," + event.getY() + ") (lat,long)="
+					+ convertirXEnLatitude(event.getX()) + "," 
+			        + convertirYEnLongitude(event.getY()));
+			Intersection intersectionTrouvee = 
+			        this.trouverIntersectionCoordoneesPixels(event.getX(), 
+			                                                 event.getY());
 			if (intersectionTrouvee != null) {
-				textfieldIdentifiantIntersection.setText(intersectionTrouvee.getIdIntersection().toString());
+				textfieldIdentifiantIntersection.setText(
+				        intersectionTrouvee.getIdIntersection().toString());
 			} else {
 				textfieldIdentifiantIntersection.setText("");
 			}
 		} else {
-			System.out.println("Clic sur le canvas, (x,y)=(" + event.getX() + "," + event.getY() + ")");
+			System.out.println("Clic sur le canvas, (x,y)=(" 
+			                    + event.getX() + "," + event.getY() + ")");
 		}
 
 	}
 
-	 
+	/**
+	 * Action à effectuer lors du clic sur le bouton Charger demandes.
+	 * Ouvre un explorateur de fichier pour choisir le fichier à charger.
+	 * @param event ActionEvent associé
+	 */
 	private void actionBoutonChargerDemande(ActionEvent event) {
 	    
 	    FileChooser fileChooser = new FileChooser();
         fileChooser.setInitialDirectory(new File(".\\data"));
-        fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("Fichier XML", "*.xml", "*.XML"));
+        fileChooser.getExtensionFilters().add(
+                new FileChooser.ExtensionFilter("Fichier XML", "*.xml", "*.XML"));
         fileChooser.setTitle("Charger des demandes de livraison");
         File fichier = fileChooser.showOpenDialog(this.thisStage);
         System.out.println("Fichier choisi = " + fichier.getAbsolutePath());
@@ -216,15 +259,22 @@ public class ControleurFenetrePrincipale {
 		}
 	}
 	*/
-	   public void actionBoutonSauvegarderDemandes(ActionEvent event) {
-	       FileChooser fileChooser = new FileChooser();
-	        fileChooser.setInitialDirectory(new File(".\\data"));
-	        fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("Fichier XML", "*.xml", "*.XML"));
-	        fileChooser.setTitle("Sauvegarder des demandes de livraison");
-	        File fichier = fileChooser.showOpenDialog(this.thisStage);
-	        System.out.println("Fichier choisi = " + fichier.getAbsolutePath());
-	        journee.sauvegarderDemandesLivraison(fichier);
-	    }
+	
+	/**
+	 * Action à effectuer lors du clic sur le bouton Sauvegarder demandes.
+	 * Ouvre un explorateur de fichier pour choisir l'emplacement du fichier.
+	 * @param event ActionEvent associé
+	 */
+	public void actionBoutonSauvegarderDemandes(ActionEvent event) {
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.setInitialDirectory(new File(".\\data"));
+        fileChooser.getExtensionFilters().add(
+                new FileChooser.ExtensionFilter("Fichier XML", "*.xml", "*.XML"));
+        fileChooser.setTitle("Sauvegarder des demandes de livraison");
+        File fichier = fileChooser.showOpenDialog(this.thisStage);
+        System.out.println("Fichier choisi = " + fichier.getAbsolutePath());
+        journee.sauvegarderDemandesLivraison(fichier);
+    }
 
 	/**
 	 * Trouve l'intersection du plan qui se trouve aux coordonnées x,y (en pixels)
@@ -243,11 +293,14 @@ public class ControleurFenetrePrincipale {
 			List<Intersection> candidats = new ArrayList<>();
 			for (Intersection intersection : planCharge.getIntersections().values()) {
 				if (distance(convertirLatitudeEnX(intersection.getLatitude()),
-						convertirLongitudeEnY(intersection.getLongitude()), x, y) <= this.TAILLE_CERCLE_INTERSECTION) {
+						     convertirLongitudeEnY(intersection.getLongitude()), 
+						     x, y) 
+				        <= this.TAILLE_CERCLE_INTERSECTION) {
 					candidats.add(intersection);
 				}
 			}
 
+			// sélectionner l'intersection à retourner
 			if (candidats.isEmpty()) {
 				return null;
 			} else if (candidats.size() == 1) {
@@ -256,9 +309,11 @@ public class ControleurFenetrePrincipale {
 				return candidats.stream()
 						.min((i1, i2) -> Double.compare(
 								distance(convertirLatitudeEnX(i1.getLatitude()),
-										convertirLongitudeEnY(i1.getLongitude()), x, y),
+										convertirLongitudeEnY(i1.getLongitude()), 
+										x, y),
 								distance(convertirLatitudeEnX(i2.getLatitude()),
-										convertirLongitudeEnY(i2.getLongitude()), x, y)))
+										convertirLongitudeEnY(i2.getLongitude()), 
+										x, y)))
 						.orElse(null);
 			}
 		} else {
@@ -269,34 +324,58 @@ public class ControleurFenetrePrincipale {
 	/**
 	 * Donne la distance qui sépare deux points.
 	 * 
-	 * @param x1
-	 * @param y1
-	 * @param x2
-	 * @param y2
-	 * @return
+	 * @param x1 coordonnées en x du premier point
+	 * @param y1 coordonnées en y du premier point
+	 * @param x2 coordonnées en x du second point
+	 * @param y2 coordonnées en y du second point
+	 * @return distance entre les deux points (dans l'unité donnée en entrée)
 	 */
 	private double distance(double x1, double y1, double x2, double y2) {
 		return Math.sqrt(Math.pow(x1 - x2, 2) - Math.pow(y1 - y2, 2));
 	}
 
+	/**
+	 * Action à effectuer lors du clic sur le bouton Ajouter livraison.
+	 * @param event ActioEvent associé
+	 */
 	private void actionBoutonAjouterLivraison(ActionEvent event) {
 		System.out.println("Clic sur le bouton Ajouter Livraison, event = " + event);
 	}
 
+	/**
+	 * Convertit une latitude en pixels sur le Canvas (axe X). 
+	 * @param x latitude 
+	 * @return coordonnée X sur le Canvas
+	 */
 	private double convertirLatitudeEnX(double x) {
 		return (x - this.latMin) * this.echelle;
 	}
 
+	/**
+     * Convertit une longitude en pixels sur le Canvas (axe Y). 
+     * @param x longitude 
+     * @return coordonnée Y sur le Canvas
+     */
 	private double convertirLongitudeEnY(double y) {
 		return (y - this.longMin) * this.echelle;
 	}
 
+	/**
+     * Convertit une coordonnées en pixels sur l'axe X en latitude. 
+     * @param x coordonnée X sur le canvas 
+     * @return latitude
+     */
 	private double convertirXEnLatitude(double x) {
 		return x / this.echelle + this.latMin;
 	}
 
-	private double convertirYEnLongitude(double x) {
-		return x / this.echelle + this.longMin;
+	/**
+     * Convertit une coordonnées en pixels sur l'axe Y en longitude. 
+     * @param y coordonnée Y sur le canvas 
+     * @return longitude
+     */
+	private double convertirYEnLongitude(double y) {
+		return y / this.echelle + this.longMin;
 	}
 
 	public void setStage(Stage stage) {
