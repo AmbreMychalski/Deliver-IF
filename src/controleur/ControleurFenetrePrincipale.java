@@ -111,13 +111,17 @@ public class ControleurFenetrePrincipale {
 		planCharge = new Plan(fichier);
 		System.out.println("Plan chargé : " + planCharge);
 
-		this.latMax = planCharge.getIntersections().values().stream().map(intersection -> intersection.getLatitude())
+		this.latMax = planCharge.getIntersections().values().stream()
+		        .map(intersection -> intersection.getLatitude())
 				.max((a, b) -> Float.compare(a, b)).orElse(0f);
-		this.latMin = planCharge.getIntersections().values().stream().map(intersection -> intersection.getLatitude())
+		this.latMin = planCharge.getIntersections().values().stream()
+		        .map(intersection -> intersection.getLatitude())
 				.min((a, b) -> Float.compare(a, b)).orElse(0f);
-		this.longMax = planCharge.getIntersections().values().stream().map(intersection -> intersection.getLongitude())
+		this.longMax = planCharge.getIntersections().values().stream()
+		        .map(intersection -> intersection.getLongitude())
 				.max((a, b) -> Float.compare(a, b)).orElse(0f);
-		this.longMin = planCharge.getIntersections().values().stream().map(intersection -> intersection.getLongitude())
+		this.longMin = planCharge.getIntersections().values().stream()
+		        .map(intersection -> intersection.getLongitude())
 				.min((a, b) -> Float.compare(a, b)).orElse(0f);
 
 		this.largeurPlan = this.latMax - this.latMin;
