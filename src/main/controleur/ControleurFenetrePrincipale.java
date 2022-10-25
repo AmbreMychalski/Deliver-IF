@@ -63,6 +63,7 @@ public class ControleurFenetrePrincipale {
 	final Color COULEUR_INTERSECTION = Color.BLACK;
 	final Color COULEUR_SEGMENT = Color.BLACK;
 	final Color COULEUR_POINT_LIVRAISON = Color.BLUE;
+	final Color COULEUR_POINT_LIVRAISON_SELECTIONNE = Color.RED;
 	Stage thisStage;
 	float largeurPlan;
 	float hauteurPlan;
@@ -156,6 +157,10 @@ public class ControleurFenetrePrincipale {
 	private void actionClicTableau(MouseEvent event) {
 	    LigneTableau ligne = tableViewDemandesLivraison.getSelectionModel().getSelectedItem();
 	    if (ligne != null) {
+	        mettreAJourListeDemandes();
+	        dessinerPointLivraison(convertirLongitudeEnX(ligne.getDemandeLivraison().getIntersection().getLongitude()),
+                    convertirLatitudeEnY(ligne.getDemandeLivraison().getIntersection().getLatitude()),
+                    COULEUR_POINT_LIVRAISON_SELECTIONNE);
 	        titlePaneSelectionDemande.setVisible(true);
 	        textfieldIdentifiantIntersectionSelection.setText(ligne.getIdIntersection().toString());
 	        textfieldPlageHoraire.setText(ligne.getPlageHoraire().toString());
