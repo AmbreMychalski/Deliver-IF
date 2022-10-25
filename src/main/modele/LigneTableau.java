@@ -1,27 +1,22 @@
 package main.modele;
 
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Objects;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.Setter;
+import lombok.ToString;
 
-public class TableRow {
+@Getter
+@Setter
+public class LigneTableau {
     private Long idIntersection;
     private PlageHoraire plageHoraire;
-    public TableRow(DemandeLivraison demande) {
+    private DemandeLivraison demandeLivraison;
+    
+    public LigneTableau(DemandeLivraison demande) {
         this.idIntersection =demande.getIntersection().getIdIntersection();
         this.plageHoraire = demande.getPlageHoraire();
-    }
-    public Long getIdIntersection() {
-        return this.idIntersection;
-    }
-    public PlageHoraire getPlageHoraire() {
-        return this.plageHoraire;
-    }
-    public void setIdIntersection(Long value) {
-        this.idIntersection = value;
-    }
-    public void setPlageHoraire(PlageHoraire value) {
-        this.plageHoraire = value;
+        this.demandeLivraison = demande;
     }
     
     @Override
@@ -36,7 +31,7 @@ public class TableRow {
             return false;
         if (getClass() != obj.getClass())
             return false;
-        TableRow other = (TableRow) obj;
+        LigneTableau other = (LigneTableau) obj;
         return Objects.equals(idIntersection, other.idIntersection) && Objects.equals(plageHoraire, other.plageHoraire);
     }
     

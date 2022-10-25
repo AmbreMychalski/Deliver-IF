@@ -86,11 +86,12 @@ public class Journee {
 	}
 	
 	public void ajouterDemandeLivraison(DemandeLivraison demande) {
-	    if (! this.demandesLivraison.contains(demande)) {
-	        this.demandesLivraison.add(demande);
-	    }
+	    this.demandesLivraison.add(demande);
 	}
 	
+	public void supprimerDemandeLivraison(DemandeLivraison demande) {
+	    this.demandesLivraison.remove(demande);
+	}
 	public void sauvegarderDemandesLivraison(File fichier) {
 		
 		 try {

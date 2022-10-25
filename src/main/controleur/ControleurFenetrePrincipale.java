@@ -28,12 +28,15 @@ import javafx.fxml.FXML;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.Button;
+import javafx.scene.control.ButtonBase;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
+import javafx.scene.control.TitledPane;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
 import javafx.stage.DirectoryChooser;
@@ -45,7 +48,7 @@ import main.modele.Journee;
 import main.modele.PlageHoraire;
 import main.modele.Plan;
 import main.modele.Segment;
-import main.modele.TableRow;
+import main.modele.LigneTableau;
 
 /**
  * Contrôleur de la vue principale de l'application.
@@ -53,10 +56,13 @@ import main.modele.TableRow;
  *
  */
 public class ControleurFenetrePrincipale {
-
+    
+    final double TAILLE_RECT_PT_LIVRAISON = 8;
 	final double TAILLE_CERCLE_INTERSECTION = 5;
 	final Color COULEUR_DEPOT = Color.RED;
-
+	final Color COULEUR_INTERSECTION = Color.BLACK;
+	final Color COULEUR_SEGMENT = Color.BLACK;
+	final Color COULEUR_POINT_LIVRAISON = Color.BLUE;
 	Stage thisStage;
 	float largeurPlan;
 	float hauteurPlan;
@@ -67,9 +73,8 @@ public class ControleurFenetrePrincipale {
 	Plan planCharge;
 
 	// objets FXML
-	
 	@FXML
-	private Button buttonAjouterLivraison;
+	private Button buttonValiderLivraison;
 	@FXML
 	private Button buttonAnnulerLivraison;
 	@FXML
@@ -84,11 +89,13 @@ public class ControleurFenetrePrincipale {
 	private Button buttonAfficherFeuillesRoute;
 	@FXML
 	private Button buttonChargerPlan;
-	@FXML
 	//private TableView tableViewDemandesLivraison;
-	private TableView<TableRow> tableViewDemandesLivraison;
+	@FXML
+	private TableView<LigneTableau> tableViewDemandesLivraison;
 	@FXML
 	private Canvas canvasPlan;
+	@FXML
+	private Canvas canvasInterieurPlan;
 	@FXML
 	private ComboBox<PlageHoraire> comboboxPlageHoraire;
 	@FXML
@@ -96,58 +103,74 @@ public class ControleurFenetrePrincipale {
 	@FXML
 	private TextField textfieldNomFichier;
 	@FXML
-    private TableColumn<TableRow,Long> columnIdentifiant;
+    private TableColumn<LigneTableau,Long> columnIdentifiant;
     @FXML
-    public TableColumn<TableRow, PlageHoraire> columnPlageHoraire;
-    
+    public TableColumn<LigneTableau, PlageHoraire> columnPlageHoraire;
+    @FXML
+    public Button buttonSupprimerLivraison;
+    @FXML
+    public TitledPane titlePaneSelectionDemande;
     //public ImageView im = new ImageView(".\\data\\repere.png");
+    @FXML
+    public TextField textfieldIdentifiantIntersectionSelection;
+    @FXML
+    public TextField textfieldPlageHoraire;
     
 	private Float latMax;
 	private Float latMin;
 	private Float longMax;
 	private Float longMin;
 
-	class Coordonnees {
-		public double x;
-		public double y;
-	}
-
 	@FXML
 	private void initialize() {
-	    buttonAjouterLivraison.setDisable(true);
+	    titlePaneSelectionDemande.setVisible(false);
+	    buttonSupprimerLivraison.setOnAction(event -> actionBoutonSupprimerLivraison(event));
+	    
+	    buttonValiderLivraison.setDisable(true);
 	    buttonAnnulerLivraison.setDisable(true);
 	    comboboxPlageHoraire.setDisable(true);
-	    buttonAjouterLivraison.setOnAction(event -> actionBoutonAjouterLivraison(event));
+	    
+	    buttonValiderLivraison.setOnAction(event -> actionBoutonAjouterLivraison(event));
 	    buttonAnnulerLivraison.setOnAction(event -> actionBoutonAnnulerLivraison(event));
 	    buttonAutoriserAjouterLivraison.setOnAction(event -> actionBoutonAutoriserAjouterLivraison(event));
 		buttonChargerDemandes.setOnAction(event -> actionBoutonChargerDemande(event));
 		buttonSauvegarderDemandes.setOnAction(event -> actionBoutonSauvegarderDemandes(event));
-		canvasPlan.setOnMouseClicked(event -> actionClicSurCanvas(event));
+		canvasInterieurPlan.setOnMouseClicked(event -> actionClicSurCanvas(event));
+		tableViewDemandesLivraison.setOnMouseClicked(event -> actionClicTableau(event));
 		buttonChargerPlan.setOnAction(event -> actionBoutonChargerPlan(event));
 		journee = new Journee();
 		for(int i=8; i<12; i++) {
 		    comboboxPlageHoraire.getItems().add(new PlageHoraire(i,i+1));
 		}
-		buttonAjouterLivraison.setOnAction(
-		        event -> actionBoutonAjouterLivraison(event));
-		buttonChargerDemandes.setOnAction(
-		        event -> actionBoutonChargerDemande(event));
-		buttonSauvegarderDemandes.setOnAction(
-		        event -> actionBoutonSauvegarderDemandes(event));
-		canvasPlan.setOnMouseClicked(
-		        event -> actionClicSurCanvas(event));
-		buttonChargerPlan.setOnAction(
-		        event -> actionBoutonChargerPlan(event));
+	}
+	
+	private void actionBoutonSupprimerLivraison(ActionEvent event) {
+	    LigneTableau ligne = tableViewDemandesLivraison.getSelectionModel().getSelectedItem();
+	    if(ligne != null) {
+	        journee.supprimerDemandeLivraison(ligne.getDemandeLivraison());
+	        this.mettreAJourListeDemandes();
+	        textfieldIdentifiantIntersectionSelection.setText("");
+	        textfieldPlageHoraire.setText("");
+	    }
+	}
+	private void actionClicTableau(MouseEvent event) {
+	    LigneTableau ligne = tableViewDemandesLivraison.getSelectionModel().getSelectedItem();
+	    if (ligne != null) {
+	        titlePaneSelectionDemande.setVisible(true);
+	        textfieldIdentifiantIntersectionSelection.setText(ligne.getIdIntersection().toString());
+	        textfieldPlageHoraire.setText(ligne.getPlageHoraire().toString());
+	    }
 	}
 	
 	private void actionBoutonAnnulerLivraison(ActionEvent event2) {
-	    buttonAjouterLivraison.setDisable(true);
+	    buttonValiderLivraison.setDisable(true);
         buttonAnnulerLivraison.setDisable(true);
         comboboxPlageHoraire.setDisable(true);
 	}
+	
     private void actionBoutonAutoriserAjouterLivraison(ActionEvent event2) {
         if(planCharge != null) {
-            buttonAjouterLivraison.setDisable(false);
+            buttonValiderLivraison.setDisable(false);
             buttonAnnulerLivraison.setDisable(false);
             comboboxPlageHoraire.setDisable(false);
         }
@@ -180,42 +203,30 @@ public class ControleurFenetrePrincipale {
 		        .map(intersection -> intersection.getLongitude())
 				.min((a, b) -> Float.compare(a, b)).orElse(0f);
 
-		this.largeurPlan = this.latMax - this.latMin;
-		this.hauteurPlan = this.longMax - this.longMin;
+		this.largeurPlan = this.longMax - this.longMin;
+		this.hauteurPlan = this.latMax - this.latMin;
 
 		this.echelle = Math.min(this.canvasPlan.getWidth() / this.largeurPlan,
 				this.canvasPlan.getHeight() / this.hauteurPlan);
 
-		// System.out.println("hauteur="+this.hauteurPlan+ " largeur="+this.largeurPlan
-		// + "echelle="+this.echelle);
-
-		GraphicsContext gc = canvasPlan.getGraphicsContext2D();
+		/*System.out.println("hauteur=" + this.hauteurPlan+ " largeur="
+		                    + this.largeurPlan + "echelle=" + this.echelle);*/
 
 		for (Intersection intersection : planCharge.getIntersections().values()) {
-			gc.strokeOval(
-			        convertirLatitudeEnX(intersection.getLatitude()) 
-			         - (this.TAILLE_CERCLE_INTERSECTION / 2),
-					convertirLongitudeEnY(intersection.getLongitude()) 
-					 - (this.TAILLE_CERCLE_INTERSECTION / 2),
-					this.TAILLE_CERCLE_INTERSECTION, 
-					this.TAILLE_CERCLE_INTERSECTION);
+		    this.dessinerIntersectionLatLong(intersection.getLatitude(), 
+		            intersection.getLongitude(), this.COULEUR_INTERSECTION);
 		}
 		for (Segment segment : planCharge.getSegments()) {
-			gc.strokeLine(convertirLatitudeEnX(segment.getOrigine().getLatitude()),
-					convertirLongitudeEnY(segment.getOrigine().getLongitude()),
-					convertirLatitudeEnX(segment.getDestination().getLatitude()),
-					convertirLongitudeEnY(segment.getDestination().getLongitude()));
+		    this.dessinerSegmentLatLong(segment.getOrigine().getLatitude(), 
+		            segment.getOrigine().getLongitude(), 
+		            segment.getDestination().getLatitude(), 
+		            segment.getDestination().getLongitude(),
+		            this.COULEUR_SEGMENT);
 		}
 
-		gc.setStroke(this.COULEUR_DEPOT);
-		gc.setFill(this.COULEUR_DEPOT);
-		gc.strokeOval(
-				convertirLatitudeEnX(planCharge.getEntrepot().getLatitude()) 
-				 - (this.TAILLE_CERCLE_INTERSECTION / 2),
-				convertirLongitudeEnY(planCharge.getEntrepot().getLongitude()) 
-				 - (this.TAILLE_CERCLE_INTERSECTION / 2),
-				this.TAILLE_CERCLE_INTERSECTION, 
-				this.TAILLE_CERCLE_INTERSECTION);
+		this.dessinerIntersectionLatLong(planCharge.getEntrepot().getLatitude(), 
+		        planCharge.getEntrepot().getLongitude(), this.COULEUR_DEPOT);
+		
 	}
 
     /**
@@ -226,11 +237,12 @@ public class ControleurFenetrePrincipale {
 		if (this.planCharge != null) {
 			System.out.println("Clic sur le canvas, (x,y)=(" 
 			        + event.getX() + "," + event.getY() + ") (lat,long)="
-					+ convertirXEnLatitude(event.getX()) + "," 
-			        + convertirYEnLongitude(event.getY()));
+					+ convertirYEnLatitude(event.getY()) + "," 
+			        + convertirXEnLongitude(event.getX()));
 			Intersection intersectionTrouvee = 
 			        this.trouverIntersectionCoordoneesPixels(event.getX(), 
 			                                                 event.getY());
+			System.out.println("Intersection trouvée = " + intersectionTrouvee);
 			if (intersectionTrouvee != null) {
 				textfieldIdentifiantIntersection.setText(
 				        intersectionTrouvee.getIdIntersection().toString());
@@ -250,7 +262,6 @@ public class ControleurFenetrePrincipale {
 	 * Ouvre un explorateur de fichier pour choisir le fichier à charger.
 	 * @param event ActionEvent associé
 	 */
-
 	private void actionBoutonChargerDemande(ActionEvent event) {
 	    FileChooser fileChooser = new FileChooser();
         fileChooser.setInitialDirectory(new File(".\\data"));
@@ -264,30 +275,46 @@ public class ControleurFenetrePrincipale {
         this.mettreAJourListeDemandes();
         
 	}
-	
+
 	private void mettreAJourListeDemandes() {
-        ObservableList<TableRow> data = FXCollections.observableArrayList();
+        ObservableList<LigneTableau> data = FXCollections.observableArrayList();
+        GraphicsContext gc = canvasInterieurPlan.getGraphicsContext2D();
+        gc.clearRect(0, 0, canvasInterieurPlan.getWidth(), canvasInterieurPlan.getHeight());
+        
         for(DemandeLivraison d: journee.getDemandesLivraison()) {
-            data.add(new TableRow(d));
+            data.add(new LigneTableau(d));
+            dessinerPointLivraison(convertirLongitudeEnX(d.getIntersection().getLongitude()),
+                    convertirLatitudeEnY(d.getIntersection().getLatitude()),
+                    COULEUR_POINT_LIVRAISON);
         }
+        
         tableViewDemandesLivraison.setItems(data);
-        columnIdentifiant.setCellValueFactory(new PropertyValueFactory<TableRow, Long>("idIntersection"));
-        columnPlageHoraire.setCellValueFactory(new PropertyValueFactory<TableRow,PlageHoraire>("plageHoraire")); 
+        columnIdentifiant.setCellValueFactory(
+                new PropertyValueFactory<LigneTableau, Long>("idIntersection"));
+        columnPlageHoraire.setCellValueFactory(
+                new PropertyValueFactory<LigneTableau,PlageHoraire>("plageHoraire")); 
 	}
     
     private void actionBoutonAjouterLivraison(ActionEvent event) {
         try {
-            Intersection intersection = journee.getPlan().getIntersections().get(Long.parseLong(textfieldIdentifiantIntersection.getText()));
+            Intersection intersection = journee.getPlan().getIntersections()
+                    .get(Long.parseLong(textfieldIdentifiantIntersection
+                            .getText()));
             PlageHoraire plageHoraire = comboboxPlageHoraire.getValue();
             if(intersection == null || plageHoraire == null) {
                 throw (new Exception());
             }
-            DemandeLivraison demande = new DemandeLivraison(intersection, plageHoraire);
+            DemandeLivraison demande = 
+                    new DemandeLivraison(intersection, plageHoraire);
             journee.ajouterDemandeLivraison(demande);
             this.mettreAJourListeDemandes();
             
         } catch (Exception ex) {
             System.err.println("Erreur lors de l'ajout de la demande");
+        } finally {
+            buttonValiderLivraison.setDisable(true);
+            buttonAnnulerLivraison.setDisable(true);
+            comboboxPlageHoraire.setDisable(true);
         }
         
     }
@@ -329,8 +356,8 @@ public class ControleurFenetrePrincipale {
 			// trouver les intersections de la zone de clic
 			List<Intersection> candidats = new ArrayList<>();
 			for (Intersection intersection : planCharge.getIntersections().values()) {
-				if (distance(convertirLatitudeEnX(intersection.getLatitude()),
-						     convertirLongitudeEnY(intersection.getLongitude()), 
+				if (distance(convertirLongitudeEnX(intersection.getLongitude()),
+						     convertirLatitudeEnY(intersection.getLatitude()), 
 						     x, y) 
 				        <= this.TAILLE_CERCLE_INTERSECTION) {
 					candidats.add(intersection);
@@ -345,11 +372,11 @@ public class ControleurFenetrePrincipale {
 			} else {
 				return candidats.stream()
 						.min((i1, i2) -> Double.compare(
-								distance(convertirLatitudeEnX(i1.getLatitude()),
-										convertirLongitudeEnY(i1.getLongitude()), 
+								distance(convertirLongitudeEnX(i1.getLongitude()),
+										convertirLatitudeEnY(i1.getLatitude()), 
 										x, y),
-								distance(convertirLatitudeEnX(i2.getLatitude()),
-										convertirLongitudeEnY(i2.getLongitude()), 
+								distance(convertirLongitudeEnX(i2.getLongitude()),
+										convertirLatitudeEnY(i2.getLatitude()), 
 										x, y)))
 						.orElse(null);
 			}
@@ -370,42 +397,124 @@ public class ControleurFenetrePrincipale {
 	private double distance(double x1, double y1, double x2, double y2) {
 		return Math.sqrt(Math.pow(x1 - x2, 2) - Math.pow(y1 - y2, 2));
 	}
-
+	
+	/**
+	 * Dessine une intersection sur le canvas à partir des latitudes 
+	 * et longitudes fournies, dans la couleur précisée.
+	 * @param latitude 
+	 * @param longitude
+	 * @param couleur
+	 */
+	private void dessinerIntersectionLatLong(double latitude, 
+                                	         double longitude, 
+                                	         Color couleur) {
+        dessinerIntersectionXY(convertirLongitudeEnX(longitude),
+                convertirLatitudeEnY(latitude), couleur);
+	}
+	
+	/**
+	 * Dessiner une intersection sur le canvas à partir des coordonnées
+	 * X et Y fournies, dans la couleur précisée. Les coordonnées
+	 * indiquent l'emplacement exact de l'intersection.
+	 * @param x
+	 * @param y
+	 * @param couleur
+	 */
+	private void dessinerIntersectionXY(double x, 
+                            	        double y, 
+                            	        Color couleur) {
+	    GraphicsContext gc = canvasPlan.getGraphicsContext2D();
+	    gc.setStroke(couleur);
+	    gc.strokeOval(
+                x - (this.TAILLE_CERCLE_INTERSECTION / 2),
+                y - (this.TAILLE_CERCLE_INTERSECTION / 2),
+                this.TAILLE_CERCLE_INTERSECTION, 
+                this.TAILLE_CERCLE_INTERSECTION);
+	}
+	
+	/**
+	 * Dessine un segment entre deux points sur le canvas dans la
+	 * couleur précisée. Les coordonnées sont données en latitude/longitude.
+	 * @param lat1 Latitude du premier point
+	 * @param long1 Longitude du premier point
+	 * @param lat2 Latitude du second point
+	 * @param long2 Longitude du second point
+	 * @param couleur
+	 */
+	private void dessinerSegmentLatLong(double lat1, double long1, 
+	                                    double lat2, double long2, 
+	                                    Color couleur) {
+	    dessinerSegmentXY(convertirLongitudeEnX(long1),
+	            convertirLatitudeEnY(lat1),
+	            convertirLongitudeEnX(long2),
+	            convertirLatitudeEnY(lat2),
+	            couleur);
+	}
+	
+	private void dessinerPointLivraison(double x, double y, Color couleur) {
+        GraphicsContext gc = canvasInterieurPlan.getGraphicsContext2D();
+        gc.setFill(couleur);
+        gc.fillRect(
+                x - (this.TAILLE_RECT_PT_LIVRAISON /2), 
+                y - (this.TAILLE_RECT_PT_LIVRAISON /2),
+                this.TAILLE_RECT_PT_LIVRAISON, this.TAILLE_RECT_PT_LIVRAISON);
+    }
+	
+	/**
+	 * Dessine un segment entre deux points sur le canvas dans la
+	 * couleur précisée. Les coodonnées sont données en pixels.
+	 * @param x1 Coordonnée sur l'axe x du premier point
+	 * @param y1 Coordonnée sur l'axe y du premier point
+	 * @param x2 Coordonnée sur l'axe x du second point
+	 * @param y2 Coordonnée sur l'axe y du second point
+	 * @param couleur
+	 */
+	private void dessinerSegmentXY(double x1, double y1, 
+                        	       double x2, double y2, 
+                        	       Color couleur) {
+	    GraphicsContext gc = canvasPlan.getGraphicsContext2D();
+	    gc.setStroke(couleur);
+	    gc.strokeLine(x1, y1, x2, y2);
+	}
 
 	/**
-	 * Convertit une latitude en pixels sur le Canvas (axe X). 
-	 * @param x latitude 
+	 * Convertit une longitude en pixels sur le Canvas (axe X). 
+	 * @param x longitude 
 	 * @return coordonnée X sur le Canvas
 	 */
-	private double convertirLatitudeEnX(double x) {
-		return (x - this.latMin) * this.echelle;
+	private double convertirLongitudeEnX(double x) {
+		return /*this.canvasPlan.getHeight() -*/ (x - this.longMin) * this.echelle;
 	}
 
 	/**
-     * Convertit une longitude en pixels sur le Canvas (axe Y). 
-     * @param x longitude 
+     * Convertit une latitude en pixels sur le Canvas (axe Y). 
+     * @param x latitude 
      * @return coordonnée Y sur le Canvas
      */
-	private double convertirLongitudeEnY(double y) {
-		return (y - this.longMin) * this.echelle;
+	private double convertirLatitudeEnY(double y) {
+	    // quand on retourne la carte, elle n'est pas calée en haut, 
+	    // on la cale donc en lui retirant "aRemonter"
+	    double aRemonter = this.canvasPlan.getWidth() - (this.latMax - this.latMin) * this.echelle;
+		return (this.canvasPlan.getWidth() - (y - this.latMin) * this.echelle) - aRemonter;
 	}
 
 	/**
-     * Convertit une coordonnées en pixels sur l'axe X en latitude. 
+     * Convertit une coordonnées en pixels sur l'axe X en longitude. 
      * @param x coordonnée X sur le canvas 
-     * @return latitude
-     */
-	private double convertirXEnLatitude(double x) {
-		return x / this.echelle + this.latMin;
-	}
-
-	/**
-     * Convertit une coordonnées en pixels sur l'axe Y en longitude. 
-     * @param y coordonnée Y sur le canvas 
      * @return longitude
      */
-	private double convertirYEnLongitude(double y) {
-		return y / this.echelle + this.longMin;
+	private double convertirXEnLongitude(double x) {
+		return this.longMin +/*- */(x /*- this.canvasPlan.getHeight()*/) / this.echelle;
+	}
+
+	/**
+     * Convertit une coordonnées en pixels sur l'axe Y en latitude. 
+     * @param y coordonnée Y sur le canvas 
+     * @return latitude
+     */
+	private double convertirYEnLatitude(double y) {
+	    double aRemonter = this.canvasPlan.getWidth() - (this.latMax - this.latMin) * this.echelle;
+		return this.latMin - (y + aRemonter - this.canvasPlan.getWidth()) / this.echelle;
 	}
 
 	public void setStage(Stage stage) {
