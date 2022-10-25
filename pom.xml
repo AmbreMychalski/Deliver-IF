@@ -6,13 +6,27 @@
 
 	<properties>
 		<junit.platform.version>1.9.0</junit.platform.version>
+		<junit.jupiter.version>5.9.0</junit.jupiter.version>
 	</properties>
 
 	<dependencies>
 		<dependency>
 			<groupId>org.junit.jupiter</groupId>
-			<artifactId>junit-jupiter</artifactId>
-			<version>5.9.0</version>
+			<artifactId>junit-jupiter-engine</artifactId>
+			<version>${junit.jupiter.version}</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.junit.jupiter</groupId>
+			<artifactId>junit-jupiter-api</artifactId>
+			<version>${junit.jupiter.version}</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.junit.jupiter</groupId>
+			<artifactId>junit-jupiter-params</artifactId>
+			<version>${junit.jupiter.version}</version>
+			<scope>test</scope>
 		</dependency>
 
 		<dependency>
@@ -35,35 +49,34 @@
 			<version>1.18.24</version>
 			<scope>provided</scope>
 		</dependency>
-		
+
 		<!-- Tous les contrôles (Bouton, Zone de texte...) -->
 		<dependency>
-		   <groupId>org.openjfx</groupId>
-		   <artifactId>javafx-controls</artifactId>
-		   <version>17</version>
+			<groupId>org.openjfx</groupId>
+			<artifactId>javafx-controls</artifactId>
+			<version>17</version>
 		</dependency>
-		
-        <!-- Pour utiliser les fichiers FXML -->
-        <dependency>
-            <groupId>org.openjfx</groupId>
-            <artifactId>javafx-fxml</artifactId>
-            <version>17</version>
-        </dependency>
+
+		<!-- Pour utiliser les fichiers FXML -->
+		<dependency>
+			<groupId>org.openjfx</groupId>
+			<artifactId>javafx-fxml</artifactId>
+			<version>17</version>
+		</dependency>
 	</dependencies>
-	
-	
+
 
 	<build>
 		<sourceDirectory>src</sourceDirectory>
-		
+
 		<resources>
-            <resource>
-                <directory>ressources</directory>
-                <includes>
-                    <include>**/*.fxml</include>
-                </includes>
-            </resource>
-        </resources>
+			<resource>
+				<directory>ressources</directory>
+				<includes>
+					<include>**/*.fxml</include>
+				</includes>
+			</resource>
+		</resources>
 
 		<plugins>
 			<plugin>
@@ -74,12 +87,12 @@
 				</configuration>
 			</plugin>
 			<plugin>
-			    <groupId>com.zenjava</groupId>
-			    <artifactId>javafx-maven-plugin</artifactId>
-			    <version>8.8.3</version>
-			    <configuration>
-			        <mainClass>controleur.MainStarter</mainClass>
-			    </configuration>
+				<groupId>com.zenjava</groupId>
+				<artifactId>javafx-maven-plugin</artifactId>
+				<version>8.8.3</version>
+				<configuration>
+					<mainClass>controleur.MainStarter</mainClass>
+				</configuration>
 			</plugin>
 
 		</plugins>
