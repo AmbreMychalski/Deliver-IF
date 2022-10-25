@@ -13,27 +13,27 @@
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.text.Font?>
 
-<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="735.0" prefWidth="1201.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controleur.ControleurFenetrePrincipale">
+<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="735.0" prefWidth="1297.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="main.controleur.ControleurFenetrePrincipale">
    <children>
       <Pane prefHeight="735.0" prefWidth="289.0">
          <children>
-            <Button id="buttonAutoriserAjouterLivraison" fx:id="buttonAutoriserAjouterLivraison" layoutX="7.0" layoutY="60.0" prefWidth="276.0" mnemonicParsing="false" text="Passer en mode ajout de demandes" />
-            <TitledPane animated="false" collapsible="false" layoutX="7.0" layoutY="90.0" prefHeight="191.0" prefWidth="276.0" text="Ajouter une demande de livraison">
+            <TitledPane animated="false" collapsible="false" layoutX="7.0" layoutY="90.0" prefHeight="191.0" prefWidth="276.0" text="Demande de livraison">
               <content>
                 <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="165.0" prefWidth="292.0">
                      <children>
                         <Label layoutX="14.0" layoutY="20.0" prefHeight="36.0" prefWidth="137.0" text="Identifiant d'intersection" textAlignment="RIGHT" wrapText="true" />
                         <Label layoutX="74.0" layoutY="92.0" text="Plage horaire" />
-                        <ComboBox id="comboboxPlageHoraire" fx:id="comboboxPlageHoraire" layoutX="172.0" layoutY="88.0" prefHeight="25.0" prefWidth="100.0" />
-                        <Button id="buttonAjouterLivraison" fx:id="buttonAjouterLivraison" layoutX="150.0" layoutY="126.0" mnemonicParsing="false" text="Ajouter" />
-                        <Button id="buttonAnnulerLivraison" fx:id="buttonAnnulerLivraison" layoutX="50.0" layoutY="126.0" mnemonicParsing="false" text="Annuler" />
-                        <TextField id="textfieldIdentifiantIntersection" fx:id="textfieldIdentifiantIntersection" editable="false" layoutX="172.0" layoutY="25.0" prefHeight="25.0" prefWidth="91.0" />
+                        <ComboBox id="comboboxPlageHoraire" fx:id="comboboxPlageHoraire" layoutX="151.0" layoutY="88.0" prefHeight="25.0" prefWidth="118.0" />
+                        <Button id="buttonAjouterLivraison" fx:id="buttonValiderLivraison" layoutX="208.0" layoutY="126.0" mnemonicParsing="false" text="Valider" />
+                        <Button id="buttonAnnulerLivraison" fx:id="buttonAnnulerLivraison" layoutX="137.0" layoutY="126.0" mnemonicParsing="false" text="Annuler" />
+                        <TextField id="textfieldIdentifiantIntersection" fx:id="textfieldIdentifiantIntersection" editable="false" layoutX="152.0" layoutY="25.0" prefHeight="25.0" prefWidth="117.0" />
                   
                         <Label layoutX="12.0" layoutY="50.0" prefHeight="36.0" prefWidth="264.0" text="Cliquez sur le plan pour sélectionner une intersection" textAlignment="CENTER" wrapText="true">
                            <font>
                               <Font size="10.0" />
                            </font>
                         </Label>
+                        <Button id="buttonAutoriserAjouterLivraison" fx:id="buttonAutoriserAjouterLivraison" layoutX="7.0" layoutY="126.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="118.0" text="Nouvelle demande" textAlignment="CENTER" wrapText="true" />
                      </children>
                   </AnchorPane>
               </content>
@@ -46,17 +46,17 @@
             <Button id="buttonCalculerTournees" fx:id="buttonCalculerTournees" layoutX="6.0" layoutY="495.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="276.0" text="Calculer les tournées" textAlignment="CENTER" />
          </children>
       </Pane>
-      <Pane layoutX="289.0" prefHeight="735.0" prefWidth="647.0">
+      <Pane layoutX="289.0" prefHeight="735.0" prefWidth="739.0">
          <children>
-            <Button id="buttonChargerPlan" fx:id="buttonChargerPlan" layoutX="517.0" layoutY="683.0" mnemonicParsing="false" text="Charger un plan" />
-            <Pane prefHeight="681.0" prefWidth="647.0" style="-fx-border-color: black; -fx-border-width: 2px;">
+            <Button id="buttonChargerPlan" fx:id="buttonChargerPlan" layoutX="623.0" layoutY="696.0" mnemonicParsing="false" text="Charger un plan" />
+            <Pane prefHeight="681.0" prefWidth="735.0" style="-fx-border-color: black; -fx-border-width: 2px;">
                <children>
-                  <Canvas id="canvasPlan" fx:id="canvasPlan" height="681.0" width="647.0" />
+                  <Canvas id="canvasPlan" fx:id="canvasPlan" height="667.0" layoutX="6.0" layoutY="7.0" width="723.0" />
                </children>
             </Pane>
          </children>
       </Pane>
-      <Pane layoutX="936.0" prefHeight="735.0" prefWidth="264.0">
+      <Pane layoutX="1027.0" prefHeight="735.0" prefWidth="264.0">
          <children>
             <Label layoutX="68.0" layoutY="24.0" text="Demandes de livraison">
                <font>
@@ -65,12 +65,12 @@
             </Label>
             <ScrollPane layoutY="65.0" prefHeight="573.0" prefWidth="264.0">
               <content>
-                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="646.0" prefWidth="249.0">
+                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="569.0" prefWidth="249.0">
                      <children>
                         <TableView fx:id="tableViewDemandesLivraison" prefHeight="573.0" prefWidth="255.0">
                           <columns>
-                            <TableColumn  fx:id="columnIdentifiant" prefWidth="111.0" text="Identifiant" />
-                            <TableColumn  fx:id="columnPlageHoraire" prefWidth="138.0" text="Plage horaire" />
+                            <TableColumn fx:id="columnIdentifiant" prefWidth="111.0" text="Identifiant" />
+                            <TableColumn fx:id="columnPlageHoraire" prefWidth="138.0" text="Plage horaire" />
                           </columns>
                         </TableView>
                      </children>
