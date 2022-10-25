@@ -41,6 +41,60 @@ public class Plan {
 		this.parseXML(fichier);
 	}
 	
+	public List<Segment> calculerPlusCourtChemin(Intersection depart, Intersection arrivee){
+	    List <Segment> chemin = new LinkedList<Segment>();
+	    HashMap<Long, Float> distance = new HashMap<Long, Float>();
+        HashMap<Long, Segment> parents = new HashMap<Long, Segment>();   // <Long idIntersection, Segment segParent>
+
+        Set<Long> intersectionsGrises = new HashSet<Long>();
+        Set<Long> intersectionsNoires = new HashSet<Long>();
+        
+        boolean arriveeIsBlack = false;
+        
+	    for(var entry : intersections.entrySet()) {
+	        distance.put(entry.getKey(), -1.0f);
+	    }
+	    distance.put(depart.getIdIntersection(), 0f);    
+	    intersectionsGrises.add(depart.getIdIntersection());
+	    
+	    while(intersectionsGrises.size()!=0 && arriveeIsBlack!=true) {
+	        Long currentInter = obtenirIntersectionLaPlusProche(intersectionsGrises, distance);
+            
+            if(intersectionsNeighbours.get(currentInter)!=null) {
+    	        for(Segment seg : intersectionsNeighbours.get(currentInter)) {
+    	            Intersection successeur = seg.getDestination();
+    	           
+    	            if(!intersectionsNoires.contains(successeur.getIdIntersection())) {
+    	                if(distance.get(currentInter)+seg.getLongueur()<distance.get(successeur.getIdIntersection())
+    	                        || distance.get(successeur.getIdIntersection())==-1.0f) {
+    	                    distance.put(successeur.getIdIntersection(), distance.get(currentInter)+seg.getLongueur());
+    	                    parents.put(successeur.getIdIntersection(), seg);
+    	                }
+    	                intersectionsGrises.add(successeur.getIdIntersection());
+    	            }
+    	        }
+            }	        intersectionsGrises.remove(currentInter);
+	        intersectionsNoires.add(currentInter);
+	        
+	        if(currentInter==arrivee.getIdIntersection()) {
+	            arriveeIsBlack=true;
+	        }
+	    }
+	    
+	    Long currentInter = arrivee.getIdIntersection();
+	    while(currentInter != depart.getIdIntersection()) {
+	        Segment seg = parents.get(currentInter);
+	        chemin.add(0, seg);
+	        currentInter = seg.getOrigine().getIdIntersection();
+	    }
+	    
+	    
+//	    for(Segment seg : chemin) {
+//	        System.out.println(seg.toString());
+//	    }	    
+	    return chemin;
+	}
+	
 	public HashMap<Intersection, Float> calculerPlusCourtsChemins(List<Intersection> listIntersections, Intersection depart){
         HashMap<Long, Float> distance = new HashMap<Long, Float>();
         Set<Long> intersectionsAVerifier = new HashSet<Long>();
