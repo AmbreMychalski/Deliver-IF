@@ -1,3 +1,9 @@
+/*
+ * LanceurApplication
+ * 
+ * Version 1.0
+ */
+
 package demarrer;
 
 
@@ -8,12 +14,18 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 
+/**
+ * Ouvre la première vue de l'application.
+ * @author H4113
+ *
+ */
 public class LanceurApplication extends Application {
 	@Override
 	public void start(Stage primaryStage) throws Exception {
 		try {
 			
-			FXMLLoader loader = new FXMLLoader(getClass().getResource("/FenetrePrincipale.fxml"));
+			FXMLLoader loader = new FXMLLoader(getClass()
+			        .getResource("/FenetrePrincipale.fxml"));
 	        Parent root = (Parent)loader.load();
 			ControleurFenetrePrincipale controleur = loader.getController();
 			controleur.setStage(primaryStage);
