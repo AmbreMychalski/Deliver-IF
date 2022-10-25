@@ -9,10 +9,14 @@
 <intersection id="6" latitude="13" longitude="21"/>
 <segment destination="0" length="4" name="Rue Danton" origin="1"/>
 <segment destination="1" length="4" name="Rue Danton" origin="0"/>
-
-<segment destination="1" length="2" name="Rue Danton" origin="3"/>
-<segment destination="3" length="2" name="Rue Danton" origin="1"/>
-
-<segment destination="3" length="2" name="Rue Danton" origin="1"/>
-
+<segment destination="1" length="2" name="Rue Emile Zola" origin="2"/>
+<segment destination="2" length="2" name="Rue Emile Zola" origin="1"/>
+<segment destination="3" length="5" name="Rue Albert Einstein" origin="2"/>
+<segment destination="2" length="3" name="Rue Rousseau" origin="4"/>
+<segment destination="3" length="8" name="Rue Bellecour" origin="4"/>
+<segment destination="4" length="8" name="Rue Bellecour" origin="3"/>
+<segment destination="4" length="5" name="Rue Michel" origin="6"/>
+<segment destination="6" length="5" name="Rue Michel" origin="4"/>
+<segment destination="4" length="7" name="Rue Gérard" origin="5"/>
+<segment destination="5" length="7" name="Rue Gérard" origin="4"/>
 </map>
