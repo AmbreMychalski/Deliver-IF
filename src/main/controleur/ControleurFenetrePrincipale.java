@@ -117,7 +117,7 @@ public class ControleurFenetrePrincipale {
 	    buttonAjouterLivraison.setDisable(true);
 	    buttonAnnulerLivraison.setDisable(true);
 	    comboboxPlageHoraire.setDisable(true);
-	    buttonAjouterLivraison.setOnAction(event -> actionBoutonAjouterLivraison1(event));
+	    buttonAjouterLivraison.setOnAction(event -> actionBoutonAjouterLivraison(event));
 	    buttonAnnulerLivraison.setOnAction(event -> actionBoutonAnnulerLivraison(event));
 	    buttonAutoriserAjouterLivraison.setOnAction(event -> actionBoutonAutoriserAjouterLivraison(event));
 		buttonChargerDemandes.setOnAction(event -> actionBoutonChargerDemande(event));
@@ -129,7 +129,7 @@ public class ControleurFenetrePrincipale {
 		    comboboxPlageHoraire.getItems().add(new PlageHoraire(i,i+1));
 		}
 		buttonAjouterLivraison.setOnAction(
-		        event -> actionBoutonAjouterLivraison1(event));
+		        event -> actionBoutonAjouterLivraison(event));
 		buttonChargerDemandes.setOnAction(
 		        event -> actionBoutonChargerDemande(event));
 		buttonSauvegarderDemandes.setOnAction(
@@ -274,23 +274,8 @@ public class ControleurFenetrePrincipale {
         columnIdentifiant.setCellValueFactory(new PropertyValueFactory<TableRow, Long>("idIntersection"));
         columnPlageHoraire.setCellValueFactory(new PropertyValueFactory<TableRow,PlageHoraire>("plageHoraire")); 
 	}
-	
-    private void actionBoutonSauvegarderDemandes(ActionEvent event) {
-        DirectoryChooser choixDossier = new DirectoryChooser();
-        choixDossier.setInitialDirectory(new File(".\\data"));
-        choixDossier.setTitle("Sauvegarder des demandes de livraison");
-        File dossier = choixDossier.showDialog(this.thisStage);
-        System.out.println("Dossier choisi = " + dossier.getAbsolutePath());
-        
-        if(!(dossier == null || textfieldNomFichier.getText() == "" || journee.getDemandesLivraison().isEmpty())) {
-            File fichier = new File(dossier.getAbsolutePath()+"\\"+textfieldNomFichier.getText()+".xml");
-            journee.sauvegarderDemandesLivraison(fichier);
-        } else {
-            System.err.print("Erreur lors de la sauvegarde des demandes");
-        }
-    }
     
-    private void actionBoutonAjouterLivraison1(ActionEvent event) {
+    private void actionBoutonAjouterLivraison(ActionEvent event) {
         try {
             Intersection intersection = journee.getPlan().getIntersections().get(Long.parseLong(textfieldIdentifiantIntersection.getText()));
             PlageHoraire plageHoraire = comboboxPlageHoraire.getValue();
@@ -312,16 +297,21 @@ public class ControleurFenetrePrincipale {
 	 * Ouvre un explorateur de fichier pour choisir l'emplacement du fichier.
 	 * @param event ActionEvent associé
 	 */
-	public void actionBoutonSauvegarderDemandes1(ActionEvent event) {
-        FileChooser fileChooser = new FileChooser();
-        fileChooser.setInitialDirectory(new File(".\\data"));
-        fileChooser.getExtensionFilters().add(
-                new FileChooser.ExtensionFilter("Fichier XML", "*.xml", "*.XML"));
-        fileChooser.setTitle("Sauvegarder des demandes de livraison");
-        File fichier = fileChooser.showOpenDialog(this.thisStage);
-        System.out.println("Fichier choisi = " + fichier.getAbsolutePath());
-        journee.sauvegarderDemandesLivraison(fichier);
+    private void actionBoutonSauvegarderDemandes(ActionEvent event) {
+        DirectoryChooser choixDossier = new DirectoryChooser();
+        choixDossier.setInitialDirectory(new File(".\\data"));
+        choixDossier.setTitle("Sauvegarder des demandes de livraison");
+        File dossier = choixDossier.showDialog(this.thisStage);
+        System.out.println("Dossier choisi = " + dossier.getAbsolutePath());
+        
+        if(!(dossier == null || textfieldNomFichier.getText() == "" || journee.getDemandesLivraison().isEmpty())) {
+            File fichier = new File(dossier.getAbsolutePath()+"\\"+textfieldNomFichier.getText()+".xml");
+            journee.sauvegarderDemandesLivraison(fichier);
+        } else {
+            System.err.print("Erreur lors de la sauvegarde des demandes");
+        }
     }
+    
 
 	/**
 	 * Trouve l'intersection du plan qui se trouve aux coordonnées x,y (en pixels)
@@ -381,13 +371,6 @@ public class ControleurFenetrePrincipale {
 		return Math.sqrt(Math.pow(x1 - x2, 2) - Math.pow(y1 - y2, 2));
 	}
 
-	/**
-	 * Action à effectuer lors du clic sur le bouton Ajouter livraison.
-	 * @param event ActioEvent associé
-	 */
-	private void actionBoutonAjouterLivraison(ActionEvent event) {
-		System.out.println("Clic sur le bouton Ajouter Livraison, event = " + event);
-	}
 
 	/**
 	 * Convertit une latitude en pixels sur le Canvas (axe X). 
