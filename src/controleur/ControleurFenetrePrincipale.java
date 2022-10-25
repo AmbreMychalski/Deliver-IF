@@ -4,6 +4,9 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
+import javafx.beans.property.SimpleStringProperty;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 /*
 import modele.DemandeLivraison;
 import javafx.scene.control.cell.PropertyValueFactory;
@@ -20,20 +23,24 @@ import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
-
+import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
-
+import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
+import javafx.stage.DirectoryChooser;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import modele.DemandeLivraison;
 import modele.Intersection;
 import modele.Journee;
+import modele.PlageHoraire;
 import modele.Plan;
 import modele.Segment;
+import modele.TableRow;
+
 
 public class ControleurFenetrePrincipale {
 
@@ -54,6 +61,10 @@ public class ControleurFenetrePrincipale {
 	@FXML
 	private Button buttonAjouterLivraison;
 	@FXML
+	private Button buttonAnnulerLivraison;
+	@FXML
+    private Button buttonAutoriserAjouterLivraison;
+	@FXML
 	private Button buttonCalculerTournees;
 	@FXML
 	private Button buttonSauvegarderDemandes;
@@ -64,21 +75,23 @@ public class ControleurFenetrePrincipale {
 	@FXML
 	private Button buttonChargerPlan;
 	@FXML
-	private TableView tableViewDemandesLivraison;
-	//private TableView<TableRow> tableViewDemandesLivraison;
+	//private TableView tableViewDemandesLivraison;
+	private TableView<TableRow> tableViewDemandesLivraison;
 	@FXML
 	private Canvas canvasPlan;
 	@FXML
-	private ComboBox comboboxPlageHoraire;
+	private ComboBox<PlageHoraire> comboboxPlageHoraire;
 	@FXML
 	private TextField textfieldIdentifiantIntersection;
-	/*
-	Juste des tests
 	@FXML
-    private TableColumn<TableRow, Long> columnIdentifiant;
+	private TextField textfieldNomFichier;
+	@FXML
+    private TableColumn<TableRow,Long> columnIdentifiant;
     @FXML
-    public TableColumn<TableRow, int[]> columnPlageHoraire;
-	*/
+    public TableColumn<TableRow, PlageHoraire> columnPlageHoraire;
+    
+    //public ImageView im = new ImageView(".\\data\\repere.png");
+    
 	private Float latMax;
 	private Float latMin;
 	private Float longMax;
@@ -91,15 +104,35 @@ public class ControleurFenetrePrincipale {
 
 	@FXML
 	private void initialize() {
-		buttonAjouterLivraison.setOnAction(event -> actionBoutonAjouterLivraison(event));
+	    buttonAjouterLivraison.setDisable(true);
+	    buttonAnnulerLivraison.setDisable(true);
+	    comboboxPlageHoraire.setDisable(true);
+	    buttonAjouterLivraison.setOnAction(event -> actionBoutonAjouterLivraison(event));
+	    buttonAnnulerLivraison.setOnAction(event -> actionBoutonAnnulerLivraison(event));
+	    buttonAutoriserAjouterLivraison.setOnAction(event -> actionBoutonAutoriserAjouterLivraison(event));
 		buttonChargerDemandes.setOnAction(event -> actionBoutonChargerDemande(event));
 		buttonSauvegarderDemandes.setOnAction(event -> actionBoutonSauvegarderDemandes(event));
 		canvasPlan.setOnMouseClicked(event -> actionClicSurCanvas(event));
 		buttonChargerPlan.setOnAction(event -> actionBoutonChargerPlan(event));
+		journee = new Journee();
+		for(int i=8; i<12; i++) {
+		    comboboxPlageHoraire.getItems().add(new PlageHoraire(i,i+1));
+		}
 	}
-
-
-
+	
+	private void actionBoutonAnnulerLivraison(ActionEvent event2) {
+	    buttonAjouterLivraison.setDisable(true);
+        buttonAnnulerLivraison.setDisable(true);
+        comboboxPlageHoraire.setDisable(true);
+	}
+    private void actionBoutonAutoriserAjouterLivraison(ActionEvent event2) {
+        if(planCharge != null) {
+            buttonAjouterLivraison.setDisable(false);
+            buttonAnnulerLivraison.setDisable(false);
+            comboboxPlageHoraire.setDisable(false);
+        }
+    }
+    
     private void actionBoutonChargerPlan(ActionEvent event) {
 		FileChooser fileChooser = new FileChooser();
 		fileChooser.setInitialDirectory(new File(".\\data"));
@@ -109,6 +142,8 @@ public class ControleurFenetrePrincipale {
 		System.out.println("Fichier choisi = " + fichier.getAbsolutePath());
 
 		planCharge = new Plan(fichier);
+		journee.setPlan(planCharge);
+		
 		System.out.println("Plan chargé : " + planCharge);
 
 		this.latMax = planCharge.getIntersections().values().stream()
@@ -170,10 +205,8 @@ public class ControleurFenetrePrincipale {
 		}
 
 	}
-
 	 
 	private void actionBoutonChargerDemande(ActionEvent event) {
-	    
 	    FileChooser fileChooser = new FileChooser();
         fileChooser.setInitialDirectory(new File(".\\data"));
         fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("Fichier XML", "*.xml", "*.XML"));
@@ -181,54 +214,54 @@ public class ControleurFenetrePrincipale {
         File fichier = fileChooser.showOpenDialog(this.thisStage);
         System.out.println("Fichier choisi = " + fichier.getAbsolutePath());
 
-        journee  = new Journee();
-        journee.setPlan(planCharge);
         journee.chargerDemandesLivraison(fichier);
+        this.mettreAJourListeDemandes();
+        
+	}
+	
+	private void mettreAJourListeDemandes() {
+        ObservableList<TableRow> data = FXCollections.observableArrayList();
         for(DemandeLivraison d: journee.getDemandesLivraison()) {
-            System.out.println(d);
+            data.add(new TableRow(d));
         }
-	     
-	     
-	     /* Ne pas supp pour l'instant
-		columnIdentifiant.setCellValueFactory(new PropertyValueFactory<TableRow,Long>("idIntersection"));
-		columnPlageHoraire.setCellValueFactory(new PropertyValueFactory<TableRow,int[]>("plageHoraire"));
+        tableViewDemandesLivraison.setItems(data);
+        columnIdentifiant.setCellValueFactory(new PropertyValueFactory<TableRow, Long>("idIntersection"));
+        columnPlageHoraire.setCellValueFactory(new PropertyValueFactory<TableRow,PlageHoraire>("plageHoraire")); 
+	}
 
-		ObservableList<TableRow> data = FXCollections.observableArrayList();
-		data.add(new TableRow(new DemandeLivraison(new Intersection(45l,0,0), 1,0)));
-		tableViewDemandesLivraison.setItems(data);
-		*/
-	}
-	/*
-	class TableRow {
-		private Long idIntersection;
-		private int [] plageHoraire;
-		public TableRow(DemandeLivraison demande) {
-			this.idIntersection =demande.getIntersection().getIdIntersection();
-			this.plageHoraire = new int [] {demande.getDebutPlageHoraire(), demande.getFinPlageHoraire()};
-		}
-		public Long getIdIntersection() {
-			return this.idIntersection;
-		}
-		public int[] getPlageHoraire() {
-			return this.plageHoraire;
-		}
-		public void setIdIntersection(Long value) {
-			this.idIntersection = value;
-		}
-		public void setPlageHoraire(int[] value) {
-			this.plageHoraire = value;
-		}
-	}
-	*/
-	   public void actionBoutonSauvegarderDemandes(ActionEvent event) {
-	       FileChooser fileChooser = new FileChooser();
-	        fileChooser.setInitialDirectory(new File(".\\data"));
-	        fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("Fichier XML", "*.xml", "*.XML"));
-	        fileChooser.setTitle("Sauvegarder des demandes de livraison");
-	        File fichier = fileChooser.showOpenDialog(this.thisStage);
-	        System.out.println("Fichier choisi = " + fichier.getAbsolutePath());
-	        journee.sauvegarderDemandesLivraison(fichier);
-	    }
+	
+    private void actionBoutonSauvegarderDemandes(ActionEvent event) {
+        DirectoryChooser choixDossier = new DirectoryChooser();
+        choixDossier.setInitialDirectory(new File(".\\data"));
+        choixDossier.setTitle("Sauvegarder des demandes de livraison");
+        File dossier = choixDossier.showDialog(this.thisStage);
+        System.out.println("Dossier choisi = " + dossier.getAbsolutePath());
+        
+        if(!(dossier == null || textfieldNomFichier.getText() == "" || journee.getDemandesLivraison().isEmpty())) {
+            File fichier = new File(dossier.getAbsolutePath()+"\\"+textfieldNomFichier.getText()+".xml");
+            journee.sauvegarderDemandesLivraison(fichier);
+        } else {
+            System.err.print("Erreur lors de la sauvegarde des demandes");
+        }
+    }
+    
+    private void actionBoutonAjouterLivraison(ActionEvent event) {
+        try {
+            Intersection intersection = journee.getPlan().getIntersections().get(Long.parseLong(textfieldIdentifiantIntersection.getText()));
+            PlageHoraire plageHoraire = comboboxPlageHoraire.getValue();
+            if(intersection == null || plageHoraire == null) {
+                throw (new Exception());
+            }
+            DemandeLivraison demande = new DemandeLivraison(intersection, plageHoraire);
+            journee.ajouterDemandeLivraison(demande);
+            this.mettreAJourListeDemandes();
+            
+        } catch (Exception ex) {
+            System.err.println("Erreur lors de l'ajout de la demande");
+        }
+        
+    }
+
 
 	/**
 	 * Trouve l'intersection du plan qui se trouve aux coordonnées x,y (en pixels)
@@ -281,10 +314,6 @@ public class ControleurFenetrePrincipale {
 	 */
 	private double distance(double x1, double y1, double x2, double y2) {
 		return Math.sqrt(Math.pow(x1 - x2, 2) - Math.pow(y1 - y2, 2));
-	}
-
-	private void actionBoutonAjouterLivraison(ActionEvent event) {
-		System.out.println("Clic sur le bouton Ajouter Livraison, event = " + event);
 	}
 
 	private double convertirLatitudeEnX(double x) {

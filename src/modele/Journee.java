@@ -29,7 +29,6 @@ import lombok.ToString;
 @Getter
 @Setter
 @AllArgsConstructor
-@NoArgsConstructor
 @ToString
 public class Journee {
 	private int nbMaxLivreur;
@@ -39,6 +38,16 @@ public class Journee {
 	private List<Tournee> tournees;
 	//private TemplateTSP template;
 	
+	public Journee(Plan p) {
+	    plan = p;
+	    demandesLivraison = new ArrayList<DemandeLivraison>();
+        tournees = new ArrayList<Tournee>();
+	}
+	
+	public Journee() {
+        demandesLivraison = new ArrayList<DemandeLivraison>();
+        tournees = new ArrayList<Tournee>();
+    }
 	
 	public void chargerDemandesLivraison(File fichier) {
 		if(this.demandesLivraison == null) {
@@ -66,7 +75,7 @@ public class Journee {
 						heureDebut = Integer.parseInt(attributs.getNamedItem("heureDebut").getNodeValue());
 						heureFin = Integer.parseInt(attributs.getNamedItem("heureFin").getNodeValue());
 						if(heureFin-heureDebut != 1) throw new Exception("Plage horaire incompatible");
-						this.demandesLivraison.add(new DemandeLivraison(this.plan.getIntersections().get(intersectionId), heureDebut, heureFin));
+						this.demandesLivraison.add(new DemandeLivraison(this.plan.getIntersections().get(intersectionId),new PlageHoraire(heureDebut, heureFin)));
 						
 					}
 				}
@@ -74,6 +83,12 @@ public class Journee {
 		} catch(Exception e) {
 			System.err.println("Problème lors de la lecture du fichier \n "+ e);
 		}
+	}
+	
+	public void ajouterDemandeLivraison(DemandeLivraison demande) {
+	    if (! this.demandesLivraison.contains(demande)) {
+	        this.demandesLivraison.add(demande);
+	    }
 	}
 	
 	public void sauvegarderDemandesLivraison(File fichier) {
@@ -90,8 +105,8 @@ public class Journee {
 	            	Element demandeLivraison = document.createElement("demandeLivraison");
 	            	root.appendChild(demandeLivraison);
 	            	demandeLivraison.setAttribute("intersectionId", demande.getIntersection().getIdIntersection().toString());
-	            	demandeLivraison.setAttribute("heureDebut", Integer.toString(demande.getDebutPlageHoraire()));
-	            	demandeLivraison.setAttribute("heureFin", Integer.toString(demande.getFinPlageHoraire()));
+	            	demandeLivraison.setAttribute("heureDebut", Integer.toString(demande.getPlageHoraire().getDebut()));
+	            	demandeLivraison.setAttribute("heureFin", Integer.toString(demande.getPlageHoraire().getFin()));
 	            }
 	            
 

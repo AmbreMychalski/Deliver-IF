@@ -10,15 +10,21 @@ import lombok.ToString;
 @Getter
 @Setter
 @AllArgsConstructor
-@ToString
-public class DemandeLivraison {
-    private Intersection intersection;
-	private PlageHoraire plageHoraire;
-	
+
+public class PlageHoraire {
+    int debut;
+    int fin;
+    
+    @Override
+    public String toString() {
+        return "De "+debut+"h à "+fin+"h";
+    }
+
     @Override
     public int hashCode() {
-        return Objects.hash(intersection, plageHoraire);
+        return Objects.hash(debut, fin);
     }
+
     @Override
     public boolean equals(Object obj) {
         if (this == obj)
@@ -27,11 +33,10 @@ public class DemandeLivraison {
             return false;
         if (getClass() != obj.getClass())
             return false;
-        DemandeLivraison other = (DemandeLivraison) obj;
-        return Objects.equals(intersection, other.intersection) && Objects.equals(plageHoraire, other.plageHoraire);
+        PlageHoraire other = (PlageHoraire) obj;
+        return debut == other.debut && fin == other.fin;
     }
-	
-	
     
     
+
 }
