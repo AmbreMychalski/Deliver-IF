@@ -2,6 +2,7 @@ package main.modele;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 
 import javax.xml.parsers.DocumentBuilder;
@@ -35,8 +36,9 @@ public class Journee {
 	private int nbLivreur;
 	private Plan plan;
 	private List<DemandeLivraison> demandesLivraison;
+	private List<DemandeLivraison> demandesLivraisonNonTraitees;
+	private List<DemandeLivraison> demandesLivraisonTraitees;
 	private List<Tournee> tournees;
-	//private TemplateTSP template;
 	
 	public Journee(Plan p) {
 	    plan = p;
@@ -123,5 +125,63 @@ public class Journee {
 	        }
 	        
 	    }
+	
+	public void calculerTournee() {
+	    
+	    boolean tourneeCalculee = false;
+	    List<DemandeLivraison> dmdLivrOrdonnee = new LinkedList<DemandeLivraison>();
+	            
+	    List<DemandeLivraison> listDemande= new LinkedList<DemandeLivraison>();
+	    for(DemandeLivraison dl : demandesLivraison) {
+	        listDemande.add(dl);
+	    }
+	    
+	    while(!tourneeCalculee) {
+	        tourneeCalculee = true;
+    	    CompleteGraph g = new CompleteGraph(listDemande,this.plan, this.plan.getEntrepot());
+    	    dmdLivrOrdonnee.clear();
+            
+            TSP tsp = new TSP1();
+            tsp.searchSolution(20000, g);
+            for(int i=1; i<this.demandesLivraison.size()+1;i++) {
+                int x =tsp.getSolution(i);
+                dmdLivrOrdonnee.add(g.getIdIndexToDemandeLivraison().get(x));
+            }
+            
+            float heureLivraison = (float) dmdLivrOrdonnee.get(0).getPlageHoraire().debut;  
+            
+            for(int i=1; i<dmdLivrOrdonnee.size();i++) {
+                int indexCurrentDl = g.getIdDemandeLivraisonToIndex().get(dmdLivrOrdonnee.get(i));
+                int indexPreviousDl = g.getIdDemandeLivraisonToIndex().get(dmdLivrOrdonnee.get(i-1));
+                float temps = g.getCost(indexPreviousDl, indexCurrentDl);
+                heureLivraison+= temps/(15.0f);
+                if(heureLivraison>dmdLivrOrdonnee.get(i).getPlageHoraire().getFin()) {
+                    tourneeCalculee=false;
+                    listDemande.remove(i);
+                    break;
+                }
+            } 
+	    }
+	    List<Livraison> livrList = new LinkedList<Livraison>();
+	    for(DemandeLivraison dl: dmdLivrOrdonnee) {
+	        livrList.add(new Livraison(dl, null));
+	    }
+	    
+	    List<Trajet> trajetList = new LinkedList<Trajet>();
+	    List<Segment> lisSeg= plan.calculerPlusCourtChemin(plan.getEntrepot(),livrList.get(0).getDemandeLivraison().getIntersection());
+	    trajetList.add(new Trajet(lisSeg));
+	    for(int i=0; i<livrList.size()-1;i++) {
+	        lisSeg= plan.calculerPlusCourtChemin(livrList.get(i).getDemandeLivraison().getIntersection(),livrList.get(i+1).getDemandeLivraison().getIntersection());
+	        trajetList.add(new Trajet(lisSeg));
+        }
+	    lisSeg= plan.calculerPlusCourtChemin(livrList.get(livrList.size()-1).getDemandeLivraison().getIntersection(),plan.getEntrepot());
+	    
+	    
+	    
+	    tournees.add(new Tournee(trajetList,livrList ));
+	    
+	    
+        
+	}
 }
 

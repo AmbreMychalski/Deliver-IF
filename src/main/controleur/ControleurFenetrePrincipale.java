@@ -65,6 +65,8 @@ public class ControleurFenetrePrincipale {
     private static final Logger logger = LogManager.getLogger(ControleurFenetrePrincipale.class);
     
     final double TAILLE_RECT_PT_LIVRAISON = 8;
+    final double TAILLE_RECT_PT_LIVRAISON_SELECTIONNE = 12;
+    final double TAILLE_CERCLE_INTERSECTION_SELECTIONNEE = 8;
 	final double TAILLE_CERCLE_INTERSECTION = 5;
 	final Color COULEUR_DEPOT = Color.RED;
 	final Color COULEUR_INTERSECTION = Color.BLACK;
@@ -176,9 +178,14 @@ public class ControleurFenetrePrincipale {
 	    LigneTableau ligne = tableViewDemandesLivraison.getSelectionModel().getSelectedItem();
 	    if (ligne != null) {
 	        mettreAJourListeDemandes();
-	        dessinerPointLivraison(convertirLongitudeEnX(ligne.getDemandeLivraison().getIntersection().getLongitude()),
-                    convertirLatitudeEnY(ligne.getDemandeLivraison().getIntersection().getLatitude()),
-                    COULEUR_POINT_LIVRAISON_SELECTIONNE);
+	        this.dessinerIntersectionLatLong(this.canvasInterieurPlan.getGraphicsContext2D(),
+	                                    ligne.getDemandeLivraison().getIntersection().getLatitude(), 
+	                                    ligne.getDemandeLivraison().getIntersection().getLongitude(),
+	                                    this.COULEUR_POINT_LIVRAISON_SELECTIONNE, 
+	                                    this.TAILLE_RECT_PT_LIVRAISON_SELECTIONNE, 
+	                                    true, 
+	                                    "Rectangle");
+	        
 	        titlePaneSelectionDemande.setVisible(true);
 	        textfieldIdentifiantIntersectionSelection.setText(ligne.getIdIntersection().toString());
 	        textfieldPlageHoraire.setText(ligne.getPlageHoraire().toString());
@@ -234,12 +241,12 @@ public class ControleurFenetrePrincipale {
 
 		/*System.out.println("hauteur=" + this.hauteurPlan+ " largeur="
 		                    + this.largeurPlan + "echelle=" + this.echelle);*/
-
+		/*
 		for (Intersection intersection : planCharge.getIntersections().values()) {
 		    this.dessinerIntersectionLatLong(intersection.getLatitude(), 
 		            intersection.getLongitude(), this.COULEUR_INTERSECTION);
 		}
-		for (Segment segment : planCharge.getSegments()) {
+		*/		for (Segment segment : planCharge.getSegments()) {
 		    this.dessinerSegmentLatLong(segment.getOrigine().getLatitude(), 
 		            segment.getOrigine().getLongitude(), 
 		            segment.getDestination().getLatitude(), 
@@ -247,8 +254,13 @@ public class ControleurFenetrePrincipale {
 		            this.COULEUR_SEGMENT);
 		}
 
-		this.dessinerIntersectionLatLong(planCharge.getEntrepot().getLatitude(), 
-		        planCharge.getEntrepot().getLongitude(), this.COULEUR_DEPOT);
+		this.dessinerIntersectionLatLong(this.canvasPlan.getGraphicsContext2D(),
+                        		        planCharge.getEntrepot().getLatitude(), 
+                        		        planCharge.getEntrepot().getLongitude(), 
+                        		        this.COULEUR_DEPOT,
+                        		        this.TAILLE_CERCLE_INTERSECTION,
+                        		        true,
+                        		        "Cercle");
 		
 	}
 
@@ -269,6 +281,28 @@ public class ControleurFenetrePrincipale {
 			if (intersectionTrouvee != null) {
 				textfieldIdentifiantIntersection.setText(
 				        intersectionTrouvee.getIdIntersection().toString());
+				
+				
+				GraphicsContext gc = canvasInterieurPlan.getGraphicsContext2D();
+				gc.clearRect(0, 0, canvasInterieurPlan.getWidth(), canvasInterieurPlan.getHeight());
+				this.dessinerIntersectionLatLong(gc, 
+				                                intersectionTrouvee.getLatitude(), 
+                        				        intersectionTrouvee.getLongitude(), 
+                        				        Color.DARKORCHID, 
+                        				        this.TAILLE_CERCLE_INTERSECTION_SELECTIONNEE, 
+                        				        true, 
+                        				        "Cercle");
+
+		        for(DemandeLivraison d: journee.getDemandesLivraison()) {
+		            this.dessinerIntersectionLatLong(gc,
+		                                            d.getIntersection().getLatitude(), 
+	                                                d.getIntersection().getLongitude(), 
+	                                                this.COULEUR_POINT_LIVRAISON, 
+	                                                this.TAILLE_RECT_PT_LIVRAISON, 
+	                                                true, 
+	                                                "Rectangle");
+		        }
+				
 			} else {
 				textfieldIdentifiantIntersection.setText("");
 			}
@@ -306,9 +340,13 @@ public class ControleurFenetrePrincipale {
         
         for(DemandeLivraison d: journee.getDemandesLivraison()) {
             data.add(new LigneTableau(d));
-            dessinerPointLivraison(convertirLongitudeEnX(d.getIntersection().getLongitude()),
-                    convertirLatitudeEnY(d.getIntersection().getLatitude()),
-                    COULEUR_POINT_LIVRAISON);
+            this.dessinerIntersectionLatLong(gc,
+                    d.getIntersection().getLatitude(), 
+                    d.getIntersection().getLongitude(), 
+                    this.COULEUR_POINT_LIVRAISON, 
+                    this.TAILLE_RECT_PT_LIVRAISON, 
+                    true, 
+                    "Rectangle");
         }
         
         tableViewDemandesLivraison.setItems(data);
@@ -432,12 +470,23 @@ public class ControleurFenetrePrincipale {
 	 * @param latitude 
 	 * @param longitude
 	 * @param couleur
+	 * @param remplir
+	 * @param forme -> parmi "rectangle", "circle"
 	 */
-	private void dessinerIntersectionLatLong(double latitude, 
+	private void dessinerIntersectionLatLong(GraphicsContext gc,
+	                                         double latitude, 
                                 	         double longitude, 
-                                	         Color couleur) {
-        dessinerIntersectionXY(convertirLongitudeEnX(longitude),
-                convertirLatitudeEnY(latitude), couleur);
+                                	         Color couleur,
+                                	         double taille,
+                                	         boolean remplir,
+                                	         String forme) {
+        dessinerIntersectionXY(gc,
+                                convertirLongitudeEnX(longitude),
+                                convertirLatitudeEnY(latitude), 
+                                couleur,
+                                taille,
+                                remplir,
+                                forme);
 	}
 	
 	/**
@@ -447,17 +496,42 @@ public class ControleurFenetrePrincipale {
 	 * @param x
 	 * @param y
 	 * @param couleur
+	 * 
 	 */
-	private void dessinerIntersectionXY(double x, 
+	private void dessinerIntersectionXY(GraphicsContext gc,
+	                                    double x, 
                             	        double y, 
-                            	        Color couleur) {
-	    GraphicsContext gc = canvasPlan.getGraphicsContext2D();
-	    gc.setStroke(couleur);
-	    gc.strokeOval(
-                x - (this.TAILLE_CERCLE_INTERSECTION / 2),
-                y - (this.TAILLE_CERCLE_INTERSECTION / 2),
-                this.TAILLE_CERCLE_INTERSECTION, 
-                this.TAILLE_CERCLE_INTERSECTION);
+                            	        Color couleur,
+                            	        double taille,
+                            	        boolean remplir,
+                            	        String forme) {
+	    if(remplir) {
+	        gc.setFill(couleur);
+	        if(forme == "Rectangle") {
+	            gc.fillRect(x - (taille /2), 
+	                          y - (taille /2),
+	                          taille, 
+	                          taille);
+	        } else if(forme == "Cercle") {
+	            gc.fillOval(x - (taille /2), 
+                        y - (taille /2),
+                        taille, 
+                        taille);
+	        }
+	    } else {
+	        gc.setStroke(couleur);
+	        if(forme == "Rectangle") {
+	            gc.strokeRect(x - (taille /2), 
+                        y - (taille /2),
+                        taille, 
+                        taille);
+	        } else if(forme == "Cercle") {
+                gc.strokeOval(x - (taille /2), 
+                        y - (taille /2),
+                        taille, 
+                        taille);
+	        }
+	    }
 	}
 	
 	/**
@@ -478,15 +552,6 @@ public class ControleurFenetrePrincipale {
 	            convertirLatitudeEnY(lat2),
 	            couleur);
 	}
-	
-	private void dessinerPointLivraison(double x, double y, Color couleur) {
-        GraphicsContext gc = canvasInterieurPlan.getGraphicsContext2D();
-        gc.setFill(couleur);
-        gc.fillRect(
-                x - (this.TAILLE_RECT_PT_LIVRAISON /2), 
-                y - (this.TAILLE_RECT_PT_LIVRAISON /2),
-                this.TAILLE_RECT_PT_LIVRAISON, this.TAILLE_RECT_PT_LIVRAISON);
-    }
 	
 	/**
 	 * Dessine un segment entre deux points sur le canvas dans la
