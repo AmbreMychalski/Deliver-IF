@@ -104,6 +104,10 @@ public class ControleurFenetrePrincipale {
 	private Button buttonAfficherFeuillesRoute;
 	@FXML
 	private Button buttonChargerPlan;
+	@FXML
+	public Button buttonSupprimerLivraison;
+	@FXML
+    public Button buttonModifierLivraison;
 	//private TableView tableViewDemandesLivraison;
 	@FXML
 	private TableView<LigneTableau> tableViewDemandesLivraison;
@@ -121,8 +125,6 @@ public class ControleurFenetrePrincipale {
     private TableColumn<LigneTableau,Long> columnIdentifiant;
     @FXML
     public TableColumn<LigneTableau, PlageHoraire> columnPlageHoraire;
-    @FXML
-    public Button buttonSupprimerLivraison;
     @FXML
     public TitledPane titlePaneSelectionDemande;
     //public ImageView im = new ImageView(".\\data\\repere.png");
@@ -146,6 +148,7 @@ public class ControleurFenetrePrincipale {
 	    
 	    titlePaneSelectionDemande.setVisible(false);
 	    buttonSupprimerLivraison.setOnAction(event -> actionBoutonSupprimerLivraison(event));
+	    buttonModifierLivraison.setOnAction(event -> actionBoutonModifierLivraison(event));
 	    
 	    buttonValiderLivraison.setDisable(true);
 	    buttonAnnulerLivraison.setDisable(true);
@@ -200,6 +203,15 @@ public class ControleurFenetrePrincipale {
 	
     private void actionBoutonAutoriserAjouterLivraison(ActionEvent event2) {
         if(planCharge != null) {
+            buttonValiderLivraison.setDisable(false);
+            buttonAnnulerLivraison.setDisable(false);
+            comboboxPlageHoraire.setDisable(false);
+        }
+    }
+    
+    private void actionBoutonModifierLivraison(ActionEvent event) {
+        if(planCharge != null) {
+            buttonAutoriserAjouterLivraison.setDisable(true);
             buttonValiderLivraison.setDisable(false);
             buttonAnnulerLivraison.setDisable(false);
             comboboxPlageHoraire.setDisable(false);
