@@ -114,17 +114,18 @@ public class Plan {
         while(intersectionsAVerifier.size()!=0 && intersectionsGrises.size()!=0) {
             
             Long currentInter = obtenirIntersectionLaPlusProche(intersectionsGrises, distance);
-            System.out.println("");
             intersectionsGrises.remove(currentInter);
-            for(Segment seg : intersectionsNeighbours.get(currentInter) ) {
-                Intersection voisin = seg.getDestination();
-                Long idVoisin = voisin.getIdIntersection();
-                if(!intersectionsNoires.contains(idVoisin)) {
-                    if(distance.get(currentInter)+seg.getLongueur()<distance.get(idVoisin)
-                            ||distance.get(idVoisin)==-1) {
-                        distance.put(idVoisin,distance.get(currentInter)+seg.getLongueur());
-                    }                   
-                    intersectionsGrises.add(idVoisin);
+            if(intersectionsNeighbours.get(currentInter)!=null) {
+                for(Segment seg : intersectionsNeighbours.get(currentInter) ) {
+                    Intersection voisin = seg.getDestination();
+                    Long idVoisin = voisin.getIdIntersection();
+                    if(!intersectionsNoires.contains(idVoisin)) {
+                        if(distance.get(currentInter)+seg.getLongueur()<distance.get(idVoisin)
+                                ||distance.get(idVoisin)==-1) {
+                            distance.put(idVoisin,distance.get(currentInter)+seg.getLongueur());
+                        }                   
+                        intersectionsGrises.add(idVoisin);
+                    }
                 }
             }
             intersectionsGrises.remove(currentInter);
