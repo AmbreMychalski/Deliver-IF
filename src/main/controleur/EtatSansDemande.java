@@ -1,98 +1,60 @@
 package main.controleur;
 
+import java.io.File;
+
+import javafx.scene.input.MouseEvent;
+import javafx.stage.FileChooser;
+
 public class EtatSansDemande implements Etat{
 
-	public void chargerPlan() {
-		
-	}
-	
-	public void ajouterDemande() {
-		
-	}
-	
-	public void quitterLogiciel() {
-		
-	}
-	
-	public void chargerListeDemandes() {
-		
-	}
-
-    @Override
-    public void clicGaucheSurPlan() {
-        // TODO Auto-generated method stub
-        
+    public void chargerPlan(ControleurFenetrePrincipale c) {
+        c.etatInitial.chargerPlan(c);
     }
-
-    @Override
-    public void choixPlageHoraire() {
-        // TODO Auto-generated method stub
-        
+    
+    public void ajouterDemande(ControleurFenetrePrincipale c) {
+        c.buttonValiderLivraison.setDisable(false);
+        c.buttonAnnulerLivraison.setDisable(false);
+        c.comboboxPlageHoraire.setDisable(false);
+        c.etatCourant = c.etatSaisieNouvelleDemandeSansTournees;
     }
+    
+    public void clicGaucheSurPlan(ControleurFenetrePrincipale c, MouseEvent event) {}
+    
+    public void clicGaucheSurTableau(ControleurFenetrePrincipale c) {}
+    
+    public void choixPlageHoraire(ControleurFenetrePrincipale c) {}
+    
+    public void validerAjouterOuModifier(ControleurFenetrePrincipale c) {}
+    
+    public void annulerAjouterOuModifier(ControleurFenetrePrincipale c) {}
+    
+    public void chargerListeDemandes(ControleurFenetrePrincipale c) {
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.setInitialDirectory(new File(".\\data"));
+        fileChooser.getExtensionFilters().add(
+                new FileChooser.ExtensionFilter("Fichier XML", "*.xml", "*.XML"));
+        fileChooser.setTitle("Charger des demandes de livraison");
+        File fichier = fileChooser.showOpenDialog(c.stage);
+        System.out.println("Fichier choisi = " + fichier.getAbsolutePath());
 
-    @Override
-    public void ajouter() {
-        // TODO Auto-generated method stub
-        
+        c.journee.chargerDemandesLivraison(fichier);
+        c.mettreAJourListeDemandes();
+        c.etatCourant = c.etatAvecDemande;
     }
-
-    @Override
-    public void annuler() {
-        // TODO Auto-generated method stub
-        
-    }
-
-    @Override
-    public void valider() {
-        // TODO Auto-generated method stub
-        
-    }
-
-    @Override
-    public void supprimerDemande() {
-        // TODO Auto-generated method stub
-        
-    }
-
-    @Override
-    public void sauvegarderDemandes() {
-        // TODO Auto-generated method stub
-        
-    }
-
-    @Override
-    public void calculerTournees() {
-        // TODO Auto-generated method stub
-        
-    }
-
-    @Override
-    public void ajoutValide() {
-        // TODO Auto-generated method stub
-        
-    }
-
-    @Override
-    public void ajoutInvalide() {
-        // TODO Auto-generated method stub
-        
-    }
-
-    @Override
-    public void afficherFeuillesRoute() {
-        // TODO Auto-generated method stub
-        
-    }
-
-    @Override
-    public void sauvegarderFeuilesRoute() {
-        // TODO Auto-generated method stub
-        
-    }
-
-    @Override
-    public void fermerFenetre() {
-        // TODO Auto-generated method stub
-        
-    }
+    
+    public void supprimerDemande(ControleurFenetrePrincipale c) {}
+    
+    public void sauvegarderDemandes(ControleurFenetrePrincipale c) {}
+    
+    public void calculerTournees(ControleurFenetrePrincipale c) {}
+    
+    public void afficherFeuillesRoute(ControleurFenetrePrincipale c) {}
+    
+    public void sauvegarderFeuillesRoute(ControleurFenetrePrincipale c) {}
+    
+    public void fermerFenetre(ControleurFenetrePrincipale c) {}
+    
+    public void quitterLogiciel(ControleurFenetrePrincipale c) {}
+    
+    public void modifierDemande(ControleurFenetrePrincipale c) {}
 }

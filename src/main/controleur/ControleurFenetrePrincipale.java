@@ -15,7 +15,6 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.apache.logging.log4j.core.LoggerContext;
 
-import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 /*
@@ -28,12 +27,10 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 */
 import javafx.event.ActionEvent;
-import javafx.event.Event;
 import javafx.fxml.FXML;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.Button;
-import javafx.scene.control.ButtonBase;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
@@ -41,12 +38,11 @@ import javafx.scene.control.TextField;
 import javafx.scene.control.TitledPane;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.AnchorPane;
 import javafx.scene.paint.Color;
-import javafx.scene.paint.Paint;
 import javafx.stage.DirectoryChooser;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
+import lombok.Setter;
 import main.modele.DemandeLivraison;
 import main.modele.Intersection;
 import main.modele.Journee;
@@ -64,7 +60,7 @@ import main.modele.LigneTableau;
  */
 public class ControleurFenetrePrincipale {
     
-    private static final Logger logger = LogManager.getLogger(ControleurFenetrePrincipale.class);
+    static final Logger logger = LogManager.getLogger(ControleurFenetrePrincipale.class);
     
     final double TAILLE_RECT_PT_LIVRAISON = 8;
     final double TAILLE_RECT_PT_LIVRAISON_SELECTIONNE = 12;
@@ -79,11 +75,30 @@ public class ControleurFenetrePrincipale {
 	 reconnaît les intersections ciblées*/
 	final double RAYON_TOLERANCE_CLIC_INTERSECTION = 8; 
 	
+	// Etats
+    Etat etatCourant;
+    final EtatInitial etatInitial = new EtatInitial();
+    final EtatSansDemande etatSansDemande = new EtatSansDemande();
+    final EtatAvecDemande etatAvecDemande = new EtatAvecDemande();
+    final EtatAfficherFeuillesRoute etatAfficherFeuillesRoute = new EtatAfficherFeuillesRoute();
+    final EtatDemandeLivraisonSelectionneeAvecTournees etatDemandeLivraisonSelectionneeAvecTournees = new EtatDemandeLivraisonSelectionneeAvecTournees();
+    final EtatDemandeLivraisonSelectionneeSansTournees etatDemandeLivraisonSelectionneeSansTournees = new EtatDemandeLivraisonSelectionneeSansTournees();
+    final EtatModifierDemandeLivraisonAvecTournees etatModifierDemandeLivraisonAvecTournees = new EtatModifierDemandeLivraisonAvecTournees();
+    final EtatModifierDemandeLivraisonSansTournees etatModifierDemandeLivraisonSansTournees = new EtatModifierDemandeLivraisonSansTournees();
+    final EtatSaisieNouvelleDemandeAvecTournees etatSaisieNouvelleDemandeAvecTournees = new EtatSaisieNouvelleDemandeAvecTournees();
+    final EtatSaisieNouvelleDemandeSansTournees etatSaisieNouvelleDemandeSansTournees = new EtatSaisieNouvelleDemandeSansTournees();
+    final EtatTourneesCalculees etatTourneesCalculees = new EtatTourneesCalculees();
 	
-	Stage thisStage;
+	@Setter
+	Stage stage;
 	float largeurPlan;
 	float hauteurPlan;
 	double echelle;
+    
+	Float latMax;
+	Float latMin;
+	Float longMax;
+	Float longMin;
 
 	// modèle
 	Journee journee;
@@ -91,57 +106,55 @@ public class ControleurFenetrePrincipale {
 
 	// objets FXML
 	@FXML
-	private Button buttonValiderLivraison;
+	Button buttonValiderLivraison;
 	@FXML
-	private Button buttonAnnulerLivraison;
+	Button buttonAnnulerLivraison;
 	@FXML
-    private Button buttonAutoriserAjouterLivraison;
+	Button buttonAutoriserAjouterLivraison;
 	@FXML
-	private Button buttonCalculerTournees;
+	Button buttonCalculerTournees;
 	@FXML
-	private Button buttonSauvegarderDemandes;
+	Button buttonSauvegarderDemandes;
 	@FXML
-	private Button buttonChargerDemandes;
+	Button buttonChargerDemandes;
 	@FXML
-	private Button buttonAfficherFeuillesRoute;
+	Button buttonAfficherFeuillesRoute;
 	@FXML
-	private Button buttonChargerPlan;
+	Button buttonChargerPlan;
 	@FXML
-	public Button buttonSupprimerLivraison;
+	Button buttonSupprimerLivraison;
 	@FXML
-    public Button buttonModifierLivraison;
-	//private TableView tableViewDemandesLivraison;
+	Button buttonModifierLivraison;
+	@FXML 
+	Button buttonEtatCourant;
 	@FXML
-	private TableView<LigneTableau> tableViewDemandesLivraison;
+	TableView<LigneTableau> tableViewDemandesLivraison;
 	@FXML
-	private Canvas canvasPlan;
+	Canvas canvasPlan;
 	@FXML
-	private Canvas canvasInterieurPlan;
+	Canvas canvasInterieurPlan;
 	@FXML
-	private ComboBox<PlageHoraire> comboboxPlageHoraire;
+	ComboBox<PlageHoraire> comboboxPlageHoraire;
 	@FXML
-	private TextField textfieldIdentifiantIntersection;
+	TextField textfieldIdentifiantIntersection;
 	@FXML
-	private TextField textfieldNomFichier;
+	TextField textfieldNomFichier;
 	@FXML
-    private TableColumn<LigneTableau,Long> columnIdentifiant;
-    @FXML
-    public TableColumn<LigneTableau, PlageHoraire> columnPlageHoraire;
-    @FXML
-    public TitledPane titlePaneSelectionDemande;
-    //public ImageView im = new ImageView(".\\data\\repere.png");
-    @FXML
-    public TextField textfieldIdentifiantIntersectionSelection;
-    @FXML
-    public TextField textfieldPlageHoraire;
-    
-	private Float latMax;
-	private Float latMin;
-	private Float longMax;
-	private Float longMin;
+	TableColumn<LigneTableau,Long> columnIdentifiant;
+	@FXML
+	TableColumn<LigneTableau, PlageHoraire> columnPlageHoraire;
+	@FXML
+	TitledPane titlePaneSelectionDemande;
+	//public ImageView im = new ImageView(".\\data\\repere.png");
+	@FXML
+	TextField textfieldIdentifiantIntersectionSelection;
+	@FXML
+	TextField textfieldPlageHoraire;
+
 
 	@FXML
 	private void initialize() {
+	    this.etatCourant = this.etatInitial;
 	    final LoggerContext context = (LoggerContext) LogManager.getContext(false);
 	    final org.apache.logging.log4j.core.config.Configuration config = context.getConfiguration();
 	    config.getLoggerConfig(LogManager.ROOT_LOGGER_NAME).setLevel(Level.ALL);
@@ -155,6 +168,8 @@ public class ControleurFenetrePrincipale {
 	    buttonValiderLivraison.setDisable(true);
 	    buttonAnnulerLivraison.setDisable(true);
 	    comboboxPlageHoraire.setDisable(true);
+	    
+	    buttonEtatCourant.setOnAction(event -> System.out.println("Etat courant = " + this.etatCourant.getClass().getName()));
 	    
 	    buttonValiderLivraison.setOnAction(event -> actionBoutonAjouterLivraison(event));
 	    buttonAnnulerLivraison.setOnAction(event -> actionBoutonAnnulerLivraison(event));
@@ -173,111 +188,26 @@ public class ControleurFenetrePrincipale {
 	}
 	
 	private void actionBoutonSupprimerLivraison(ActionEvent event) {
-	    LigneTableau ligne = tableViewDemandesLivraison.getSelectionModel().getSelectedItem();
-	    if(ligne != null) {
-	        journee.supprimerDemandeLivraison(ligne.getDemandeLivraison());
-	        this.mettreAJourListeDemandes();
-	        textfieldIdentifiantIntersectionSelection.setText("");
-	        textfieldPlageHoraire.setText("");
-	    }
+	    etatCourant.supprimerDemande(this);
 	}
 	private void actionClicTableau(MouseEvent event) {
-	    LigneTableau ligne = tableViewDemandesLivraison.getSelectionModel().getSelectedItem();
-	    if (ligne != null) {
-	        mettreAJourListeDemandes();
-	        this.dessinerIntersectionLatLong(this.canvasInterieurPlan.getGraphicsContext2D(),
-	                                    ligne.getDemandeLivraison().getIntersection().getLatitude(), 
-	                                    ligne.getDemandeLivraison().getIntersection().getLongitude(),
-	                                    this.COULEUR_POINT_LIVRAISON_SELECTIONNE, 
-	                                    this.TAILLE_RECT_PT_LIVRAISON_SELECTIONNE, 
-	                                    true, 
-	                                    "Rectangle");
-	        
-	        titlePaneSelectionDemande.setVisible(true);
-	        textfieldIdentifiantIntersectionSelection.setText(ligne.getIdIntersection().toString());
-	        textfieldPlageHoraire.setText(ligne.getPlageHoraire().toString());
-	    }
+	    this.etatCourant.clicGaucheSurTableau(this);
 	}
 	
 	private void actionBoutonAnnulerLivraison(ActionEvent event2) {
-	    buttonValiderLivraison.setDisable(true);
-        buttonAnnulerLivraison.setDisable(true);
-        comboboxPlageHoraire.setDisable(true);
+	    this.etatCourant.annulerAjouterOuModifier(this);
 	}
 	
     private void actionBoutonAutoriserAjouterLivraison(ActionEvent event2) {
-        if(planCharge != null) {
-            buttonValiderLivraison.setDisable(false);
-            buttonAnnulerLivraison.setDisable(false);
-            comboboxPlageHoraire.setDisable(false);
-        }
+        etatCourant.ajouterDemande(this);
     }
     
     private void actionBoutonModifierLivraison(ActionEvent event) {
-        if(planCharge != null) {
-            buttonAutoriserAjouterLivraison.setDisable(true);
-            buttonValiderLivraison.setDisable(false);
-            buttonAnnulerLivraison.setDisable(false);
-            comboboxPlageHoraire.setDisable(false);
-        }
+        etatCourant.modifierDemande(this);
     }
     
     private void actionBoutonChargerPlan(ActionEvent event) {
-		FileChooser fileChooser = new FileChooser();
-		fileChooser.setInitialDirectory(new File(".\\data"));
-		fileChooser.getExtensionFilters().add(
-		        new FileChooser.ExtensionFilter("Fichier XML", "*.xml", "*.XML"));
-		fileChooser.setTitle("Charger un plan");
-		File fichier = fileChooser.showOpenDialog(this.thisStage);
-		System.out.println("Fichier choisi = " + fichier.getAbsolutePath());
-
-		planCharge = new Plan(fichier);
-		journee.setPlan(planCharge);
-		
-		System.out.println("Plan chargé : " + planCharge);
-
-		this.latMax = planCharge.getIntersections().values().stream()
-		        .map(intersection -> intersection.getLatitude())
-				.max((a, b) -> Float.compare(a, b)).orElse(0f);
-		this.latMin = planCharge.getIntersections().values().stream()
-		        .map(intersection -> intersection.getLatitude())
-				.min((a, b) -> Float.compare(a, b)).orElse(0f);
-		this.longMax = planCharge.getIntersections().values().stream()
-		        .map(intersection -> intersection.getLongitude())
-				.max((a, b) -> Float.compare(a, b)).orElse(0f);
-		this.longMin = planCharge.getIntersections().values().stream()
-		        .map(intersection -> intersection.getLongitude())
-				.min((a, b) -> Float.compare(a, b)).orElse(0f);
-
-		this.largeurPlan = this.longMax - this.longMin;
-		this.hauteurPlan = this.latMax - this.latMin;
-
-		this.echelle = Math.min(this.canvasPlan.getWidth() / this.largeurPlan,
-				this.canvasPlan.getHeight() / this.hauteurPlan);
-
-		/*System.out.println("hauteur=" + this.hauteurPlan+ " largeur="
-		                    + this.largeurPlan + "echelle=" + this.echelle);*/
-		/*
-		for (Intersection intersection : planCharge.getIntersections().values()) {
-		    this.dessinerIntersectionLatLong(intersection.getLatitude(), 
-		            intersection.getLongitude(), this.COULEUR_INTERSECTION);
-		}
-		*/		for (Segment segment : planCharge.getSegments()) {
-		    this.dessinerSegmentLatLong(segment.getOrigine().getLatitude(), 
-		            segment.getOrigine().getLongitude(), 
-		            segment.getDestination().getLatitude(), 
-		            segment.getDestination().getLongitude(),
-		            this.COULEUR_SEGMENT);
-		}
-
-		this.dessinerIntersectionLatLong(this.canvasPlan.getGraphicsContext2D(),
-                        		        planCharge.getEntrepot().getLatitude(), 
-                        		        planCharge.getEntrepot().getLongitude(), 
-                        		        this.COULEUR_DEPOT,
-                        		        this.TAILLE_CERCLE_INTERSECTION,
-                        		        true,
-                        		        "Cercle");
-		
+		etatCourant.chargerPlan(this);
 	}
 
     /**
@@ -285,48 +215,7 @@ public class ControleurFenetrePrincipale {
      * @param event MouseEvent associé
      */
 	private void actionClicSurCanvas(MouseEvent event) {
-		if (this.planCharge != null) {
-			logger.debug("Clic sur le canvas, (x,y)=(" 
-			        + event.getX() + "," + event.getY() + ") (lat,long)="
-					+ convertirYEnLatitude(event.getY()) + "," 
-			        + convertirXEnLongitude(event.getX()));
-			Intersection intersectionTrouvee = 
-			        this.trouverIntersectionCoordoneesPixels(event.getX(), 
-			                                                 event.getY());
-			logger.debug("Intersection trouvée = " + intersectionTrouvee);
-			if (intersectionTrouvee != null) {
-				textfieldIdentifiantIntersection.setText(
-				        intersectionTrouvee.getIdIntersection().toString());
-				
-				
-				GraphicsContext gc = canvasInterieurPlan.getGraphicsContext2D();
-				gc.clearRect(0, 0, canvasInterieurPlan.getWidth(), canvasInterieurPlan.getHeight());
-				this.dessinerIntersectionLatLong(gc, 
-				                                intersectionTrouvee.getLatitude(), 
-                        				        intersectionTrouvee.getLongitude(), 
-                        				        Color.DARKORCHID, 
-                        				        this.TAILLE_CERCLE_INTERSECTION_SELECTIONNEE, 
-                        				        true, 
-                        				        "Cercle");
-
-		        for(DemandeLivraison d: journee.getDemandesLivraison()) {
-		            this.dessinerIntersectionLatLong(gc,
-		                                            d.getIntersection().getLatitude(), 
-	                                                d.getIntersection().getLongitude(), 
-	                                                this.COULEUR_POINT_LIVRAISON, 
-	                                                this.TAILLE_RECT_PT_LIVRAISON, 
-	                                                true, 
-	                                                "Rectangle");
-		        }
-				
-			} else {
-				textfieldIdentifiantIntersection.setText("");
-			}
-		} else {
-			logger.debug("Clic sur le canvas, (x,y)=(" 
-                    + event.getX() + "," + event.getY() + ")");
-		}
-
+		etatCourant.clicGaucheSurPlan(this, event);
 	}
 
 
@@ -336,17 +225,7 @@ public class ControleurFenetrePrincipale {
 	 * @param event ActionEvent associé
 	 */
 	private void actionBoutonChargerDemande(ActionEvent event) {
-	    FileChooser fileChooser = new FileChooser();
-        fileChooser.setInitialDirectory(new File(".\\data"));
-        fileChooser.getExtensionFilters().add(
-                new FileChooser.ExtensionFilter("Fichier XML", "*.xml", "*.XML"));
-        fileChooser.setTitle("Charger des demandes de livraison");
-        File fichier = fileChooser.showOpenDialog(this.thisStage);
-        System.out.println("Fichier choisi = " + fichier.getAbsolutePath());
-
-        journee.chargerDemandesLivraison(fichier);
-        this.mettreAJourListeDemandes();
-        
+	    etatCourant.chargerListeDemandes(this);
 	}
 	
 	private void actionBoutonCalculerTournees(ActionEvent event) {
@@ -367,7 +246,7 @@ public class ControleurFenetrePrincipale {
         }
     }
 
-	private void mettreAJourListeDemandes() {
+	void mettreAJourListeDemandes() {
         ObservableList<LigneTableau> data = FXCollections.observableArrayList();
         GraphicsContext gc = canvasInterieurPlan.getGraphicsContext2D();
         gc.clearRect(0, 0, canvasInterieurPlan.getWidth(), canvasInterieurPlan.getHeight());
@@ -391,27 +270,7 @@ public class ControleurFenetrePrincipale {
 	}
     
     private void actionBoutonAjouterLivraison(ActionEvent event) {
-        try {
-            Intersection intersection = journee.getPlan().getIntersections()
-                    .get(Long.parseLong(textfieldIdentifiantIntersection
-                            .getText()));
-            PlageHoraire plageHoraire = comboboxPlageHoraire.getValue();
-            if(intersection == null || plageHoraire == null) {
-                throw (new Exception());
-            }
-            DemandeLivraison demande = 
-                    new DemandeLivraison(intersection, plageHoraire);
-            journee.ajouterDemandeLivraison(demande);
-            this.mettreAJourListeDemandes();
-            
-        } catch (Exception ex) {
-            System.err.println("Erreur lors de l'ajout de la demande");
-        } finally {
-            buttonValiderLivraison.setDisable(true);
-            buttonAnnulerLivraison.setDisable(true);
-            comboboxPlageHoraire.setDisable(true);
-        }
-        
+        etatCourant.validerAjouterOuModifier(this);
     }
 	
 	/**
@@ -420,18 +279,7 @@ public class ControleurFenetrePrincipale {
 	 * @param event ActionEvent associé
 	 */
     private void actionBoutonSauvegarderDemandes(ActionEvent event) {
-        DirectoryChooser choixDossier = new DirectoryChooser();
-        choixDossier.setInitialDirectory(new File(".\\data"));
-        choixDossier.setTitle("Sauvegarder des demandes de livraison");
-        File dossier = choixDossier.showDialog(this.thisStage);
-        System.out.println("Dossier choisi = " + dossier.getAbsolutePath());
-        
-        if(!(dossier == null || textfieldNomFichier.getText() == "" || journee.getDemandesLivraison().isEmpty())) {
-            File fichier = new File(dossier.getAbsolutePath()+"\\"+textfieldNomFichier.getText()+".xml");
-            journee.sauvegarderDemandesLivraison(fichier);
-        } else {
-            System.err.print("Erreur lors de la sauvegarde des demandes");
-        }
+        etatCourant.sauvegarderDemandes(this);
     }
     
 
@@ -446,7 +294,7 @@ public class ControleurFenetrePrincipale {
 	 * @return l'intersection du plan si une intersection se trouve aux coordonnées
 	 *         précisées, null sinon
 	 */
-	private Intersection trouverIntersectionCoordoneesPixels(double x, double y) {
+	Intersection trouverIntersectionCoordoneesPixels(double x, double y) {
 		if (this.planCharge != null) {
 			// trouver les intersections de la zone de clic
 			List<Intersection> candidats = new ArrayList<>();
@@ -494,7 +342,7 @@ public class ControleurFenetrePrincipale {
 	 * @param y2 coordonnées en y du second point
 	 * @return distance entre les deux points (dans l'unité donnée en entrée)
 	 */
-	private double distance(double x1, double y1, double x2, double y2) {
+	double distance(double x1, double y1, double x2, double y2) {
 		return Math.sqrt(Math.pow(x1 - x2, 2) + Math.pow(y1 - y2, 2));
 	}
 	
@@ -507,7 +355,7 @@ public class ControleurFenetrePrincipale {
 	 * @param remplir
 	 * @param forme -> parmi "rectangle", "circle"
 	 */
-	private void dessinerIntersectionLatLong(GraphicsContext gc,
+	void dessinerIntersectionLatLong(GraphicsContext gc,
 	                                         double latitude, 
                                 	         double longitude, 
                                 	         Color couleur,
@@ -532,7 +380,7 @@ public class ControleurFenetrePrincipale {
 	 * @param couleur
 	 * 
 	 */
-	private void dessinerIntersectionXY(GraphicsContext gc,
+	void dessinerIntersectionXY(GraphicsContext gc,
 	                                    double x, 
                             	        double y, 
                             	        Color couleur,
@@ -577,7 +425,7 @@ public class ControleurFenetrePrincipale {
 	 * @param long2 Longitude du second point
 	 * @param couleur
 	 */
-	private void dessinerSegmentLatLong(double lat1, double long1, 
+	void dessinerSegmentLatLong(double lat1, double long1, 
 	                                    double lat2, double long2, 
 	                                    Color couleur) {
 	    dessinerSegmentXY(convertirLongitudeEnX(long1),
@@ -596,7 +444,7 @@ public class ControleurFenetrePrincipale {
 	 * @param y2 Coordonnée sur l'axe y du second point
 	 * @param couleur
 	 */
-	private void dessinerSegmentXY(double x1, double y1, 
+	void dessinerSegmentXY(double x1, double y1, 
                         	       double x2, double y2, 
                         	       Color couleur) {
 	    GraphicsContext gc = canvasPlan.getGraphicsContext2D();
@@ -609,7 +457,7 @@ public class ControleurFenetrePrincipale {
 	 * @param x longitude 
 	 * @return coordonnée X sur le Canvas
 	 */
-	private double convertirLongitudeEnX(double x) {
+	double convertirLongitudeEnX(double x) {
 		return /*this.canvasPlan.getHeight() -*/ (x - this.longMin) * this.echelle;
 	}
 
@@ -618,7 +466,7 @@ public class ControleurFenetrePrincipale {
      * @param x latitude 
      * @return coordonnée Y sur le Canvas
      */
-	private double convertirLatitudeEnY(double y) {
+	double convertirLatitudeEnY(double y) {
 	    // quand on retourne la carte, elle n'est pas calée en haut, 
 	    // on la cale donc en lui retirant "aRemonter"
 	    double aRemonter = this.canvasPlan.getWidth() - (this.latMax - this.latMin) * this.echelle;
@@ -630,7 +478,7 @@ public class ControleurFenetrePrincipale {
      * @param x coordonnée X sur le canvas 
      * @return longitude
      */
-	private double convertirXEnLongitude(double x) {
+	double convertirXEnLongitude(double x) {
 		return this.longMin +/*- */(x /*- this.canvasPlan.getHeight()*/) / this.echelle;
 	}
 
@@ -639,12 +487,8 @@ public class ControleurFenetrePrincipale {
      * @param y coordonnée Y sur le canvas 
      * @return latitude
      */
-	private double convertirYEnLatitude(double y) {
+	double convertirYEnLatitude(double y) {
 	    double aRemonter = this.canvasPlan.getWidth() - (this.latMax - this.latMin) * this.echelle;
 		return this.latMin - (y + aRemonter - this.canvasPlan.getWidth()) / this.echelle;
-	}
-
-	public void setStage(Stage stage) {
-		this.thisStage = stage;
 	}
 }

@@ -1,108 +1,35 @@
 package main.controleur;
 
 public class EtatAfficherFeuillesRoute implements Etat {
-
-	public void sauvegarderFeuillesRoute() {
-		
-	}
-	
-	public void fermerFenetre() {
-		
-	}
-
-    @Override
-    public void chargerPlan() {
-        // TODO Auto-generated method stub
-        
-    }
-
-    @Override
-    public void ajouterDemande() {
-        // TODO Auto-generated method stub
-        
-    }
-
-    @Override
-    public void clicGaucheSurPlan() {
-        // TODO Auto-generated method stub
-        
-    }
-
-    @Override
-    public void choixPlageHoraire() {
-        // TODO Auto-generated method stub
-        
-    }
-
-    @Override
-    public void ajouter() {
-        // TODO Auto-generated method stub
-        
-    }
-
-    @Override
-    public void annuler() {
-        // TODO Auto-generated method stub
-        
-    }
-
-    @Override
-    public void valider() {
-        // TODO Auto-generated method stub
-        
-    }
-
-    @Override
-    public void chargerListeDemandes() {
-        // TODO Auto-generated method stub
-        
-    }
-
-    @Override
-    public void supprimerDemande() {
-        // TODO Auto-generated method stub
-        
-    }
-
-    @Override
-    public void sauvegarderDemandes() {
-        // TODO Auto-generated method stub
-        
-    }
-
-    @Override
-    public void calculerTournees() {
-        // TODO Auto-generated method stub
-        
-    }
-
-    @Override
-    public void ajoutValide() {
-        // TODO Auto-generated method stub
-        
-    }
-
-    @Override
-    public void ajoutInvalide() {
-        // TODO Auto-generated method stub
-        
-    }
-
-    @Override
-    public void afficherFeuillesRoute() {
-        // TODO Auto-generated method stub
-        
-    }
-
-    @Override
-    public void sauvegarderFeuilesRoute() {
-        // TODO Auto-generated method stub
-        
-    }
-
-    @Override
-    public void quitterLogiciel() {
-        // TODO Auto-generated method stub
-        
-    }
+    public void chargerPlan(ControleurFenetrePrincipale c) {}
+    
+    public void ajouterDemande(ControleurFenetrePrincipale c) {}
+    
+    public void clicGaucheSurPlan(ControleurFenetrePrincipale c) {}
+    
+    public void clicGaucheSurTableau(ControleurFenetrePrincipale c) {}
+    
+    public void choixPlageHoraire(ControleurFenetrePrincipale c) {}
+    
+    public void validerAjouterOuModifier(ControleurFenetrePrincipale c) {}
+    
+    public void annulerAjouterOuModifier(ControleurFenetrePrincipale c) {}
+    
+    public void chargerListeDemandes(ControleurFenetrePrincipale c) {}
+    
+    public void supprimerDemande(ControleurFenetrePrincipale c) {}
+    
+    public void sauvegarderDemandes(ControleurFenetrePrincipale c) {}
+    
+    public void calculerTournees(ControleurFenetrePrincipale c) {}
+    
+    public void afficherFeuillesRoute(ControleurFenetrePrincipale c) {}
+    
+    public void sauvegarderFeuillesRoute(ControleurFenetrePrincipale c) {}
+    
+    public void fermerFenetre(ControleurFenetrePrincipale c) {}
+    
+    public void quitterLogiciel(ControleurFenetrePrincipale c) {}
+    
+    public void modifierDemande(ControleurFenetrePrincipale c) {}
 }
