@@ -36,9 +36,9 @@ public class Journee {
 	private int nbLivreur;
 	private Plan plan;
 	private List<DemandeLivraison> demandesLivraison;
+	private List<DemandeLivraison> demandesLivraisonNonTraitees;
 	private List<DemandeLivraison> demandesLivraisonTraitees;
 	private List<Tournee> tournees;
-	//private TemplateTSP template;
 	
 	public Journee(Plan p) {
 	    plan = p;
@@ -160,7 +160,6 @@ public class Journee {
                     listDemande.remove(i);
                     break;
                 }
-                
             } 
 	    }
 	    List<Livraison> livrList = new LinkedList<Livraison>();
