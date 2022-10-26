@@ -1,6 +1,6 @@
 package main.controleur;
 
-import main.modele.LigneTableau;
+import main.modele.DemandeLivraison;
 
 public class EtatTourneesCalculees implements Etat{
 
@@ -11,12 +11,12 @@ public class EtatTourneesCalculees implements Etat{
     public void clicGaucheSurPlan(ControleurFenetrePrincipale c) {}
     
     public void clicGaucheSurTableau(ControleurFenetrePrincipale c) {
-        LigneTableau ligne = c.tableViewDemandesLivraison.getSelectionModel().getSelectedItem();
+        DemandeLivraison ligne = c.tableViewDemandesLivraison.getSelectionModel().getSelectedItem();
         if (ligne != null) {
             c.mettreAJourListeDemandes();
             c.dessinerIntersectionLatLong(c.canvasInterieurPlan.getGraphicsContext2D(),
-                                        ligne.getDemandeLivraison().getIntersection().getLatitude(), 
-                                        ligne.getDemandeLivraison().getIntersection().getLongitude(),
+                                        ligne.getIntersection().getLatitude(), 
+                                        ligne.getIntersection().getLongitude(),
                                         c.COULEUR_POINT_LIVRAISON_SELECTIONNE, 
                                         c.TAILLE_RECT_PT_LIVRAISON_SELECTIONNE, 
                                         true, 
