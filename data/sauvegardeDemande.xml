@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<listeDemandes>
+	<demandeLivraison heureDebut="9" heureFin="10" intersectionId="54704577" />
+	<demandeLivraison heureDebut="11" heureFin="12" intersectionId="26027238" />
+	<demandeLivraison heureDebut="11" heureFin="12" intersectionId="26033312" />
+	<demandeLivraison heureDebut="11" heureFin="12" intersectionId="640541652" />
+	<demandeLivraison heureDebut="11" heureFin="12" intersectionId="479185301" />
+	<demandeLivraison heureDebut="10" heureFin="11" intersectionId="26086126" />
+	<demandeLivraison heureDebut="14" heureFin="15" intersectionId="2069548756" />
+	<demandeLivraison heureDebut="7" heureFin="8" intersectionId="55475004" />
+	<demandeLivraison heureDebut="11" heureFin="12" intersectionId="459797860" />
+</listeDemandes>

@@ -10,7 +10,24 @@ public class EtatDemandeLivraisonSelectionneeSansTournees implements Etat {
     
     public void clicGaucheSurPlan(ControleurFenetrePrincipale c) {}
     
-    public void clicGaucheSurTableau(ControleurFenetrePrincipale c) {}
+    public void clicGaucheSurTableau(ControleurFenetrePrincipale c) {
+        LigneTableau ligne = c.tableViewDemandesLivraison.getSelectionModel().getSelectedItem();
+        if (ligne != null) {
+            c.mettreAJourListeDemandes();
+            c.dessinerIntersectionLatLong(c.canvasInterieurPlan.getGraphicsContext2D(),
+                                        ligne.getDemandeLivraison().getIntersection().getLatitude(), 
+                                        ligne.getDemandeLivraison().getIntersection().getLongitude(),
+                                        c.COULEUR_POINT_LIVRAISON_SELECTIONNE, 
+                                        c.TAILLE_RECT_PT_LIVRAISON_SELECTIONNE, 
+                                        true, 
+                                        "Rectangle");
+            
+            c.titlePaneSelectionDemande.setVisible(true);
+            c.textfieldIdentifiantIntersectionSelection.setText(ligne.getIdIntersection().toString());
+            c.textfieldPlageHoraire.setText(ligne.getPlageHoraire().toString());
+        }
+        c.etatCourant = c.etatDemandeLivraisonSelectionneeSansTournees;
+    }
     
     public void choixPlageHoraire(ControleurFenetrePrincipale c) {}
     

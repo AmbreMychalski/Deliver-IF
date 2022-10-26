@@ -164,7 +164,6 @@ public class ControleurFenetrePrincipale {
 	    config.getLoggerConfig(ControleurFenetrePrincipale.class.getPackage().getName()).setLevel(Level.ALL);
 	    context.updateLoggers(config);
 	    
-	    titlePaneSelectionDemande.setVisible(false);
 	    buttonSupprimerLivraison.setOnAction(event -> actionBoutonSupprimerLivraison(event));
 	    buttonModifierLivraison.setOnAction(event -> actionBoutonModifierLivraison(event));
 	    
