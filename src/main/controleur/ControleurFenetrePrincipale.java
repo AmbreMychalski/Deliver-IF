@@ -18,6 +18,9 @@ import org.apache.logging.log4j.core.LoggerContext;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.scene.paint.LinearGradient;
+import javafx.scene.paint.Stop;
+import javafx.scene.paint.CycleMethod;
 /*
 import modele.DemandeLivraison;
 import javafx.scene.control.cell.PropertyValueFactory;
@@ -357,11 +360,10 @@ public class ControleurFenetrePrincipale {
             for(Trajet trajet : trajets) {
                 List<Segment> segments = trajet.getSegments(); 
                 for(Segment segment : segments) {
-                    this.dessinerSegmentLatLong((double)segment.getOrigine().getLatitude(),
+                    this.dessinerTrajetLatLong((double)segment.getOrigine().getLatitude(),
                             (double)segment.getOrigine().getLongitude(),
                             (double)segment.getDestination().getLatitude(),
-                            (double)segment.getDestination().getLongitude(),
-                            COULEUR_DEPOT);
+                            (double)segment.getDestination().getLongitude());
                 }
             }
         }
@@ -587,6 +589,16 @@ public class ControleurFenetrePrincipale {
 	            couleur);
 	}
 	
+	
+	private void dessinerTrajetLatLong(double lat1, double long1, 
+            double lat2, double long2) {
+        System.out.println("long1 : "+long1+" lat1 : "+lat1+" long2 : "+long2+" lat2 : "+lat2);
+        dessinerSegmentGradientXY(convertirLongitudeEnX(long1),
+                convertirLatitudeEnY(lat1),
+                convertirLongitudeEnX(long2),
+                convertirLatitudeEnY(lat2));
+	}
+	
 	/**
 	 * Dessine un segment entre deux points sur le canvas dans la
 	 * couleur précisée. Les coodonnées sont données en pixels.
@@ -603,6 +615,18 @@ public class ControleurFenetrePrincipale {
 	    gc.setStroke(couleur);
 	    gc.strokeLine(x1, y1, x2, y2);
 	}
+	
+	private void dessinerSegmentGradientXY(double x1, double y1, 
+            double x2, double y2) {
+     GraphicsContext gc = canvasPlan.getGraphicsContext2D();
+     
+    //     Stop[] stops = new Stop[] { new Stop(0, Color.WHITE), new Stop(1, Color.MAROON)};
+    //     LinearGradient lg1 = new LinearGradient(0, 0, 1, 0, true, CycleMethod.REFLECT, stops);
+    
+         gc.setLineWidth(3);
+         gc.setStroke(Color.DODGERBLUE);
+         gc.strokeLine(x1, y1, x2, y2);
+    }
 
 	/**
 	 * Convertit une longitude en pixels sur le Canvas (axe X). 
