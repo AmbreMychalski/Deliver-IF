@@ -10,6 +10,11 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.logging.log4j.Level;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.core.LoggerContext;
+
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -57,6 +62,8 @@ import main.modele.LigneTableau;
  */
 public class ControleurFenetrePrincipale {
     
+    private static final Logger logger = LogManager.getLogger(ControleurFenetrePrincipale.class);
+    
     final double TAILLE_RECT_PT_LIVRAISON = 8;
 	final double TAILLE_CERCLE_INTERSECTION = 5;
 	final Color COULEUR_DEPOT = Color.RED;
@@ -64,6 +71,11 @@ public class ControleurFenetrePrincipale {
 	final Color COULEUR_SEGMENT = Color.BLACK;
 	final Color COULEUR_POINT_LIVRAISON = Color.BLUE;
 	final Color COULEUR_POINT_LIVRAISON_SELECTIONNE = Color.RED;
+	/* Rayon en pixels définissant la zone où l'on 
+	 reconnaît les intersections ciblées*/
+	final double RAYON_TOLERANCE_CLIC_INTERSECTION = 8; 
+	
+	
 	Stage thisStage;
 	float largeurPlan;
 	float hauteurPlan;
@@ -124,6 +136,12 @@ public class ControleurFenetrePrincipale {
 
 	@FXML
 	private void initialize() {
+	    final LoggerContext context = (LoggerContext) LogManager.getContext(false);
+	    final org.apache.logging.log4j.core.config.Configuration config = context.getConfiguration();
+	    config.getLoggerConfig(LogManager.ROOT_LOGGER_NAME).setLevel(Level.ALL);
+	    config.getLoggerConfig(ControleurFenetrePrincipale.class.getPackage().getName()).setLevel(Level.ALL);
+	    context.updateLoggers(config);
+	    
 	    titlePaneSelectionDemande.setVisible(false);
 	    buttonSupprimerLivraison.setOnAction(event -> actionBoutonSupprimerLivraison(event));
 	    
@@ -240,14 +258,14 @@ public class ControleurFenetrePrincipale {
      */
 	private void actionClicSurCanvas(MouseEvent event) {
 		if (this.planCharge != null) {
-			System.out.println("Clic sur le canvas, (x,y)=(" 
+			logger.debug("Clic sur le canvas, (x,y)=(" 
 			        + event.getX() + "," + event.getY() + ") (lat,long)="
 					+ convertirYEnLatitude(event.getY()) + "," 
 			        + convertirXEnLongitude(event.getX()));
 			Intersection intersectionTrouvee = 
 			        this.trouverIntersectionCoordoneesPixels(event.getX(), 
 			                                                 event.getY());
-			System.out.println("Intersection trouvée = " + intersectionTrouvee);
+			logger.debug("Intersection trouvée = " + intersectionTrouvee);
 			if (intersectionTrouvee != null) {
 				textfieldIdentifiantIntersection.setText(
 				        intersectionTrouvee.getIdIntersection().toString());
@@ -255,8 +273,8 @@ public class ControleurFenetrePrincipale {
 				textfieldIdentifiantIntersection.setText("");
 			}
 		} else {
-			System.out.println("Clic sur le canvas, (x,y)=(" 
-			                    + event.getX() + "," + event.getY() + ")");
+			logger.debug("Clic sur le canvas, (x,y)=(" 
+                    + event.getX() + "," + event.getY() + ")");
 		}
 
 	}
@@ -364,11 +382,16 @@ public class ControleurFenetrePrincipale {
 				if (distance(convertirLongitudeEnX(intersection.getLongitude()),
 						     convertirLatitudeEnY(intersection.getLatitude()), 
 						     x, y) 
-				        <= this.TAILLE_CERCLE_INTERSECTION) {
+				        <= this.RAYON_TOLERANCE_CLIC_INTERSECTION) {
 					candidats.add(intersection);
 				}
 			}
-
+			logger.debug("candidats = " + candidats);
+			candidats.forEach(
+			        i -> System.out.println("lat,long = " 
+			                + i.getLatitude()+","+i.getLongitude()+" x,y = "
+			                + this.convertirLongitudeEnX(i.getLongitude())
+			                +","+this.convertirLatitudeEnY(i.getLatitude())));
 			// sélectionner l'intersection à retourner
 			if (candidats.isEmpty()) {
 				return null;
@@ -400,7 +423,7 @@ public class ControleurFenetrePrincipale {
 	 * @return distance entre les deux points (dans l'unité donnée en entrée)
 	 */
 	private double distance(double x1, double y1, double x2, double y2) {
-		return Math.sqrt(Math.pow(x1 - x2, 2) - Math.pow(y1 - y2, 2));
+		return Math.sqrt(Math.pow(x1 - x2, 2) + Math.pow(y1 - y2, 2));
 	}
 	
 	/**
