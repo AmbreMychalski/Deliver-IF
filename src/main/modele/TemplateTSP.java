@@ -64,7 +64,12 @@ public abstract class TemplateTSP implements TSP {
 	 */	
 	private void branchAndBound(int currentVertex, Collection<Integer> unvisited, 
 			Collection<Integer> visited, float currentCost){
-		if (System.currentTimeMillis() - startTime > timeLimit) return;
+		if (System.currentTimeMillis() - startTime > timeLimit) {
+		    if(bestSolCost== Integer.MAX_VALUE) {
+		        System.out.println("Le Tsp n'a pas trouvé de solution");
+		    }
+		    return;
+		}
 	    if (unvisited.size() == 0){ 
 	    	if (g.isArc(currentVertex,0)){ 
 	    		if (currentCost+g.getCost(currentVertex,0) < bestSolCost){ 

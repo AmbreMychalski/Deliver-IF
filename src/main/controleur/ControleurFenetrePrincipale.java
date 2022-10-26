@@ -53,6 +53,8 @@ import main.modele.Journee;
 import main.modele.PlageHoraire;
 import main.modele.Plan;
 import main.modele.Segment;
+import main.modele.Tournee;
+import main.modele.Trajet;
 import main.modele.LigneTableau;
 
 /**
@@ -162,6 +164,8 @@ public class ControleurFenetrePrincipale {
 		canvasInterieurPlan.setOnMouseClicked(event -> actionClicSurCanvas(event));
 		tableViewDemandesLivraison.setOnMouseClicked(event -> actionClicTableau(event));
 		buttonChargerPlan.setOnAction(event -> actionBoutonChargerPlan(event));
+	    buttonCalculerTournees.setOnAction(event -> actionBoutonCalculerTournees(event));
+
 		journee = new Journee();
 		for(int i=8; i<12; i++) {
 		    comboboxPlageHoraire.getItems().add(new PlageHoraire(i,i+1));
@@ -344,6 +348,24 @@ public class ControleurFenetrePrincipale {
         this.mettreAJourListeDemandes();
         
 	}
+	
+	private void actionBoutonCalculerTournees(ActionEvent event) {
+        this.journee.calculerTournee();
+        for (Tournee tournee: journee.getTournees()) {
+            System.out.println(tournee.toString());
+            List<Trajet> trajets = tournee.getTrajets();
+            for(Trajet trajet : trajets) {
+                List<Segment> segments = trajet.getSegments(); 
+                for(Segment segment : segments) {
+                    this.dessinerSegmentLatLong((double)segment.getOrigine().getLatitude(),
+                            (double)segment.getOrigine().getLongitude(),
+                            (double)segment.getDestination().getLatitude(),
+                            (double)segment.getDestination().getLongitude(),
+                            COULEUR_DEPOT);
+                }
+            }
+        }
+    }
 
 	private void mettreAJourListeDemandes() {
         ObservableList<LigneTableau> data = FXCollections.observableArrayList();
