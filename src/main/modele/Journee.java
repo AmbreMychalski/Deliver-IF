@@ -36,7 +36,7 @@ public class Journee {
 	private int nbLivreur;
 	private Plan plan;
 	private List<DemandeLivraison> demandesLivraison;
-	private List<DemandeLivraison> demandesLivraisonTraitees;
+	private List<DemandeLivraison> demandesLivraisonNonTraitees;
 	private List<Tournee> tournees;
 	//private TemplateTSP template;
 	
@@ -131,10 +131,10 @@ public class Journee {
 	    boolean tourneeCalculee = false;
 	    List<DemandeLivraison> dmdLivrOrdonnee = new LinkedList<DemandeLivraison>();
 	            
-	    List<DemandeLivraison> listDemande= new LinkedList<DemandeLivraison>();
-	    for(DemandeLivraison dl : demandesLivraison) {
-	        listDemande.add(dl);
-	    }
+	    List<DemandeLivraison> listDemande= new LinkedList<DemandeLivraison>(demandesLivraison);
+//	    for(DemandeLivraison dl : demandesLivraison) {
+//	        listDemande.add(dl);
+//	    }
 	    
 	    while(!tourneeCalculee) {
 	        tourneeCalculee = true;
@@ -143,26 +143,32 @@ public class Journee {
             
             TSP tsp = new TSP1();
             tsp.searchSolution(20000, g);
-            for(int i=1; i<this.demandesLivraison.size()+1;i++) {
+            for(int i=1; i<listDemande.size()+1;i++) {
                 int x =tsp.getSolution(i);
                 dmdLivrOrdonnee.add(g.getIdIndexToDemandeLivraison().get(x));
             }
             
-            float heureLivraison = (float) dmdLivrOrdonnee.get(0).getPlageHoraire().debut;  
+            float heureLivraison = (float) dmdLivrOrdonnee.get(0).getPlageHoraire().debut+5/60.0f;  
             
             for(int i=1; i<dmdLivrOrdonnee.size();i++) {
-                int indexCurrentDl = g.getIdDemandeLivraisonToIndex().get(dmdLivrOrdonnee.get(i));
+                DemandeLivraison currentDl = dmdLivrOrdonnee.get(i);
+                int indexCurrentDl = g.getIdDemandeLivraisonToIndex().get(currentDl);
                 int indexPreviousDl = g.getIdDemandeLivraisonToIndex().get(dmdLivrOrdonnee.get(i-1));
+                
                 float temps = g.getCost(indexPreviousDl, indexCurrentDl);
                 heureLivraison+= temps/(15.0f);
-                if(heureLivraison>dmdLivrOrdonnee.get(i).getPlageHoraire().getFin()) {
+                
+                if(heureLivraison>currentDl.getPlageHoraire().getFin()) {
                     tourneeCalculee=false;
-                    listDemande.remove(i);
+                    this.demandesLivraisonNonTraitees.add(currentDl);
+                    listDemande.remove(currentDl);
                     break;
                 }
+                heureLivraison+=5/60.0f;
                 
             } 
 	    }
+	    
 	    List<Livraison> livrList = new LinkedList<Livraison>();
 	    for(DemandeLivraison dl: dmdLivrOrdonnee) {
 	        livrList.add(new Livraison(dl, null));
@@ -176,7 +182,7 @@ public class Journee {
 	        trajetList.add(new Trajet(lisSeg));
         }
 	    lisSeg= plan.calculerPlusCourtChemin(livrList.get(livrList.size()-1).getDemandeLivraison().getIntersection(),plan.getEntrepot());
-	    
+	    trajetList.add(new Trajet(lisSeg));
 	    
 	    
 	    tournees.add(new Tournee(trajetList,livrList ));
