@@ -1,6 +1,9 @@
 package main.controleur;
 
-import main.modele.LigneTableau;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
+import javafx.scene.input.MouseEvent;
+import main.modele.DemandeLivraison;
 
 public class EtatDemandeLivraisonSelectionneeSansTournees implements Etat {
 
@@ -8,25 +11,35 @@ public class EtatDemandeLivraisonSelectionneeSansTournees implements Etat {
     
     public void ajouterDemande(ControleurFenetrePrincipale c) {}
     
-    public void clicGaucheSurPlan(ControleurFenetrePrincipale c) {}
+    public void clicGaucheSurPlan(ControleurFenetrePrincipale c, MouseEvent event) {
+        c.mettreAJourListeDemandes();
+        c.textfieldIdentifiantIntersectionSelection.setText("");
+        c.textfieldPlageHoraire.setText("");
+        if (c.journee.getDemandesLivraison().size() == 0) {
+            c.etatCourant = c.etatSansDemande;
+        } else {
+            c.etatCourant = c.etatAvecDemande;
+        }
+
+    }
     
     public void clicGaucheSurTableau(ControleurFenetrePrincipale c) {
-        LigneTableau ligne = c.tableViewDemandesLivraison.getSelectionModel().getSelectedItem();
+        DemandeLivraison ligne = c.tableViewDemandesLivraison.getSelectionModel().getSelectedItem();
         if (ligne != null) {
             c.mettreAJourListeDemandes();
             c.dessinerIntersectionLatLong(c.canvasInterieurPlan.getGraphicsContext2D(),
-                                        ligne.getDemandeLivraison().getIntersection().getLatitude(), 
-                                        ligne.getDemandeLivraison().getIntersection().getLongitude(),
+                                        ligne.getIntersection().getLatitude(), 
+                                        ligne.getIntersection().getLongitude(),
                                         c.COULEUR_POINT_LIVRAISON_SELECTIONNE, 
                                         c.TAILLE_RECT_PT_LIVRAISON_SELECTIONNE, 
                                         true, 
                                         "Rectangle");
             
+            c.buttonAutoriserAjouterLivraison.setDisable(false);
             c.titlePaneSelectionDemande.setVisible(true);
             c.textfieldIdentifiantIntersectionSelection.setText(ligne.getIdIntersection().toString());
             c.textfieldPlageHoraire.setText(ligne.getPlageHoraire().toString());
         }
-        c.etatCourant = c.etatDemandeLivraisonSelectionneeSansTournees;
     }
     
     public void choixPlageHoraire(ControleurFenetrePrincipale c) {}
@@ -38,9 +51,9 @@ public class EtatDemandeLivraisonSelectionneeSansTournees implements Etat {
     public void chargerListeDemandes(ControleurFenetrePrincipale c) {}
     
     public void supprimerDemande(ControleurFenetrePrincipale c) {
-        LigneTableau ligne = c.tableViewDemandesLivraison.getSelectionModel().getSelectedItem();
+        DemandeLivraison ligne = c.tableViewDemandesLivraison.getSelectionModel().getSelectedItem();
         if(ligne != null) {
-            c.journee.supprimerDemandeLivraison(ligne.getDemandeLivraison());
+            c.journee.supprimerDemandeLivraison(ligne);
             c.mettreAJourListeDemandes();
             c.textfieldIdentifiantIntersectionSelection.setText("");
             c.textfieldPlageHoraire.setText("");
@@ -70,6 +83,20 @@ public class EtatDemandeLivraisonSelectionneeSansTournees implements Etat {
         c.buttonAnnulerLivraison.setDisable(false);
         c.comboboxPlageHoraire.setDisable(false);
         c.etatCourant = c.etatModifierDemandeLivraisonSansTournees;
+    }
+    
+    public  void touchePressee(ControleurFenetrePrincipale c, KeyEvent ke) {
+        if(ke.getCode()== KeyCode.ESCAPE) {
+            c.buttonAutoriserAjouterLivraison.setDisable(false);
+            c.mettreAJourListeDemandes();
+            c.textfieldIdentifiantIntersectionSelection.setText("");
+            c.textfieldPlageHoraire.setText("");
+            if (c.journee.getDemandesLivraison().size() == 0) {
+                c.etatCourant = c.etatSansDemande;
+            } else {
+                c.etatCourant = c.etatAvecDemande;
+            }
+        }
     }
 
 }

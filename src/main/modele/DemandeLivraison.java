@@ -2,6 +2,8 @@ package main.modele;
 
 import java.util.Objects;
 
+import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.property.StringProperty;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
@@ -14,6 +16,20 @@ import lombok.ToString;
 public class DemandeLivraison {
     private Intersection intersection;
 	private PlageHoraire plageHoraire;
+	
+	
+	public  void modifierDemandeLivraison(Intersection intersection, PlageHoraire plageHoraire) {
+	    if(intersection != null) {
+	        this.setIntersection(intersection);
+	    }
+	    if(plageHoraire != null) {
+	        this.setPlageHoraire(plageHoraire);
+	    }
+	}
+	
+	public Long getIdIntersection() {
+	    return intersection.getIdIntersection();
+	}
 	
     @Override
     public int hashCode() {

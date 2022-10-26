@@ -1,5 +1,6 @@
 package main.controleur;
 
+import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 
 public interface Etat {
@@ -41,4 +42,6 @@ public interface Etat {
 	public default void quitterLogiciel(ControleurFenetrePrincipale c) {}
 	
 	public default void modifierDemande(ControleurFenetrePrincipale c) {}
+	
+	public default void touchePressee(ControleurFenetrePrincipale c, KeyEvent ke) {}
 }

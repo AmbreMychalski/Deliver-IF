@@ -3,6 +3,7 @@ package main.controleur;
 import java.io.File;
 
 import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.paint.Color;
 import javafx.stage.FileChooser;
@@ -105,4 +106,6 @@ public class EtatSansDemande implements Etat{
     public void quitterLogiciel(ControleurFenetrePrincipale c) {}
     
     public void modifierDemande(ControleurFenetrePrincipale c) {}
+    
+    public  void touchePressee(ControleurFenetrePrincipale c, KeyEvent ke) {}
 }

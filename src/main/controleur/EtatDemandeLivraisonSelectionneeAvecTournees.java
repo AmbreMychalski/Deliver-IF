@@ -1,6 +1,7 @@
 package main.controleur;
 
-import main.modele.LigneTableau;
+import javafx.scene.input.KeyEvent;
+import main.modele.DemandeLivraison;
 
 public class EtatDemandeLivraisonSelectionneeAvecTournees implements Etat {
 
@@ -11,12 +12,12 @@ public class EtatDemandeLivraisonSelectionneeAvecTournees implements Etat {
     public void clicGaucheSurPlan(ControleurFenetrePrincipale c) {}
     
     public void clicGaucheSurTableau(ControleurFenetrePrincipale c) {
-        LigneTableau ligne = c.tableViewDemandesLivraison.getSelectionModel().getSelectedItem();
+        DemandeLivraison ligne = c.tableViewDemandesLivraison.getSelectionModel().getSelectedItem();
         if (ligne != null) {
             c.mettreAJourListeDemandes();
             c.dessinerIntersectionLatLong(c.canvasInterieurPlan.getGraphicsContext2D(),
-                                        ligne.getDemandeLivraison().getIntersection().getLatitude(), 
-                                        ligne.getDemandeLivraison().getIntersection().getLongitude(),
+                                        ligne.getIntersection().getLatitude(), 
+                                        ligne.getIntersection().getLongitude(),
                                         c.COULEUR_POINT_LIVRAISON_SELECTIONNE, 
                                         c.TAILLE_RECT_PT_LIVRAISON_SELECTIONNE, 
                                         true, 
@@ -52,5 +53,7 @@ public class EtatDemandeLivraisonSelectionneeAvecTournees implements Etat {
     public void quitterLogiciel(ControleurFenetrePrincipale c) {}
     
     public void modifierDemande(ControleurFenetrePrincipale c) {}
+    
+    public  void touchePressee(ControleurFenetrePrincipale c, KeyEvent ke) {}
 
 }

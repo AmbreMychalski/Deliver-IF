@@ -2,6 +2,7 @@ package main.controleur;
 
 import java.io.File;
 
+import javafx.scene.input.KeyEvent;
 import javafx.stage.FileChooser;
 import main.modele.Plan;
 import main.modele.Segment;
@@ -19,8 +20,6 @@ public class EtatInitial implements Etat{
         c.planCharge = new Plan(fichier);
         c.journee.setPlan(c.planCharge);
         
-        System.out.println("Plan chargé : " + c.planCharge);
-
         c.latMax = c.planCharge.getIntersections().values().stream()
                 .map(intersection -> intersection.getLatitude())
                 .max((a, b) -> Float.compare(a, b)).orElse(0f);
@@ -87,4 +86,7 @@ public class EtatInitial implements Etat{
     public void quitterLogiciel(ControleurFenetrePrincipale c) {}
     
     public void modifierDemande(ControleurFenetrePrincipale c) {}
+    
+    public  void touchePressee(ControleurFenetrePrincipale c,  KeyEvent ke) {}
+    
 }

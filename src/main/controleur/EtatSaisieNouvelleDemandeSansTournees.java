@@ -1,6 +1,7 @@
 package main.controleur;
 
 import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.paint.Color;
 import main.modele.DemandeLivraison;
@@ -112,4 +113,6 @@ public class EtatSaisieNouvelleDemandeSansTournees implements Etat{
     public void quitterLogiciel(ControleurFenetrePrincipale c) {}
     
     public void modifierDemande(ControleurFenetrePrincipale c) {}
+    
+    public  void touchePressee(ControleurFenetrePrincipale c, KeyEvent ke) {}
 }

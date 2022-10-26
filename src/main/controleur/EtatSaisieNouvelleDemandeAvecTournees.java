@@ -1,5 +1,7 @@
 package main.controleur;
 
+import javafx.scene.input.KeyEvent;
+
 public class EtatSaisieNouvelleDemandeAvecTournees implements Etat {
 
     public void chargerPlan(ControleurFenetrePrincipale c) {}
@@ -33,5 +35,8 @@ public class EtatSaisieNouvelleDemandeAvecTournees implements Etat {
     public void quitterLogiciel(ControleurFenetrePrincipale c) {}
     
     public void modifierDemande(ControleurFenetrePrincipale c) {}
+    
+    public  void touchePressee(ControleurFenetrePrincipale c, KeyEvent ke) {}
+    
 
 }

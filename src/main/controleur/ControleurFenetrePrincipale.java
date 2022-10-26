@@ -15,6 +15,9 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.apache.logging.log4j.core.LoggerContext;
 
+import javafx.beans.Observable;
+import javafx.beans.property.ReadOnlyLongWrapper;
+import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.paint.LinearGradient;
@@ -40,6 +43,8 @@ import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.TitledPane;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.paint.Color;
 import javafx.stage.DirectoryChooser;
@@ -54,7 +59,6 @@ import main.modele.Plan;
 import main.modele.Segment;
 import main.modele.Tournee;
 import main.modele.Trajet;
-import main.modele.LigneTableau;
 
 /**
  * Contrôleur de la vue principale de l'application.
@@ -131,7 +135,7 @@ public class ControleurFenetrePrincipale {
 	@FXML 
 	Button buttonEtatCourant;
 	@FXML
-	TableView<LigneTableau> tableViewDemandesLivraison;
+	TableView<DemandeLivraison> tableViewDemandesLivraison;
 	@FXML
 	Canvas canvasPlan;
 	@FXML
@@ -143,9 +147,9 @@ public class ControleurFenetrePrincipale {
 	@FXML
 	TextField textfieldNomFichier;
 	@FXML
-	TableColumn<LigneTableau,Long> columnIdentifiant;
+	TableColumn<DemandeLivraison, Long> columnIdentifiant;
 	@FXML
-	TableColumn<LigneTableau, PlageHoraire> columnPlageHoraire;
+	TableColumn<DemandeLivraison, PlageHoraire> columnPlageHoraire;
 	@FXML
 	TitledPane titlePaneSelectionDemande;
 	//public ImageView im = new ImageView(".\\data\\repere.png");
@@ -154,7 +158,11 @@ public class ControleurFenetrePrincipale {
 	@FXML
 	TextField textfieldPlageHoraire;
 
-
+	@FXML
+    private void handleKeyPressed(KeyEvent ke){
+    	 this.etatCourant.touchePressee(this, ke);
+    }
+	
 	@FXML
 	private void initialize() {
 	    this.etatCourant = this.etatInitial;
@@ -182,7 +190,7 @@ public class ControleurFenetrePrincipale {
 		tableViewDemandesLivraison.setOnMouseClicked(event -> actionClicTableau(event));
 		buttonChargerPlan.setOnAction(event -> actionBoutonChargerPlan(event));
 	    buttonCalculerTournees.setOnAction(event -> actionBoutonCalculerTournees(event));
-
+	    
 		journee = new Journee();
 		for(int i=8; i<12; i++) {
 		    comboboxPlageHoraire.getItems().add(new PlageHoraire(i,i+1));
@@ -248,12 +256,12 @@ public class ControleurFenetrePrincipale {
     }
 
 	void mettreAJourListeDemandes() {
-        ObservableList<LigneTableau> data = FXCollections.observableArrayList();
+        ObservableList<DemandeLivraison> data = FXCollections.observableArrayList();
         GraphicsContext gc = canvasInterieurPlan.getGraphicsContext2D();
         gc.clearRect(0, 0, canvasInterieurPlan.getWidth(), canvasInterieurPlan.getHeight());
+        data.addAll(journee.getDemandesLivraison());
         
         for(DemandeLivraison d: journee.getDemandesLivraison()) {
-            data.add(new LigneTableau(d));
             this.dessinerIntersectionLatLong(gc,
                     d.getIntersection().getLatitude(), 
                     d.getIntersection().getLongitude(), 
@@ -263,11 +271,13 @@ public class ControleurFenetrePrincipale {
                     "Rectangle");
         }
         
-        tableViewDemandesLivraison.setItems(data);
+        
         columnIdentifiant.setCellValueFactory(
-                new PropertyValueFactory<LigneTableau, Long>("idIntersection"));
+                new PropertyValueFactory<DemandeLivraison, Long>("idIntersection"));
         columnPlageHoraire.setCellValueFactory(
-                new PropertyValueFactory<LigneTableau,PlageHoraire>("plageHoraire")); 
+                new PropertyValueFactory<DemandeLivraison, PlageHoraire>("plageHoraire")); 
+        
+        tableViewDemandesLivraison.setItems(data);
 	}
     
     private void actionBoutonAjouterLivraison(ActionEvent event) {
@@ -307,12 +317,14 @@ public class ControleurFenetrePrincipale {
 					candidats.add(intersection);
 				}
 			}
+			/*
 			logger.debug("candidats = " + candidats);
 			candidats.forEach(
 			        i -> System.out.println("lat,long = " 
 			                + i.getLatitude()+","+i.getLongitude()+" x,y = "
 			                + this.convertirLongitudeEnX(i.getLongitude())
 			                +","+this.convertirLatitudeEnY(i.getLatitude())));
+							*/
 			// sélectionner l'intersection à retourner
 			if (candidats.isEmpty()) {
 				return null;
