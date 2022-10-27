@@ -29,11 +29,11 @@ public class PlanTests {
     }
     
     @Test
-    void exceptionFichierNonConformeTest() {
+    void FichierNonConformeTest() {
         File fichierPlan = new File("data/testExceptionPlan.xml");
         Assertions.assertThrows(FichierNonConformeException.class,() -> {
-
-        File fichierPlan = new File("data/testExceptionPlan.xml");
+            new Plan(fichierPlan);
+        });
     }
         
     void exceptionFichierNonConformeTest() {
