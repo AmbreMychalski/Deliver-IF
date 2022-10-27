@@ -54,7 +54,7 @@ public class CompleteGraph implements Graph {
             Integer currentIndex =  idDemandeLivraisonToIndex.get(currentDl);           
             for(DemandeLivraison dl : demandesLivraisons ) {
                 if(dl != currentDl ) {
-                    if(currentDl.getPlageHoraire().getFin()==dl.getPlageHoraire().getDebut() || currentDl.getPlageHoraire().getDebut()==dl.getPlageHoraire().getDebut()) {
+                    if(currentDl.getPlageHoraire().getFin()<=dl.getPlageHoraire().getDebut() || currentDl.getPlageHoraire().getDebut()==dl.getPlageHoraire().getDebut()) {
                         index = idDemandeLivraisonToIndex.get(dl);
                         cost[currentIndex][index]=plusCourtsChemins.get(dl.getIntersection());  
                     }   

@@ -1,27 +1,18 @@
 package main.controleur;
 
-import java.io.File;
-
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.paint.Color;
-import javafx.stage.FileChooser;
 import main.modele.DemandeLivraison;
 import main.modele.Intersection;
+import main.modele.PlageHoraire;
 
-public class EtatSansDemande implements Etat{
+public class EtatSaisieNouvelleDemandeSansTournees implements Etat{
 
-    public void chargerPlan(ControleurFenetrePrincipale c) {
-        c.etatInitial.chargerPlan(c);
-    }
+    public void chargerPlan(ControleurFenetrePrincipale c) {}
     
-    public void ajouterDemande(ControleurFenetrePrincipale c) {
-        c.buttonValiderLivraison.setDisable(false);
-        c.buttonAnnulerLivraison.setDisable(false);
-        c.comboboxPlageHoraire.setDisable(false);
-        c.etatCourant = c.etatSaisieNouvelleDemandeSansTournees;
-    }
+    public void ajouterDemande(ControleurFenetrePrincipale c) {}
     
     public void clicGaucheSurPlan(ControleurFenetrePrincipale c, MouseEvent event) {
         if (c.planCharge != null) {
@@ -68,28 +59,44 @@ public class EtatSansDemande implements Etat{
 
     }
     
-    
     public void clicGaucheSurTableau(ControleurFenetrePrincipale c) {}
     
     public void choixPlageHoraire(ControleurFenetrePrincipale c) {}
     
-    public void validerAjouterOuModifier(ControleurFenetrePrincipale c) {}
-    
-    public void annulerAjouterOuModifier(ControleurFenetrePrincipale c) {}
-    
-    public void chargerListeDemandes(ControleurFenetrePrincipale c) {
-        FileChooser fileChooser = new FileChooser();
-        fileChooser.setInitialDirectory(new File(".\\data"));
-        fileChooser.getExtensionFilters().add(
-                new FileChooser.ExtensionFilter("Fichier XML", "*.xml", "*.XML"));
-        fileChooser.setTitle("Charger des demandes de livraison");
-        File fichier = fileChooser.showOpenDialog(c.stage);
-        System.out.println("Fichier choisi = " + fichier.getAbsolutePath());
-
-        c.journee.chargerDemandesLivraison(fichier);
-        c.mettreAJourListeDemandes();
-        c.etatCourant = c.etatAvecDemande;
+    public void validerAjouterOuModifier(ControleurFenetrePrincipale c) {
+        String champIdentifiant = c.textfieldIdentifiantIntersection.getText();
+        PlageHoraire plageHoraire = c.comboboxPlageHoraire.getValue();
+        if(!champIdentifiant.isEmpty() && plageHoraire != null) {
+            Intersection intersection = c.journee.getPlan().getIntersections()
+                    .get(Long.parseLong(champIdentifiant));
+            DemandeLivraison demande = 
+                    new DemandeLivraison(intersection, plageHoraire);
+            c.journee.ajouterDemandeLivraison(demande);
+            c.mettreAJourListeDemandes();
+            c.buttonValiderLivraison.setDisable(true);
+            c.buttonAnnulerLivraison.setDisable(true);
+            c.comboboxPlageHoraire.setDisable(true);
+            c.comboboxPlageHoraire.setValue(null);
+            c.textfieldIdentifiantIntersection.setText("");
+            c.etatCourant = c.etatAvecDemande;
+        } else {
+            ControleurFenetrePrincipale.logger.warn("Informations manquantes pour l'ajout de la demande");
+        }
     }
+    
+    public void annulerAjouterOuModifier(ControleurFenetrePrincipale c) {
+        c.buttonValiderLivraison.setDisable(true);
+        c.buttonAnnulerLivraison.setDisable(true);
+        c.comboboxPlageHoraire.setDisable(true);
+        c.textfieldIdentifiantIntersection.setText("");
+        if (c.journee.getDemandesLivraison().size() == 0) {
+            c.etatCourant = c.etatSansDemande;
+        } else {
+            c.etatCourant = c.etatAvecDemande;
+        }
+    }
+    
+    public void chargerListeDemandes(ControleurFenetrePrincipale c) {}
     
     public void supprimerDemande(ControleurFenetrePrincipale c) {}
     

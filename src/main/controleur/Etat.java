@@ -1,38 +1,47 @@
 package main.controleur;
 
+import javafx.scene.input.KeyEvent;
+import javafx.scene.input.MouseEvent;
+
 public interface Etat {
 
-	public void chargerPlan();
+	public default void chargerPlan(ControleurFenetrePrincipale c) {}
 	
-	public void ajouterDemande();
+	public default void ajouterDemande(ControleurFenetrePrincipale c) {}
 	
-	public void clicGaucheSurPlan();
+	public default void clicGaucheSurPlan(ControleurFenetrePrincipale c, MouseEvent event) {}
 	
-	public void choixPlageHoraire();
+	public default void clicGaucheSurTableau(ControleurFenetrePrincipale c) {}
 	
-	public void ajouter();
+	public default void choixPlageHoraire(ControleurFenetrePrincipale c) {}
 	
-	public void annuler();
+	public default void validerAjouterOuModifier(ControleurFenetrePrincipale c) {}
 	
-	public void valider();
+	public default void annulerAjouterOuModifier(ControleurFenetrePrincipale c) {
+	    c.buttonAutoriserAjouterLivraison.setDisable(false);
+        c.buttonValiderLivraison.setDisable(true);
+        c.buttonAnnulerLivraison.setDisable(true);
+        c.comboboxPlageHoraire.setDisable(true);
+        c.etatCourant = c.etatDemandeLivraisonSelectionneeSansTournees;
+	}
 	
-	public void chargerListeDemandes();
+	public default void chargerListeDemandes(ControleurFenetrePrincipale c) {}
 	
-	public void supprimerDemande();
+	public default void supprimerDemande(ControleurFenetrePrincipale c) {}
 	
-	public void sauvegarderDemandes();
+	public default void sauvegarderDemandes(ControleurFenetrePrincipale c) {}
 	
-	public void calculerTournees();
+	public default void calculerTournees(ControleurFenetrePrincipale c) {}
 	
-	public void ajoutValide();
+	public default void afficherFeuillesRoute(ControleurFenetrePrincipale c) {}
 	
-	public void ajoutInvalide();
+	public default void sauvegarderFeuillesRoute(ControleurFenetrePrincipale c) {}
 	
-	public void afficherFeuillesRoute();
+	public default void fermerFenetre(ControleurFenetrePrincipale c) {}
 	
-	public void sauvegarderFeuilesRoute();
+	public default void quitterLogiciel(ControleurFenetrePrincipale c) {}
 	
-	public void fermerFenetre();
+	public default void modifierDemande(ControleurFenetrePrincipale c) {}
 	
-	public void quitterLogiciel();
+	public default void touchePressee(ControleurFenetrePrincipale c, KeyEvent ke) {}
 }
