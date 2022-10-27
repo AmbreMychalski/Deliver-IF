@@ -270,4 +270,3 @@ public class Plan {
         return interPlusProche;
     }
 }
-

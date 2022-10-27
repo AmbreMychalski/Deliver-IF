@@ -32,6 +32,15 @@ public class PlanTests {
     void exceptionFichierNonConformeTest() {
         File fichierPlan = new File("data/testExceptionPlan.xml");
         Assertions.assertThrows(FichierNonConformeException.class,() -> {
+
+        File fichierPlan = new File("data/testExceptionPlan.xml");
+    }
+        
+    void exceptionFichierNonConformeTest() {
+
+        File fichierPlan = new File("data/testExceptionPlan.xml");
+        
+        Assertions.assertThrows(Exception.class, () -> {
             new Plan(fichierPlan);
         });
     }
