@@ -89,7 +89,7 @@ public class EtatModifierDemandeLivraisonSansTournees implements Etat {
                     .get(Long.parseLong(champIdentifiant));
         }
          
-        
+
         DemandeLivraison demande = c.journee.getDemandesLivraison().get(c.journee.getDemandesLivraison().indexOf(ligne));
         demande.modifierDemandeLivraison(intersection, plageHoraire);
         

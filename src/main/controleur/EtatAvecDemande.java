@@ -1,6 +1,7 @@
 package main.controleur;
 
 import java.io.File;
+import java.util.List;
 
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.input.KeyEvent;
@@ -9,6 +10,9 @@ import javafx.scene.paint.Color;
 import javafx.stage.FileChooser;
 import main.modele.DemandeLivraison;
 import main.modele.Intersection;
+import main.modele.Segment;
+import main.modele.Tournee;
+import main.modele.Trajet;
 
 public class EtatAvecDemande implements Etat{
 
@@ -126,7 +130,24 @@ public class EtatAvecDemande implements Etat{
         }
     }
     
-    public void calculerTournees(ControleurFenetrePrincipale c) {}
+    public void calculerTournees(ControleurFenetrePrincipale c) {
+        c.journee.calculerTournee();
+        GraphicsContext gc = c.canvasPlanTrajet.getGraphicsContext2D();
+        gc.clearRect(0, 0, c.canvasPlanTrajet.getWidth(), c.canvasPlanTrajet.getHeight());
+        for (Tournee tournee: c.journee.getTournees()) {
+            List<Trajet> trajets = tournee.getTrajets();
+            for(Trajet trajet : trajets) {
+                List<Segment> segments = trajet.getSegments(); 
+                for(Segment segment : segments) {
+                    c.dessinerTrajetLatLong((double)segment.getOrigine().getLatitude(),
+                            (double)segment.getOrigine().getLongitude(),
+                            (double)segment.getDestination().getLatitude(),
+                            (double)segment.getDestination().getLongitude());
+                }
+            }
+        }
+        c.etatCourant = c.etatTourneesCalculees;
+    }
     
     public void afficherFeuillesRoute(ControleurFenetrePrincipale c) {}
     

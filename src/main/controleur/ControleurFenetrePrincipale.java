@@ -141,6 +141,8 @@ public class ControleurFenetrePrincipale {
 	@FXML
 	Canvas canvasInterieurPlan;
 	@FXML
+	Canvas canvasPlanTrajet;
+	@FXML
 	ComboBox<PlageHoraire> comboboxPlageHoraire;
 	@FXML
 	TextField textfieldIdentifiantIntersection;
@@ -239,26 +241,14 @@ public class ControleurFenetrePrincipale {
 	}
 	
 	private void actionBoutonCalculerTournees(ActionEvent event) {
-        this.journee.calculerTournee();
-        for (Tournee tournee: journee.getTournees()) {
-            System.out.println(tournee.toString());
-            List<Trajet> trajets = tournee.getTrajets();
-            for(Trajet trajet : trajets) {
-                List<Segment> segments = trajet.getSegments(); 
-                for(Segment segment : segments) {
-                    this.dessinerTrajetLatLong((double)segment.getOrigine().getLatitude(),
-                            (double)segment.getOrigine().getLongitude(),
-                            (double)segment.getDestination().getLatitude(),
-                            (double)segment.getDestination().getLongitude());
-                }
-            }
-        }
+        this.etatCourant.calculerTournees(this);
     }
 
 	void mettreAJourListeDemandes() {
         ObservableList<DemandeLivraison> data = FXCollections.observableArrayList();
         GraphicsContext gc = canvasInterieurPlan.getGraphicsContext2D();
         gc.clearRect(0, 0, canvasInterieurPlan.getWidth(), canvasInterieurPlan.getHeight());
+        
         data.addAll(journee.getDemandesLivraison());
         
         for(DemandeLivraison d: journee.getDemandesLivraison()) {
@@ -271,13 +261,12 @@ public class ControleurFenetrePrincipale {
                     "Rectangle");
         }
         
-        
+        tableViewDemandesLivraison.setItems(data);
         columnIdentifiant.setCellValueFactory(
                 new PropertyValueFactory<DemandeLivraison, Long>("idIntersection"));
         columnPlageHoraire.setCellValueFactory(
                 new PropertyValueFactory<DemandeLivraison, PlageHoraire>("plageHoraire")); 
         
-        tableViewDemandesLivraison.setItems(data);
 	}
     
     private void actionBoutonAjouterLivraison(ActionEvent event) {
@@ -449,7 +438,7 @@ public class ControleurFenetrePrincipale {
 	}
 	
 	
-	private void dessinerTrajetLatLong(double lat1, double long1, 
+	void dessinerTrajetLatLong(double lat1, double long1, 
             double lat2, double long2) {
         System.out.println("long1 : "+long1+" lat1 : "+lat1+" long2 : "+long2+" lat2 : "+lat2);
         dessinerSegmentGradientXY(convertirLongitudeEnX(long1),
@@ -477,7 +466,7 @@ public class ControleurFenetrePrincipale {
 	
 	private void dessinerSegmentGradientXY(double x1, double y1, 
             double x2, double y2) {
-     GraphicsContext gc = canvasPlan.getGraphicsContext2D();
+     GraphicsContext gc = canvasPlanTrajet.getGraphicsContext2D();
      
     //     Stop[] stops = new Stop[] { new Stop(0, Color.WHITE), new Stop(1, Color.MAROON)};
     //     LinearGradient lg1 = new LinearGradient(0, 0, 1, 0, true, CycleMethod.REFLECT, stops);

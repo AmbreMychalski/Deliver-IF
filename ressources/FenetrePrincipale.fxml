@@ -37,8 +37,6 @@
                   </AnchorPane>
               </content>
             </TitledPane>
-            <Label layoutX="6.0" layoutY="330.0" prefHeight="36.0" prefWidth="137.0" text="Entrez le nom du fichier :" textAlignment="RIGHT" wrapText="true" />
-            <TextField id="textfieldNomFichier" fx:id="textfieldNomFichier" layoutX="6.0" layoutY="360.0" prefHeight="25.0" prefWidth="276.0" />
             <Button id="buttonSauvegarderDemandes" fx:id="buttonSauvegarderDemandes" layoutX="6.0" layoutY="397.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="276.0" text="Sauvegarder les demandes de livraison" textAlignment="CENTER" wrapText="true" />
             <Button id="buttonChargerDemandes" fx:id="buttonChargerDemandes" layoutX="6.0" layoutY="429.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="276.0" text="Charger des demandes de livraisons" textAlignment="CENTER" />
             <Button id="buttonAfficherFeuillesRoute" fx:id="buttonAfficherFeuillesRoute" layoutX="7.0" layoutY="462.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="276.0" text="Afficher les feuilles de route" textAlignment="CENTER" />
@@ -51,8 +49,10 @@
             <Button id="buttonChargerPlan" fx:id="buttonChargerPlan" layoutX="623.0" layoutY="696.0" mnemonicParsing="false" text="Charger un plan" />
             <Pane prefHeight="681.0" prefWidth="735.0" style="-fx-border-color: black; -fx-border-width: 2px;">
                <children>
-                  <Canvas id="canvasPlan" fx:id="canvasPlan" height="667.0" layoutX="6.0" layoutY="7.0" width="723.0" />
+       				<Canvas id="canvasPlanTrajet" fx:id="canvasPlanTrajet" height="667.0" layoutX="6.0" layoutY="7.0" width="723.0" />
+                    <Canvas id="canvasPlan" fx:id="canvasPlan" height="667.0" layoutX="6.0" layoutY="7.0" width="723.0" />
                   	<Canvas id="canvasInterieurPlan" fx:id="canvasInterieurPlan" height="667.0" layoutX="6.0" layoutY="7.0" width="723.0" />
+                  	
                  
                </children>
             </Pane>

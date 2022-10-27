@@ -169,6 +169,9 @@ public class Journee {
                     listDemande.remove(currentDl);
                     break;
                 }
+                if(heureLivraison < currentDl.getPlageHoraire().getDebut()) {
+                    heureLivraison = currentDl.getPlageHoraire().getDebut();
+                }
                 heureLivraison+=5/60.0f;
                 
             } 

@@ -7,7 +7,12 @@ public class EtatTourneesCalculees implements Etat{
 
     public void chargerPlan(ControleurFenetrePrincipale c) {}
     
-    public void ajouterDemande(ControleurFenetrePrincipale c) {}
+    public void ajouterDemande(ControleurFenetrePrincipale c) {
+        c.buttonValiderLivraison.setDisable(false);
+        c.buttonAnnulerLivraison.setDisable(false);
+        c.comboboxPlageHoraire.setDisable(false);
+        c.etatCourant = c.etatSaisieNouvelleDemandeAvecTournees;
+    }
     
     public void clicGaucheSurPlan(ControleurFenetrePrincipale c) {}
     
