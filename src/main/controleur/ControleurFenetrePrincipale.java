@@ -6,6 +6,7 @@
 
 package main.controleur;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -14,8 +15,16 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.apache.logging.log4j.core.LoggerContext;
 
+import javafx.beans.Observable;
+import javafx.beans.property.ReadOnlyLongWrapper;
+import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.scene.paint.LinearGradient;
+import javafx.scene.paint.Stop;
+import javafx.scene.transform.Affine;
+import javafx.scene.transform.Transform;
+import javafx.scene.paint.CycleMethod;
 /*
 import modele.DemandeLivraison;
 import javafx.scene.control.cell.PropertyValueFactory;
@@ -36,9 +45,12 @@ import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.TitledPane;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.paint.Color;
+import javafx.stage.DirectoryChooser;
+import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import lombok.Setter;
 import main.modele.DemandeLivraison;
@@ -46,6 +58,9 @@ import main.modele.Intersection;
 import main.modele.Journee;
 import main.modele.PlageHoraire;
 import main.modele.Plan;
+import main.modele.Segment;
+import main.modele.Tournee;
+import main.modele.Trajet;
 
 /**
  * Contrôleur de la vue principale de l'application.
@@ -55,7 +70,7 @@ import main.modele.Plan;
 public class ControleurFenetrePrincipale {
     
     static final Logger logger = LogManager.getLogger(ControleurFenetrePrincipale.class);
-    
+    final int ARR_SIZE = 5;
     final double TAILLE_RECT_PT_LIVRAISON = 8;
     final double TAILLE_RECT_PT_LIVRAISON_SELECTIONNE = 12;
     final double TAILLE_CERCLE_INTERSECTION_SELECTIONNEE = 8;
@@ -437,7 +452,6 @@ public class ControleurFenetrePrincipale {
 	
 	void dessinerTrajetLatLong(double lat1, double long1, 
             double lat2, double long2) {
-        System.out.println("long1 : "+long1+" lat1 : "+lat1+" long2 : "+long2+" lat2 : "+lat2);
         dessinerSegmentGradientXY(convertirLongitudeEnX(long1),
                 convertirLatitudeEnY(lat1),
                 convertirLongitudeEnX(long2),
@@ -467,11 +481,33 @@ public class ControleurFenetrePrincipale {
      
     //     Stop[] stops = new Stop[] { new Stop(0, Color.WHITE), new Stop(1, Color.MAROON)};
     //     LinearGradient lg1 = new LinearGradient(0, 0, 1, 0, true, CycleMethod.REFLECT, stops);
-    
+     
          gc.setLineWidth(3);
          gc.setStroke(Color.DODGERBLUE);
          gc.strokeLine(x1, y1, x2, y2);
+         
+
+    
+         //this.drawArrow(gc, (int)(x1), (int)(y1), (int)(x2), (int)(y2));
     }
+	
+	// depuis https://stackoverflow.com/questions/35751576/javafx-draw-line-with-arrow-canvas
+	
+	private void drawArrow(GraphicsContext gc, int x1, int y1, int x2, int y2) {
+	    gc.setFill(Color.BLUE);
+
+	    double dx = x2 - x1, dy = y2 - y1;
+	    double angle = Math.atan2(dy, dx);
+	    int len = (int) Math.sqrt(dx * dx + dy * dy);
+	  
+	    Transform transform = Transform.translate(x1, y1);
+	    transform = transform.createConcatenation(Transform.rotate(Math.toDegrees(angle), 0, 0));
+	    gc.setTransform(new Affine(transform));
+	    gc.setLineWidth(3);    
+	    gc.strokeLine(0, 0, len, 0);
+	    gc.fillPolygon(new double[]{len, len - ARR_SIZE, len - ARR_SIZE, len}, new double[]{0, -ARR_SIZE, ARR_SIZE, 0},
+	            4);
+	}
 
 	/**
 	 * Convertit une longitude en pixels sur le Canvas (axe X). 

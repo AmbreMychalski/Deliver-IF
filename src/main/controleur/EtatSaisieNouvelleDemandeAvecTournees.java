@@ -79,6 +79,7 @@ public class EtatSaisieNouvelleDemandeAvecTournees implements Etat {
             c.journee.ajouterDemandeLivraison(demande);
             c.tableViewDemandesLivraison.getItems().add(demande);
             c.tableViewDemandesLivraison.refresh();
+            c.mettreAJourCanvasDemande();
             c.buttonValiderLivraison.setDisable(true);
             c.buttonAnnulerLivraison.setDisable(true);
             c.comboboxPlageHoraire.setDisable(true);
@@ -89,23 +90,24 @@ public class EtatSaisieNouvelleDemandeAvecTournees implements Etat {
             ControleurFenetrePrincipale.logger.warn("Informations manquantes pour l'ajout de la demande");
         }
         
-        c.journee.getTournees().clear();
         c.journee.calculerTournee();
-        
         GraphicsContext gc = c.canvasPlanTrajet.getGraphicsContext2D();
         gc.clearRect(0, 0, c.canvasPlanTrajet.getWidth(), c.canvasPlanTrajet.getHeight());
-        for (Tournee tournee: c.journee.getTournees()) {
-            List<Trajet> trajets = tournee.getTrajets();
-            for(Trajet trajet : trajets) {
-                List<Segment> segments = trajet.getSegments(); 
-                for(Segment segment : segments) {
-                    c.dessinerTrajetLatLong((double)segment.getOrigine().getLatitude(),
-                            (double)segment.getOrigine().getLongitude(),
-                            (double)segment.getDestination().getLatitude(),
-                            (double)segment.getDestination().getLongitude());
-                }
+        
+        Tournee tournee = c.journee.getTournees().get(c.journee.getTournees().size()-1);
+        List<Trajet> trajets = tournee.getTrajets();
+        
+        for(Trajet trajet : trajets) {
+            List<Segment> segments = trajet.getSegments(); 
+            for(Segment segment : segments) {
+                c.dessinerTrajetLatLong((double)segment.getOrigine().getLatitude(),
+                        (double)segment.getOrigine().getLongitude(),
+                        (double)segment.getDestination().getLatitude(),
+                        (double)segment.getDestination().getLongitude());
             }
+            
         }
+        
         c.etatCourant = c.etatTourneesCalculees;
     }
     

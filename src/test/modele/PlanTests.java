@@ -6,6 +6,7 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
+import exception.FichierNonConformeException;
 import main.modele.Plan;
 
 public class PlanTests {
@@ -29,10 +30,8 @@ public class PlanTests {
     
     @Test
     void exceptionFichierNonConformeTest() {
-
         File fichierPlan = new File("data/testExceptionPlan.xml");
-        
-        Assertions.assertThrows(Exception.class, () -> {
+        Assertions.assertThrows(FichierNonConformeException.class,() -> {
             new Plan(fichierPlan);
         });
     }

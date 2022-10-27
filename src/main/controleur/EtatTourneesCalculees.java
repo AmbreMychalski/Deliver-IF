@@ -32,6 +32,8 @@ public class EtatTourneesCalculees implements Etat{
             c.textfieldIdentifiantIntersectionSelection.setText(ligne.getIdIntersection().toString());
             c.textfieldPlageHoraire.setText(ligne.getPlageHoraire().toString());
         }
+        c.buttonModifierLivraison.setDisable(false);
+        c.buttonSupprimerLivraison.setDisable(false);
         c.etatCourant = c.etatDemandeLivraisonSelectionneeAvecTournees;
     }
     

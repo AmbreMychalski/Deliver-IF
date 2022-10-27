@@ -72,6 +72,7 @@ public class EtatSaisieNouvelleDemandeSansTournees implements Etat{
             DemandeLivraison demande = 
                     new DemandeLivraison(intersection, plageHoraire);
             c.journee.ajouterDemandeLivraison(demande);
+            c.mettreAJourCanvasDemande();
             c.tableViewDemandesLivraison.getItems().add(demande);
             c.tableViewDemandesLivraison.refresh();
             c.buttonValiderLivraison.setDisable(true);

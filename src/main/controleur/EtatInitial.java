@@ -18,7 +18,6 @@ public class EtatInitial implements Etat{
         System.out.println("Fichier choisi = " + fichier.getAbsolutePath());
 
         c.planCharge = new Plan(fichier);
-        
         c.journee.setPlan(c.planCharge);
         
         c.latMax = c.planCharge.getIntersections().values().stream()

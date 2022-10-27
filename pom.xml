@@ -9,10 +9,9 @@
 		<junit.jupiter.version>5.9.0</junit.jupiter.version>
 	</properties>
 
-	<dependencies>
+	<!-- Dépendances pour JUnit 5 -->
 	
-		<!-- Dépendances pour JUnit 5 -->
-		
+	<dependencies>
 		<dependency>
 			<groupId>org.junit.jupiter</groupId>
 			<artifactId>junit-jupiter-engine</artifactId>
@@ -49,7 +48,7 @@
 		</dependency>
 
 		<!-- Lombok : génération de getters, setters, constructeurs, ... via annotations -->
-		
+
 		<dependency>
 			<groupId>org.projectlombok</groupId>
 			<artifactId>lombok</artifactId>
@@ -57,7 +56,7 @@
 			<scope>provided</scope>
 		</dependency>
 
-		<!-- Tous les contrôles (Boutons, zones de texte...) -->
+		<!-- Tous les contrôles (boutons, zones de texte...) -->
 		
 		<dependency>
 			<groupId>org.openjfx</groupId>
@@ -72,23 +71,9 @@
 			<artifactId>javafx-fxml</artifactId>
 			<version>17</version>
 		</dependency>
-		
-		<!-- Dépendances pour le logger -->
-		
-		<dependency>
-			<groupId>org.apache.logging.log4j</groupId>
-		    <artifactId>log4j-api</artifactId>
-		    <version>2.13.0</version>
-		 </dependency>
-		 
-		 <dependency>
-		    <groupId>org.apache.logging.log4j</groupId>
-		    <artifactId>log4j-core</artifactId>
-		    <version>2.13.0</version>
-		 </dependency>
 
-		<!-- Dépendance pour le logger -->
-		
+		<!-- Dépendances pour le logger -->
+
 		<dependency>
 			<groupId>org.apache.logging.log4j</groupId>
 		    <artifactId>log4j-api</artifactId>
@@ -101,14 +86,14 @@
 		  </dependency>
 	</dependencies>
 
-	<!-- Partie BUILD -->
-	
+
 	<build>
 	
-		<!-- Override des répertoires source & tests pour que JavaFX ET JUnit marchent -->
+	<!-- Override des répertoires source & tests pour que JavaFX ET JUnit marchent -->
 		
     	<sourceDirectory>src/main</sourceDirectory>
     	<testSourceDirectory>src/test</testSourceDirectory>
+
 		<resources>
 			<resource>
 				<directory>ressources</directory>
@@ -119,10 +104,11 @@
 		</resources>
 
 		<plugins>
-			
+		
 			<!-- Plugins Maven -->
+			
 			<plugin>
-                <groupId>org.apache.maven.plugins</groupId>
+				<groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-surefire-plugin</artifactId>
                 <version>3.0.0-M3</version>
             </plugin>
@@ -136,9 +122,9 @@
                     <target>1.8</target>
                 </configuration>
             </plugin>
-			
-			<!-- Plugin JavaFX -->
-			
+            
+            <!-- Plugin JavaFX -->
+            
 			<plugin>
 				<groupId>com.zenjava</groupId>
 				<artifactId>javafx-maven-plugin</artifactId>
