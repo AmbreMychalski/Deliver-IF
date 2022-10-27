@@ -15,12 +15,7 @@ public class PlanTests {
     void analyserXMLTest() throws Exception {
         
         File fichierPlan = new File("data\\testPlan.xml");
-        
-        // On charge le plan
-        
         Plan plan = new Plan(fichierPlan);
-        
-        // On vérifie la première intersection
         
         Assertions.assertEquals("Rue Danton", plan.getSegments().get(0).getNom());
     }
