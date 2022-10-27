@@ -6,7 +6,6 @@
 
 package main.controleur;
 
-import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -15,14 +14,8 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.apache.logging.log4j.core.LoggerContext;
 
-import javafx.beans.Observable;
-import javafx.beans.property.ReadOnlyLongWrapper;
-import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.scene.paint.LinearGradient;
-import javafx.scene.paint.Stop;
-import javafx.scene.paint.CycleMethod;
 /*
 import modele.DemandeLivraison;
 import javafx.scene.control.cell.PropertyValueFactory;
@@ -43,12 +36,9 @@ import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.TitledPane;
 import javafx.scene.control.cell.PropertyValueFactory;
-import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.paint.Color;
-import javafx.stage.DirectoryChooser;
-import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import lombok.Setter;
 import main.modele.DemandeLivraison;
@@ -56,9 +46,6 @@ import main.modele.Intersection;
 import main.modele.Journee;
 import main.modele.PlageHoraire;
 import main.modele.Plan;
-import main.modele.Segment;
-import main.modele.Tournee;
-import main.modele.Trajet;
 
 /**
  * Contrôleur de la vue principale de l'application.
@@ -192,7 +179,13 @@ public class ControleurFenetrePrincipale {
 		buttonSauvegarderDemandes.setOnAction(event -> actionBoutonSauvegarderDemandes(event));
 		canvasInterieurPlan.setOnMouseClicked(event -> actionClicSurCanvas(event));
 		tableViewDemandesLivraison.setOnMouseClicked(event -> actionClicTableau(event));
-		buttonChargerPlan.setOnAction(event -> actionBoutonChargerPlan(event));
+		buttonChargerPlan.setOnAction(event -> {
+            try {
+                actionBoutonChargerPlan(event);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        });
 	    buttonCalculerTournees.setOnAction(event -> actionBoutonCalculerTournees(event));
 	    
 	
@@ -227,7 +220,7 @@ public class ControleurFenetrePrincipale {
         etatCourant.modifierDemande(this);
     }
     
-    private void actionBoutonChargerPlan(ActionEvent event) {
+    private void actionBoutonChargerPlan(ActionEvent event) throws Exception {
 		etatCourant.chargerPlan(this);
 	}
 
