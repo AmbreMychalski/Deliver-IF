@@ -138,7 +138,7 @@ public class EtatAvecDemande implements Etat{
         c.journee.calculerTournee();
         GraphicsContext gc = c.canvasPlanTrajet.getGraphicsContext2D();
         gc.clearRect(0, 0, c.canvasPlanTrajet.getWidth(), c.canvasPlanTrajet.getHeight());
-        for (Tournee tournee: c.journee.getTournees()) {
+        Tournee tournee = c.journee.getTournees().get(c.journee.getTournees().size()-1);
             List<Trajet> trajets = tournee.getTrajets();
             for(Trajet trajet : trajets) {
                 List<Segment> segments = trajet.getSegments(); 
@@ -149,7 +149,7 @@ public class EtatAvecDemande implements Etat{
                             (double)segment.getDestination().getLongitude());
                 }
             }
-        }
+        
         c.etatCourant = c.etatTourneesCalculees;
     }
     

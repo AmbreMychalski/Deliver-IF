@@ -5,7 +5,7 @@ import javafx.scene.input.MouseEvent;
 
 public interface Etat {
 
-	public default void chargerPlan(ControleurFenetrePrincipale c) throws Exception {}
+	public default void chargerPlan(ControleurFenetrePrincipale c) {}
 	
 	public default void ajouterDemande(ControleurFenetrePrincipale c) {}
 	

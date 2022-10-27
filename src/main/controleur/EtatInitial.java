@@ -8,7 +8,7 @@ import main.modele.Plan;
 import main.modele.Segment;
 
 public class EtatInitial implements Etat{
-    public void chargerPlan(ControleurFenetrePrincipale c) throws Exception {
+    public void chargerPlan(ControleurFenetrePrincipale c) {
         FileChooser fileChooser = new FileChooser();
         fileChooser.setInitialDirectory(new File(".\\data"));
         fileChooser.getExtensionFilters().add(
@@ -18,7 +18,6 @@ public class EtatInitial implements Etat{
         System.out.println("Fichier choisi = " + fichier.getAbsolutePath());
 
         c.planCharge = new Plan(fichier);
-        
         c.journee.setPlan(c.planCharge);
         
         c.latMax = c.planCharge.getIntersections().values().stream()

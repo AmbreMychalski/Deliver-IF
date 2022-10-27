@@ -13,7 +13,7 @@ import main.modele.Intersection;
 
 public class EtatSansDemande implements Etat{
 
-    public void chargerPlan(ControleurFenetrePrincipale c) throws Exception {
+    public void chargerPlan(ControleurFenetrePrincipale c) {
         c.etatInitial.chargerPlan(c);
     }
     
