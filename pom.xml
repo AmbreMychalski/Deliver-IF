@@ -10,18 +10,23 @@
 	</properties>
 
 	<dependencies>
+	
+		<!-- Dépendances pour JUnit 5 -->
+		
 		<dependency>
 			<groupId>org.junit.jupiter</groupId>
 			<artifactId>junit-jupiter-engine</artifactId>
 			<version>${junit.jupiter.version}</version>
 			<scope>test</scope>
 		</dependency>
+		
 		<dependency>
 			<groupId>org.junit.jupiter</groupId>
 			<artifactId>junit-jupiter-api</artifactId>
 			<version>${junit.jupiter.version}</version>
 			<scope>test</scope>
 		</dependency>
+		
 		<dependency>
 			<groupId>org.junit.jupiter</groupId>
 			<artifactId>junit-jupiter-params</artifactId>
@@ -43,6 +48,8 @@
 			<scope>test</scope>
 		</dependency>
 
+		<!-- Lombok : génération de getters, setters, constructeurs, ... via annotations -->
+		
 		<dependency>
 			<groupId>org.projectlombok</groupId>
 			<artifactId>lombok</artifactId>
@@ -50,7 +57,8 @@
 			<scope>provided</scope>
 		</dependency>
 
-		<!-- Tous les contrôles (Bouton, Zone de texte...) -->
+		<!-- Tous les contrôles (Boutons, zones de texte...) -->
+		
 		<dependency>
 			<groupId>org.openjfx</groupId>
 			<artifactId>javafx-controls</artifactId>
@@ -58,6 +66,7 @@
 		</dependency>
 
 		<!-- Pour utiliser les fichiers FXML -->
+		
 		<dependency>
 			<groupId>org.openjfx</groupId>
 			<artifactId>javafx-fxml</artifactId>
@@ -65,10 +74,14 @@
 		</dependency>
 	</dependencies>
 
-
+	<!-- Partie BUILD -->
+	
 	<build>
-		<sourceDirectory>src</sourceDirectory>
-
+	
+		<!-- Override des répertoires source & tests pour que JavaFX ET JUnit marchent -->
+		
+    	<sourceDirectory>src/main</sourceDirectory>
+    	<testSourceDirectory>src/test</testSourceDirectory>
 		<resources>
 			<resource>
 				<directory>ressources</directory>
@@ -79,13 +92,26 @@
 		</resources>
 
 		<plugins>
+			
+			<!-- Plugins Maven -->
 			<plugin>
-				<artifactId>maven-compiler-plugin</artifactId>
-				<version>3.8.1</version>
-				<configuration>
-					<release>17</release>
-				</configuration>
-			</plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <version>3.0.0-M3</version>
+            </plugin>
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>3.8.1</version>
+                <configuration>
+                    <source>1.8</source>
+                    <target>1.8</target>
+                </configuration>
+            </plugin>
+			
+			<!-- Plugin JavaFX -->
+			
 			<plugin>
 				<groupId>com.zenjava</groupId>
 				<artifactId>javafx-maven-plugin</artifactId>
@@ -94,8 +120,6 @@
 					<mainClass>controleur.MainStarter</mainClass>
 				</configuration>
 			</plugin>
-
 		</plugins>
-
 	</build>
 </project>
