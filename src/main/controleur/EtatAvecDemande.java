@@ -1,6 +1,7 @@
 package main.controleur;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.List;
 
 import javafx.scene.canvas.GraphicsContext;
@@ -73,7 +74,10 @@ public class EtatAvecDemande implements Etat{
     public void clicGaucheSurTableau(ControleurFenetrePrincipale c) {
         DemandeLivraison ligne = c.tableViewDemandesLivraison.getSelectionModel().getSelectedItem();
         if (ligne != null) {
-            c.mettreAJourListeDemandes();
+            c.buttonModifierLivraison.setDisable(false);
+            c.buttonSupprimerLivraison.setDisable(false);
+           
+            c.mettreAJourCanvasDemande();
             c.dessinerIntersectionLatLong(c.canvasInterieurPlan.getGraphicsContext2D(),
                                         ligne.getIntersection().getLatitude(), 
                                         ligne.getIntersection().getLongitude(),
@@ -85,7 +89,7 @@ public class EtatAvecDemande implements Etat{
             c.textfieldIdentifiantIntersectionSelection.setText(ligne.getIdIntersection().toString());
             c.textfieldPlageHoraire.setText(ligne.getPlageHoraire().toString());
         }
-        c.buttonAutoriserAjouterLivraison.setDisable(false);
+        c.buttonAutoriserAjouterLivraison.setDisable(true);
         c.etatCourant = c.etatDemandeLivraisonSelectionneeSansTournees;
     }
     
@@ -102,12 +106,12 @@ public class EtatAvecDemande implements Etat{
                 new FileChooser.ExtensionFilter("Fichier XML", "*.xml", "*.XML"));
         fileChooser.setTitle("Charger des demandes de livraison");
         File fichier = fileChooser.showOpenDialog(c.stage);
-        if (fichier != null) {
-            System.out.println("Fichier choisi = " + fichier.getAbsolutePath());
+        System.out.println("Fichier choisi = " + fichier.getAbsolutePath());
 
-            c.journee.chargerDemandesLivraison(fichier);
-            c.mettreAJourListeDemandes();
-        } 
+        ArrayList <DemandeLivraison> listeDemandes = c.journee.chargerDemandesLivraison(fichier);
+        c.tableViewDemandesLivraison.getItems().addAll(listeDemandes);
+        c.tableViewDemandesLivraison.refresh();
+        c.mettreAJourCanvasDemande();
     }
     
     public void supprimerDemande(ControleurFenetrePrincipale c) {}

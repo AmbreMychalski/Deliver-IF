@@ -52,12 +52,14 @@ public class Journee {
         tournees = new ArrayList<Tournee>();
     }
     
-    public void chargerDemandesLivraison(File fichier) {
+    public ArrayList<DemandeLivraison> chargerDemandesLivraison(File fichier) {
         if(this.demandesLivraison == null) {
             this.demandesLivraison = new ArrayList<>();
         }
         Node node = null;
         NodeList list=null; 
+        
+        ArrayList<DemandeLivraison> demandesAjoutees = new ArrayList<>();
         
         try {
             DocumentBuilderFactory fact = DocumentBuilderFactory.newInstance();
@@ -78,7 +80,10 @@ public class Journee {
                         heureDebut = Integer.parseInt(attributs.getNamedItem("heureDebut").getNodeValue());
                         heureFin = Integer.parseInt(attributs.getNamedItem("heureFin").getNodeValue());
                         if(heureFin-heureDebut != 1) throw new Exception("Plage horaire incompatible");
-                        this.demandesLivraison.add(new DemandeLivraison(this.plan.getIntersections().get(intersectionId),new PlageHoraire(heureDebut, heureFin)));
+                        
+                        DemandeLivraison demande = new DemandeLivraison(this.plan.getIntersections().get(intersectionId),new PlageHoraire(heureDebut, heureFin));
+                        this.demandesLivraison.add(demande);
+                        demandesAjoutees.add(demande);
                         
                     }
                 }
@@ -86,6 +91,7 @@ public class Journee {
         } catch(Exception e) {
             System.err.println("Problème lors de la lecture du fichier \n "+ e);
         }
+        return(demandesAjoutees);
     }
     
     public void ajouterDemandeLivraison(DemandeLivraison demande) {

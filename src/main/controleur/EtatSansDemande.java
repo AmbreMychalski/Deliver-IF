@@ -1,6 +1,7 @@
 package main.controleur;
 
 import java.io.File;
+import java.util.ArrayList;
 
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.input.KeyEvent;
@@ -86,8 +87,10 @@ public class EtatSansDemande implements Etat{
         File fichier = fileChooser.showOpenDialog(c.stage);
         System.out.println("Fichier choisi = " + fichier.getAbsolutePath());
 
-        c.journee.chargerDemandesLivraison(fichier);
-        c.mettreAJourListeDemandes();
+        ArrayList <DemandeLivraison> listeDemandes = c.journee.chargerDemandesLivraison(fichier);
+        c.tableViewDemandesLivraison.getItems().addAll(listeDemandes);
+        c.tableViewDemandesLivraison.refresh();
+        c.mettreAJourCanvasDemande();
         c.etatCourant = c.etatAvecDemande;
     }
     

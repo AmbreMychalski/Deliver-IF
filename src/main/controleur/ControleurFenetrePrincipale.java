@@ -176,6 +176,8 @@ public class ControleurFenetrePrincipale {
 	    
 	    buttonSupprimerLivraison.setOnAction(event -> actionBoutonSupprimerLivraison(event));
 	    buttonModifierLivraison.setOnAction(event -> actionBoutonModifierLivraison(event));
+	    buttonSupprimerLivraison.setDisable(true);
+	    buttonModifierLivraison.setDisable(true);
 	    
 	    buttonValiderLivraison.setDisable(true);
 	    buttonAnnulerLivraison.setDisable(true);
@@ -192,6 +194,13 @@ public class ControleurFenetrePrincipale {
 		tableViewDemandesLivraison.setOnMouseClicked(event -> actionClicTableau(event));
 		buttonChargerPlan.setOnAction(event -> actionBoutonChargerPlan(event));
 	    buttonCalculerTournees.setOnAction(event -> actionBoutonCalculerTournees(event));
+	    
+	
+        tableViewDemandesLivraison.setItems(FXCollections.observableArrayList());
+        columnIdentifiant.setCellValueFactory(
+                new PropertyValueFactory<DemandeLivraison, Long>("idIntersection"));
+        columnPlageHoraire.setCellValueFactory(
+                new PropertyValueFactory<DemandeLivraison, PlageHoraire>("plageHoraire")); 
 	    
 		journee = new Journee();
 		for(int i=8; i<12; i++) {
@@ -243,14 +252,11 @@ public class ControleurFenetrePrincipale {
 	private void actionBoutonCalculerTournees(ActionEvent event) {
         this.etatCourant.calculerTournees(this);
     }
-
-	void mettreAJourListeDemandes() {
-        ObservableList<DemandeLivraison> data = FXCollections.observableArrayList();
+    
+	void mettreAJourCanvasDemande() {
         GraphicsContext gc = canvasInterieurPlan.getGraphicsContext2D();
         gc.clearRect(0, 0, canvasInterieurPlan.getWidth(), canvasInterieurPlan.getHeight());
-        
-        data.addAll(journee.getDemandesLivraison());
-        
+                
         for(DemandeLivraison d: journee.getDemandesLivraison()) {
             this.dessinerIntersectionLatLong(gc,
                     d.getIntersection().getLatitude(), 
@@ -259,16 +265,14 @@ public class ControleurFenetrePrincipale {
                     this.TAILLE_RECT_PT_LIVRAISON, 
                     true, 
                     "Rectangle");
-        }
-        
-        tableViewDemandesLivraison.setItems(data);
+        }        
         columnIdentifiant.setCellValueFactory(
                 new PropertyValueFactory<DemandeLivraison, Long>("idIntersection"));
         columnPlageHoraire.setCellValueFactory(
                 new PropertyValueFactory<DemandeLivraison, PlageHoraire>("plageHoraire")); 
         
-	}
-    
+    }
+	
     private void actionBoutonAjouterLivraison(ActionEvent event) {
         etatCourant.validerAjouterOuModifier(this);
     }

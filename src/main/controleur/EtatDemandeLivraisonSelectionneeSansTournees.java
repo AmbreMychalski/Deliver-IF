@@ -12,7 +12,11 @@ public class EtatDemandeLivraisonSelectionneeSansTournees implements Etat {
     public void ajouterDemande(ControleurFenetrePrincipale c) {}
     
     public void clicGaucheSurPlan(ControleurFenetrePrincipale c, MouseEvent event) {
-        c.mettreAJourListeDemandes();
+
+        c.buttonModifierLivraison.setDisable(true);
+        c.buttonSupprimerLivraison.setDisable(true);
+        c.buttonAutoriserAjouterLivraison.setDisable(false);
+        c.mettreAJourCanvasDemande();
         c.textfieldIdentifiantIntersectionSelection.setText("");
         c.textfieldPlageHoraire.setText("");
         if (c.journee.getDemandesLivraison().size() == 0) {
@@ -26,7 +30,7 @@ public class EtatDemandeLivraisonSelectionneeSansTournees implements Etat {
     public void clicGaucheSurTableau(ControleurFenetrePrincipale c) {
         DemandeLivraison ligne = c.tableViewDemandesLivraison.getSelectionModel().getSelectedItem();
         if (ligne != null) {
-            c.mettreAJourListeDemandes();
+            c.mettreAJourCanvasDemande();
             c.dessinerIntersectionLatLong(c.canvasInterieurPlan.getGraphicsContext2D(),
                                         ligne.getIntersection().getLatitude(), 
                                         ligne.getIntersection().getLongitude(),
@@ -35,7 +39,6 @@ public class EtatDemandeLivraisonSelectionneeSansTournees implements Etat {
                                         true, 
                                         "Rectangle");
             
-            c.buttonAutoriserAjouterLivraison.setDisable(false);
             c.titlePaneSelectionDemande.setVisible(true);
             c.textfieldIdentifiantIntersectionSelection.setText(ligne.getIdIntersection().toString());
             c.textfieldPlageHoraire.setText(ligne.getPlageHoraire().toString());
@@ -53,8 +56,10 @@ public class EtatDemandeLivraisonSelectionneeSansTournees implements Etat {
     public void supprimerDemande(ControleurFenetrePrincipale c) {
         DemandeLivraison ligne = c.tableViewDemandesLivraison.getSelectionModel().getSelectedItem();
         if(ligne != null) {
+            c.mettreAJourCanvasDemande();
             c.journee.supprimerDemandeLivraison(ligne);
-            c.mettreAJourListeDemandes();
+            c.tableViewDemandesLivraison.getItems().remove(ligne);
+            c.tableViewDemandesLivraison.refresh();
             c.textfieldIdentifiantIntersectionSelection.setText("");
             c.textfieldPlageHoraire.setText("");
         }
@@ -63,6 +68,10 @@ public class EtatDemandeLivraisonSelectionneeSansTournees implements Etat {
         } else {
             c.etatCourant = c.etatAvecDemande;
         }
+
+        c.buttonAutoriserAjouterLivraison.setDisable(false);
+        c.buttonModifierLivraison.setDisable(true);
+        c.buttonSupprimerLivraison.setDisable(true);
     }
     
     public void sauvegarderDemandes(ControleurFenetrePrincipale c) {}
@@ -78,6 +87,10 @@ public class EtatDemandeLivraisonSelectionneeSansTournees implements Etat {
     public void quitterLogiciel(ControleurFenetrePrincipale c) {}
     
     public void modifierDemande(ControleurFenetrePrincipale c) {
+
+        c.buttonModifierLivraison.setDisable(true);
+        c.buttonSupprimerLivraison.setDisable(true);
+        
         c.buttonAutoriserAjouterLivraison.setDisable(true);
         c.buttonValiderLivraison.setDisable(false);
         c.buttonAnnulerLivraison.setDisable(false);
@@ -87,8 +100,12 @@ public class EtatDemandeLivraisonSelectionneeSansTournees implements Etat {
     
     public  void touchePressee(ControleurFenetrePrincipale c, KeyEvent ke) {
         if(ke.getCode()== KeyCode.ESCAPE) {
+
+            c.buttonModifierLivraison.setDisable(true);
+            c.buttonSupprimerLivraison.setDisable(true);
+            
             c.buttonAutoriserAjouterLivraison.setDisable(false);
-            c.mettreAJourListeDemandes();
+            c.mettreAJourCanvasDemande();
             c.textfieldIdentifiantIntersectionSelection.setText("");
             c.textfieldPlageHoraire.setText("");
             if (c.journee.getDemandesLivraison().size() == 0) {

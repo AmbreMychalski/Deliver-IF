@@ -19,7 +19,7 @@ public class EtatTourneesCalculees implements Etat{
     public void clicGaucheSurTableau(ControleurFenetrePrincipale c) {
         DemandeLivraison ligne = c.tableViewDemandesLivraison.getSelectionModel().getSelectedItem();
         if (ligne != null) {
-            c.mettreAJourListeDemandes();
+            c.mettreAJourCanvasDemande();
             c.dessinerIntersectionLatLong(c.canvasInterieurPlan.getGraphicsContext2D(),
                                         ligne.getIntersection().getLatitude(), 
                                         ligne.getIntersection().getLongitude(),

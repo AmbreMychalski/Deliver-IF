@@ -92,8 +92,8 @@ public class EtatModifierDemandeLivraisonSansTournees implements Etat {
 
         DemandeLivraison demande = c.journee.getDemandesLivraison().get(c.journee.getDemandesLivraison().indexOf(ligne));
         demande.modifierDemandeLivraison(intersection, plageHoraire);
-        
-        c.mettreAJourListeDemandes();
+        c.tableViewDemandesLivraison.refresh();
+        c.mettreAJourCanvasDemande();
         c.dessinerIntersectionLatLong(c.canvasInterieurPlan.getGraphicsContext2D(),
                                     demande.getIntersection().getLatitude(), 
                                     demande.getIntersection().getLongitude(),
@@ -104,7 +104,9 @@ public class EtatModifierDemandeLivraisonSansTournees implements Etat {
         c.textfieldIdentifiantIntersectionSelection.setText(demande.getIdIntersection().toString());
         c.textfieldPlageHoraire.setText(demande.getPlageHoraire().toString());
         
-        
+
+        c.buttonModifierLivraison.setDisable(false);
+        c.buttonSupprimerLivraison.setDisable(false);
         c.buttonValiderLivraison.setDisable(true);
         c.buttonAnnulerLivraison.setDisable(true);
         c.comboboxPlageHoraire.setDisable(true);
@@ -116,6 +118,8 @@ public class EtatModifierDemandeLivraisonSansTournees implements Etat {
     
     
     public void annulerAjouterOuModifier(ControleurFenetrePrincipale c) {
+        c.buttonModifierLivraison.setDisable(false);
+        c.buttonSupprimerLivraison.setDisable(false);
         c.buttonAutoriserAjouterLivraison.setDisable(false);
         c.buttonValiderLivraison.setDisable(true);
         c.buttonAnnulerLivraison.setDisable(true);

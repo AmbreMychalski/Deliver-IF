@@ -77,7 +77,8 @@ public class EtatSaisieNouvelleDemandeAvecTournees implements Etat {
             DemandeLivraison demande = 
                     new DemandeLivraison(intersection, plageHoraire);
             c.journee.ajouterDemandeLivraison(demande);
-            c.mettreAJourListeDemandes();
+            c.tableViewDemandesLivraison.getItems().add(demande);
+            c.tableViewDemandesLivraison.refresh();
             c.buttonValiderLivraison.setDisable(true);
             c.buttonAnnulerLivraison.setDisable(true);
             c.comboboxPlageHoraire.setDisable(true);
