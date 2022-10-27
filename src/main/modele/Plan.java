@@ -2,23 +2,28 @@ package main.modele;
 
 import java.io.File;
 import java.util.ArrayList;
-import java.util.LinkedList;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Set;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
+import java.util.Set;
 import java.util.regex.Pattern;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
+import exception.FichierNonConformeException;
+import exception.IntersectionIntrouvableException;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -30,142 +35,166 @@ import lombok.ToString;
 @ToString
 public class Plan {
 
-	private Intersection entrepot;
-	private String nom;
-	private Map<Long, Intersection> intersections =  new HashMap<Long, Intersection>();
-	private List<Segment> segments =  new ArrayList<Segment>();
-	private Map<Long, List<Segment>> intersectionsNeighbours = new HashMap<Long, List<Segment>>();
+	private Intersection               entrepot;
+	private String                     nom;
+	private Map<Long, Intersection>    intersections = new HashMap<Long, Intersection>();
+	private List<Segment>              segments = new ArrayList<Segment>();
+	private Map<Long, List<Segment>>   intersectionsNeighbours = new HashMap<Long, List<Segment>>();
 	
+	private static final Logger        LOGGER = LogManager.getLogger();
 	
-	public Plan(File fichier) {
-		this.parseXML(fichier);
+	public Plan(File fichier) throws Exception {
+	    try {
+	        this.parseXML(fichier);
+	    } catch (Exception e) {
+	        throw e;
+	    }
 	}
 	
-	public List<Segment> calculerPlusCourtChemin(Intersection depart, Intersection arrivee){
-	    List <Segment> chemin = new LinkedList<Segment>();
-	    HashMap<Long, Float> distance = new HashMap<Long, Float>();
-        HashMap<Long, Segment> parents = new HashMap<Long, Segment>();   // <Long idIntersection, Segment segParent>
+	public List<Segment> calculerPlusCourtChemin(Intersection depart, Intersection arrivee) {
+	    List <Segment>          chemin = new LinkedList<Segment>();
+	    HashMap<Long, Float>    distance = new HashMap<Long, Float>();
+        HashMap<Long, Segment>  parents = new HashMap<Long, Segment>(); // <Long idIntersection, Segment segParent>
 
-        Set<Long> intersectionsGrises = new HashSet<Long>();
-        Set<Long> intersectionsNoires = new HashSet<Long>();
+        Set<Long>               intersectionsGrises = new HashSet<Long>();
+        Set<Long>               intersectionsNoires = new HashSet<Long>();
         
-        boolean arriveeIsBlack = false;
+        boolean                 arriveeIsBlack = false;
         
-	    for(var entry : intersections.entrySet()) {
+	    for(Entry<Long, Intersection> entry : intersections.entrySet()) {
 	        distance.put(entry.getKey(), -1.0f);
 	    }
+	    
 	    distance.put(depart.getIdIntersection(), 0f);    
 	    intersectionsGrises.add(depart.getIdIntersection());
 	    
-	    while(intersectionsGrises.size()!=0 && arriveeIsBlack!=true) {
-	        Long currentInter = obtenirIntersectionLaPlusProche(intersectionsGrises, distance);
+	    while(intersectionsGrises.size() != 0 && arriveeIsBlack != true) {
+	        Long currentInter = obtenirIntersectionLaPlusProche(intersectionsGrises, 
+	                                                            distance);
             
-            if(intersectionsNeighbours.get(currentInter)!=null) {
+            if(intersectionsNeighbours.get(currentInter) != null) {
     	        for(Segment seg : intersectionsNeighbours.get(currentInter)) {
     	            Intersection successeur = seg.getDestination();
     	           
     	            if(!intersectionsNoires.contains(successeur.getIdIntersection())) {
-    	                if(distance.get(currentInter)+seg.getLongueur()<distance.get(successeur.getIdIntersection())
-    	                        || distance.get(successeur.getIdIntersection())==-1.0f) {
-    	                    distance.put(successeur.getIdIntersection(), distance.get(currentInter)+seg.getLongueur());
+    	                if(distance.get(currentInter) + seg.getLongueur() 
+    	                        < distance.get(successeur.getIdIntersection())
+    	                        || distance.get(successeur.getIdIntersection()) == -1.0f) {
+    	                    distance.put(successeur.getIdIntersection(), 
+    	                                 distance.get(currentInter)+seg.getLongueur());
     	                    parents.put(successeur.getIdIntersection(), seg);
     	                }
+    	                
     	                intersectionsGrises.add(successeur.getIdIntersection());
     	            }
     	        }
-            }	        intersectionsGrises.remove(currentInter);
+            }
+            intersectionsGrises.remove(currentInter);
 	        intersectionsNoires.add(currentInter);
 	        
-	        if(currentInter==arrivee.getIdIntersection()) {
-	            arriveeIsBlack=true;
+	        if(currentInter == arrivee.getIdIntersection()) {
+	            arriveeIsBlack = true;
 	        }
 	    }
 	    
 	    Long currentInter = arrivee.getIdIntersection();
+	    
 	    while(currentInter != depart.getIdIntersection()) {
 	        Segment seg = parents.get(currentInter);
 	        chemin.add(0, seg);
 	        currentInter = seg.getOrigine().getIdIntersection();
 	    }
-	    
-	    
-//	    for(Segment seg : chemin) {
-//	        System.out.println(seg.toString());
-//	    }	    
 	    return chemin;
 	}
 	
-	public HashMap<Intersection, Float> calculerPlusCourtsChemins(List<Intersection> listIntersections, Intersection depart){
-        HashMap<Long, Float> distance = new HashMap<Long, Float>();
-        Set<Long> intersectionsAVerifier = new HashSet<Long>();
-        Set<Long> intersectionsGrises = new HashSet<Long>();
-        Set<Long> intersectionsNoires = new HashSet<Long>();
-        for(var entry : intersections.entrySet()) {
-            distance.put(entry.getKey(),-1.0f);
+	public HashMap<Intersection, Float> calculerPlusCourtsChemins(
+	        List<Intersection> listIntersections, Intersection depart) {
+	    
+        HashMap<Long, Float>    distance = new HashMap<Long, Float>();
+        Set<Long>               intersectionsAVerifier = new HashSet<Long>();
+        Set<Long>               intersectionsGrises = new HashSet<Long>();
+        Set<Long>               intersectionsNoires = new HashSet<Long>();
+        
+        for(Entry<Long, Intersection> entry : intersections.entrySet()) {
+            distance.put(entry.getKey(), -1.0f);
         }
+        
         distance.put(depart.getIdIntersection(), 0.0f);
         
-        for(Intersection inter: listIntersections) {
+        for(Intersection inter : listIntersections) {
             intersectionsAVerifier.add(inter.getIdIntersection());
         }
                 
         intersectionsGrises.add(depart.getIdIntersection());
         
-        while(intersectionsAVerifier.size()!=0 && intersectionsGrises.size()!=0) {
+        while(intersectionsAVerifier.size() != 0 && intersectionsGrises.size() != 0) {
             
             Long currentInter = obtenirIntersectionLaPlusProche(intersectionsGrises, distance);
             intersectionsGrises.remove(currentInter);
-            if(intersectionsNeighbours.get(currentInter)!=null) {
-                for(Segment seg : intersectionsNeighbours.get(currentInter) ) {
+            
+            if(intersectionsNeighbours.get(currentInter) != null) {
+                for(Segment seg : intersectionsNeighbours.get(currentInter)) {
                     Intersection voisin = seg.getDestination();
                     Long idVoisin = voisin.getIdIntersection();
+                    
                     if(!intersectionsNoires.contains(idVoisin)) {
-                        if(distance.get(currentInter)+seg.getLongueur()<distance.get(idVoisin)
-                                ||distance.get(idVoisin)==-1) {
-                            distance.put(idVoisin,distance.get(currentInter)+seg.getLongueur());
+                        if(distance.get(currentInter) + seg.getLongueur() 
+                                < distance.get(idVoisin)
+                                ||distance.get(idVoisin) == -1) {
+                            distance.put(idVoisin,distance.get(currentInter) 
+                                    + seg.getLongueur());
                         }                   
                         intersectionsGrises.add(idVoisin);
                     }
                 }
             }
+            
             intersectionsGrises.remove(currentInter);
             intersectionsAVerifier.remove(currentInter);
             intersectionsNoires.add(currentInter);          
         }
         
-        HashMap<Intersection, Float>res = new HashMap<Intersection, Float>();
-        for(Intersection inter: listIntersections) {
+        HashMap<Intersection, Float> res = new HashMap<Intersection, Float>();
+        
+        for(Intersection inter : listIntersections) {
             res.put(inter, distance.get(inter.getIdIntersection()));
         }       
         
         return res;
     }
 
-	public void parseXML(File fichier) {
+	public void parseXML(File fichier) throws FichierNonConformeException, IntersectionIntrouvableException {
+        Node            node = null;
+        NodeList        list = null;   
+        
 		nom = fichier.getName().split(Pattern.quote("."))[0];
 		
-		Node node = null;
-		NodeList list=null;	
-		
 		try {
-			DocumentBuilderFactory fact = DocumentBuilderFactory.newInstance();
-			DocumentBuilder builder = fact.newDocumentBuilder();
-			Document doc = builder.parse(fichier);
-			Element el = doc.getDocumentElement();
+			DocumentBuilderFactory   fact = DocumentBuilderFactory.newInstance();
+			DocumentBuilder          builder = fact.newDocumentBuilder();
+			Document                 doc = builder.parse(fichier); 
+			Element                  el = doc.getDocumentElement();
+            Long                     entrepotId = null;
+            NamedNodeMap             attributs;
+
 			list = el.getChildNodes();
-			NamedNodeMap attributs;
-			Long entrepotId = null;
+            		
+			if(list.getLength() < 1) {
+			    LOGGER.error("Le fichier XML ne contient pas d'éléments.");
+			    throw new Exception();
+			}
 			
 			for (int i = 0; i < list.getLength(); i++) {
+			    
 				node = list.item(i);
-				
+							
 				if(node.getNodeType() == Node.ELEMENT_NODE) {
 					if(node.getNodeName() == "warehouse") {
 						entrepotId = Long.parseLong(node.getAttributes().getNamedItem("address").getNodeValue());
 					} else if(node.getNodeName() == "intersection") {
-						Long intersectionId; 
-						float latitude; 
-						float longitude;
+						Long      intersectionId; 
+						float     latitude; 
+						float     longitude;
 						
 						attributs = node.getAttributes();
 						intersectionId = Long.parseLong(attributs.getNamedItem("id").getNodeValue());
@@ -174,10 +203,10 @@ public class Plan {
 						
 						this.intersections.put(intersectionId, new Intersection(intersectionId, latitude, longitude));
 					} else if(node.getNodeName()== "segment") {
-						Long destinationId; 
-						float longueur; 
-						String nom; 
-						Long origineId;
+						Long      destinationId; 
+						float     longueur; 
+						String    nom; 
+						Long      origineId;
 						
 						attributs = node.getAttributes();
 						destinationId = Long.parseLong(attributs.getNamedItem("destination").getNodeValue());
@@ -185,35 +214,59 @@ public class Plan {
 						nom = attributs.getNamedItem("name").getNodeValue();
 						longueur = Float.parseFloat(attributs.getNamedItem("length").getNodeValue());
 						
-						segments.add(new Segment(this.intersections.get(origineId), this.intersections.get(destinationId), longueur, nom));
+						if(intersections.get(destinationId) == null 
+						        || intersections.get(origineId) == null) {
+						    LOGGER.error("La destination ou l'origine d'un segment "
+						            + "n'a pas été reconnue.");
+						    throw new IntersectionIntrouvableException("Intersection introuvable");
+						}
+						
+						// On gère le voisinage des intersections
+						
+						segments.add(new Segment(this.intersections.get(origineId), 
+						        this.intersections.get(destinationId), longueur, nom));
+						
 						if(!this.intersectionsNeighbours.containsKey(origineId)) {
                             this.intersectionsNeighbours.put(origineId, new ArrayList<Segment>());
                         }
-                        this.intersectionsNeighbours.get(origineId).add(segments.get(segments.size()-1));
+						
+                        this.intersectionsNeighbours.get(origineId).add(
+                                segments.get(segments.size() - 1));
 					}
 				}
 			}
 			
 			this.entrepot = this.intersections.get(entrepotId);
 		} catch (Exception e) {
-			System.err.println("Erreur lors du parsing du fichier \n"+e);
+		    
+		    // Réinitialisation des attributs du plan courant
+		    
 			this.intersections =  new HashMap<Long, Intersection>();
 			this.segments =  new ArrayList<Segment>();
 			this.entrepot = null;
+
+			// Gestion de l'erreur 
+			
+			LOGGER.error("Erreur lors du parsing du fichier " + fichier);
+			throw new FichierNonConformeException("Fichier non conforme");
 		}
 	}
 
-	private Long obtenirIntersectionLaPlusProche(Set < Long > intersectionsGrise, HashMap<Long, Float> distance ) {
+	private Long obtenirIntersectionLaPlusProche(Set < Long > intersectionsGrise, 
+	        HashMap<Long, Float> distance) {
+	    
         Long interPlusProche = null;
         float plusPetiteDist = Float.MAX_VALUE;
+        
         for (Long idInter: intersectionsGrise) {
             float interDist = distance.get(idInter);
+            
             if (interDist < plusPetiteDist) {
                 plusPetiteDist = interDist;
                 interPlusProche = idInter;
             }
         }
+        
         return interPlusProche;
     }
 }
-
