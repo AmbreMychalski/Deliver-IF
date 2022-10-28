@@ -2,7 +2,7 @@ package main.controleur;
 
 import javafx.scene.input.KeyEvent;
 
-public class EtatAfficherFeuillesRoute implements Etat {
+public class EtatAfficherFeuillesRoute extends Etat {
     public void chargerPlan(ControleurFenetrePrincipale c) {}
     
     public void ajouterDemande(ControleurFenetrePrincipale c) {}

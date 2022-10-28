@@ -10,11 +10,8 @@ import main.modele.Segment;
 import main.modele.Tournee;
 import main.modele.Trajet;
 
-public class EtatDemandeLivraisonSelectionneeAvecTournees implements Etat {
+public class EtatDemandeLivraisonSelectionneeAvecTournees extends Etat {
 
-    public void chargerPlan(ControleurFenetrePrincipale c) {}
-    
-    public void ajouterDemande(ControleurFenetrePrincipale c) {}
     
     public void clicGaucheSurPlan(ControleurFenetrePrincipale c) {
         c.buttonModifierLivraison.setDisable(true);
@@ -47,13 +44,6 @@ public class EtatDemandeLivraisonSelectionneeAvecTournees implements Etat {
 
     }
     
-    public void choixPlageHoraire(ControleurFenetrePrincipale c) {}
-    
-    public void validerAjouterOuModifier(ControleurFenetrePrincipale c) {}
-    
-    public void annulerAjouterOuModifier(ControleurFenetrePrincipale c) {}
-    
-    public void chargerListeDemandes(ControleurFenetrePrincipale c) {}
     
     public void supprimerDemande(ControleurFenetrePrincipale c) {
         DemandeLivraison ligne = c.tableViewDemandesLivraison.getSelectionModel().getSelectedItem();
@@ -95,20 +85,7 @@ public class EtatDemandeLivraisonSelectionneeAvecTournees implements Etat {
         }
         
     }
-    
-    public void sauvegarderDemandes(ControleurFenetrePrincipale c) {}
-    
-    public void calculerTournees(ControleurFenetrePrincipale c) {}
-    
-    public void afficherFeuillesRoute(ControleurFenetrePrincipale c) {}
-    
-    public void sauvegarderFeuillesRoute(ControleurFenetrePrincipale c) {}
-    
-    public void fermerFenetre(ControleurFenetrePrincipale c) {}
-    
-    public void quitterLogiciel(ControleurFenetrePrincipale c) {}
-    
-    public void modifierDemande(ControleurFenetrePrincipale c) {}
+   
     
     public  void touchePressee(ControleurFenetrePrincipale c, KeyEvent ke) {
         if(ke.getCode()== KeyCode.ESCAPE) {

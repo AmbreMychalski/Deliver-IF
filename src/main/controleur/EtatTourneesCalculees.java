@@ -3,9 +3,8 @@ package main.controleur;
 import javafx.scene.input.KeyEvent;
 import main.modele.DemandeLivraison;
 
-public class EtatTourneesCalculees implements Etat{
+public class EtatTourneesCalculees extends Etat{
 
-    public void chargerPlan(ControleurFenetrePrincipale c) {}
     
     public void ajouterDemande(ControleurFenetrePrincipale c) {
         c.buttonValiderLivraison.setDisable(false);
@@ -13,8 +12,6 @@ public class EtatTourneesCalculees implements Etat{
         c.comboboxPlageHoraire.setDisable(false);
         c.etatCourant = c.etatSaisieNouvelleDemandeAvecTournees;
     }
-    
-    public void clicGaucheSurPlan(ControleurFenetrePrincipale c) {}
     
     public void clicGaucheSurTableau(ControleurFenetrePrincipale c) {
         DemandeLivraison ligne = c.tableViewDemandesLivraison.getSelectionModel().getSelectedItem();
@@ -36,30 +33,11 @@ public class EtatTourneesCalculees implements Etat{
         c.buttonSupprimerLivraison.setDisable(false);
         c.etatCourant = c.etatDemandeLivraisonSelectionneeAvecTournees;
     }
-    
-    public void choixPlageHoraire(ControleurFenetrePrincipale c) {}
-    
-    public void validerAjouterOuModifier(ControleurFenetrePrincipale c) {}
-    
-    public void annulerAjouterOuModifier(ControleurFenetrePrincipale c) {}
-    
-    public void chargerListeDemandes(ControleurFenetrePrincipale c) {}
-    
-    public void supprimerDemande(ControleurFenetrePrincipale c) {}
-    
-    public void sauvegarderDemandes(ControleurFenetrePrincipale c) {}
-    
-    public void calculerTournees(ControleurFenetrePrincipale c) {}
-    
+     
     public void afficherFeuillesRoute(ControleurFenetrePrincipale c) {}
-    
-    public void sauvegarderFeuillesRoute(ControleurFenetrePrincipale c) {}
-    
-    public void fermerFenetre(ControleurFenetrePrincipale c) {}
-    
+   
     public void quitterLogiciel(ControleurFenetrePrincipale c) {}
     
     public void modifierDemande(ControleurFenetrePrincipale c) {}
     
-    public  void touchePressee(ControleurFenetrePrincipale c, KeyEvent ke) {}
 }

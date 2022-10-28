@@ -13,11 +13,7 @@ import main.modele.Segment;
 import main.modele.Tournee;
 import main.modele.Trajet;
 
-public class EtatSaisieNouvelleDemandeAvecTournees implements Etat {
-
-    public void chargerPlan(ControleurFenetrePrincipale c) {}
-    
-    public void ajouterDemande(ControleurFenetrePrincipale c) {}    
+public class EtatSaisieNouvelleDemandeAvecTournees extends Etat { 
     
     public void clicGaucheSurPlan(ControleurFenetrePrincipale c, MouseEvent event) {
         if (c.planCharge != null) {
@@ -63,10 +59,7 @@ public class EtatSaisieNouvelleDemandeAvecTournees implements Etat {
         }
 
     }
-    
-    public void clicGaucheSurTableau(ControleurFenetrePrincipale c) {}
-    
-    public void choixPlageHoraire(ControleurFenetrePrincipale c) {}
+
     
     public void validerAjouterOuModifier(ControleurFenetrePrincipale c) {
         String champIdentifiant = c.textfieldIdentifiantIntersection.getText();
@@ -122,26 +115,6 @@ public class EtatSaisieNouvelleDemandeAvecTournees implements Etat {
             c.etatCourant = c.etatAvecDemande;
         }
     }
-    
-    public void chargerListeDemandes(ControleurFenetrePrincipale c) {}
-    
-    public void supprimerDemande(ControleurFenetrePrincipale c) {}
-    
-    public void sauvegarderDemandes(ControleurFenetrePrincipale c) {}
-    
-    public void calculerTournees(ControleurFenetrePrincipale c) {}
-    
-    public void afficherFeuillesRoute(ControleurFenetrePrincipale c) {}
-    
-    public void sauvegarderFeuillesRoute(ControleurFenetrePrincipale c) {}
-    
-    public void fermerFenetre(ControleurFenetrePrincipale c) {}
-    
-    public void quitterLogiciel(ControleurFenetrePrincipale c) {}
-    
-    public void modifierDemande(ControleurFenetrePrincipale c) {}
-    
-    public  void touchePressee(ControleurFenetrePrincipale c, KeyEvent ke) {}
-    
+   
 
 }

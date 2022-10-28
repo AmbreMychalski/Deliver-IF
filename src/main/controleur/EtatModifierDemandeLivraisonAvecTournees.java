@@ -2,7 +2,7 @@ package main.controleur;
 
 import javafx.scene.input.KeyEvent;
 
-public class EtatModifierDemandeLivraisonAvecTournees implements Etat {
+public class EtatModifierDemandeLivraisonAvecTournees extends Etat {
     public void chargerPlan(ControleurFenetrePrincipale c) {}
     
     public void ajouterDemande(ControleurFenetrePrincipale c) {}

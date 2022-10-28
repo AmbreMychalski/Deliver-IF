@@ -11,7 +11,7 @@ import javafx.stage.FileChooser;
 import main.modele.DemandeLivraison;
 import main.modele.Intersection;
 
-public class EtatSansDemande implements Etat{
+public class EtatSansDemande extends Etat{
 
     public void chargerPlan(ControleurFenetrePrincipale c) throws Exception {
         c.etatInitial.chargerPlan(c);
@@ -69,15 +69,6 @@ public class EtatSansDemande implements Etat{
 
     }
     
-    
-    public void clicGaucheSurTableau(ControleurFenetrePrincipale c) {}
-    
-    public void choixPlageHoraire(ControleurFenetrePrincipale c) {}
-    
-    public void validerAjouterOuModifier(ControleurFenetrePrincipale c) {}
-    
-    public void annulerAjouterOuModifier(ControleurFenetrePrincipale c) {}
-    
     public void chargerListeDemandes(ControleurFenetrePrincipale c) {
         FileChooser fileChooser = new FileChooser();
         fileChooser.setInitialDirectory(new File(".\\data"));
@@ -93,22 +84,4 @@ public class EtatSansDemande implements Etat{
         c.mettreAJourCanvasDemande();
         c.etatCourant = c.etatAvecDemande;
     }
-    
-    public void supprimerDemande(ControleurFenetrePrincipale c) {}
-    
-    public void sauvegarderDemandes(ControleurFenetrePrincipale c) {}
-    
-    public void calculerTournees(ControleurFenetrePrincipale c) {}
-    
-    public void afficherFeuillesRoute(ControleurFenetrePrincipale c) {}
-    
-    public void sauvegarderFeuillesRoute(ControleurFenetrePrincipale c) {}
-    
-    public void fermerFenetre(ControleurFenetrePrincipale c) {}
-    
-    public void quitterLogiciel(ControleurFenetrePrincipale c) {}
-    
-    public void modifierDemande(ControleurFenetrePrincipale c) {}
-    
-    public  void touchePressee(ControleurFenetrePrincipale c, KeyEvent ke) {}
 }

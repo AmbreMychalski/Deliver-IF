@@ -15,9 +15,8 @@ import main.modele.Segment;
 import main.modele.Tournee;
 import main.modele.Trajet;
 
-public class EtatAvecDemande implements Etat{
+public class EtatAvecDemande extends Etat{
 
-    public void chargerPlan(ControleurFenetrePrincipale c) {}
     
     public void ajouterDemande(ControleurFenetrePrincipale c) {
         c.buttonValiderLivraison.setDisable(false);
@@ -93,11 +92,7 @@ public class EtatAvecDemande implements Etat{
         c.etatCourant = c.etatDemandeLivraisonSelectionneeSansTournees;
     }
     
-    public void choixPlageHoraire(ControleurFenetrePrincipale c) {}
-    
-    public void validerAjouterOuModifier(ControleurFenetrePrincipale c) {}
-    
-    public void annulerAjouterOuModifier(ControleurFenetrePrincipale c) {}
+
     
     public void chargerListeDemandes(ControleurFenetrePrincipale c) {
         FileChooser fileChooser = new FileChooser();
@@ -114,7 +109,7 @@ public class EtatAvecDemande implements Etat{
         c.mettreAJourCanvasDemande();
     }
     
-    public void supprimerDemande(ControleurFenetrePrincipale c) {}
+
     
     public void sauvegarderDemandes(ControleurFenetrePrincipale c) {
         FileChooser fileChooser = new FileChooser();
@@ -153,15 +148,5 @@ public class EtatAvecDemande implements Etat{
         c.etatCourant = c.etatTourneesCalculees;
     }
     
-    public void afficherFeuillesRoute(ControleurFenetrePrincipale c) {}
-    
-    public void sauvegarderFeuillesRoute(ControleurFenetrePrincipale c) {}
-    
-    public void fermerFenetre(ControleurFenetrePrincipale c) {}
-    
-    public void quitterLogiciel(ControleurFenetrePrincipale c) {}
-    
-    public void modifierDemande(ControleurFenetrePrincipale c) {}
-    
-    public  void touchePressee(ControleurFenetrePrincipale c, KeyEvent ke) {}
+  
 }

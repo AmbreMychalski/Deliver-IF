@@ -5,11 +5,8 @@ import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import main.modele.DemandeLivraison;
 
-public class EtatDemandeLivraisonSelectionneeSansTournees implements Etat {
+public class EtatDemandeLivraisonSelectionneeSansTournees extends Etat {
 
-    public void chargerPlan(ControleurFenetrePrincipale c) {}
-    
-    public void ajouterDemande(ControleurFenetrePrincipale c) {}
     
     public void clicGaucheSurPlan(ControleurFenetrePrincipale c, MouseEvent event) {
 
@@ -73,18 +70,7 @@ public class EtatDemandeLivraisonSelectionneeSansTournees implements Etat {
         c.buttonModifierLivraison.setDisable(true);
         c.buttonSupprimerLivraison.setDisable(true);
     }
-    
-    public void sauvegarderDemandes(ControleurFenetrePrincipale c) {}
-    
-    public void calculerTournees(ControleurFenetrePrincipale c) {}
-    
-    public void afficherFeuillesRoute(ControleurFenetrePrincipale c) {}
-    
-    public void sauvegarderFeuillesRoute(ControleurFenetrePrincipale c) {}
-    
-    public void fermerFenetre(ControleurFenetrePrincipale c) {}
-    
-    public void quitterLogiciel(ControleurFenetrePrincipale c) {}
+
     
     public void modifierDemande(ControleurFenetrePrincipale c) {
 

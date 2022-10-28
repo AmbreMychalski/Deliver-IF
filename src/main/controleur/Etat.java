@@ -3,45 +3,47 @@ package main.controleur;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 
-public interface Etat {
+public abstract class Etat {
 
-	public default void chargerPlan(ControleurFenetrePrincipale c) throws Exception {}
+	public void chargerPlan(ControleurFenetrePrincipale c) throws Exception {}
 	
-	public default void ajouterDemande(ControleurFenetrePrincipale c) {}
+	public void ajouterDemande(ControleurFenetrePrincipale c){}
 	
-	public default void clicGaucheSurPlan(ControleurFenetrePrincipale c, MouseEvent event) {}
+	public void clicGaucheSurPlan(ControleurFenetrePrincipale c, MouseEvent event){}
 	
-	public default void clicGaucheSurTableau(ControleurFenetrePrincipale c) {}
+	public void clicGaucheSurTableau(ControleurFenetrePrincipale c) {}
 	
-	public default void choixPlageHoraire(ControleurFenetrePrincipale c) {}
+	public void choixPlageHoraire(ControleurFenetrePrincipale c) {}
 	
-	public default void validerAjouterOuModifier(ControleurFenetrePrincipale c) {}
+	public void validerAjouterOuModifier(ControleurFenetrePrincipale c) {}
 	
-	public default void annulerAjouterOuModifier(ControleurFenetrePrincipale c) {
+	public void annulerAjouterOuModifier(ControleurFenetrePrincipale c) {}
+	
+	public void chargerListeDemandes(ControleurFenetrePrincipale c) {}
+	
+	public void supprimerDemande(ControleurFenetrePrincipale c) {}
+	
+	public void sauvegarderDemandes(ControleurFenetrePrincipale c) {}
+	
+	public void calculerTournees(ControleurFenetrePrincipale c) {}
+	
+	public void afficherFeuillesRoute(ControleurFenetrePrincipale c) {}
+	
+	public void sauvegarderFeuillesRoute(ControleurFenetrePrincipale c) {}
+	
+	public void fermerFenetre(ControleurFenetrePrincipale c) {}
+	
+	public void quitterLogiciel(ControleurFenetrePrincipale c) {}
+	
+	public void modifierDemande(ControleurFenetrePrincipale c) {}
+	
+	public void touchePressee(ControleurFenetrePrincipale c, KeyEvent ke) {}
+	
+	private void annulerModif(ControleurFenetrePrincipale c) {
 	    c.buttonAutoriserAjouterLivraison.setDisable(false);
         c.buttonValiderLivraison.setDisable(true);
         c.buttonAnnulerLivraison.setDisable(true);
         c.comboboxPlageHoraire.setDisable(true);
         c.etatCourant = c.etatDemandeLivraisonSelectionneeSansTournees;
 	}
-	
-	public default void chargerListeDemandes(ControleurFenetrePrincipale c) {}
-	
-	public default void supprimerDemande(ControleurFenetrePrincipale c) {}
-	
-	public default void sauvegarderDemandes(ControleurFenetrePrincipale c) {}
-	
-	public default void calculerTournees(ControleurFenetrePrincipale c) {}
-	
-	public default void afficherFeuillesRoute(ControleurFenetrePrincipale c) {}
-	
-	public default void sauvegarderFeuillesRoute(ControleurFenetrePrincipale c) {}
-	
-	public default void fermerFenetre(ControleurFenetrePrincipale c) {}
-	
-	public default void quitterLogiciel(ControleurFenetrePrincipale c) {}
-	
-	public default void modifierDemande(ControleurFenetrePrincipale c) {}
-	
-	public default void touchePressee(ControleurFenetrePrincipale c, KeyEvent ke) {}
 }

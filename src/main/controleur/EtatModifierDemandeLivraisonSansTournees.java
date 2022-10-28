@@ -8,11 +8,9 @@ import main.modele.DemandeLivraison;
 import main.modele.Intersection;
 import main.modele.PlageHoraire;
 
-public class EtatModifierDemandeLivraisonSansTournees implements Etat {
+public class EtatModifierDemandeLivraisonSansTournees enxtends Etat {
 
-    public void chargerPlan(ControleurFenetrePrincipale c) {}
-    
-    public void ajouterDemande(ControleurFenetrePrincipale c) {}
+
     
     public void clicGaucheSurPlan(ControleurFenetrePrincipale c, MouseEvent event) {
         if (c.planCharge != null) {
@@ -127,25 +125,5 @@ public class EtatModifierDemandeLivraisonSansTournees implements Etat {
         c.etatCourant = c.etatDemandeLivraisonSelectionneeSansTournees;
     }
     
-    public void chargerListeDemandes(ControleurFenetrePrincipale c) {}
-    
-    public void supprimerDemande(ControleurFenetrePrincipale c) {}
-    
-    public void sauvegarderDemandes(ControleurFenetrePrincipale c) {}
-    
-    public void calculerTournees(ControleurFenetrePrincipale c) {}
-    
-    public void afficherFeuillesRoute(ControleurFenetrePrincipale c) {}
-    
-    public void sauvegarderFeuillesRoute(ControleurFenetrePrincipale c) {}
-    
-    public void fermerFenetre(ControleurFenetrePrincipale c) {}
-    
-    public void quitterLogiciel(ControleurFenetrePrincipale c) {}
-    
-    public void modifierDemande(ControleurFenetrePrincipale c) {}
-    
-    public  void touchePressee(ControleurFenetrePrincipale c, KeyEvent ke) {}
-    
-
+   
 }
