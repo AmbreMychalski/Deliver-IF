@@ -1,9 +1,8 @@
-package main;
+package demarrer;
 
-
-import main.modele.DemandeLivraison;
-import main.modele.Journee;
-import main.modele.Plan;
+import modele.DemandeLivraison;
+import modele.Journee;
+import modele.Plan;
 
 public class Main {
 

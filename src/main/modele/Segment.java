@@ -1,4 +1,4 @@
-package main.modele;
+package modele;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

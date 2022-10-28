@@ -1,4 +1,4 @@
-package main.modele;
+package modele;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -26,8 +26,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
-import main.exception.FichierNonConformeException;
-import main.exception.IntersectionIntrouvableException;
+import exception.FichierNonConformeException;
+import exception.IntersectionIntrouvableException;
 
 @Getter
 @Setter

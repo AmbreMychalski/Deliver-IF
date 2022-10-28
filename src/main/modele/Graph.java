@@ -1,4 +1,4 @@
-package main.modele;
+package modele;
 
 public interface Graph {
 	/**

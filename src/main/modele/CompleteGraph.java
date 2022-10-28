@@ -1,4 +1,4 @@
-package main.modele;
+package modele;
 
 import java.util.List;
 import java.util.ArrayList;
@@ -22,7 +22,7 @@ public class CompleteGraph implements Graph {
     
     /**
      * Create a complete directed graph such that each edge has a weight within [MIN_COST,MAX_COST]
-     * @param nbVertices
+     *
      */
     public CompleteGraph(List<DemandeLivraison> demandesLivraisons,  Plan plan, Intersection entrepot){
         

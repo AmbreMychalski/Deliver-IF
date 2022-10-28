@@ -1,12 +1,11 @@
-package main.controleur;
+package controleur;
 
 import javafx.scene.canvas.GraphicsContext;
-import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.paint.Color;
-import main.modele.DemandeLivraison;
-import main.modele.Intersection;
-import main.modele.PlageHoraire;
+import modele.DemandeLivraison;
+import modele.Intersection;
+import modele.PlageHoraire;
 
 public class EtatSaisieNouvelleDemandeSansTournees extends Etat{
     

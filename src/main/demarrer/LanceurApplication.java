@@ -4,15 +4,14 @@
  * Version 1.0
  */
 
-package main.demarrer;
-
+package demarrer;
 
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
-import main.controleur.ControleurFenetrePrincipale;
+import controleur.ControleurFenetrePrincipale;
 
 /**
  * Ouvre la première vue de l'application.

@@ -1,4 +1,4 @@
-package main.exception;
+package exception;
 
 public class IntersectionIntrouvableException extends Exception {
     public IntersectionIntrouvableException(String errorMessage) {

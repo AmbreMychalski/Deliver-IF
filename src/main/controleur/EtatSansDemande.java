@@ -1,15 +1,14 @@
-package main.controleur;
+package controleur;
 
 import java.io.File;
 import java.util.ArrayList;
 
 import javafx.scene.canvas.GraphicsContext;
-import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.paint.Color;
 import javafx.stage.FileChooser;
-import main.modele.DemandeLivraison;
-import main.modele.Intersection;
+import modele.DemandeLivraison;
+import modele.Intersection;
 
 public class EtatSansDemande extends Etat{
 

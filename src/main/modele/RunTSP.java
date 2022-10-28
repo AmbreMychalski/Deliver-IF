@@ -1,4 +1,4 @@
-package main.modele;
+package modele;
 
 public class RunTSP {
 	public static void main(String[] args) {

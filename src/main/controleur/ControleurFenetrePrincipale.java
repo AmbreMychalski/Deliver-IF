@@ -4,7 +4,7 @@
  * Version 1.0
  */
 
-package main.controleur;
+package controleur;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -15,15 +15,6 @@ import org.apache.logging.log4j.Logger;
 import org.apache.logging.log4j.core.LoggerContext;
 
 import javafx.collections.FXCollections;
-/*
-import modele.DemandeLivraison;
-import javafx.scene.control.cell.PropertyValueFactory;
-import javafx.scene.control.TableColumn;
-import javafx.beans.property.LongProperty;
-import javafx.beans.property.SimpleLongProperty;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
-*/
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.canvas.Canvas;
@@ -42,11 +33,11 @@ import javafx.scene.transform.Affine;
 import javafx.scene.transform.Transform;
 import javafx.stage.Stage;
 import lombok.Setter;
-import main.modele.DemandeLivraison;
-import main.modele.Intersection;
-import main.modele.Journee;
-import main.modele.PlageHoraire;
-import main.modele.Plan;
+import modele.DemandeLivraison;
+import modele.Intersection;
+import modele.Journee;
+import modele.PlageHoraire;
+import modele.Plan;
 
 /**
  * Contrôleur de la vue principale de l'application.
@@ -506,7 +497,7 @@ public class ControleurFenetrePrincipale {
 
 	/**
      * Convertit une latitude en pixels sur le Canvas (axe Y). 
-     * @param x latitude 
+     * @param y latitude
      * @return coordonnée Y sur le Canvas
      */
 	double convertirLatitudeEnY(double y) {

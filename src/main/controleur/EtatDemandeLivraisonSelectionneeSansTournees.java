@@ -1,9 +1,9 @@
-package main.controleur;
+package controleur;
 
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
-import main.modele.DemandeLivraison;
+import modele.DemandeLivraison;
 
 public class EtatDemandeLivraisonSelectionneeSansTournees extends Etat {
 

@@ -6,8 +6,8 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
-import main.exception.FichierNonConformeException;
-import main.modele.Plan;
+import exception.FichierNonConformeException;
+import modele.Plan;
 
 public class PlanTests {
     

@@ -1,7 +1,7 @@
-package main.controleur;
+package controleur;
 
 import javafx.scene.input.KeyEvent;
-import main.modele.DemandeLivraison;
+import modele.DemandeLivraison;
 
 public class EtatTourneesCalculees extends Etat{
 

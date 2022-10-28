@@ -1,11 +1,10 @@
-package main.controleur;
+package controleur;
 
 import java.io.File;
 
-import javafx.scene.input.KeyEvent;
 import javafx.stage.FileChooser;
-import main.modele.Plan;
-import main.modele.Segment;
+import modele.Plan;
+import modele.Segment;
 
 public class EtatInitial extends Etat{
     public void chargerPlan(ControleurFenetrePrincipale c) throws Exception {
