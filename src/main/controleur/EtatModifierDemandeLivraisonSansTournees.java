@@ -8,10 +8,8 @@ import main.modele.DemandeLivraison;
 import main.modele.Intersection;
 import main.modele.PlageHoraire;
 
-public class EtatModifierDemandeLivraisonSansTournees enxtends Etat {
-
-
-    
+public class EtatModifierDemandeLivraisonSansTournees extends Etat {
+ 
     public void clicGaucheSurPlan(ControleurFenetrePrincipale c, MouseEvent event) {
         if (c.planCharge != null) {
             ControleurFenetrePrincipale.logger.debug("Clic sur le canvas, (x,y)=(" 
@@ -66,8 +64,8 @@ public class EtatModifierDemandeLivraisonSansTournees enxtends Etat {
             ControleurFenetrePrincipale.logger.debug("Clic sur le canvas, (x,y)=(" 
                     + event.getX() + "," + event.getY() + ")");
         }
-
     }
+
     
     public void clicGaucheSurTableau(ControleurFenetrePrincipale c) {}
     
