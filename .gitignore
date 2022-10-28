@@ -1,5 +1,22 @@
-/target/
 .classpath
 .project
 .settings/
 /.apt_generated/
+
+### Java ###
+*.class
+
+# Package Files #
+*.jar
+*.war
+*.ear
+
+### IntelliJ ###
+*.iml
+*.ipr
+*.iws
+.idea/
+
+### Maven ###
+target/
+log/
