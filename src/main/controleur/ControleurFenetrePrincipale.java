@@ -53,7 +53,6 @@ public class ControleurFenetrePrincipale {
     final double TAILLE_CERCLE_INTERSECTION_SELECTIONNEE = 8;
 	final double TAILLE_CERCLE_INTERSECTION = 5;
 	final Color COULEUR_DEPOT = Color.RED;
-	final Color COULEUR_INTERSECTION = Color.BLACK;
 	final Color COULEUR_SEGMENT = Color.BLACK;
 	final Color COULEUR_POINT_LIVRAISON = Color.BLUE;
 	final Color COULEUR_POINT_LIVRAISON_SELECTIONNE = Color.RED;
@@ -126,8 +125,6 @@ public class ControleurFenetrePrincipale {
 	@FXML
 	TextField textfieldIdentifiantIntersection;
 	@FXML
-	TextField textfieldNomFichier;
-	@FXML
 	TableColumn<DemandeLivraison, Long> columnIdentifiant;
 	@FXML
 	TableColumn<DemandeLivraison, PlageHoraire> columnPlageHoraire;
@@ -183,9 +180,9 @@ public class ControleurFenetrePrincipale {
 	
         tableViewDemandesLivraison.setItems(FXCollections.observableArrayList());
         columnIdentifiant.setCellValueFactory(
-                new PropertyValueFactory<DemandeLivraison, Long>("idIntersection"));
+                new PropertyValueFactory<>("idIntersection"));
         columnPlageHoraire.setCellValueFactory(
-                new PropertyValueFactory<DemandeLivraison, PlageHoraire>("plageHoraire")); 
+                new PropertyValueFactory<>("plageHoraire"));
 	    
 		journee = new Journee();
 		for(int i=8; i<12; i++) {
@@ -246,7 +243,7 @@ public class ControleurFenetrePrincipale {
             this.dessinerIntersectionLatLong(gc,
                     d.getIntersection().getLatitude(), 
                     d.getIntersection().getLongitude(), 
-                    this.COULEUR_POINT_LIVRAISON, 
+                    d.getPlageHoraire().getCouleur(),
                     this.TAILLE_RECT_PT_LIVRAISON, 
                     true, 
                     "Rectangle");
@@ -380,12 +377,12 @@ public class ControleurFenetrePrincipale {
                             	        String forme) {
 	    if(remplir) {
 	        gc.setFill(couleur);
-	        if(forme == "Rectangle") {
+	        if(forme.equals("Rectangle")) {
 	            gc.fillRect(x - (taille /2), 
 	                          y - (taille /2),
 	                          taille, 
 	                          taille);
-	        } else if(forme == "Cercle") {
+	        } else if(forme.equals("Cercle")) {
 	            gc.fillOval(x - (taille /2), 
                         y - (taille /2),
                         taille, 
@@ -393,12 +390,12 @@ public class ControleurFenetrePrincipale {
 	        }
 	    } else {
 	        gc.setStroke(couleur);
-	        if(forme == "Rectangle") {
+	        if(forme.equals("Rectangle")) {
 	            gc.strokeRect(x - (taille /2), 
                         y - (taille /2),
                         taille, 
                         taille);
-	        } else if(forme == "Cercle") {
+	        } else if(forme.equals("Cercle")) {
                 gc.strokeOval(x - (taille /2), 
                         y - (taille /2),
                         taille, 
@@ -427,9 +424,9 @@ public class ControleurFenetrePrincipale {
 	}
 	
 	
-	void dessinerTrajetLatLong(double lat1, double long1, 
+	void dessinerTrajetLatLong(GraphicsContext gc, double lat1, double long1,
             double lat2, double long2) {
-        dessinerSegmentGradientXY(convertirLongitudeEnX(long1),
+        dessinerSegmentGradientXY(gc, convertirLongitudeEnX(long1),
                 convertirLatitudeEnY(lat1),
                 convertirLongitudeEnX(long2),
                 convertirLatitudeEnY(lat2));
@@ -444,7 +441,7 @@ public class ControleurFenetrePrincipale {
 	 * @param y2 Coordonnée sur l'axe y du second point
 	 * @param couleur
 	 */
-	void dessinerSegmentXY(double x1, double y1, 
+	void dessinerSegmentXY(double x1, double y1,
                         	       double x2, double y2, 
                         	       Color couleur) {
 	    GraphicsContext gc = canvasPlan.getGraphicsContext2D();
@@ -452,19 +449,16 @@ public class ControleurFenetrePrincipale {
 	    gc.strokeLine(x1, y1, x2, y2);
 	}
 	
-	private void dessinerSegmentGradientXY(double x1, double y1, 
+	private void dessinerSegmentGradientXY(GraphicsContext gc, double x1, double y1,
             double x2, double y2) {
-     GraphicsContext gc = canvasPlanTrajet.getGraphicsContext2D();
-     
+
     //     Stop[] stops = new Stop[] { new Stop(0, Color.WHITE), new Stop(1, Color.MAROON)};
     //     LinearGradient lg1 = new LinearGradient(0, 0, 1, 0, true, CycleMethod.REFLECT, stops);
-     
-         gc.setLineWidth(3);
+		gc.setLineWidth(3);
+
          gc.setStroke(Color.DODGERBLUE);
          gc.strokeLine(x1, y1, x2, y2);
-         
 
-    
          //this.drawArrow(gc, (int)(x1), (int)(y1), (int)(x2), (int)(y2));
     }
 	

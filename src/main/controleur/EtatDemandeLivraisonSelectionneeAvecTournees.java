@@ -70,7 +70,7 @@ public class EtatDemandeLivraisonSelectionneeAvecTournees extends Etat {
             for(Trajet trajet : trajets) {
                 List<Segment> segments = trajet.getSegments(); 
                 for(Segment segment : segments) {
-                    c.dessinerTrajetLatLong((double)segment.getOrigine().getLatitude(),
+                    c.dessinerTrajetLatLong(gc, (double)segment.getOrigine().getLatitude(),
                             (double)segment.getOrigine().getLongitude(),
                             (double)segment.getDestination().getLatitude(),
                             (double)segment.getDestination().getLongitude());

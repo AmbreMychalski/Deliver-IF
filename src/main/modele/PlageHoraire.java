@@ -2,19 +2,38 @@ package modele;
 
 import java.util.Objects;
 
-import lombok.AllArgsConstructor;
+import javafx.scene.paint.Color;
 import lombok.Getter;
 import lombok.Setter;
-import lombok.ToString;
 
 @Getter
 @Setter
-@AllArgsConstructor
 
 public class PlageHoraire {
     int debut;
     int fin;
-    
+    Color couleur;
+
+    public PlageHoraire(int debut, int fin){
+        this.debut = debut;
+        this.fin = fin;
+        switch (debut){
+            case 8 :
+                this.couleur = Color.BLUEVIOLET;
+                break;
+            case 9:
+                this.couleur = Color.DARKCYAN;
+                break;
+            case 10:
+                this.couleur = Color.DARKORANGE;
+                break;
+            case 11:
+                this.couleur = Color.DEEPPINK;
+                break;
+            default:
+                this.couleur = Color.GREEN;
+        }
+    }
     @Override
     public String toString() {
         return "De "+debut+"h à "+fin+"h";
