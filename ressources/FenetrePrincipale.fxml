@@ -16,7 +16,7 @@
    <children>
       <Pane prefHeight="735.0" prefWidth="289.0">
          <children>
-            <TitledPane animated="false" collapsible="false" layoutX="7.0" layoutY="90.0" prefHeight="191.0" prefWidth="276.0" text="Demande de livraison">
+            <TitledPane id="titledPaneEditionDemande" fx:id="titledPaneEditionDemande" animated="false" collapsible="false" layoutX="7.0" layoutY="90.0" prefHeight="191.0" prefWidth="276.0" text="Demande de livraison">
               <content>
                 <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="165.0" prefWidth="292.0">
                      <children>

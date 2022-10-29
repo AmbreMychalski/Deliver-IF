@@ -9,37 +9,15 @@ public class EtatDemandeLivraisonSelectionneeSansTournees extends Etat {
 
     
     public void clicGaucheSurPlan(ControleurFenetrePrincipale c, MouseEvent event) {
-
-        c.buttonModifierLivraison.setDisable(true);
-        c.buttonSupprimerLivraison.setDisable(true);
-        c.buttonAutoriserAjouterLivraison.setDisable(false);
-        c.mettreAJourCanvasDemande();
-        c.textfieldIdentifiantIntersectionSelection.setText("");
-        c.textfieldPlageHoraire.setText("");
-        if (c.journee.getDemandesLivraison().size() == 0) {
-            c.etatCourant = c.etatSansDemande;
-        } else {
-            c.etatCourant = c.etatAvecDemande;
-        }
-
+        this.sortieDeSelectionDemande(c);
+        c.etatCourant = c.etatAvecDemande;
+        c.buttonCalculerTournees.setDisable(false);
+        c.buttonChargerDemandes.setDisable(false);
     }
     
     public void clicGaucheSurTableau(ControleurFenetrePrincipale c) {
-        DemandeLivraison ligne = c.tableViewDemandesLivraison.getSelectionModel().getSelectedItem();
-        if (ligne != null) {
-            c.mettreAJourCanvasDemande();
-            c.dessinerIntersectionLatLong(c.canvasInterieurPlan.getGraphicsContext2D(),
-                                        ligne.getIntersection().getLatitude(), 
-                                        ligne.getIntersection().getLongitude(),
-                                        c.COULEUR_POINT_LIVRAISON_SELECTIONNE, 
-                                        c.TAILLE_RECT_PT_LIVRAISON_SELECTIONNE, 
-                                        true, 
-                                        "Rectangle");
-            
-            c.titlePaneSelectionDemande.setVisible(true);
-            c.textfieldIdentifiantIntersectionSelection.setText(ligne.getIdIntersection().toString());
-            c.textfieldPlageHoraire.setText(ligne.getPlageHoraire().toString());
-        }
+        this.selectionnerDemande(c);
+
     }
     
     public void choixPlageHoraire(ControleurFenetrePrincipale c) {}
@@ -51,54 +29,32 @@ public class EtatDemandeLivraisonSelectionneeSansTournees extends Etat {
     public void chargerListeDemandes(ControleurFenetrePrincipale c) {}
     
     public void supprimerDemande(ControleurFenetrePrincipale c) {
-        DemandeLivraison ligne = c.tableViewDemandesLivraison.getSelectionModel().getSelectedItem();
-        if(ligne != null) {
-            c.mettreAJourCanvasDemande();
-            c.journee.supprimerDemandeLivraison(ligne);
-            c.tableViewDemandesLivraison.getItems().remove(ligne);
-            c.tableViewDemandesLivraison.refresh();
-            c.textfieldIdentifiantIntersectionSelection.setText("");
-            c.textfieldPlageHoraire.setText("");
-        }
-        if (c.journee.getDemandesLivraison().size() == 0) {
-            c.etatCourant = c.etatSansDemande;
-        } else {
+        this.supprimerDemandeLivraison(c);
+        this.sortieDeSelectionDemande(c);
+        if(c.journee.getDemandesLivraison().size() > 0){
             c.etatCourant = c.etatAvecDemande;
+            c.buttonCalculerTournees.setDisable(false);
+            c.buttonChargerDemandes.setDisable(false);
+        } else {
+            c.etatCourant = c.etatSansDemande;
         }
 
-        c.buttonAutoriserAjouterLivraison.setDisable(false);
-        c.buttonModifierLivraison.setDisable(true);
-        c.buttonSupprimerLivraison.setDisable(true);
     }
 
     
     public void modifierDemande(ControleurFenetrePrincipale c) {
 
-        c.buttonModifierLivraison.setDisable(true);
-        c.buttonSupprimerLivraison.setDisable(true);
-        
-        c.buttonAutoriserAjouterLivraison.setDisable(true);
-        c.buttonValiderLivraison.setDisable(false);
-        c.buttonAnnulerLivraison.setDisable(false);
-        c.comboboxPlageHoraire.setDisable(false);
+        this.modifierDemandeApresSelection(c);
         c.etatCourant = c.etatModifierDemandeLivraisonSansTournees;
     }
     
     public  void touchePressee(ControleurFenetrePrincipale c, KeyEvent ke) {
-        if(ke.getCode()== KeyCode.ESCAPE) {
 
-            c.buttonModifierLivraison.setDisable(true);
-            c.buttonSupprimerLivraison.setDisable(true);
-            
-            c.buttonAutoriserAjouterLivraison.setDisable(false);
-            c.mettreAJourCanvasDemande();
-            c.textfieldIdentifiantIntersectionSelection.setText("");
-            c.textfieldPlageHoraire.setText("");
-            if (c.journee.getDemandesLivraison().size() == 0) {
-                c.etatCourant = c.etatSansDemande;
-            } else {
-                c.etatCourant = c.etatAvecDemande;
-            }
+        if(ke.getCode()== KeyCode.ESCAPE) {
+            this.sortieDeSelectionDemande(c);
+            c.etatCourant = c.etatAvecDemande;
+            c.buttonCalculerTournees.setDisable(false);
+            c.buttonChargerDemandes.setDisable(false);
         }
     }
 

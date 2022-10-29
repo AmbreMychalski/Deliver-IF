@@ -53,6 +53,10 @@ public class EtatInitial extends Etat{
                                         c.TAILLE_CERCLE_INTERSECTION,
                                         true,
                                         "Cercle");
+        c.titledPaneEditionDemande.setVisible(true);
+        c.titlePaneSelectionDemande.setVisible(true);
+        c.buttonChargerDemandes.setDisable(false);
+        c.buttonAutoriserAjouterLivraison.setDisable(false);
         c.etatCourant = c.etatSansDemande;
     }
     

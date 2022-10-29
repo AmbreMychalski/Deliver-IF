@@ -132,6 +132,8 @@ public class ControleurFenetrePrincipale {
 	TitledPane titlePaneSelectionDemande;
 	//public ImageView im = new ImageView(".\\data\\repere.png");
 	@FXML
+	TitledPane titledPaneEditionDemande;
+	@FXML
 	TextField textfieldIdentifiantIntersectionSelection;
 	@FXML
 	TextField textfieldPlageHoraire;
@@ -158,7 +160,19 @@ public class ControleurFenetrePrincipale {
 	    buttonValiderLivraison.setDisable(true);
 	    buttonAnnulerLivraison.setDisable(true);
 	    comboboxPlageHoraire.setDisable(true);
-	    
+
+		buttonCalculerTournees.setDisable(true);
+		buttonAutoriserAjouterLivraison.setDisable(true);
+		buttonSauvegarderDemandes.setDisable(true);
+		buttonChargerDemandes.setDisable(true);
+		buttonAfficherFeuillesRoute.setDisable(true);
+
+		textfieldIdentifiantIntersection.setDisable(true);
+		textfieldPlageHoraire.setDisable(true);
+		textfieldIdentifiantIntersectionSelection.setDisable(true);
+		titlePaneSelectionDemande.setVisible(false);
+		titledPaneEditionDemande.setVisible(false);
+
 	    buttonEtatCourant.setOnAction(event -> System.out.println("Etat courant = " + this.etatCourant.getClass().getName()));
 	    
 	    buttonValiderLivraison.setOnAction(event -> actionBoutonAjouterLivraison(event));
@@ -235,10 +249,12 @@ public class ControleurFenetrePrincipale {
         this.etatCourant.calculerTournees(this);
     }
     
-	void mettreAJourCanvasDemande() {
+	void afficherDemandeLivraison(boolean nettoyerCanvas) {
         GraphicsContext gc = canvasInterieurPlan.getGraphicsContext2D();
-        gc.clearRect(0, 0, canvasInterieurPlan.getWidth(), canvasInterieurPlan.getHeight());
-                
+		if(nettoyerCanvas){
+			gc.clearRect(0, 0, canvasInterieurPlan.getWidth(), canvasInterieurPlan.getHeight());
+		}
+
         for(DemandeLivraison d: journee.getDemandesLivraison()) {
             this.dessinerIntersectionLatLong(gc,
                     d.getIntersection().getLatitude(), 
