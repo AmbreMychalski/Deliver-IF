@@ -36,7 +36,6 @@ public class EtatDemandeLivraisonSelectionneeAvecTournees extends Etat {
             c.buttonSauvegarderDemandes.setDisable(true);
             c.etatCourant = c.etatSansDemande;
         }
-        
     }
     public void modifierDemande(ControleurFenetrePrincipale c) {
         this.modifierDemandeApresSelection(c);

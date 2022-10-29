@@ -22,18 +22,12 @@ public class EtatModifierDemandeLivraisonSansTournees extends Etat {
                     "Rectangle");
         }
     }
-
-
     public void validerAjouterOuModifier(ControleurFenetrePrincipale c) {
         this.effectuerModification(c);
         c.etatCourant = c.etatDemandeLivraisonSelectionneeSansTournees;
-
     }
-
     public void annulerAjouterOuModifier(ControleurFenetrePrincipale c) {
         this.annulerModification(c);
         c.etatCourant = c.etatDemandeLivraisonSelectionneeSansTournees;
     }
-    
-   
 }
