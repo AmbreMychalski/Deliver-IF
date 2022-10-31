@@ -80,11 +80,11 @@ public class Journee {
                         heureDebut = Integer.parseInt(attributs.getNamedItem("heureDebut").getNodeValue());
                         heureFin = Integer.parseInt(attributs.getNamedItem("heureFin").getNodeValue());
                         if(heureFin-heureDebut != 1) throw new Exception("Plage horaire incompatible");
-                        
-                        DemandeLivraison demande = new DemandeLivraison(this.plan.getIntersections().get(intersectionId),new PlageHoraire(heureDebut, heureFin));
-                        this.demandesLivraison.add(demande);
-                        demandesAjoutees.add(demande);
-                        
+                        if(this.plan.estLivrable(this.plan.getIntersections().get(intersectionId))) {
+                            DemandeLivraison demande = new DemandeLivraison(this.plan.getIntersections().get(intersectionId), new PlageHoraire(heureDebut, heureFin));
+                            this.demandesLivraison.add(demande);
+                            demandesAjoutees.add(demande);
+                        }
                     }
                 }
             }

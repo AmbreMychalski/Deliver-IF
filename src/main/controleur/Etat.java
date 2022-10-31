@@ -184,18 +184,23 @@ public abstract class Etat {
 		if(!champIdentifiant.isEmpty() && plageHoraire != null) {
 			Intersection intersection = c.journee.getPlan().getIntersections()
 					.get(Long.parseLong(champIdentifiant));
-			DemandeLivraison demande =
-					new DemandeLivraison(intersection, plageHoraire);
-			c.journee.ajouterDemandeLivraison(demande);
-			c.tableViewDemandesLivraison.getItems().add(demande);
-			c.tableViewDemandesLivraison.refresh();
-			c.afficherDemandeLivraison(true);
-			c.buttonValiderLivraison.setDisable(true);
-			c.buttonAnnulerLivraison.setDisable(true);
-			c.comboboxPlageHoraire.setDisable(true);
-			c.comboboxPlageHoraire.setValue(null);
-			c.textfieldIdentifiantIntersection.setText("");
-			c.tableViewDemandesLivraison.setDisable(false);
+			if(c.journee.getPlan().estLivrable(intersection)){
+				DemandeLivraison demande =
+						new DemandeLivraison(intersection, plageHoraire);
+				c.journee.ajouterDemandeLivraison(demande);
+				c.tableViewDemandesLivraison.getItems().add(demande);
+				c.tableViewDemandesLivraison.refresh();
+				c.afficherDemandeLivraison(true);
+				c.buttonValiderLivraison.setDisable(true);
+				c.buttonAnnulerLivraison.setDisable(true);
+				c.comboboxPlageHoraire.setDisable(true);
+				c.comboboxPlageHoraire.setValue(null);
+				c.textfieldIdentifiantIntersection.setText("");
+				c.tableViewDemandesLivraison.setDisable(false);
+			}
+			else{
+				ControleurFenetrePrincipale.logger.warn("L'intersection n'est pas livrable");
+			}
 		} else {
 			ControleurFenetrePrincipale.logger.warn("Informations manquantes pour l'ajout de la demande");
 		}

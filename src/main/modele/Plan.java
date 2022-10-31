@@ -1,14 +1,8 @@
 package modele;
 
 import java.io.File;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.Map.Entry;
-import java.util.Set;
 import java.util.regex.Pattern;
 
 import javax.xml.parsers.DocumentBuilder;
@@ -50,7 +44,18 @@ public class Plan {
 	        throw e;
 	    }
 	}
-	
+
+	public boolean estLivrable(Intersection intersection){
+
+		if(!sontConnectee(intersection, this.entrepot)){
+			return false;
+		} else if (!sontConnectee(this.entrepot, intersection)) {
+
+		}
+
+		return true;
+	}
+
 	public List<Segment> calculerPlusCourtChemin(Intersection depart, Intersection arrivee) {
 	    List <Segment>          chemin = new LinkedList<Segment>();
 	    HashMap<Long, Float>    distance = new HashMap<Long, Float>();
@@ -269,4 +274,70 @@ public class Plan {
         
         return interPlusProche;
     }
+
+	private boolean sontConnectee(Intersection depart, Intersection arrivee){
+		HashMap<Long, Float>    distance = new HashMap<Long, Float>();
+		HashMap<Long, Float>    distanceAndHeuristic = new HashMap<Long, Float>();
+		Set<Long>               intersectionsNoires = new HashSet<Long>();
+		Queue<Long> intersectionsGrises = new PriorityQueue<Long>(10, new Comparator<Long>() {
+			public int compare(Long n1, Long n2) {
+				if(distanceAndHeuristic.get(n1)==distanceAndHeuristic.get(n2)){
+					return 0;
+				}
+				else if(distanceAndHeuristic.get(n1)<distanceAndHeuristic.get(n2)){
+					return -1;
+				}
+				return 1;
+			}
+		});
+
+		for(Entry<Long, Intersection> entry : intersections.entrySet()) {
+			distance.put(entry.getKey(), -1.0f);
+			distanceAndHeuristic.put(entry.getKey(), -1.0f);
+		}
+		distance.put(depart.getIdIntersection(), 0.0f);
+		distanceAndHeuristic.put(depart.getIdIntersection(), calculHeuristique(depart, arrivee));
+		intersectionsGrises.add(depart.getIdIntersection());
+
+		while(!intersectionsGrises.isEmpty()){
+			long idCourrant = intersectionsGrises.poll();
+			if(intersectionsNeighbours.get(idCourrant) != null) {
+				for(Segment seg : intersectionsNeighbours.get(idCourrant)) {
+					Intersection voisin = seg.getDestination();
+					Long idVoisin = voisin.getIdIntersection();
+					float heuristiqueVoisin = calculHeuristique(voisin, arrivee);
+					if(idVoisin==arrivee.getIdIntersection()){
+						return true;
+					}
+					float g = distance.get(idCourrant)+ seg.getLongueur();
+					float f = g+heuristiqueVoisin;
+					if(!intersectionsNoires.contains(idVoisin)){
+						if(g<distance.get(idVoisin)
+								||distanceAndHeuristic.get(idVoisin) == -1) {
+							distance.put(idVoisin,g);
+							distanceAndHeuristic.put(idVoisin,f);
+							intersectionsGrises.add(idVoisin);
+						}
+					}
+				}
+			}
+			intersectionsNoires.add(idCourrant);
+		}
+		return false;
+	}
+
+	private float calculHeuristique(Intersection interCourant, Intersection interCible){
+		double R = 6372.8; // Earth's Radius, in kilometers
+
+		double dLat = Math.toRadians(interCible.getLatitude() - interCourant.getLatitude());
+		double dLon = Math.toRadians(interCible.getLongitude() - interCourant.getLongitude());
+		double lat1 = Math.toRadians(interCourant.getLatitude());
+		double lat2 = Math.toRadians(interCible.getLatitude());
+
+		double a = Math.pow(Math.sin(dLat / 2),2)
+				+ Math.pow(Math.sin(dLon / 2),2) * Math.cos(lat1) * Math.cos(lat2);
+		double c = 2 * Math.asin(Math.sqrt(a));
+		return (float) (R * c);
+
+	}
 }
