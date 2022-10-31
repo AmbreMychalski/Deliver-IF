@@ -22,17 +22,14 @@ public class EtatModifierDemandeLivraisonAvecTournees extends Etat {
                     "Rectangle");
         }
     }
-
     public void validerAjouterOuModifier(ControleurFenetrePrincipale c) {
         this.effectuerModification(c);
         this.calculerEtAfficherTournee(c);
         c.etatCourant = c.etatDemandeLivraisonSelectionneeAvecTournees;
     }
-    
     public void annulerAjouterOuModifier(ControleurFenetrePrincipale c) {
         this.annulerModification(c);
         c.etatCourant = c.etatDemandeLivraisonSelectionneeAvecTournees;
     }
-
     public  void touchePressee(ControleurFenetrePrincipale c, KeyEvent ke) {}
 }

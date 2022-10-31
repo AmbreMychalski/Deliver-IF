@@ -59,5 +59,4 @@ public class EtatInitial extends Etat{
         c.buttonAutoriserAjouterLivraison.setDisable(false);
         c.etatCourant = c.etatSansDemande;
     }
-    
 }

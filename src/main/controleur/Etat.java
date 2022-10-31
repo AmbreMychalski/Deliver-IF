@@ -264,5 +264,14 @@ public abstract class Etat {
 			c.afficherDemandeLivraison(true);
 		}
 	}
+	protected  void annulerAjout (ControleurFenetrePrincipale c){
+		c.buttonValiderLivraison.setDisable(true);
+		c.buttonAnnulerLivraison.setDisable(true);
+		c.comboboxPlageHoraire.setDisable(true);
+		c.tableViewDemandesLivraison.setDisable(false);
+		c.textfieldIdentifiantIntersection.setText("");
+		c.comboboxPlageHoraire.setValue(null);
+
+	}
 
 }

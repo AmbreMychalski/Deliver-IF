@@ -15,7 +15,6 @@ public class EtatSansDemande extends Etat{
     public void chargerPlan(ControleurFenetrePrincipale c) throws Exception {
         c.etatInitial.chargerPlan(c);
     }
-    
     public void ajouterDemande(ControleurFenetrePrincipale c) {
         c.buttonValiderLivraison.setDisable(false);
         c.buttonAnnulerLivraison.setDisable(false);
@@ -23,11 +22,9 @@ public class EtatSansDemande extends Etat{
         c.buttonCalculerTournees.setDisable(false);
         c.etatCourant = c.etatSaisieNouvelleDemandeSansTournees;
     }
-    
     public void clicGaucheSurPlan(ControleurFenetrePrincipale c, MouseEvent event) {
         this.naviguerSurPlan(c, event);
     }
-    
     public void chargerListeDemandes(ControleurFenetrePrincipale c) {
         this.chargerDemandes(c);
         c.etatCourant = c.etatAvecDemande;
