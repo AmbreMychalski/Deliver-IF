@@ -50,7 +50,7 @@ public class Plan {
 		if(!sontConnectee(intersection, this.entrepot)){
 			return false;
 		} else if (!sontConnectee(this.entrepot, intersection)) {
-
+			return false;
 		}
 
 		return true;
