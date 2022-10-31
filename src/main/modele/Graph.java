@@ -20,4 +20,6 @@ public interface Graph {
 	 */
 	public abstract boolean isArc(int i, int j);
 
+	public float[][] getCostMatrix();
+
 }

@@ -93,5 +93,8 @@ public class CompleteGraph implements Graph {
             System.out.println();
         }
     }
-
+    @Override
+    public float[][] getCostMatrix() {
+        return this.cost;
+    }
 }

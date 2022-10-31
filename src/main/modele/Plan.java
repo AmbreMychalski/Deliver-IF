@@ -279,7 +279,7 @@ public class Plan {
 		HashMap<Long, Float>    distance = new HashMap<Long, Float>();
 		HashMap<Long, Float>    distanceAndHeuristic = new HashMap<Long, Float>();
 		Set<Long>               intersectionsNoires = new HashSet<Long>();
-		Queue<Long> intersectionsGrises = new PriorityQueue<Long>(10, new Comparator<Long>() {
+		Queue<Long> intersectionsGrises = new PriorityQueue<Long>(20, new Comparator<Long>() {
 			public int compare(Long n1, Long n2) {
 				if(distanceAndHeuristic.get(n1)==distanceAndHeuristic.get(n2)){
 					return 0;

@@ -64,7 +64,9 @@ public abstract class Etat {
 	}
 
 	protected  void calculerEtAfficherTournee(ControleurFenetrePrincipale c){
+		long startTime = System.currentTimeMillis();
 		c.journee.calculerTournee();
+		ControleurFenetrePrincipale.logger.debug("Solution trouvé en :"+ (System.currentTimeMillis() - startTime)+"ms ");
 		GraphicsContext gc = c.canvasPlanTrajet.getGraphicsContext2D();
 		gc.clearRect(0, 0, c.canvasPlanTrajet.getWidth(), c.canvasPlanTrajet.getHeight());
 		Tournee tournee = c.journee.getTournees().get(c.journee.getTournees().size()-1);
