@@ -44,7 +44,11 @@ public abstract class Etat {
 	public void modifierDemande(ControleurFenetrePrincipale c) {}
 	
 	public void touchePressee(ControleurFenetrePrincipale c, KeyEvent ke) {}
-	
+
+	public  void supprimerLivraison(ControleurFenetrePrincipale c){
+		System.out.println("c.etatCourant : "+c.etatCourant);
+	}
+
 	private void annulerModif(ControleurFenetrePrincipale c) {
 	    c.buttonAutoriserAjouterLivraison.setDisable(false);
         c.buttonValiderLivraison.setDisable(true);
@@ -63,9 +67,9 @@ public abstract class Etat {
 		c.buttonSauvegarderDemandes.setDisable(false);
 	}
 
-	protected  void calculerEtAfficherTournee(ControleurFenetrePrincipale c){
+	protected  boolean calculerEtAfficherTournee(ControleurFenetrePrincipale c){
 		long startTime = System.currentTimeMillis();
-		c.journee.calculerTournee();
+		boolean tourneeComplete = c.journee.calculerTournee();
 		ControleurFenetrePrincipale.logger.debug("Solution trouvé en :"+ (System.currentTimeMillis() - startTime)+"ms ");
 		GraphicsContext gc = c.canvasPlanTrajet.getGraphicsContext2D();
 		gc.clearRect(0, 0, c.canvasPlanTrajet.getWidth(), c.canvasPlanTrajet.getHeight());
@@ -80,6 +84,7 @@ public abstract class Etat {
 						(double)segment.getDestination().getLongitude());
 			}
 		}
+		return tourneeComplete;
 	}
 	protected void sauvegarderListeDemandes(ControleurFenetrePrincipale c){
 		FileChooser fileChooser = new FileChooser();

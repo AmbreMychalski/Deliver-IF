@@ -73,6 +73,8 @@ public class ControleurFenetrePrincipale {
     final EtatSaisieNouvelleDemandeAvecTournees etatSaisieNouvelleDemandeAvecTournees = new EtatSaisieNouvelleDemandeAvecTournees();
     final EtatSaisieNouvelleDemandeSansTournees etatSaisieNouvelleDemandeSansTournees = new EtatSaisieNouvelleDemandeSansTournees();
     final EtatTourneesCalculees etatTourneesCalculees = new EtatTourneesCalculees();
+
+	final EtatTourneesCalculeesPartielles etatTourneesCalculeesPartielles = new EtatTourneesCalculeesPartielles();
 	
 	@Setter
 	Stage stage;
@@ -235,6 +237,10 @@ public class ControleurFenetrePrincipale {
 		etatCourant.clicGaucheSurPlan(this, event);
 	}
 
+	public void actionPopUpsupprimerLivraison(ActionEvent event) {
+		System.out.println("Controleur\n");
+		etatCourant.supprimerLivraison(this);
+	}
 
 	/**
 	 * Action à effectuer lors du clic sur le bouton Charger demandes.

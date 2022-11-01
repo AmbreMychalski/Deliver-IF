@@ -133,8 +133,8 @@ public class Journee {
             
         }
     
-    public void calculerTournee() {
-        
+    public boolean calculerTournee() {
+        boolean tourneeComplete = true;
         boolean tourneeCalculee = false;
         List<DemandeLivraison> dmdLivrOrdonnee = new LinkedList<DemandeLivraison>();
                 
@@ -172,6 +172,7 @@ public class Journee {
                 if(heureLivraison>currentDl.getPlageHoraire().getFin()) {
                     tourneeCalculee=false;
                     this.demandesLivraisonNonTraitees.add(currentDl);
+                    tourneeComplete = false;
                     listDemande.remove(currentDl);
                     break;
                 }
@@ -205,8 +206,8 @@ public class Journee {
         
         
         tournees.add(new Tournee(trajetList,livrList ));
-        
-        
+
+        return tourneeComplete;
         
     }
 }

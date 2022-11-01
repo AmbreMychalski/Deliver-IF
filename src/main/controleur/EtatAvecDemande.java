@@ -42,9 +42,16 @@ public class EtatAvecDemande extends Etat{
     }
     
     public void calculerTournees(ControleurFenetrePrincipale c) {
-        this.calculerEtAfficherTournee(c);
-        c.buttonCalculerTournees.setDisable(true);
-        c.buttonChargerDemandes.setDisable(true);
-        c.etatCourant = c.etatTourneesCalculees;
+        boolean tourneeComplete = this.calculerEtAfficherTournee(c);
+        if(!tourneeComplete) {
+            vue.PopUpTourneeImpossible.display(c);
+            c.etatCourant = c.etatTourneesCalculeesPartielles;
+            System.out.println("changement d'état : "+c.etatCourant);
+        }
+        else {
+            c.buttonCalculerTournees.setDisable(true);
+            c.buttonChargerDemandes.setDisable(true);
+            c.etatCourant = c.etatTourneesCalculees;
+        }
     }
 }
