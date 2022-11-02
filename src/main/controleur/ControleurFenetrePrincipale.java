@@ -9,6 +9,7 @@ package controleur;
 import java.util.ArrayList;
 import java.util.List;
 
+import modele.*;
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -33,11 +34,6 @@ import javafx.scene.transform.Affine;
 import javafx.scene.transform.Transform;
 import javafx.stage.Stage;
 import lombok.Setter;
-import modele.DemandeLivraison;
-import modele.Intersection;
-import modele.Journee;
-import modele.PlageHoraire;
-import modele.Plan;
 
 /**
  * Contrôleur de la vue principale de l'application.
@@ -199,6 +195,7 @@ public class ControleurFenetrePrincipale {
                 new PropertyValueFactory<>("idIntersection"));
         columnPlageHoraire.setCellValueFactory(
                 new PropertyValueFactory<>("plageHoraire"));
+		columnPlageHoraire.setComparator(new PlageHoraireComparator());
 	    
 		journee = new Journee();
 		for(int i=8; i<12; i++) {
