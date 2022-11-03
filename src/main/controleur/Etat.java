@@ -1,5 +1,6 @@
 package controleur;
 
+import exception.FichierNonConformeException;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
@@ -13,7 +14,7 @@ import java.util.List;
 
 public abstract class Etat {
 
-	public void chargerPlan(ControleurFenetrePrincipale c) throws Exception {}
+	public void chargerPlan(ControleurFenetrePrincipale c) throws FichierNonConformeException {}
 	
 	public void ajouterDemande(ControleurFenetrePrincipale c){}
 	

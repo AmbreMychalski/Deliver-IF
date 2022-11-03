@@ -37,12 +37,8 @@ public class Plan {
 	
 	private static final Logger        LOGGER = LogManager.getLogger();
 	
-	public Plan(File fichier) throws Exception {
-	    try {
-	        this.parseXML(fichier);
-	    } catch (Exception e) {
-	        throw e;
-	    }
+	public Plan(File fichier) throws FichierNonConformeException {
+		this.parseXML(fichier);
 	}
 
 	public boolean estLivrable(Intersection intersection){
@@ -168,7 +164,7 @@ public class Plan {
         return res;
     }
 
-	public void parseXML(File fichier) throws FichierNonConformeException, IntersectionIntrouvableException {
+	public void parseXML(File fichier) throws FichierNonConformeException {
         Node            node = null;
         NodeList        list = null;   
         

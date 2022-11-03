@@ -9,6 +9,7 @@ package controleur;
 import java.util.ArrayList;
 import java.util.List;
 
+import exception.FichierNonConformeException;
 import modele.*;
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
@@ -183,8 +184,8 @@ public class ControleurFenetrePrincipale {
 		buttonChargerPlan.setOnAction(event -> {
             try {
                 actionBoutonChargerPlan(event);
-            } catch (Exception e) {
-                e.printStackTrace();
+            } catch (FichierNonConformeException e) {
+                ControleurFenetrePrincipale.logger.warn("Problème lors de la lecture du fichier");
             }
         });
 	    buttonCalculerTournees.setOnAction(event -> actionBoutonCalculerTournees(event));
@@ -222,7 +223,7 @@ public class ControleurFenetrePrincipale {
         etatCourant.modifierDemande(this);
     }
     
-    private void actionBoutonChargerPlan(ActionEvent event) throws Exception {
+    private void actionBoutonChargerPlan(ActionEvent event) throws FichierNonConformeException {
 		etatCourant.chargerPlan(this);
 	}
 
