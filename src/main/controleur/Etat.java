@@ -163,7 +163,7 @@ public abstract class Etat {
 		c.tableViewDemandesLivraison.setDisable(false);
 	}
 
-	protected void selectionnerDemande(ControleurFenetrePrincipale c){
+	protected boolean selectionnerDemande(ControleurFenetrePrincipale c){
 		DemandeLivraison ligne = c.tableViewDemandesLivraison.getSelectionModel().getSelectedItem();
 		if (ligne != null) {
 			c.afficherDemandeLivraison(true);
@@ -178,12 +178,16 @@ public abstract class Etat {
 			c.titlePaneSelectionDemande.setVisible(true);
 			c.textfieldIdentifiantIntersectionSelection.setText(ligne.getIdIntersection().toString());
 			c.textfieldPlageHoraire.setText(ligne.getPlageHoraire().toString());
+			c.buttonCalculerTournees.setDisable(true);
+			c.buttonAutoriserAjouterLivraison.setDisable(true);
+			c.buttonSauvegarderDemandes.setDisable(true);
+			c.buttonChargerDemandes.setDisable(true);
+			c.buttonModifierLivraison.setDisable(false);
+			c.buttonSupprimerLivraison.setDisable(false);
+			return true;
 		}
-		c.buttonCalculerTournees.setDisable(true);
-		c.buttonAutoriserAjouterLivraison.setDisable(true);
-		c.buttonSauvegarderDemandes.setDisable(true);
-		c.buttonModifierLivraison.setDisable(false);
-		c.buttonSupprimerLivraison.setDisable(false);
+		return false;
+
 	}
 	protected void validerAjoutDemande(ControleurFenetrePrincipale c){
 		String champIdentifiant = c.textfieldIdentifiantIntersection.getText();
@@ -204,6 +208,7 @@ public abstract class Etat {
 				c.comboboxPlageHoraire.setValue(null);
 				c.textfieldIdentifiantIntersection.setText("");
 				c.tableViewDemandesLivraison.setDisable(false);
+				c.buttonSauvegarderDemandes.setDisable(false);
 			}
 			else{
 				ControleurFenetrePrincipale.logger.warn("L'intersection n'est pas livrable");

@@ -15,6 +15,7 @@ public class EtatSaisieNouvelleDemandeSansTournees extends Etat{
     public void validerAjouterOuModifier(ControleurFenetrePrincipale c) {
         this.validerAjoutDemande(c);
         if (c.journee.getDemandesLivraison().size() > 0){
+            c.buttonCalculerTournees.setDisable(false);
             c.etatCourant = c.etatAvecDemande;
         }
     }

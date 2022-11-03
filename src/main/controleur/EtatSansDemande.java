@@ -19,7 +19,6 @@ public class EtatSansDemande extends Etat{
         c.buttonValiderLivraison.setDisable(false);
         c.buttonAnnulerLivraison.setDisable(false);
         c.comboboxPlageHoraire.setDisable(false);
-        c.buttonCalculerTournees.setDisable(false);
         c.etatCourant = c.etatSaisieNouvelleDemandeSansTournees;
     }
     public void clicGaucheSurPlan(ControleurFenetrePrincipale c, MouseEvent event) {

@@ -22,6 +22,7 @@ public class EtatAvecDemande extends Etat{
         c.buttonAnnulerLivraison.setDisable(false);
         c.comboboxPlageHoraire.setDisable(false);
         c.tableViewDemandesLivraison.setDisable(true);
+        c.buttonCalculerTournees.setDisable(true);
         c.etatCourant = c.etatSaisieNouvelleDemandeSansTournees;
     }
     
@@ -29,12 +30,15 @@ public class EtatAvecDemande extends Etat{
         this.naviguerSurPlan(c, event);
     }
     public void clicGaucheSurTableau(ControleurFenetrePrincipale c) {
-        this.selectionnerDemande(c);
-        c.etatCourant = c.etatDemandeLivraisonSelectionneeSansTournees;
+        boolean demandeSelectionee = this.selectionnerDemande(c);
+        if(demandeSelectionee){
+            c.etatCourant = c.etatDemandeLivraisonSelectionneeSansTournees;
+        }
     }
 
     public void chargerListeDemandes(ControleurFenetrePrincipale c) {
         this.chargerDemandes(c);
+        c.buttonCalculerTournees.setDisable(false);
     }
 
     public void sauvegarderDemandes(ControleurFenetrePrincipale c) {

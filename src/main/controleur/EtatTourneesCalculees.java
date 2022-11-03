@@ -23,7 +23,9 @@ public class EtatTourneesCalculees extends Etat{
         c.etatCourant = c.etatSaisieNouvelleDemandeAvecTournees;
     }
     public void clicGaucheSurTableau(ControleurFenetrePrincipale c) {
-        this.selectionnerDemande(c);
-        c.etatCourant = c.etatDemandeLivraisonSelectionneeAvecTournees;
+        boolean demandeSelectionee = this.selectionnerDemande(c);
+        if (demandeSelectionee){
+            c.etatCourant = c.etatDemandeLivraisonSelectionneeAvecTournees;
+        }
     }
 }

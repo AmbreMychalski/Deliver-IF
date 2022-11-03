@@ -24,6 +24,9 @@ public class EtatDemandeLivraisonSelectionneeSansTournees extends Etat {
             c.buttonCalculerTournees.setDisable(false);
             c.buttonChargerDemandes.setDisable(false);
         } else {
+            c.buttonChargerDemandes.setDisable(false);
+            c.buttonSauvegarderDemandes.setDisable(true);
+            c.buttonCalculerTournees.setDisable(true);
             c.etatCourant = c.etatSansDemande;
         }
     }
@@ -33,11 +36,29 @@ public class EtatDemandeLivraisonSelectionneeSansTournees extends Etat {
     }
     public  void touchePressee(ControleurFenetrePrincipale c, KeyEvent ke) {
 
-        if(ke.getCode()== KeyCode.ESCAPE) {
-            this.sortieDeSelectionDemande(c);
-            c.etatCourant = c.etatAvecDemande;
-            c.buttonCalculerTournees.setDisable(false);
-            c.buttonChargerDemandes.setDisable(false);
+        switch (ke.getCode()) {
+            case ESCAPE:
+                this.sortieDeSelectionDemande(c);
+                c.etatCourant = c.etatAvecDemande;
+                c.buttonCalculerTournees.setDisable(false);
+                c.buttonChargerDemandes.setDisable(false);
+                break;
+            case DELETE:
+                this.supprimerDemandeLivraison(c);
+                this.sortieDeSelectionDemande(c);
+                c.buttonCalculerTournees.setDisable(false);
+                c.buttonChargerDemandes.setDisable(false);
+                if(c.journee.getDemandesLivraison().size() > 0){
+                    c.etatCourant = c.etatAvecDemande;
+                    c.buttonCalculerTournees.setDisable(false);
+                    c.buttonChargerDemandes.setDisable(false);
+                } else {
+                    c.buttonSauvegarderDemandes.setDisable(true);
+                    c.buttonCalculerTournees.setDisable(true);
+                    c.buttonChargerDemandes.setDisable(false);
+                    c.etatCourant = c.etatSansDemande;
+                }
+                break;
         }
     }
 }
