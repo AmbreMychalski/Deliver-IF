@@ -142,23 +142,31 @@ public class Journee {
 //      for(DemandeLivraison dl : demandesLivraison) {
 //          listDemande.add(dl);
 //      }
+
+        ArrayList<Integer> indexDejaCalcule = new ArrayList<Integer>(listDemande.size()+1);
+        ArrayList<DemandeLivraison> demandeDejaCalcule = new ArrayList<DemandeLivraison>(listDemande.size());
         
         while(!tourneeCalculee) {
             tourneeCalculee = true;
             CompleteGraph g = new CompleteGraph(listDemande,this.plan, this.plan.getEntrepot());
+
             dmdLivrOrdonnee.clear();
-            
-            System.out.println(listDemande);
-            g.printGraph();
-            
+            indexDejaCalcule.clear();
+            indexDejaCalcule.add(0);
+
+            for(DemandeLivraison dl : demandeDejaCalcule){
+                indexDejaCalcule.add(g.getIdDemandeLivraisonToIndex().get(dl));
+            }
+
             TSP tsp = new TSP1();
-            tsp.searchSolution(20000, g);
+            tsp.searchSolution(20000, g, indexDejaCalcule);
             for(int i=1; i<listDemande.size()+1;i++) {
                 int x =tsp.getSolution(i);
                 dmdLivrOrdonnee.add(g.getIdIndexToDemandeLivraison().get(x));
             }
-            
-            
+            demandeDejaCalcule.clear();
+            demandeDejaCalcule.add(dmdLivrOrdonnee.get(0));
+
             float heureLivraison = (float) dmdLivrOrdonnee.get(0).getPlageHoraire().debut+5/60.0f;  
             
             for(int i=1; i<dmdLivrOrdonnee.size();i++) {
@@ -180,7 +188,7 @@ public class Journee {
                     heureLivraison = currentDl.getPlageHoraire().getDebut();
                 }
                 heureLivraison+=5/60.0f;
-                
+                demandeDejaCalcule.add(currentDl);
             } 
         }
         

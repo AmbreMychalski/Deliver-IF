@@ -11,18 +11,24 @@ public abstract class TemplateTSP implements TSP {
 	private int timeLimit;
 	private long startTime;
 	
-	public void searchSolution(int timeLimit, Graph g){
+	public void searchSolution(int timeLimit, Graph g, ArrayList<Integer> visited){
 		if (timeLimit <= 0) return;
 		startTime = System.currentTimeMillis();	
 		this.timeLimit = timeLimit;
 		this.g = g;
 		bestSol = new Integer[g.getNbVertices()];
-		Collection<Integer> unvisited = new ArrayList<Integer>(g.getNbVertices()-1);
+		ArrayList<Integer> unvisited = new ArrayList<Integer>(g.getNbVertices()-1);
 		for (int i=1; i<g.getNbVertices(); i++) unvisited.add(i);
-		Collection<Integer> visited = new ArrayList<Integer>(g.getNbVertices());
-		visited.add(0); // The first visited vertex is 0
+		if(visited == null){
+			visited = new ArrayList<Integer>(g.getNbVertices());
+			visited.add(0);
+		}
+		else{
+			unvisited.removeAll(visited);
+		}
+		 // The first visited vertex is 0
 		bestSolCost = Integer.MAX_VALUE;
-		branchAndBound(0, unvisited, visited, 0);
+		branchAndBound(visited.get(visited.size()-1), unvisited, visited, 0);
 	}
 	
 	public Integer getSolution(int i){
