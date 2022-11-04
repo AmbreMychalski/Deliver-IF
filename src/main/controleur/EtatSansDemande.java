@@ -17,9 +17,9 @@ public class EtatSansDemande extends Etat{
         c.etatInitial.chargerPlan(c);
     }
     public void ajouterDemande(ControleurFenetrePrincipale c) {
-        c.buttonValiderLivraison.setDisable(false);
-        c.buttonAnnulerLivraison.setDisable(false);
-        c.comboboxPlageHoraire.setDisable(false);
+        c.vue.buttonValiderLivraison.setDisable(false);
+        c.vue.buttonAnnulerLivraison.setDisable(false);
+        c.vue.comboboxPlageHoraire.setDisable(false);
         c.etatCourant = c.etatSaisieNouvelleDemandeSansTournees;
     }
     public void clicGaucheSurPlan(ControleurFenetrePrincipale c, MouseEvent event) {
@@ -28,7 +28,7 @@ public class EtatSansDemande extends Etat{
     public void chargerListeDemandes(ControleurFenetrePrincipale c) {
         this.chargerDemandes(c);
         c.etatCourant = c.etatAvecDemande;
-        c.buttonCalculerTournees.setDisable(false);
-        c.buttonSauvegarderDemandes.setDisable(false);
+        c.vue.buttonCalculerTournees.setDisable(false);
+        c.vue.buttonSauvegarderDemandes.setDisable(false);
     }
 }

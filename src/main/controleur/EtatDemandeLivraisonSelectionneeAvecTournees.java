@@ -46,14 +46,14 @@ public class EtatDemandeLivraisonSelectionneeAvecTournees extends Etat {
     private void miseAJourBoutonEtCanvas(ControleurFenetrePrincipale c) {
         if(c.journee.getDemandesLivraison().size() != 0) {
             this.calculerEtAfficherTournee(c);
-            c.buttonSauvegarderDemandes.setDisable(false);
+            c.vue.buttonSauvegarderDemandes.setDisable(false);
             c.etatCourant = c.etatTourneesCalculees;
         } else {
-            GraphicsContext gc = c.canvasPlanTrajet.getGraphicsContext2D();
-            gc.clearRect(0, 0, c.canvasPlanTrajet.getWidth(), c.canvasPlanTrajet.getHeight());
-            c.buttonCalculerTournees.setDisable(true);
-            c.buttonSauvegarderDemandes.setDisable(true);
-            c.buttonChargerDemandes.setDisable(false);
+            GraphicsContext gc = c.vue.canvasPlanTrajet.getGraphicsContext2D();
+            gc.clearRect(0, 0, c.vue.canvasPlanTrajet.getWidth(), c.vue.canvasPlanTrajet.getHeight());
+            c.vue.buttonCalculerTournees.setDisable(true);
+            c.vue.buttonSauvegarderDemandes.setDisable(true);
+            c.vue.buttonChargerDemandes.setDisable(false);
             c.etatCourant = c.etatSansDemande;
         }
     }

@@ -16,10 +16,10 @@ public class EtatTourneesCalculees extends Etat{
         this.naviguerSurPlan(c, event);
     }
     public void ajouterDemande(ControleurFenetrePrincipale c) {
-        c.buttonValiderLivraison.setDisable(false);
-        c.buttonAnnulerLivraison.setDisable(false);
-        c.comboboxPlageHoraire.setDisable(false);
-        c.tableViewDemandesLivraison.setDisable(true);
+        c.vue.buttonValiderLivraison.setDisable(false);
+        c.vue.buttonAnnulerLivraison.setDisable(false);
+        c.vue.comboboxPlageHoraire.setDisable(false);
+        c.vue.tableViewDemandesLivraison.setDisable(true);
         c.etatCourant = c.etatSaisieNouvelleDemandeAvecTournees;
     }
     public void clicGaucheSurTableau(ControleurFenetrePrincipale c) {

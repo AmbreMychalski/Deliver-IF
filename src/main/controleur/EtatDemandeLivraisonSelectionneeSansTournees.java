@@ -10,8 +10,8 @@ public class EtatDemandeLivraisonSelectionneeSansTournees extends Etat {
     public void clicGaucheSurPlan(ControleurFenetrePrincipale c, MouseEvent event) {
         this.sortieDeSelectionDemande(c);
         c.etatCourant = c.etatAvecDemande;
-        c.buttonCalculerTournees.setDisable(false);
-        c.buttonChargerDemandes.setDisable(false);
+        c.vue.buttonCalculerTournees.setDisable(false);
+        c.vue.buttonChargerDemandes.setDisable(false);
     }
     public void clicGaucheSurTableau(ControleurFenetrePrincipale c) {
         this.selectionnerDemande(c);
@@ -21,12 +21,12 @@ public class EtatDemandeLivraisonSelectionneeSansTournees extends Etat {
         this.sortieDeSelectionDemande(c);
         if(c.journee.getDemandesLivraison().size() > 0){
             c.etatCourant = c.etatAvecDemande;
-            c.buttonCalculerTournees.setDisable(false);
-            c.buttonChargerDemandes.setDisable(false);
+            c.vue.buttonCalculerTournees.setDisable(false);
+            c.vue.buttonChargerDemandes.setDisable(false);
         } else {
-            c.buttonChargerDemandes.setDisable(false);
-            c.buttonSauvegarderDemandes.setDisable(true);
-            c.buttonCalculerTournees.setDisable(true);
+            c.vue.buttonChargerDemandes.setDisable(false);
+            c.vue.buttonSauvegarderDemandes.setDisable(true);
+            c.vue.buttonCalculerTournees.setDisable(true);
             c.etatCourant = c.etatSansDemande;
         }
     }
@@ -40,22 +40,22 @@ public class EtatDemandeLivraisonSelectionneeSansTournees extends Etat {
             case ESCAPE:
                 this.sortieDeSelectionDemande(c);
                 c.etatCourant = c.etatAvecDemande;
-                c.buttonCalculerTournees.setDisable(false);
-                c.buttonChargerDemandes.setDisable(false);
+                c.vue.buttonCalculerTournees.setDisable(false);
+                c.vue.buttonChargerDemandes.setDisable(false);
                 break;
             case DELETE:
                 this.supprimerDemandeLivraison(c);
                 this.sortieDeSelectionDemande(c);
-                c.buttonCalculerTournees.setDisable(false);
-                c.buttonChargerDemandes.setDisable(false);
+                c.vue.buttonCalculerTournees.setDisable(false);
+                c.vue.buttonChargerDemandes.setDisable(false);
                 if(c.journee.getDemandesLivraison().size() > 0){
                     c.etatCourant = c.etatAvecDemande;
-                    c.buttonCalculerTournees.setDisable(false);
-                    c.buttonChargerDemandes.setDisable(false);
+                    c.vue.buttonCalculerTournees.setDisable(false);
+                    c.vue.buttonChargerDemandes.setDisable(false);
                 } else {
-                    c.buttonSauvegarderDemandes.setDisable(true);
-                    c.buttonCalculerTournees.setDisable(true);
-                    c.buttonChargerDemandes.setDisable(false);
+                    c.vue.buttonSauvegarderDemandes.setDisable(true);
+                    c.vue.buttonCalculerTournees.setDisable(true);
+                    c.vue.buttonChargerDemandes.setDisable(false);
                     c.etatCourant = c.etatSansDemande;
                 }
                 break;

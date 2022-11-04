@@ -11,12 +11,12 @@ public class EtatTourneesCalculeesPartielles extends Etat {
 
         for(DemandeLivraison dmd : demandeLivraisonNonTraitees){
             c.journee.supprimerDemandeLivraison(dmd);
-            c.tableViewDemandesLivraison.getItems().remove(dmd);
+            c.vue.tableViewDemandesLivraison.getItems().remove(dmd);
         }
-        c.tableViewDemandesLivraison.refresh();
-        c.textfieldIdentifiantIntersectionSelection.setText("");
-        c.textfieldPlageHoraire.setText("");
-        c.afficherDemandeLivraison(true);
+        c.vue.tableViewDemandesLivraison.refresh();
+        c.vue.textfieldIdentifiantIntersectionSelection.setText("");
+        c.vue.textfieldPlageHoraire.setText("");
+        c.vue.afficherDemandeLivraison(true);
         c.etatCourant = c.etatTourneesCalculees;
         System.out.println(c.etatCourant);
     }

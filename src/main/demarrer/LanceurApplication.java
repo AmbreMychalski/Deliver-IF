@@ -11,7 +11,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
-import controleur.ControleurFenetrePrincipale;
+import vue.VueFenetrePrincipale;
 
 /**
  * Ouvre la première vue de l'application.
@@ -26,7 +26,7 @@ public class LanceurApplication extends Application {
 			FXMLLoader loader = new FXMLLoader(getClass()
 			        .getResource("/FenetrePrincipale.fxml"));
 	        Parent root = (Parent)loader.load();
-			ControleurFenetrePrincipale controleur = loader.getController();
+			VueFenetrePrincipale controleur = loader.getController();
 			controleur.setStage(primaryStage);
 	        primaryStage.setTitle("Calcul de tournées");
 	        primaryStage.setScene(new Scene(root));

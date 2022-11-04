@@ -11,13 +11,12 @@ public class EtatModifierDemandeLivraisonSansTournees extends Etat {
  
     public void clicGaucheSurPlan(ControleurFenetrePrincipale c, MouseEvent event) {
         this.naviguerSurPlan(c, event);
-        DemandeLivraison ligne = c.tableViewDemandesLivraison.getSelectionModel().getSelectedItem();
+        DemandeLivraison ligne = c.vue.tableViewDemandesLivraison.getSelectionModel().getSelectedItem();
         if (ligne != null) {
-            c.dessinerIntersectionLatLong(c.canvasInterieurPlan.getGraphicsContext2D(),
-                    ligne.getIntersection().getLatitude(),
-                    ligne.getIntersection().getLongitude(),
-                    c.COULEUR_POINT_LIVRAISON_SELECTIONNE,
-                    c.TAILLE_RECT_PT_LIVRAISON_SELECTIONNE,
+            c.vue.dessinerIntersection(c.vue.canvasInterieurPlan.getGraphicsContext2D(),
+                    ligne.getIntersection(),
+                    c.vue.COULEUR_POINT_LIVRAISON_SELECTIONNE,
+                    c.vue.TAILLE_RECT_PT_LIVRAISON_SELECTIONNE,
                     true,
                     "Rectangle");
         }

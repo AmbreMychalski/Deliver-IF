@@ -18,11 +18,11 @@ public class EtatAvecDemande extends Etat{
 
     
     public void ajouterDemande(ControleurFenetrePrincipale c) {
-        c.buttonValiderLivraison.setDisable(false);
-        c.buttonAnnulerLivraison.setDisable(false);
-        c.comboboxPlageHoraire.setDisable(false);
-        c.tableViewDemandesLivraison.setDisable(true);
-        c.buttonCalculerTournees.setDisable(true);
+        c.vue.buttonValiderLivraison.setDisable(false);
+        c.vue.buttonAnnulerLivraison.setDisable(false);
+        c.vue.comboboxPlageHoraire.setDisable(false);
+        c.vue.tableViewDemandesLivraison.setDisable(true);
+        c.vue.buttonCalculerTournees.setDisable(true);
         c.etatCourant = c.etatSaisieNouvelleDemandeSansTournees;
     }
     
@@ -38,7 +38,7 @@ public class EtatAvecDemande extends Etat{
 
     public void chargerListeDemandes(ControleurFenetrePrincipale c) {
         this.chargerDemandes(c);
-        c.buttonCalculerTournees.setDisable(false);
+        c.vue.buttonCalculerTournees.setDisable(false);
     }
 
     public void sauvegarderDemandes(ControleurFenetrePrincipale c) {
@@ -47,14 +47,15 @@ public class EtatAvecDemande extends Etat{
     
     public void calculerTournees(ControleurFenetrePrincipale c) {
         boolean tourneeComplete = this.calculerEtAfficherTournee(c);
+        ControleurFenetrePrincipale.logger.debug("tourneeComplete = " + tourneeComplete);
         if(!tourneeComplete) {
             vue.PopUpTourneeImpossible.display(c);
             c.etatCourant = c.etatTourneesCalculeesPartielles;
             System.out.println("changement d'état : "+c.etatCourant);
         }
         else {
-            c.buttonCalculerTournees.setDisable(true);
-            c.buttonChargerDemandes.setDisable(true);
+            c.vue.buttonCalculerTournees.setDisable(true);
+            c.vue.buttonChargerDemandes.setDisable(true);
             c.etatCourant = c.etatTourneesCalculees;
         }
     }

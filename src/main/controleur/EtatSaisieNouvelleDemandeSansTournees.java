@@ -15,7 +15,7 @@ public class EtatSaisieNouvelleDemandeSansTournees extends Etat{
     public void validerAjouterOuModifier(ControleurFenetrePrincipale c) {
         this.validerAjoutDemande(c);
         if (c.journee.getDemandesLivraison().size() > 0){
-            c.buttonCalculerTournees.setDisable(false);
+            c.vue.buttonCalculerTournees.setDisable(false);
             c.etatCourant = c.etatAvecDemande;
         }
     }
@@ -23,8 +23,8 @@ public class EtatSaisieNouvelleDemandeSansTournees extends Etat{
         this.annulerAjout(c);
         if (c.journee.getDemandesLivraison().size() == 0) {
             c.etatCourant = c.etatSansDemande;
-            c.buttonCalculerTournees.setDisable(true);
-            c.buttonSauvegarderDemandes.setDisable(true);
+            c.vue.buttonCalculerTournees.setDisable(true);
+            c.vue.buttonSauvegarderDemandes.setDisable(true);
         } else {
             c.etatCourant = c.etatAvecDemande;
         }
