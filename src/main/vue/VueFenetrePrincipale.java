@@ -102,6 +102,8 @@ public class VueFenetrePrincipale {
     public TextField textfieldIdentifiantIntersectionSelection;
     @FXML
     public TextField textfieldPlageHoraire;
+    @FXML
+    public Label labelGuideUtilisateur;
 
     @FXML
     private void initialize() {
