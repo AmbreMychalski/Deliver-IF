@@ -240,7 +240,7 @@ public class VueFenetrePrincipale implements Observer {
     }
 
     private void actionBoutonAfficherFeulleDeRoute(ActionEvent event) {
-        TourneeSerialisation serialisation = new TourneeSerialisation(controleur.getJournee().getTournees().get(0));
+        TourneeSerialisation serialisation = new TourneeSerialisation(controleur.getJournee().getTournees(), this.controleur.getPlanCharge());
         serialisation.serialiser();
     }
 

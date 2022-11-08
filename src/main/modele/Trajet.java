@@ -9,8 +9,14 @@ import lombok.ToString;
 
 @Getter
 @Setter
-@AllArgsConstructor
 @ToString
 public class Trajet {
-	List<Segment> segments;	
+	List<Segment> segments;
+	private Intersection origine;
+	private Intersection destination;
+	public Trajet(List<Segment> segments){
+		this.segments = segments;
+		this.origine = segments.get(0).getOrigine();
+		this.destination = segments.get(segments.size()-1).getDestination();
+	}
 }
