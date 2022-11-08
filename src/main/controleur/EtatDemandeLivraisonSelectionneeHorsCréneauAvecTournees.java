@@ -1,23 +1,18 @@
 package controleur;
 
-import java.util.List;
-
 import javafx.scene.canvas.GraphicsContext;
-import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
-import modele.DemandeLivraison;
-import modele.Segment;
-import modele.Tournee;
-import modele.Trajet;
 
-public class EtatDemandeLivraisonSelectionneeAvecTournees extends Etat {
-    public EtatDemandeLivraisonSelectionneeAvecTournees() {
-        super.message = "EtatDemandeLivraisonSelectionneeAvecTournees";
+public class EtatDemandeLivraisonSelectionneeHorsCréneauAvecTournees extends Etat {
+    public EtatDemandeLivraisonSelectionneeHorsCréneauAvecTournees() {
+        super.message = "Certaines livraisons seront effectuées hors des horaires données : veuillez ajouter un nouveau livreur pour régler ce problème";
     }
+
     public void clicGaucheSurPlan(ControleurFenetrePrincipale c, MouseEvent event) {
         this.sortieDeSelectionDemande(c);
         c.changementEtat(c.etatTourneesCalculees);
+     
     }
     public void clicGaucheSurTableau(ControleurFenetrePrincipale c) {
         this.selectionnerDemande(c);

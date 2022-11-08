@@ -73,7 +73,7 @@
                 <TableColumn fx:id="columnPlageHoraire" prefWidth="138.0" text="Plage horaire" />
               </columns>
             </TableView>
-            <TitledPane fx:id="titlePaneSelectionDemande" animated="false" collapsible="false" layoutX="7.0" layoutY="500.0" prefHeight="160.0" prefWidth="276.0" text="Selection de la demande">
+            <TitledPane fx:id="titlePaneSelectionDemande" animated="false" collapsible="false" layoutX="7.0" layoutY="500.0" prefHeight="190.0" prefWidth="276.0" text="Selection de la demande">
               <content>
                 <AnchorPane fx:id="anchorPaneSelectionDemande" minHeight="0.0" minWidth="0.0" prefHeight="175.0" prefWidth="292.0">
                      <children>
@@ -83,7 +83,7 @@
                         <TextField id="textfieldIdentifiantIntersectionSelection" fx:id="textfieldIdentifiantIntersectionSelection" editable="false" layoutX="152.0" layoutY="25.0" prefHeight="25.0" prefWidth="117.0" />
                         <TextField id="textfieldPlageHoraire" fx:id="textfieldPlageHoraire" editable="false" layoutX="152.0" layoutY="60.0" prefHeight="25.0" prefWidth="117.0" />
                         <Button id="buttonSupprimerLivraison" fx:id="buttonModifierLivraison" layoutX="69.0" layoutY="95.0" mnemonicParsing="false" text="Modifier" />
-
+                        <Button id="buttonAjouterLivreur" fx:id="buttonAjouterLivreur" layoutX="90.0" layoutY="130.0" mnemonicParsing="false" text="Ajouter un livreur" />
                      </children>
                   </AnchorPane>
               </content>

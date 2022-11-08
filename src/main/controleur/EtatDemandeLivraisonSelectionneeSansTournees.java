@@ -6,10 +6,12 @@ import javafx.scene.input.MouseEvent;
 import modele.DemandeLivraison;
 
 public class EtatDemandeLivraisonSelectionneeSansTournees extends Etat {
-
+    public EtatDemandeLivraisonSelectionneeSansTournees() {
+        super.message = "EtatDemandeLivraisonSelectionneeSansTournees";
+    }
     public void clicGaucheSurPlan(ControleurFenetrePrincipale c, MouseEvent event) {
         this.sortieDeSelectionDemande(c);
-        c.etatCourant = c.etatAvecDemande;
+        c.changementEtat(c.etatAvecDemande);
         c.vue.buttonCalculerTournees.setDisable(false);
         c.vue.buttonChargerDemandes.setDisable(false);
     }
@@ -20,26 +22,26 @@ public class EtatDemandeLivraisonSelectionneeSansTournees extends Etat {
         this.supprimerDemandeLivraison(c);
         this.sortieDeSelectionDemande(c);
         if(c.journee.getDemandesLivraison().size() > 0){
-            c.etatCourant = c.etatAvecDemande;
+            c.changementEtat(c.etatAvecDemande);
             c.vue.buttonCalculerTournees.setDisable(false);
             c.vue.buttonChargerDemandes.setDisable(false);
         } else {
             c.vue.buttonChargerDemandes.setDisable(false);
             c.vue.buttonSauvegarderDemandes.setDisable(true);
             c.vue.buttonCalculerTournees.setDisable(true);
-            c.etatCourant = c.etatSansDemande;
+            c.changementEtat(c.etatSansDemande);
         }
     }
     public void modifierDemande(ControleurFenetrePrincipale c) {
         this.modifierDemandeApresSelection(c);
-        c.etatCourant = c.etatModifierDemandeLivraisonSansTournees;
+        c.changementEtat(c.etatModifierDemandeLivraisonSansTournees);
     }
     public  void touchePressee(ControleurFenetrePrincipale c, KeyEvent ke) {
 
         switch (ke.getCode()) {
             case ESCAPE:
                 this.sortieDeSelectionDemande(c);
-                c.etatCourant = c.etatAvecDemande;
+                c.changementEtat(c.etatAvecDemande);
                 c.vue.buttonCalculerTournees.setDisable(false);
                 c.vue.buttonChargerDemandes.setDisable(false);
                 break;
@@ -49,14 +51,14 @@ public class EtatDemandeLivraisonSelectionneeSansTournees extends Etat {
                 c.vue.buttonCalculerTournees.setDisable(false);
                 c.vue.buttonChargerDemandes.setDisable(false);
                 if(c.journee.getDemandesLivraison().size() > 0){
-                    c.etatCourant = c.etatAvecDemande;
+                    c.changementEtat(c.etatAvecDemande);
                     c.vue.buttonCalculerTournees.setDisable(false);
                     c.vue.buttonChargerDemandes.setDisable(false);
                 } else {
                     c.vue.buttonSauvegarderDemandes.setDisable(true);
                     c.vue.buttonCalculerTournees.setDisable(true);
                     c.vue.buttonChargerDemandes.setDisable(false);
-                    c.etatCourant = c.etatSansDemande;
+                    c.changementEtat(c.etatSansDemande);
                 }
                 break;
         }

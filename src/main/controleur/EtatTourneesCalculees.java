@@ -8,6 +8,9 @@ import modele.DemandeLivraison;
 import modele.Intersection;
 
 public class EtatTourneesCalculees extends Etat{
+    public EtatTourneesCalculees() {
+        super.message = "EtatTourneesCalculees";
+    }
 
     public  void sauvegarderDemandes(ControleurFenetrePrincipale c){
         this.sauvegarderListeDemandes(c);
@@ -20,12 +23,12 @@ public class EtatTourneesCalculees extends Etat{
         c.vue.buttonAnnulerLivraison.setDisable(false);
         c.vue.comboboxPlageHoraire.setDisable(false);
         c.vue.tableViewDemandesLivraison.setDisable(true);
-        c.etatCourant = c.etatSaisieNouvelleDemandeAvecTournees;
+        c.changementEtat(c.etatSaisieNouvelleDemandeAvecTournees);
     }
     public void clicGaucheSurTableau(ControleurFenetrePrincipale c) {
         boolean demandeSelectionee = this.selectionnerDemande(c);
         if (demandeSelectionee){
-            c.etatCourant = c.etatDemandeLivraisonSelectionneeAvecTournees;
+            c.changementEtat(c.etatDemandeLivraisonSelectionneeAvecTournees);
         }
     }
 }

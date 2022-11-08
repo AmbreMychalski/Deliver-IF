@@ -76,6 +76,8 @@ public class VueFenetrePrincipale {
     @FXML
     public Button buttonModifierLivraison;
     @FXML
+    public Button buttonAjouterLivreur;
+    @FXML
     public Button buttonEtatCourant;
     @FXML
     public TableView<DemandeLivraison> tableViewDemandesLivraison;
@@ -117,8 +119,10 @@ public class VueFenetrePrincipale {
 
         buttonSupprimerLivraison.setOnAction(this::actionBoutonSupprimerLivraison);
         buttonModifierLivraison.setOnAction(this::actionBoutonModifierLivraison);
+        buttonAjouterLivreur.setOnAction(this::actionBoutonAjouterLivreur);
         buttonSupprimerLivraison.setDisable(true);
         buttonModifierLivraison.setDisable(true);
+        buttonAjouterLivreur.setDisable(true);
 
         buttonValiderLivraison.setDisable(true);
         buttonAnnulerLivraison.setDisable(true);
@@ -192,6 +196,10 @@ public class VueFenetrePrincipale {
         controleur.modifierDemande();
     }
 
+    private void actionBoutonAjouterLivreur(ActionEvent event) {
+        controleur.ajouterLivreur();
+    }
+
     private void actionBoutonChargerPlan(ActionEvent event) throws FichierNonConformeException {
         controleur.chargerPlan();
     }
@@ -251,6 +259,9 @@ public class VueFenetrePrincipale {
         controleur.sauvegarderDemandes();
     }
 
+    public void updateLabelGuideUtilisateur(String texte){
+        labelGuideUtilisateur.setText(texte);
+    }
 
     /**
      * Trouve l'intersection du plan qui se trouve aux coordonnées x,y (en pixels)

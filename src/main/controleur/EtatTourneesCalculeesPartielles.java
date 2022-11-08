@@ -5,6 +5,10 @@ import modele.DemandeLivraison;
 import java.util.List;
 
 public class EtatTourneesCalculeesPartielles extends Etat {
+    public EtatTourneesCalculeesPartielles() {
+        super.message = "EtatTourneesCalculeesPartielles";
+    }
+
     public  void supprimerLivraison(ControleurFenetrePrincipale c) {
         System.out.println("ouioui");
         List<DemandeLivraison> demandeLivraisonNonTraitees = c.journee.getDemandesLivraisonNonTraitees();
@@ -17,7 +21,6 @@ public class EtatTourneesCalculeesPartielles extends Etat {
         c.vue.textfieldIdentifiantIntersectionSelection.setText("");
         c.vue.textfieldPlageHoraire.setText("");
         c.vue.afficherDemandeLivraison(true);
-        c.etatCourant = c.etatTourneesCalculees;
-        System.out.println(c.etatCourant);
+        c.changementEtat(c.etatTourneesCalculees);
     }
 }

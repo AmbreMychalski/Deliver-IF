@@ -15,7 +15,9 @@ import modele.Tournee;
 import modele.Trajet;
 
 public class EtatAvecDemande extends Etat{
-
+    public EtatAvecDemande() {
+        super.message = "EtatAvecDemande";
+    }
     
     public void ajouterDemande(ControleurFenetrePrincipale c) {
         c.vue.buttonValiderLivraison.setDisable(false);
@@ -23,7 +25,7 @@ public class EtatAvecDemande extends Etat{
         c.vue.comboboxPlageHoraire.setDisable(false);
         c.vue.tableViewDemandesLivraison.setDisable(true);
         c.vue.buttonCalculerTournees.setDisable(true);
-        c.etatCourant = c.etatSaisieNouvelleDemandeSansTournees;
+        c.changementEtat(c.etatSaisieNouvelleDemandeSansTournees);
     }
     
     public void clicGaucheSurPlan(ControleurFenetrePrincipale c, MouseEvent event) {
@@ -32,7 +34,7 @@ public class EtatAvecDemande extends Etat{
     public void clicGaucheSurTableau(ControleurFenetrePrincipale c) {
         boolean demandeSelectionee = this.selectionnerDemande(c);
         if(demandeSelectionee){
-            c.etatCourant = c.etatDemandeLivraisonSelectionneeSansTournees;
+            c.changementEtat(c.etatDemandeLivraisonSelectionneeSansTournees);
         }
     }
 
@@ -50,13 +52,13 @@ public class EtatAvecDemande extends Etat{
         ControleurFenetrePrincipale.logger.debug("tourneeComplete = " + tourneeComplete);
         if(!tourneeComplete) {
             vue.PopUpTourneeImpossible.display(c);
-            c.etatCourant = c.etatTourneesCalculeesPartielles;
+            c.changementEtat(c.etatTourneesCalculeesPartielles);
             System.out.println("changement d'état : "+c.etatCourant);
         }
         else {
             c.vue.buttonCalculerTournees.setDisable(true);
             c.vue.buttonChargerDemandes.setDisable(true);
-            c.etatCourant = c.etatTourneesCalculees;
+            c.changementEtat(c.etatTourneesCalculees);
         }
     }
 }

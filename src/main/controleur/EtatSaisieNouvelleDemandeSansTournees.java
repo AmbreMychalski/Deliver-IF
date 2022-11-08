@@ -9,6 +9,9 @@ import modele.PlageHoraire;
 
 public class EtatSaisieNouvelleDemandeSansTournees extends Etat{
 
+    public EtatSaisieNouvelleDemandeSansTournees() {
+        super.message = "EtatSaisieNouvelleDemandeSansTournees";
+    }
     public void clicGaucheSurPlan(ControleurFenetrePrincipale c, MouseEvent event) {
         this.naviguerSurPlan(c, event);
     }
@@ -16,17 +19,17 @@ public class EtatSaisieNouvelleDemandeSansTournees extends Etat{
         this.validerAjoutDemande(c);
         if (c.journee.getDemandesLivraison().size() > 0){
             c.vue.buttonCalculerTournees.setDisable(false);
-            c.etatCourant = c.etatAvecDemande;
+            c.changementEtat(c.etatAvecDemande);
         }
     }
     public void annulerAjouterOuModifier(ControleurFenetrePrincipale c) {
         this.annulerAjout(c);
         if (c.journee.getDemandesLivraison().size() == 0) {
-            c.etatCourant = c.etatSansDemande;
+            c.changementEtat(c.etatSansDemande);
             c.vue.buttonCalculerTournees.setDisable(true);
             c.vue.buttonSauvegarderDemandes.setDisable(true);
         } else {
-            c.etatCourant = c.etatAvecDemande;
+            c.changementEtat(c.etatAvecDemande);
         }
     }
     
