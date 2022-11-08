@@ -13,8 +13,8 @@ public class EtatSaisieNouvelleDemandeSansTournees extends Etat{
         this.naviguerSurPlan(c, event);
     }
     public void validerAjouterOuModifier(ControleurFenetrePrincipale c) {
-        this.validerAjoutDemande(c);
-        if (c.journee.getDemandesLivraison().size() > 0){
+        boolean ajoutOK = this.validerAjoutDemande(c);
+        if(ajoutOK){
             c.vue.buttonCalculerTournees.setDisable(false);
             c.etatCourant = c.etatAvecDemande;
         }

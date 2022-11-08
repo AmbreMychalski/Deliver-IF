@@ -24,8 +24,10 @@ import org.apache.logging.log4j.core.LoggerContext;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Observable;
+import java.util.Observer;
 
-public class VueFenetrePrincipale {
+public class VueFenetrePrincipale implements Observer {
 
     ControleurFenetrePrincipale controleur;
 
@@ -496,4 +498,9 @@ public class VueFenetrePrincipale {
         return this.latMin - (y + aRemonter - this.canvasPlan.getWidth()) / this.echelle;
     }
 
+    @Override
+    public void update(Observable o, Object arg) {
+        tableViewDemandesLivraison.refresh();
+        afficherDemandeLivraison(true);
+    }
 }

@@ -1,9 +1,7 @@
 package modele;
 
 import java.io.File;
-import java.util.ArrayList;
-import java.util.LinkedList;
-import java.util.List;
+import java.util.*;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -26,12 +24,13 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
+import vue.VueFenetrePrincipale;
 
 @Getter
 @Setter
 @AllArgsConstructor
 @ToString
-public class Journee {
+public class Journee extends Observable {
     private int nbMaxLivreur;
     private int nbLivreur;
     private Plan plan;
@@ -82,7 +81,7 @@ public class Journee {
                         if(heureFin-heureDebut != 1) throw new Exception("Plage horaire incompatible");
                         if(this.plan.estLivrable(this.plan.getIntersections().get(intersectionId))) {
                             DemandeLivraison demande = new DemandeLivraison(this.plan.getIntersections().get(intersectionId), new PlageHoraire(heureDebut, heureFin));
-                            this.demandesLivraison.add(demande);
+                            ajouterDemandeLivraison(demande);
                             demandesAjoutees.add(demande);
                         }
                     }
@@ -96,10 +95,12 @@ public class Journee {
     
     public void ajouterDemandeLivraison(DemandeLivraison demande) {
         this.demandesLivraison.add(demande);
+        notifierObservateurs();
     }
     
     public void supprimerDemandeLivraison(DemandeLivraison demande) {
         this.demandesLivraison.remove(demande);
+        notifierObservateurs();
     }
     public void sauvegarderDemandesLivraison(File fichier) {
         
@@ -136,9 +137,9 @@ public class Journee {
     public boolean calculerTournee() {
         boolean tourneeComplete = true;
         boolean tourneeCalculee = false;
-        List<DemandeLivraison> dmdLivrOrdonnee = new LinkedList<DemandeLivraison>();
+        List<DemandeLivraison> dmdLivrOrdonnee = new LinkedList<>();
                 
-        List<DemandeLivraison> listDemande= new LinkedList<DemandeLivraison>(demandesLivraison);
+        List<DemandeLivraison> listDemande= new LinkedList<>(demandesLivraison);
 //      for(DemandeLivraison dl : demandesLivraison) {
 //          listDemande.add(dl);
 //      }
@@ -217,6 +218,19 @@ public class Journee {
 
         return tourneeComplete;
         
+    }
+    public void notifierObservateurs(){
+        setChanged();
+        notifyObservers();
+    }
+
+    public void ajouterObservateur(Observer obs) {
+        addObserver(obs);
+    }
+
+    public void modifierDemandeLivraison(DemandeLivraison demande, Intersection intersection,PlageHoraire plageHoraire) {
+        demande.modifierDemandeLivraison(intersection, plageHoraire);
+        notifierObservateurs();
     }
 }
 
