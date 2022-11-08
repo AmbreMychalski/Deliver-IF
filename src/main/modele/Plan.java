@@ -336,4 +336,19 @@ public class Plan {
 		return (float) (R * c);
 
 	}
+
+	public List<String> obtenirRueIntersection(Intersection intersection){
+		String rue1 = null;
+		String rue2 = null;
+		for(Segment seg : segments){
+			if (rue1 == null && (Objects.equals(seg.getOrigine().getIdIntersection(), intersection.getIdIntersection()))){
+				rue1 = seg.getNom();
+			}
+			if (rue2 == null && (Objects.equals(seg.getOrigine().getIdIntersection(), intersection.getIdIntersection())) && (!Objects.equals(seg.getNom(), rue2))){
+				rue2 = seg.getNom();
+			}
+			if(rue1 != null && rue2 != null) break;
+		}
+		return Arrays.asList(rue1,rue2);
+	}
 }

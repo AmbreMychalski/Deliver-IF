@@ -147,7 +147,7 @@ public class VueFenetrePrincipale implements Observer {
         buttonAutoriserAjouterLivraison.setDisable(true);
         buttonSauvegarderDemandes.setDisable(true);
         buttonChargerDemandes.setDisable(true);
-        buttonAfficherFeuillesRoute.setDisable(true);
+        buttonAfficherFeuillesRoute.setDisable(false);
 
         textfieldIdentifiantIntersection.setDisable(true);
         textfieldPlageHoraire.setDisable(true);
@@ -158,7 +158,7 @@ public class VueFenetrePrincipale implements Observer {
         tableViewLivraisons.setVisible(false);
 
         buttonEtatCourant.setOnAction(event -> System.out.println("Etat courant = " + controleur.getEtatCourant().getClass().getName()));
-
+        buttonAfficherFeuillesRoute.setOnAction(event -> actionBoutonAfficherFeulleDeRoute(event));
         buttonValiderLivraison.setOnAction(event -> actionBoutonAjouterLivraison(event));
         buttonAnnulerLivraison.setOnAction(event -> actionBoutonAnnulerLivraison(event));
         buttonAutoriserAjouterLivraison.setOnAction(event -> actionBoutonAutoriserAjouterLivraison(event));
@@ -237,6 +237,11 @@ public class VueFenetrePrincipale implements Observer {
                         return cell;
                     }
                 });
+    }
+
+    private void actionBoutonAfficherFeulleDeRoute(ActionEvent event) {
+        TourneeSerialisation serialisation = new TourneeSerialisation(controleur.getJournee().getTournees().get(0));
+        serialisation.serialiser();
     }
 
 
