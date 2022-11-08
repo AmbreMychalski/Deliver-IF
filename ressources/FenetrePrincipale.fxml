@@ -62,7 +62,8 @@
       </Pane>
       <Pane layoutX="1027.0" prefHeight="735.0" prefWidth="289.0">
          <children>
-            <Label layoutX="68.0" layoutY="24.0" text="Demandes de livraison">
+             <ComboBox id="comboboxLivreur" fx:id="comboboxLivreur" layoutX="68.0" layoutY="20.0" prefHeight="25.0" prefWidth="118.0" />
+            <Label layoutX="68.0" layoutY="50.0" text="Demandes de livraison">
                <font>
                   <Font name="System Bold" size="12.0" />
                </font>
@@ -73,6 +74,14 @@
                 <TableColumn fx:id="columnPlageHoraire" prefWidth="138.0" text="Plage horaire" />
               </columns>
             </TableView>
+             <TableView fx:id="tableViewLivraisons" layoutX="8.0" layoutY="75.0" prefHeight="400.0" prefWidth="276.0">
+                 <columns>
+                     <TableColumn fx:id="columnIdentifiantLivraison" prefWidth="80.0" text="Identifiant" />
+                     <TableColumn fx:id="columnPlageHoraireLivraison" prefWidth="96.0" text="Plage horaire" />
+                     <TableColumn fx:id="columnHeure" prefWidth="70.0" text="Horaire" />
+                     <TableColumn fx:id="columnLivreur" prefWidth="30.0" text="Livreur" />
+                 </columns>
+             </TableView>
             <TitledPane fx:id="titlePaneSelectionDemande" animated="false" collapsible="false" layoutX="7.0" layoutY="500.0" prefHeight="160.0" prefWidth="276.0" text="Selection de la demande">
               <content>
                 <AnchorPane fx:id="anchorPaneSelectionDemande" minHeight="0.0" minWidth="0.0" prefHeight="175.0" prefWidth="292.0">

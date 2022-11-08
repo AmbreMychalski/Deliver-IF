@@ -69,13 +69,14 @@ public abstract class Etat {
 	}
 
 	protected  boolean calculerEtAfficherTournee(ControleurFenetrePrincipale c){
+		int livreur = c.vue.comboboxLivreur.getValue();
 		long startTime = System.currentTimeMillis();
-		boolean tourneeComplete = c.journee.calculerTournee();
+		boolean tourneeComplete = c.journee.calculerTournee(livreur);
 		ControleurFenetrePrincipale.logger.debug("tourneeComplete = " + tourneeComplete);
 		ControleurFenetrePrincipale.logger.debug("Solution trouvé en :"+ (System.currentTimeMillis() - startTime)+"ms ");
 		GraphicsContext gc = c.vue.canvasPlanTrajet.getGraphicsContext2D();
 		gc.clearRect(0, 0, c.vue.canvasPlanTrajet.getWidth(), c.vue.canvasPlanTrajet.getHeight());
-		Tournee tournee = c.journee.getTournees().get(c.journee.getTournees().size()-1);
+		Tournee tournee = c.journee.getTournees().get(livreur-1);
 		List<Trajet> trajets = tournee.getTrajets();
 		for(Trajet trajet : trajets) {
 			List<Segment> segments = trajet.getSegments();
@@ -86,6 +87,10 @@ public abstract class Etat {
 						(double)segment.getDestination().getLongitude());
 			}
 		}
+		List<Livraison> listeLivraisons = c.journee.getLivraisonsLivreur(livreur);
+		c.vue.tableViewLivraisons.getItems().addAll(listeLivraisons);
+		c.vue.tableViewLivraisons.refresh();
+
 		return tourneeComplete;
 	}
 	protected void sauvegarderListeDemandes(ControleurFenetrePrincipale c){

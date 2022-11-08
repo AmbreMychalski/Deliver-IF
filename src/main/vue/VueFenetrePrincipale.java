@@ -83,6 +83,8 @@ public class VueFenetrePrincipale implements Observer {
     @FXML
     public TableView<DemandeLivraison> tableViewDemandesLivraison;
     @FXML
+    public TableView<Livraison> tableViewLivraisons;
+    @FXML
     public Canvas canvasPlan;
     @FXML
     public Canvas canvasInterieurPlan;
@@ -97,6 +99,14 @@ public class VueFenetrePrincipale implements Observer {
     @FXML
     public TableColumn<DemandeLivraison, PlageHoraire> columnPlageHoraire;
     @FXML
+    public TableColumn<Livraison, Long> columnIdentifiantLivraison;
+    @FXML
+    public TableColumn<Livraison, PlageHoraire> columnPlageHoraireLivraison;
+    @FXML
+    public TableColumn<Livraison, String> columnHeure;
+    @FXML
+    public TableColumn<Livraison, Integer> columnLivreur;
+    @FXML
     public TitledPane titlePaneSelectionDemande;
     //public ImageView im = new ImageView(".\\data\\repere.png");
     @FXML
@@ -107,6 +117,8 @@ public class VueFenetrePrincipale implements Observer {
     public TextField textfieldPlageHoraire;
     @FXML
     public Label labelGuideUtilisateur;
+    @FXML
+    public ComboBox<Integer> comboboxLivreur;
 
     @FXML
     private void initialize() {
@@ -139,6 +151,8 @@ public class VueFenetrePrincipale implements Observer {
         titlePaneSelectionDemande.setVisible(false);
         titledPaneEditionDemande.setVisible(false);
 
+        tableViewLivraisons.setVisible(false);
+
         buttonEtatCourant.setOnAction(event -> System.out.println("Etat courant = " + controleur.getEtatCourant().getClass().getName()));
 
         buttonValiderLivraison.setOnAction(event -> actionBoutonAjouterLivraison(event));
@@ -164,6 +178,19 @@ public class VueFenetrePrincipale implements Observer {
         columnPlageHoraire.setCellValueFactory(
                 new PropertyValueFactory<>("plageHoraire"));
         columnPlageHoraire.setComparator(new ComparateurPlageHoraire());
+
+        tableViewLivraisons.setItems(FXCollections.observableArrayList());
+        columnIdentifiantLivraison.setCellValueFactory(
+                new PropertyValueFactory<>("idIntersectionLivraison"));
+        columnPlageHoraireLivraison.setCellValueFactory(
+                new PropertyValueFactory<>("plageHoraireLivraison"));
+        columnHeure.setCellValueFactory(
+                new PropertyValueFactory<>("heureAffiche"));
+        columnLivreur.setCellValueFactory(
+                new PropertyValueFactory<>("livreur"));
+
+        comboboxLivreur.getItems().add(1);
+        comboboxLivreur.getSelectionModel().selectFirst();
 
         for(int i=8; i<12; i++) {
             comboboxPlageHoraire.getItems().add(new PlageHoraire(i,i+1));
@@ -239,7 +266,10 @@ public class VueFenetrePrincipale implements Observer {
     }
 
     private void actionBoutonCalculerTournees(ActionEvent event) {
+
         controleur.calculerTournees();
+        tableViewDemandesLivraison.setVisible(false);
+        tableViewLivraisons.setVisible(true);
     }
 
     public void afficherDemandeLivraison(boolean nettoyerCanvas) {
@@ -256,10 +286,6 @@ public class VueFenetrePrincipale implements Observer {
                     true,
                     "Rectangle");
         }
-        columnIdentifiant.setCellValueFactory(
-                new PropertyValueFactory<DemandeLivraison, Long>("idIntersection"));
-        columnPlageHoraire.setCellValueFactory(
-                new PropertyValueFactory<DemandeLivraison, PlageHoraire>("plageHoraire"));
 
     }
 

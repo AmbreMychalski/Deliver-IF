@@ -47,6 +47,7 @@ public class Journee extends Observable {
         demandesLivraison = new ArrayList<DemandeLivraison>();
         tournees = new ArrayList<Tournee>();
         livraisonsNonValides = new ArrayList<>();
+        livraisons = new ArrayList<Livraison>();
     }
     
     public Journee() {
@@ -55,6 +56,16 @@ public class Journee extends Observable {
         tournees = new ArrayList<Tournee>();
         livraisons =  new ArrayList<Livraison>();
         livraisonsNouveauLivreur =  new ArrayList<Livraison>();
+    }
+
+    public List<Livraison> getLivraisonsLivreur(int livreur){
+        List<Livraison> livraisonsDuLivreur = new ArrayList<>();
+        for(Livraison l : livraisons){
+            if(l.getLivreur()==livreur){
+                livraisonsDuLivreur.add(l);
+            }
+        }
+        return livraisonsDuLivreur;
     }
     
     public ArrayList<DemandeLivraison> chargerDemandesLivraison(File fichier) {
@@ -140,12 +151,11 @@ public class Journee extends Observable {
             
         }
     
-    public boolean calculerTournee() {
+    public boolean calculerTournee(int livreur) {
         boolean tourneeComplete = true;
         boolean tourneeCalculee = false;
         List<DemandeLivraison> dmdLivrOrdonnee = new LinkedList<>();
                 
-
         List<DemandeLivraison> listDemande= new LinkedList<DemandeLivraison>(demandesLivraison);
 
         List<Livraison> livrList = new LinkedList<Livraison>();
@@ -160,7 +170,7 @@ public class Journee extends Observable {
         }
 
         float heureLivraison = (float) dmdLivrOrdonnee.get(0).getPlageHoraire().debut+5/60.0f;
-        this.livraisons.add(new Livraison(dmdLivrOrdonnee.get(0), heureLivraison));
+        this.livraisons.add(new Livraison(dmdLivrOrdonnee.get(0), heureLivraison, livreur));
         livrList.add(this.livraisons.get(this.livraisons.size()-1));
 
         for(int i=1; i<dmdLivrOrdonnee.size();i++) {
@@ -171,7 +181,7 @@ public class Journee extends Observable {
             float dist = g.getCost(indexPreviousDl, indexCurrentDl);
             heureLivraison+= dist/(15000.0f);
 
-            this.livraisons.add(new Livraison(currentDl, heureLivraison));
+            this.livraisons.add(new Livraison(currentDl, heureLivraison, livreur));
             livrList.add(this.livraisons.get(this.livraisons.size()-1));
             if(heureLivraison>currentDl.getPlageHoraire().getFin()) {
                 this.livraisonsNonValides.add(livrList.get(livrList.size()-1));
