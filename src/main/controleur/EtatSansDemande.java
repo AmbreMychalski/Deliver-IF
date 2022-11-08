@@ -12,6 +12,9 @@ import modele.DemandeLivraison;
 import modele.Intersection;
 
 public class EtatSansDemande extends Etat{
+    public EtatSansDemande() {
+        super.message = "EtatSansDemande";
+    }
 
     public void chargerPlan(ControleurFenetrePrincipale c) throws FichierNonConformeException {
         c.etatInitial.chargerPlan(c);
@@ -20,14 +23,14 @@ public class EtatSansDemande extends Etat{
         c.vue.buttonValiderLivraison.setDisable(false);
         c.vue.buttonAnnulerLivraison.setDisable(false);
         c.vue.comboboxPlageHoraire.setDisable(false);
-        c.etatCourant = c.etatSaisieNouvelleDemandeSansTournees;
+        c.changementEtat(c.etatSaisieNouvelleDemandeSansTournees);
     }
     public void clicGaucheSurPlan(ControleurFenetrePrincipale c, MouseEvent event) {
         this.naviguerSurPlan(c, event);
     }
     public void chargerListeDemandes(ControleurFenetrePrincipale c) {
         this.chargerDemandes(c);
-        c.etatCourant = c.etatAvecDemande;
+        c.changementEtat(c.etatAvecDemande);
         c.vue.buttonCalculerTournees.setDisable(false);
         c.vue.buttonSauvegarderDemandes.setDisable(false);
     }

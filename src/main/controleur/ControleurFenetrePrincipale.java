@@ -15,6 +15,8 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import vue.VueFenetrePrincipale;
 
+import java.sql.SQLOutput;
+
 /**
  * Contrôleur de la vue principale de l'application.
  * @author H4113
@@ -77,6 +79,10 @@ public class ControleurFenetrePrincipale {
 		etatCourant.ajouterDemande(this);
 	}
 
+	public void ajouterLivreur() {
+		etatCourant.ajouterLivreur(this);
+	}
+
 	public void modifierDemande() {
 		etatCourant.modifierDemande(this);
 	}
@@ -107,5 +113,10 @@ public class ControleurFenetrePrincipale {
 
 	public void sauvegarderDemandes() {
 		etatCourant.sauvegarderDemandes(this);
+	}
+
+	public void changementEtat(Etat nouvelEtat){
+		this.etatCourant = nouvelEtat;
+		this.vue.updateLabelGuideUtilisateur(this.etatCourant.getMessage());
 	}
 }

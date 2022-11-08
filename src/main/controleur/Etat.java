@@ -6,13 +6,19 @@ import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.paint.Color;
 import javafx.stage.FileChooser;
+import lombok.Getter;
 import modele.*;
 
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
+@Getter
 public abstract class Etat {
+	protected String message;
+	public Etat() {
+		this.message = "Etat";
+	}
 
 	public void chargerPlan(ControleurFenetrePrincipale c) throws FichierNonConformeException {}
 	
@@ -43,7 +49,9 @@ public abstract class Etat {
 	public void quitterLogiciel(ControleurFenetrePrincipale c) {}
 	
 	public void modifierDemande(ControleurFenetrePrincipale c) {}
-	
+
+	public void ajouterLivreur(ControleurFenetrePrincipale c) {}
+
 	public void touchePressee(ControleurFenetrePrincipale c, KeyEvent ke) {}
 
 	public  void supprimerLivraison(ControleurFenetrePrincipale c){
@@ -55,7 +63,7 @@ public abstract class Etat {
         c.vue.buttonValiderLivraison.setDisable(true);
         c.vue.buttonAnnulerLivraison.setDisable(true);
         c.vue.comboboxPlageHoraire.setDisable(true);
-        c.etatCourant = c.etatDemandeLivraisonSelectionneeSansTournees;
+        c.changementEtat(c.etatDemandeLivraisonSelectionneeSansTournees);
 	}
 
 	protected void sortieDeSelectionDemande(ControleurFenetrePrincipale c){

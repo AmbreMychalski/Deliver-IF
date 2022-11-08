@@ -8,6 +8,9 @@ import modele.Plan;
 import modele.Segment;
 
 public class EtatInitial extends Etat{
+    public EtatInitial() {
+        super.message = "EtatInitial";
+    }
     public void chargerPlan(ControleurFenetrePrincipale c) throws FichierNonConformeException {
         FileChooser fileChooser = new FileChooser();
         fileChooser.setInitialDirectory(new File(".\\data"));
@@ -55,7 +58,7 @@ public class EtatInitial extends Etat{
             c.vue.titlePaneSelectionDemande.setVisible(true);
             c.vue.buttonChargerDemandes.setDisable(false);
             c.vue.buttonAutoriserAjouterLivraison.setDisable(false);
-            c.etatCourant = c.etatSansDemande;
+            c.changementEtat(c.etatSansDemande);
         } catch (Exception ex){
             throw  new FichierNonConformeException("Le fichier comporte des problèmes");
         }

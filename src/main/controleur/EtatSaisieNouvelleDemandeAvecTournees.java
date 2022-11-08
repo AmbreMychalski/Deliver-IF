@@ -12,8 +12,10 @@ import modele.Segment;
 import modele.Tournee;
 import modele.Trajet;
 
-public class EtatSaisieNouvelleDemandeAvecTournees extends Etat { 
-    
+public class EtatSaisieNouvelleDemandeAvecTournees extends Etat {
+    public EtatSaisieNouvelleDemandeAvecTournees() {
+        super.message = "EtatSaisieNouvelleDemandeAvecTournees";
+    }
     public void clicGaucheSurPlan(ControleurFenetrePrincipale c, MouseEvent event) {
         this.naviguerSurPlan(c, event);
     }
@@ -21,12 +23,12 @@ public class EtatSaisieNouvelleDemandeAvecTournees extends Etat {
         boolean ajoutOK = this.validerAjoutDemande(c);
         if(ajoutOK){
             this.calculerEtAfficherTournee(c);
-            c.etatCourant = c.etatTourneesCalculees;
+            c.changementEtat(c.etatTourneesCalculees);
         }
     }
     public void annulerAjouterOuModifier(ControleurFenetrePrincipale c) {
         this.annulerAjout(c);
-        c.etatCourant = c.etatTourneesCalculees;
+        c.changementEtat(c.etatTourneesCalculees);
     }
    
 
