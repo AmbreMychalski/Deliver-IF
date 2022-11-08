@@ -140,9 +140,10 @@ public abstract class Etat {
 
 
 		DemandeLivraison demande = c.journee.getDemandesLivraison().get(c.journee.getDemandesLivraison().indexOf(ligne));
-		demande.modifierDemandeLivraison(intersection, plageHoraire);
-		c.vue.tableViewDemandesLivraison.refresh();
-		c.vue.afficherDemandeLivraison(true);
+		c.journee.modifierDemandeLivraison(demande, intersection, plageHoraire);
+
+		//c.vue.tableViewDemandesLivraison.refresh();
+		//c.vue.afficherDemandeLivraison(true);
 		c.vue.dessinerIntersection(c.vue.canvasInterieurPlan.getGraphicsContext2D(),
 				demande.getIntersection(),
 				c.vue.COULEUR_POINT_LIVRAISON_SELECTIONNE,
@@ -197,7 +198,7 @@ public abstract class Etat {
 		return false;
 
 	}
-	protected void validerAjoutDemande(ControleurFenetrePrincipale c){
+	protected boolean validerAjoutDemande(ControleurFenetrePrincipale c){
 		String champIdentifiant = c.vue.textfieldIdentifiantIntersection.getText();
 		PlageHoraire plageHoraire = c.vue.comboboxPlageHoraire.getValue();
 		if(!champIdentifiant.isEmpty() && plageHoraire != null) {
@@ -206,10 +207,10 @@ public abstract class Etat {
 			if(c.journee.getPlan().estLivrable(intersection)){
 				DemandeLivraison demande =
 						new DemandeLivraison(intersection, plageHoraire);
-				c.journee.ajouterDemandeLivraison(demande);
 				c.vue.tableViewDemandesLivraison.getItems().add(demande);
-				c.vue.tableViewDemandesLivraison.refresh();
-				c.vue.afficherDemandeLivraison(true);
+				c.journee.ajouterDemandeLivraison(demande);
+				//c.vue.tableViewDemandesLivraison.refresh();
+				//c.vue.afficherDemandeLivraison(true);
 				c.vue.buttonValiderLivraison.setDisable(true);
 				c.vue.buttonAnnulerLivraison.setDisable(true);
 				c.vue.comboboxPlageHoraire.setDisable(true);
@@ -217,6 +218,7 @@ public abstract class Etat {
 				c.vue.textfieldIdentifiantIntersection.setText("");
 				c.vue.tableViewDemandesLivraison.setDisable(false);
 				c.vue.buttonSauvegarderDemandes.setDisable(false);
+				return true;
 			}
 			else{
 				ControleurFenetrePrincipale.logger.warn("L'intersection n'est pas livrable");
@@ -224,6 +226,7 @@ public abstract class Etat {
 		} else {
 			ControleurFenetrePrincipale.logger.warn("Informations manquantes pour l'ajout de la demande");
 		}
+		return false;
 	}
 
 	protected  void naviguerSurPlan(ControleurFenetrePrincipale c, MouseEvent event){
@@ -273,18 +276,18 @@ public abstract class Etat {
 		ArrayList<DemandeLivraison> listeDemandes = c.journee.chargerDemandesLivraison(fichier);
 		c.vue.tableViewDemandesLivraison.getItems().addAll(listeDemandes);
 		c.vue.tableViewDemandesLivraison.refresh();
-		c.vue.afficherDemandeLivraison(true);
+		//c.vue.afficherDemandeLivraison(true);
 	}
 
 	protected void supprimerDemandeLivraison(ControleurFenetrePrincipale c){
 		DemandeLivraison ligne = c.vue.tableViewDemandesLivraison.getSelectionModel().getSelectedItem();
 		if(ligne != null) {
-			c.journee.supprimerDemandeLivraison(ligne);
 			c.vue.tableViewDemandesLivraison.getItems().remove(ligne);
+			c.journee.supprimerDemandeLivraison(ligne);
 			c.vue.tableViewDemandesLivraison.refresh();
 			c.vue.textfieldIdentifiantIntersectionSelection.setText("");
 			c.vue.textfieldPlageHoraire.setText("");
-			c.vue.afficherDemandeLivraison(true);
+			//c.vue.afficherDemandeLivraison(true);
 		}
 	}
 	protected  void annulerAjout (ControleurFenetrePrincipale c){

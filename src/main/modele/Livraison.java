@@ -13,5 +13,5 @@ import lombok.ToString;
 @ToString
 public class Livraison {
 	private DemandeLivraison demandeLivraison;
-	private Date date;
+	private float date;
 }

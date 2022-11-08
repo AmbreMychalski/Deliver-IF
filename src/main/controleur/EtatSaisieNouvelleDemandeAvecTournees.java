@@ -20,9 +20,11 @@ public class EtatSaisieNouvelleDemandeAvecTournees extends Etat {
         this.naviguerSurPlan(c, event);
     }
     public void validerAjouterOuModifier(ControleurFenetrePrincipale c) {
-        this.validerAjoutDemande(c);
-        this.calculerEtAfficherTournee(c);
-        c.changementEtat(c.etatTourneesCalculees);
+        boolean ajoutOK = this.validerAjoutDemande(c);
+        if(ajoutOK){
+            this.calculerEtAfficherTournee(c);
+            c.changementEtat(c.etatTourneesCalculees);
+        }
     }
     public void annulerAjouterOuModifier(ControleurFenetrePrincipale c) {
         this.annulerAjout(c);

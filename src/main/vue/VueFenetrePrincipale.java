@@ -15,6 +15,7 @@ import javafx.scene.paint.Color;
 import javafx.scene.transform.Affine;
 import javafx.scene.transform.Transform;
 import javafx.stage.Stage;
+import javafx.util.Callback;
 import lombok.Getter;
 import lombok.Setter;
 import modele.*;
@@ -24,8 +25,10 @@ import org.apache.logging.log4j.core.LoggerContext;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Observable;
+import java.util.Observer;
 
-public class VueFenetrePrincipale {
+public class VueFenetrePrincipale implements Observer {
 
     ControleurFenetrePrincipale controleur;
 
@@ -164,11 +167,33 @@ public class VueFenetrePrincipale {
                 new PropertyValueFactory<>("idIntersection"));
         columnPlageHoraire.setCellValueFactory(
                 new PropertyValueFactory<>("plageHoraire"));
-        columnPlageHoraire.setComparator(new PlageHoraireComparator());
+        columnPlageHoraire.setComparator(new ComparateurPlageHoraire());
 
         for(int i=8; i<12; i++) {
             comboboxPlageHoraire.getItems().add(new PlageHoraire(i,i+1));
         }
+        comboboxPlageHoraire.setCellFactory(
+                new Callback<ListView<PlageHoraire>, ListCell<PlageHoraire>>() {
+                    @Override public ListCell<PlageHoraire> call(ListView<PlageHoraire> param) {
+                        final ListCell<PlageHoraire> cell = new ListCell<PlageHoraire>() {
+                            {
+                                super.setPrefWidth(100);
+                            }
+                            @Override public void updateItem(PlageHoraire plageHoraire,
+                                                             boolean empty) {
+                                super.updateItem(plageHoraire, empty);
+                                if (plageHoraire != null) {
+                                    setText(plageHoraire.toString());
+                                    setTextFill(plageHoraire.getCouleur());
+                                }
+                                else {
+                                    setText(null);
+                                }
+                            }
+                        };
+                        return cell;
+                    }
+                });
     }
 
 
@@ -507,4 +532,11 @@ public class VueFenetrePrincipale {
         return this.latMin - (y + aRemonter - this.canvasPlan.getWidth()) / this.echelle;
     }
 
+    @Override
+    public void update(Observable o, Object arg) {
+        if (arg == "ChangementDemandeLivraison"){
+            tableViewDemandesLivraison.refresh();
+            afficherDemandeLivraison(true);
+        }
+    }
 }
