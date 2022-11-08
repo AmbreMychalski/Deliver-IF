@@ -15,6 +15,7 @@ import javafx.scene.paint.Color;
 import javafx.scene.transform.Affine;
 import javafx.scene.transform.Transform;
 import javafx.stage.Stage;
+import javafx.util.Callback;
 import lombok.Getter;
 import lombok.Setter;
 import modele.*;
@@ -167,6 +168,28 @@ public class VueFenetrePrincipale implements Observer {
         for(int i=8; i<12; i++) {
             comboboxPlageHoraire.getItems().add(new PlageHoraire(i,i+1));
         }
+        comboboxPlageHoraire.setCellFactory(
+                new Callback<ListView<PlageHoraire>, ListCell<PlageHoraire>>() {
+                    @Override public ListCell<PlageHoraire> call(ListView<PlageHoraire> param) {
+                        final ListCell<PlageHoraire> cell = new ListCell<PlageHoraire>() {
+                            {
+                                super.setPrefWidth(100);
+                            }
+                            @Override public void updateItem(PlageHoraire plageHoraire,
+                                                             boolean empty) {
+                                super.updateItem(plageHoraire, empty);
+                                if (plageHoraire != null) {
+                                    setText(plageHoraire.toString());
+                                    setTextFill(plageHoraire.getCouleur());
+                                }
+                                else {
+                                    setText(null);
+                                }
+                            }
+                        };
+                        return cell;
+                    }
+                });
     }
 
 
