@@ -183,6 +183,26 @@ public class VueFenetrePrincipale implements Observer {
                 new PropertyValueFactory<>("plageHoraire"));
         columnPlageHoraire.setComparator(new ComparateurPlageHoraire());
 
+        columnPlageHoraire.setCellFactory(
+                new Callback<TableColumn<DemandeLivraison, PlageHoraire>, TableCell<DemandeLivraison, PlageHoraire>>() {
+                    @Override
+                    public TableCell<DemandeLivraison, PlageHoraire> call(TableColumn<DemandeLivraison, PlageHoraire> param) {
+                        final TableCell<DemandeLivraison, PlageHoraire> tableCell = new TableCell<DemandeLivraison, PlageHoraire>() {
+                            @Override public void updateItem(PlageHoraire plageHoraire, boolean empty) {
+                                super.updateItem(plageHoraire, empty);
+                                if (plageHoraire != null) {
+                                    setText(plageHoraire.toString());
+                                    setTextFill(plageHoraire.getCouleur());
+                                }
+                                else {
+                                    setText(null);
+                                }
+                            }
+                        };
+                        return tableCell;
+                    }
+                });
+
         tableViewLivraisons.setItems(FXCollections.observableArrayList());
         columnIdentifiantLivraison.setCellValueFactory(
                 new PropertyValueFactory<>("idIntersectionLivraison"));
@@ -203,11 +223,7 @@ public class VueFenetrePrincipale implements Observer {
                 new Callback<ListView<PlageHoraire>, ListCell<PlageHoraire>>() {
                     @Override public ListCell<PlageHoraire> call(ListView<PlageHoraire> param) {
                         final ListCell<PlageHoraire> cell = new ListCell<PlageHoraire>() {
-                            {
-                                super.setPrefWidth(100);
-                            }
-                            @Override public void updateItem(PlageHoraire plageHoraire,
-                                                             boolean empty) {
+                            @Override public void updateItem(PlageHoraire plageHoraire, boolean empty) {
                                 super.updateItem(plageHoraire, empty);
                                 if (plageHoraire != null) {
                                     setText(plageHoraire.toString());
