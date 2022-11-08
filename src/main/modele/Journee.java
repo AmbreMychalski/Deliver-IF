@@ -101,12 +101,12 @@ public class Journee extends Observable {
     
     public void ajouterDemandeLivraison(DemandeLivraison demande) {
         this.demandesLivraison.add(demande);
-        notifierObservateurs();
+        notifierObservateurs("ChangementDemandeLivraison");
     }
     
     public void supprimerDemandeLivraison(DemandeLivraison demande) {
         this.demandesLivraison.remove(demande);
-        notifierObservateurs();
+        notifierObservateurs("ChangementDemandeLivraison");
     }
     public void sauvegarderDemandesLivraison(File fichier) {
         
@@ -144,7 +144,7 @@ public class Journee extends Observable {
         boolean tourneeComplete = true;
         boolean tourneeCalculee = false;
         List<DemandeLivraison> dmdLivrOrdonnee = new LinkedList<>();
-                
+
 
         List<DemandeLivraison> listDemande= new LinkedList<DemandeLivraison>(demandesLivraison);
 
@@ -200,9 +200,9 @@ public class Journee extends Observable {
         return tourneeComplete;
 
     }
-    public void notifierObservateurs(){
+    public void notifierObservateurs(String args){
         setChanged();
-        notifyObservers();
+        notifyObservers(args);
     }
 
     public void ajouterObservateur(Observer obs) {
@@ -211,7 +211,7 @@ public class Journee extends Observable {
 
     public void modifierDemandeLivraison(DemandeLivraison demande, Intersection intersection,PlageHoraire plageHoraire) {
         demande.modifierDemandeLivraison(intersection, plageHoraire);
-        notifierObservateurs();
+        notifierObservateurs("ChangementDemandeLivraison");
     }
 }
 

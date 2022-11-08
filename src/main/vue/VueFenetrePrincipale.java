@@ -523,7 +523,9 @@ public class VueFenetrePrincipale implements Observer {
 
     @Override
     public void update(Observable o, Object arg) {
-        tableViewDemandesLivraison.refresh();
-        afficherDemandeLivraison(true);
+        if (arg == "ChangementDemandeLivraison"){
+            tableViewDemandesLivraison.refresh();
+            afficherDemandeLivraison(true);
+        }
     }
 }
