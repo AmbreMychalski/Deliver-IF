@@ -62,7 +62,12 @@
       </Pane>
       <Pane layoutX="1027.0" prefHeight="735.0" prefWidth="289.0">
          <children>
-             <ComboBox id="comboboxLivreur" fx:id="comboboxLivreur" layoutX="68.0" layoutY="20.0" prefHeight="25.0" prefWidth="118.0" />
+             <Label layoutX="40.0" layoutY="25.0" text="Livreur n°">
+                 <font>
+                     <Font name="System Bold" size="12.0" />
+                 </font>
+             </Label>
+             <ComboBox id="comboboxLivreur" fx:id="comboboxLivreur" layoutX="95.0" layoutY="20.0" prefHeight="25.0" prefWidth="50.0" />
             <Label layoutX="68.0" layoutY="50.0" text="Demandes de livraison">
                <font>
                   <Font name="System Bold" size="12.0" />

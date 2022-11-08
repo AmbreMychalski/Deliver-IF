@@ -6,6 +6,9 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.paint.Color;
 import modele.DemandeLivraison;
 import modele.Intersection;
+import modele.Livraison;
+
+import java.util.List;
 
 public class EtatTourneesCalculees extends Etat{
     public EtatTourneesCalculees() {
@@ -22,7 +25,10 @@ public class EtatTourneesCalculees extends Etat{
         c.vue.buttonValiderLivraison.setDisable(false);
         c.vue.buttonAnnulerLivraison.setDisable(false);
         c.vue.comboboxPlageHoraire.setDisable(false);
-        c.vue.tableViewDemandesLivraison.setDisable(true);
+        //c.vue.tableViewDemandesLivraison.setDisable(true);
+        List<Livraison> listeLivraisons = c.journee.getLivraisonsLivreur(c.vue.comboboxLivreur.getValue());
+        c.vue.tableViewLivraisons.getItems().addAll(listeLivraisons);
+        c.vue.tableViewLivraisons.refresh();
         c.changementEtat(c.etatSaisieNouvelleDemandeAvecTournees);
     }
     public void clicGaucheSurTableau(ControleurFenetrePrincipale c) {

@@ -26,7 +26,8 @@ public class Livraison {
 
 	public String getHeureAffiche(){
 		int h = (int) heure;
-		return String.valueOf(h)+"h";
+		int min = (int)(60*(heure - h));
+		return String.valueOf(h)+"h"+String.valueOf(min);
 	}
 
 }
