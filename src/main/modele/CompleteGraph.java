@@ -24,10 +24,11 @@ public class CompleteGraph implements Graph {
      * Create a complete directed graph such that each edge has a weight within [MIN_COST,MAX_COST]
      *
      */
-    public CompleteGraph(List<DemandeLivraison> demandesLivraisons,  Plan plan, Intersection entrepot){
-        
-        nbVertices = demandesLivraisons.size()+1;
-        cost = new float[demandesLivraisons.size()+1][demandesLivraisons.size()+1];
+    public CompleteGraph(List<DemandeLivraison> demandesLivraisons,  Plan plan, Intersection entrepot) {
+
+        nbVertices = demandesLivraisons.size() + 1;
+        cost = new float[demandesLivraisons.size() + 1][demandesLivraisons.size() + 1];
+
         for(float[] row : cost) {
             Arrays.fill(row, -1.0f);
         }
@@ -62,7 +63,6 @@ public class CompleteGraph implements Graph {
             }
             cost[currentIndex][0]=plusCourtsChemins.get(entrepot);
         }
-        
     }
 
     @Override
@@ -72,23 +72,26 @@ public class CompleteGraph implements Graph {
 
     @Override
     public float getCost(int i, int j) {
-        if (i<0 || i>=nbVertices || j<0 || j>=nbVertices)
+        if (i < 0 || i >= nbVertices || j < 0 || j >= nbVertices)
             return -1;
         return cost[i][j];
     }
 
     @Override
     public boolean isArc(int i, int j) {
-        if (cost[i][j]<0) {
+        if (cost[i][j] < 0) {
             return false;
         }
         return true;
     }
-    
+
+    /*
+    Fonction servant au débugage
+     */
     public void printGraph() {
-        for(int i=0; i<nbVertices; i++) {
-            for(int j=0; j<nbVertices; j++) {
-                System.out.print(cost[i][j]+" ");
+        for(int i = 0; i < nbVertices; i++) {
+            for(int j = 0; j < nbVertices; j++) {
+                System.out.print(cost[i][j] + " ");
             } 
             System.out.println();
         }

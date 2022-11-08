@@ -162,7 +162,7 @@ public class VueFenetrePrincipale implements Observer {
                 new PropertyValueFactory<>("idIntersection"));
         columnPlageHoraire.setCellValueFactory(
                 new PropertyValueFactory<>("plageHoraire"));
-        columnPlageHoraire.setComparator(new PlageHoraireComparator());
+        columnPlageHoraire.setComparator(new ComparateurPlageHoraire());
 
         for(int i=8; i<12; i++) {
             comboboxPlageHoraire.getItems().add(new PlageHoraire(i,i+1));
