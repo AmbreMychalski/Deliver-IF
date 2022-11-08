@@ -13,6 +13,7 @@ import javafx.scene.Scene;
 import javafx.stage.Stage;
 import vue.VueFenetrePrincipale;
 
+
 /**
  * Ouvre la première vue de l'application.
  * @author H4113

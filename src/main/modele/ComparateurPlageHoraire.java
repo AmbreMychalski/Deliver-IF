@@ -2,7 +2,7 @@ package modele;
 
 import java.util.Comparator;
 
-public class PlageHoraireComparator implements Comparator<PlageHoraire> {
+public class ComparateurPlageHoraire implements Comparator<PlageHoraire> {
 
     @Override
     public int compare(PlageHoraire o1, PlageHoraire o2) {

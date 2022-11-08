@@ -9,12 +9,11 @@ import org.junit.jupiter.api.Test;
 import exception.FichierNonConformeException;
 import modele.Plan;
 
-public class PlanTests {
+public class PlanTest {
     
     @Test
     @DisplayName("Test de l'analyse XML")
     void analyserXMLTest() throws Exception {
-        
         File fichierPlan = new File("data\\testPlan.xml");
         Plan plan = new Plan(fichierPlan);
         
@@ -22,6 +21,7 @@ public class PlanTests {
     }
     
     @Test
+    @DisplayName("Test de l'exception en cas de fichier null en entrée")
     void exceptionFichierNullTest() {        
         Assertions.assertThrows(Exception.class, () -> {
             new Plan(null);
@@ -29,18 +29,11 @@ public class PlanTests {
     }
     
     @Test
-    void FichierNonConformeTest() {
-        File fichierPlan = new File("data/testExceptionPlan.xml");
-        Assertions.assertThrows(FichierNonConformeException.class,() -> {
-            new Plan(fichierPlan);
-        });
-    }
-        
+    @DisplayName("Test de l'exception en cas de problème lors de la lecture du fichier")
     void exceptionFichierNonConformeTest() {
-
         File fichierPlan = new File("data/testExceptionPlan.xml");
-        
-        Assertions.assertThrows(Exception.class, () -> {
+
+        Assertions.assertThrows(FichierNonConformeException.class,() -> {
             new Plan(fichierPlan);
         });
     }
