@@ -7,7 +7,7 @@ import java.util.List;
 public class EtatTourneesCalculeesPartielles extends Etat {
     public  void supprimerLivraison(ControleurFenetrePrincipale c) {
         System.out.println("ouioui");
-        List<DemandeLivraison> demandeLivraisonNonTraitees = c.journee.getDemandesLivraisonNonTraitees();
+        /*List<DemandeLivraison> demandeLivraisonNonTraitees = c.journee.getDemandesLivraisonNonTraitees();
 
         for(DemandeLivraison dmd : demandeLivraisonNonTraitees){
             c.journee.supprimerDemandeLivraison(dmd);
@@ -18,6 +18,6 @@ public class EtatTourneesCalculeesPartielles extends Etat {
         c.vue.textfieldPlageHoraire.setText("");
         c.vue.afficherDemandeLivraison(true);
         c.etatCourant = c.etatTourneesCalculees;
-        System.out.println(c.etatCourant);
+        System.out.println(c.etatCourant);*/
     }
 }

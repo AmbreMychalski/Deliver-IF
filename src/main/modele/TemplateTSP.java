@@ -11,7 +11,7 @@ public abstract class TemplateTSP implements TSP {
 	private int timeLimit;
 	private long startTime;
 	
-	public void searchSolution(int timeLimit, Graph g, ArrayList<Integer> visited){
+	public void searchSolution(int timeLimit, Graph g){
 		if (timeLimit <= 0) return;
 		startTime = System.currentTimeMillis();	
 		this.timeLimit = timeLimit;
@@ -19,13 +19,10 @@ public abstract class TemplateTSP implements TSP {
 		bestSol = new Integer[g.getNbVertices()];
 		ArrayList<Integer> unvisited = new ArrayList<Integer>(g.getNbVertices()-1);
 		for (int i=1; i<g.getNbVertices(); i++) unvisited.add(i);
-		if(visited == null){
-			visited = new ArrayList<Integer>(g.getNbVertices());
-			visited.add(0);
-		}
-		else{
-			unvisited.removeAll(visited);
-		}
+
+		ArrayList<Integer> visited = new ArrayList<Integer>(g.getNbVertices());
+		visited.add(0);
+
 		 // The first visited vertex is 0
 		bestSolCost = Integer.MAX_VALUE;
 		branchAndBound(visited.get(visited.size()-1), unvisited, visited, 0);
