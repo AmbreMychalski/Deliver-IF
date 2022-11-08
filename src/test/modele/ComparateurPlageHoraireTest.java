@@ -6,7 +6,7 @@ import org.junit.jupiter.api.Test;
 
 public class ComparateurPlageHoraireTest {
 
-    PlageHoraireComparator comparateurPlageHoraire = new PlageHoraireComparator();
+    ComparateurPlageHoraire comparateurPlageHoraire = new ComparateurPlageHoraire();
     PlageHoraire plageHoraire1 = new PlageHoraire(9, 10);
     PlageHoraire plageHoraire2 = new PlageHoraire(10, 11);
     PlageHoraire plageHoraire3 = new PlageHoraire(11, 12);

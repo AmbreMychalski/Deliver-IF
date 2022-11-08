@@ -10,7 +10,6 @@ import lombok.ToString;
 @AllArgsConstructor
 @ToString
 public class Segment {
-	
 	private Intersection origine;
 	private Intersection destination;
 	private float longueur;
