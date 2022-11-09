@@ -10,7 +10,8 @@ import modele.PlageHoraire;
 public class EtatSaisieNouvelleDemandeSansTournees extends Etat{
 
     public EtatSaisieNouvelleDemandeSansTournees() {
-        super.message = "EtatSaisieNouvelleDemandeSansTournees";
+        super.message = "Cliquez sur le plan pour choisir une " +
+                "intersection, puis choisissez la plage horaire";
     }
     public void clicGaucheSurPlan(ControleurFenetrePrincipale c, MouseEvent event) {
         this.naviguerSurPlan(c, event);

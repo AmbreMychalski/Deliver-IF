@@ -6,7 +6,9 @@ import javafx.scene.input.MouseEvent;
 
 public class EtatDemandeLivraisonSelectionneeHorsCréneauAvecTournees extends Etat {
     public EtatDemandeLivraisonSelectionneeHorsCréneauAvecTournees() {
-        super.message = "Certaines livraisons seront effectuées hors des horaires données : veuillez ajouter un nouveau livreur pour régler ce problème";
+        super.message = "Certaines livraisons seront effectuées hors des " +
+                "horaires données : veuillez ajouter un nouveau livreur " +
+                "pour régler ce problème";
     }
 
     public void clicGaucheSurPlan(ControleurFenetrePrincipale c, MouseEvent event) {
@@ -46,7 +48,8 @@ public class EtatDemandeLivraisonSelectionneeHorsCréneauAvecTournees extends Et
             c.changementEtat(c.etatTourneesCalculees);
         } else {
             GraphicsContext gc = c.vue.canvasPlanTrajet.getGraphicsContext2D();
-            gc.clearRect(0, 0, c.vue.canvasPlanTrajet.getWidth(), c.vue.canvasPlanTrajet.getHeight());
+            gc.clearRect(0, 0, c.vue.canvasPlanTrajet.getWidth(),
+                    c.vue.canvasPlanTrajet.getHeight());
             c.vue.buttonCalculerTournees.setDisable(true);
             c.vue.buttonSauvegarderDemandes.setDisable(true);
             c.vue.buttonChargerDemandes.setDisable(false);

@@ -12,7 +12,8 @@ import java.util.List;
 
 public class EtatTourneesCalculees extends Etat{
     public EtatTourneesCalculees() {
-        super.message = "EtatTourneesCalculees";
+        super.message = "Ajoutez des demandes, visualisez les " +
+                "feuilles de route ou modifiez les tournées";
     }
 
     public  void sauvegarderDemandes(ControleurFenetrePrincipale c){
@@ -26,7 +27,8 @@ public class EtatTourneesCalculees extends Etat{
         c.vue.buttonAnnulerLivraison.setDisable(false);
         c.vue.comboboxPlageHoraire.setDisable(false);
         //c.vue.tableViewDemandesLivraison.setDisable(true);
-        List<Livraison> listeLivraisons = c.journee.getLivraisonsLivreur(c.vue.comboboxLivreur.getValue());
+        List<Livraison> listeLivraisons = c.journee.getLivraisonsLivreur(
+                c.vue.comboboxLivreur.getValue());
         c.vue.tableViewLivraisons.getItems().addAll(listeLivraisons);
         c.vue.tableViewLivraisons.refresh();
         c.changementEtat(c.etatSaisieNouvelleDemandeAvecTournees);

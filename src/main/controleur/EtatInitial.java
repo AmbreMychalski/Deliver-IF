@@ -9,9 +9,10 @@ import modele.Segment;
 
 public class EtatInitial extends Etat{
     public EtatInitial() {
-        super.message = "EtatInitial";
+        super.message = "Chargez un plan";
     }
-    public void chargerPlan(ControleurFenetrePrincipale c) throws FichierNonConformeException {
+    public void chargerPlan(ControleurFenetrePrincipale c)
+            throws FichierNonConformeException {
         FileChooser fileChooser = new FileChooser();
         fileChooser.setInitialDirectory(new File(".\\data"));
         fileChooser.getExtensionFilters().add(

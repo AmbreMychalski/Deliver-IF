@@ -9,11 +9,12 @@ import modele.Intersection;
 
 public class EtatModifierDemandeLivraisonAvecTournees extends Etat {
     public EtatModifierDemandeLivraisonAvecTournees() {
-        super.message = "EtatModifierDemandeLivraisonAvecTournees";
+        super.message = "Validez ou annulez les modifications";
     }
     public void clicGaucheSurPlan(ControleurFenetrePrincipale c, MouseEvent event) {
         this.naviguerSurPlan(c, event);
-        DemandeLivraison ligne = c.vue.tableViewDemandesLivraison.getSelectionModel().getSelectedItem();
+        DemandeLivraison ligne = c.vue.tableViewDemandesLivraison
+                .getSelectionModel().getSelectedItem();
         if (ligne != null) {
             c.vue.dessinerIntersection(c.vue.canvasInterieurPlan.getGraphicsContext2D(),
                     ligne.getIntersection(),

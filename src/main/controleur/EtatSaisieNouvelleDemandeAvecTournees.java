@@ -14,7 +14,8 @@ import modele.Trajet;
 
 public class EtatSaisieNouvelleDemandeAvecTournees extends Etat {
     public EtatSaisieNouvelleDemandeAvecTournees() {
-        super.message = "EtatSaisieNouvelleDemandeAvecTournees";
+        super.message = "Cliquez sur le plan pour choisir une " +
+                "intersection, puis choisissez la plage horaire";
     }
     public void clicGaucheSurPlan(ControleurFenetrePrincipale c, MouseEvent event) {
         this.naviguerSurPlan(c, event);

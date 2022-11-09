@@ -13,10 +13,11 @@ import modele.Intersection;
 
 public class EtatSansDemande extends Etat{
     public EtatSansDemande() {
-        super.message = "EtatSansDemande";
+        super.message = "Ajoutez ou chargez des demandes de livraison";
     }
 
-    public void chargerPlan(ControleurFenetrePrincipale c) throws FichierNonConformeException {
+    public void chargerPlan(ControleurFenetrePrincipale c)
+            throws FichierNonConformeException {
         c.etatInitial.chargerPlan(c);
     }
     public void ajouterDemande(ControleurFenetrePrincipale c) {

@@ -53,7 +53,7 @@ public class ControleurFenetrePrincipale {
 
 	public ControleurFenetrePrincipale(VueFenetrePrincipale vue) {
 		this.vue = vue;
-		this.etatCourant = this.etatInitial;
+		this.changementEtat(etatInitial);
 		this.journee = new Journee();
 		this.journee.ajouterObservateur(vue);
 	}
