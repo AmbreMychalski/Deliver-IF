@@ -89,10 +89,10 @@ public abstract class Etat {
 		for(Trajet trajet : trajets) {
 			List<Segment> segments = trajet.getSegments();
 			for(Segment segment : segments) {
-				c.vue.dessinerTrajetLatLong(gc, (double)segment.getOrigine().getLatitude(),
-						(double)segment.getOrigine().getLongitude(),
-						(double)segment.getDestination().getLatitude(),
-						(double)segment.getDestination().getLongitude());
+				c.vue.dessinerTrajetLatLong(gc, segment.getOrigine().getLatitude(),
+						segment.getOrigine().getLongitude(),
+						segment.getDestination().getLatitude(),
+						segment.getDestination().getLongitude());
 			}
 		}
 		List<Livraison> listeLivraisons = c.journee.getLivraisonsLivreur(livreur);

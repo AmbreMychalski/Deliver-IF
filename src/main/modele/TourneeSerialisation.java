@@ -1,12 +1,8 @@
 package modele;
 
-import javafx.stage.FileChooser;
 import lombok.AllArgsConstructor;
 
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.PrintStream;
-import java.util.ArrayList;
+import java.io.*;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
@@ -16,63 +12,75 @@ public class TourneeSerialisation {
     List<String> coordNames = Arrays.asList("N", "NE","E","SE", "S", "SW", "W", "NW", "N");
     String[] mot_liaison = new String[]{" vers "," sur "," pour suivre ",", "," pour rejoindre "};
     List<Tournee> tournees;
-    PrintStream out;
+    StringWriter writer = new StringWriter();
+    PrintWriter out = new PrintWriter(writer);
     File fichier;
     Plan plan;
     public TourneeSerialisation(List<Tournee> tournee, Plan plan){
         this.tournees = tournee;
         try {
             this.plan = plan;
-            fichier = new File("./data/fdr.txt");
-            out = System.out;//new PrintStream(fichier);
+            //fichier = new File("./data/fdr.txt");
         } catch (Exception ex){
             ex.printStackTrace();
         }
     }
-    public void serialiser(){
-        out.println("Bienvenue sur la super sérialiseur de tournée");
+    public String serialiser(int livreur) throws IndexOutOfBoundsException{
+        out.println("Bienvenue sur le super sérialiseur de tournée");
         int i=1;
-        for(Tournee tournee : tournees){
-            out.println("**********************************************");
-            out.println("Tournée du livreur : "+tournee.getLivraisons().get(0).getLivreur()); //une tournée n'a pas de livreur ??
-            out.println("Liste des livraisons et horaire de livraison: \n");
-            for(Livraison liv :tournee.getLivraisons()){
-                List<String> rues = plan.obtenirRuesIntersection(liv.getDemandeLivraison().getIntersection());
-                out.println(i+"/ Croisement de la "+rues.get(0)+" et de la "+rues.get(1)+" à "+liv.getHeureAffiche());
-                i++;
-            }
-            out.println("************************************************");
-            out.println("****************** Itinéraire détaillé ****************");
-            out.println("La tournée est composée de "+tournee.getTrajets().size()+" trajets : ");
-            int j=1;
-            for(Trajet trajet : tournee.getTrajets()){
-                out.println("///--- /"+j +"/ de "+ plan.obtenirRuesIntersection(trajet.getDepart())+ " à "+ plan.obtenirRuesIntersection(trajet.getArrivee())+"-----///");
-                int a=0;
-                String directionPrecedente = null;
-                String ruePrecedente = null;
-                float somme = 0;
-                for(Segment segment : trajet.getSegments()){
-                    String direction = bearing(segment.getOrigine().getLatitude(), segment.getOrigine().getLongitude(), segment.getDestination().getLatitude(), segment.getDestination().getLongitude());
-                    out.print(a+1+"/");
-                    if(a==0){
-                        out.println("Prenez sur "+segment.getNom()+" sur "+(int)(segment.getLongueur())+" mètres.");
-                        somme +=segment.getLongueur();
-                    }else{
-                        if(segment.getNom() == ruePrecedente){
-                            somme += segment.getLongueur();
-                        }else{
-                            out.println( direction(directionPrecedente,direction)+mot_liaison[(int)(Math.random()*(mot_liaison.length-1))]+ segment.getNom()+" sur "+(int)(somme)+" mètres.");
-                            somme = 0;
-                        }
-                    }
-                    a++;
-                    ruePrecedente = segment.getNom();
-                    directionPrecedente = direction;
-                }
-                j++;
-            }
+        Tournee tournee = tournees.get(livreur-1);
+
+        out.println("***********************************************************");
+        out.println("Tournée du livreur : "+tournee.getLivraisons().get(0).getLivreur()); //une tournée n'a pas de livreur ??
+        out.println("************* Liste des livraisons et horaire de livraison: *********** \n");
+        for(Livraison liv :tournee.getLivraisons()){
+            List<String> rues = plan.obtenirRuesIntersection(liv.getDemandeLivraison().getIntersection());
+            out.println(i+"/ Croisement de la "+rues.get(0)+" et de la "+rues.get(1)+" à "+liv.getHeureAffiche());
+            i++;
         }
+        out.println("*******************************************************");
+        out.println("****************** Itinéraire détaillé ****************");
+        out.println("La tournée est composée de "+tournee.getTrajets().size()+" trajets : \n");
+        int j=1;
+        for(Trajet trajet : tournee.getTrajets()){
+            out.println("///--- /"+j +"/ de "+ plan.obtenirRuesIntersection(trajet.getDepart())+ " à "+ plan.obtenirRuesIntersection(trajet.getArrivee())+"-----/// \n");
+            int a=0;
+            String directionPrecedente = null;
+            String ruePrecedente = null;
+            float somme = 0;
+            for(Segment segment : trajet.getSegments()){
+                String direction = bearing(segment.getOrigine().getLatitude(), segment.getOrigine().getLongitude(), segment.getDestination().getLatitude(), segment.getDestination().getLongitude());
+                out.print(a+1+"/");
+                if(a==0){
+                    out.println("Prenez sur "+segment.getNom()+" sur "+ (int) segment.getLongueur()+" mètres.");
+                    somme +=segment.getLongueur();
+                }else{
+                    if(segment.getNom() == ruePrecedente){
+                        somme += segment.getLongueur();
+                    }else{
+                        out.println( direction(directionPrecedente,direction)+mot_liaison[(int)(Math.random()*(mot_liaison.length-1))]+ segment.getNom()+" sur "+(int)(somme)+" mètres.");
+                        somme = 0;
+                    }
+                }
+                a++;
+                ruePrecedente = segment.getNom();
+                directionPrecedente = direction;
+            }
+            j++;
+            out.println();
+            out.println("*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*//*/*/*/*/*/*/*/*/*/");
+            out.println();
+        }
+        out.close();
+        return writer.toString();
     }
+
+    public void sauvegarderDansFichier(File fichier) throws IOException {
+         FileWriter fw = new FileWriter(fichier);
+         fw.write(writer.toString());
+         fw.close();
+    }
+
 
     //https://stackoverflow.com/questions/9457988/bearing-from-one-coordinate-to-another
     private String bearing(double lat1, double lon1, double lat2, double lon2){
@@ -124,7 +132,7 @@ public class TourneeSerialisation {
         String[] adverbes = new String[]{"", "légèrement", "", "complètement", ""};
         String directive;
         if (Math.abs(diffIndex) != 4 && Math.abs(diffIndex) != 0) {
-            directive = "Tournez " + adverbes[Math.abs(diffIndex)] + (diffIndex < 0 ? " à gauche" : "à droite");
+            directive = "Tournez " + adverbes[Math.abs(diffIndex)] + (diffIndex < 0 ? " à gauche" : " à droite");
         } else if (Math.abs(diffIndex) == 0) {
 
             directive = "Continuez tout droit";

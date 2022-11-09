@@ -57,6 +57,7 @@ public class EtatAvecDemande extends Etat{
             System.out.println("changement d'état : "+c.etatCourant);
         }
         else {
+            c.vue.buttonAfficherFeuillesRoute.setDisable(false);
             c.vue.buttonCalculerTournees.setDisable(true);
             c.vue.buttonChargerDemandes.setDisable(true);
             c.changementEtat(c.etatTourneesCalculees);

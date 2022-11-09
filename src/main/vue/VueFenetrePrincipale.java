@@ -156,7 +156,7 @@ public class VueFenetrePrincipale implements Observer {
         titledPaneEditionDemande.setVisible(false);
 
         tableViewLivraisons.setVisible(false);
-
+        buttonAfficherFeuillesRoute.setDisable(true);
         buttonEtatCourant.setOnAction(event -> System.out.println("Etat courant = " + controleur.getEtatCourant().getClass().getName()));
         buttonAfficherFeuillesRoute.setOnAction(event -> actionBoutonAfficherFeulleDeRoute(event));
         buttonValiderLivraison.setOnAction(event -> actionBoutonAjouterLivraison(event));
@@ -240,8 +240,7 @@ public class VueFenetrePrincipale implements Observer {
     }
 
     private void actionBoutonAfficherFeulleDeRoute(ActionEvent event) {
-        TourneeSerialisation serialisation = new TourneeSerialisation(controleur.getJournee().getTournees(), this.controleur.getPlanCharge());
-        serialisation.serialiser();
+        vue.FenetreFeuilleDeRoute.display(controleur, this.comboboxLivreur.getValue());
     }
 
 
