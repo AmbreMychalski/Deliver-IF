@@ -14,16 +14,10 @@ public class TourneeSerialisation {
     List<Tournee> tournees;
     StringWriter writer = new StringWriter();
     PrintWriter out = new PrintWriter(writer);
-    File fichier;
     Plan plan;
     public TourneeSerialisation(List<Tournee> tournee, Plan plan){
         this.tournees = tournee;
-        try {
-            this.plan = plan;
-            //fichier = new File("./data/fdr.txt");
-        } catch (Exception ex){
-            ex.printStackTrace();
-        }
+        this.plan = plan;
     }
     public String serialiser(int livreur) throws IndexOutOfBoundsException{
         out.println("Bienvenue sur le super sérialiseur de tournée");
@@ -58,7 +52,7 @@ public class TourneeSerialisation {
                     if(segment.getNom() == ruePrecedente){
                         somme += segment.getLongueur();
                     }else{
-                        out.println( direction(directionPrecedente,direction)+mot_liaison[(int)(Math.random()*(mot_liaison.length-1))]+ segment.getNom()+" sur "+(int)(somme)+" mètres.");
+                        out.println( direction(directionPrecedente,direction)+mot_liaison[(int)(Math.random()*(mot_liaison.length-1))]+ segment.getNom()+" sur "+(int)(segment.getLongueur())+" mètres.");
                         somme = 0;
                     }
                 }

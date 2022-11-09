@@ -13,7 +13,7 @@
 <?import javafx.scene.shape.Rectangle?>
 <?import javafx.scene.text.Font?>
 
-<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" onKeyPressed="#handleKeyPressed" prefHeight="761.0" prefWidth="1317.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="vue.VueFenetrePrincipale">
+<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" onKeyPressed="#handleKeyPressed" prefHeight="771.0" prefWidth="1317.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="vue.VueFenetrePrincipale">
    <children>
       <Pane prefHeight="735.0" prefWidth="289.0">
          <children>
@@ -105,6 +105,6 @@
          </children>
          
       </Pane>
-      <Label fx:id="labelGuideUtilisateur" layoutX="8.0" layoutY="742.0" prefHeight="17.0" prefWidth="735.0" />
+      <Label fx:id="labelGuideUtilisateur" layoutX="7.0" layoutY="722.0" prefHeight="17.0" prefWidth="735.0" />
    </children>
 </Pane>
