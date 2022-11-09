@@ -79,7 +79,7 @@ public abstract class Etat {
 	protected  boolean calculerEtAfficherTournee(ControleurFenetrePrincipale c){
 		int livreur = c.vue.comboboxLivreur.getValue();
 		long startTime = System.currentTimeMillis();
-		boolean tourneeComplete = c.journee.calculerTournee(livreur);
+		boolean tourneeComplete = c.journee.calculerTournee();
 		ControleurFenetrePrincipale.logger.debug("tourneeComplete = " + tourneeComplete);
 		ControleurFenetrePrincipale.logger.debug("Solution trouvé en :"+ (System.currentTimeMillis() - startTime)+"ms ");
 		GraphicsContext gc = c.vue.canvasPlanTrajet.getGraphicsContext2D();

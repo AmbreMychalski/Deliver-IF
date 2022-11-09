@@ -46,7 +46,7 @@ public class TourneeSerialisation {
             out.println("La tournée est composée de "+tournee.getTrajets().size()+" trajets : ");
             int j=1;
             for(Trajet trajet : tournee.getTrajets()){
-                out.println("///--- /"+j +"/ de "+ plan.obtenirRuesIntersection(trajet.getOrigine())+ " à "+ plan.obtenirRuesIntersection(trajet.getDestination())+"-----///");
+                out.println("///--- /"+j +"/ de "+ plan.obtenirRuesIntersection(trajet.getDepart())+ " à "+ plan.obtenirRuesIntersection(trajet.getArrivee())+"-----///");
                 int a=0;
                 String directionPrecedente = null;
                 String ruePrecedente = null;
