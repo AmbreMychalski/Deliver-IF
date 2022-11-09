@@ -110,7 +110,6 @@ public class VueFenetrePrincipale implements Observer {
     public TableColumn<Livraison, Integer> columnLivreur;
     @FXML
     public TitledPane titlePaneSelectionDemande;
-    //public ImageView im = new ImageView(".\\data\\repere.png");
     @FXML
     public TitledPane titledPaneEditionDemande;
     @FXML
@@ -166,6 +165,7 @@ public class VueFenetrePrincipale implements Observer {
         buttonSauvegarderDemandes.setOnAction(event -> actionBoutonSauvegarderDemandes(event));
         canvasInterieurPlan.setOnMouseClicked(event -> actionClicSurCanvas(event));
         tableViewDemandesLivraison.setOnMouseClicked(event -> actionClicTableau(event));
+        tableViewLivraisons.setOnMouseClicked(event -> actionClicTableau(event));
         buttonChargerPlan.setOnAction(event -> {
             try {
                 actionBoutonChargerPlan(event);
@@ -212,6 +212,39 @@ public class VueFenetrePrincipale implements Observer {
                 new PropertyValueFactory<>("heureAffiche"));
         columnLivreur.setCellValueFactory(
                 new PropertyValueFactory<>("livreur"));
+        columnPlageHoraireLivraison.setCellFactory(
+                new Callback<TableColumn<Livraison, PlageHoraire>, TableCell<Livraison, PlageHoraire>>() {
+                    @Override
+                    public TableCell<Livraison, PlageHoraire> call(TableColumn<Livraison, PlageHoraire> param) {
+                        final TableCell<Livraison, PlageHoraire> tableCell = new TableCell<Livraison, PlageHoraire>() {
+                            @Override public void updateItem(PlageHoraire plageHoraire, boolean empty) {
+                                super.updateItem(plageHoraire, empty);
+                                if (plageHoraire != null) {
+                                    setText(plageHoraire.toString());
+                                    setTextFill(plageHoraire.getCouleur());
+                                }
+                                else {
+                                    setText(null);
+                                }
+                            }
+                        };
+                        return tableCell;
+                    }
+                });
+        tableViewLivraisons.setRowFactory(tv -> new TableRow<Livraison>() {
+            @Override
+            protected void updateItem(Livraison liv, boolean empty) {
+                super.updateItem(liv, empty);
+                if (liv == null)
+                    setStyle("");
+                else if (!liv.isDansSaPlageHorraire())
+                    setStyle("-fx-background-color: #ffaea8;");
+                else
+                    setStyle("");
+            }
+        });
+
+
 
         comboboxLivreur.getItems().add(1);
         comboboxLivreur.getSelectionModel().selectFirst();
@@ -315,6 +348,22 @@ public class VueFenetrePrincipale implements Observer {
                     "Rectangle");
         }
 
+    }
+
+    public void afficherLivraison(boolean nettoyerCanvas){
+        GraphicsContext gc = canvasInterieurPlan.getGraphicsContext2D();
+        if(nettoyerCanvas){
+            gc.clearRect(0, 0, canvasInterieurPlan.getWidth(), canvasInterieurPlan.getHeight());
+        }
+
+        for(Livraison l: controleur.getJournee().getLivraisonsLivreur(comboboxLivreur.getValue())) {
+            this.dessinerIntersection(gc,
+                    l.getDemandeLivraison().getIntersection(),
+                    l.getDemandeLivraison().getPlageHoraire().getCouleur(),
+                    this.TAILLE_RECT_PT_LIVRAISON,
+                    true,
+                    "Rectangle");
+        }
     }
 
     private void actionBoutonAjouterLivraison(ActionEvent event) {

@@ -178,10 +178,21 @@ public abstract class Etat {
 		c.vue.tableViewDemandesLivraison.setDisable(false);
 	}
 
-	protected boolean selectionnerDemande(ControleurFenetrePrincipale c){
-		DemandeLivraison ligne = c.vue.tableViewDemandesLivraison.getSelectionModel().getSelectedItem();
+	protected boolean selectionnerDemande(ControleurFenetrePrincipale c, boolean livraison){
+		DemandeLivraison ligne;
+		if(!livraison) {
+			ligne = c.vue.tableViewDemandesLivraison.getSelectionModel().getSelectedItem();
+		}
+		else {
+			ligne = c.vue.tableViewLivraisons.getSelectionModel().getSelectedItem().getDemandeLivraison();
+		}
 		if (ligne != null) {
-			c.vue.afficherDemandeLivraison(true);
+			if(!livraison) {
+				c.vue.afficherDemandeLivraison(true);
+			}
+			else{
+				c.vue.afficherLivraison(true);
+			}
 			c.vue.dessinerIntersection(c.vue.canvasInterieurPlan.getGraphicsContext2D(),
 					ligne.getIntersection(),
 					c.vue.COULEUR_POINT_LIVRAISON_SELECTIONNE,
@@ -203,6 +214,7 @@ public abstract class Etat {
 		return false;
 
 	}
+
 	protected boolean validerAjoutDemande(ControleurFenetrePrincipale c){
 		String champIdentifiant = c.vue.textfieldIdentifiantIntersection.getText();
 		PlageHoraire plageHoraire = c.vue.comboboxPlageHoraire.getValue();

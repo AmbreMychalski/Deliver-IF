@@ -34,7 +34,7 @@ public class EtatTourneesCalculees extends Etat{
         c.changementEtat(c.etatSaisieNouvelleDemandeAvecTournees);
     }
     public void clicGaucheSurTableau(ControleurFenetrePrincipale c) {
-        boolean demandeSelectionee = this.selectionnerDemande(c);
+        boolean demandeSelectionee = this.selectionnerDemande(c,true);
         if (demandeSelectionee){
             c.changementEtat(c.etatDemandeLivraisonSelectionneeAvecTournees);
         }

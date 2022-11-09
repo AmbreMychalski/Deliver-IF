@@ -17,7 +17,7 @@ public class EtatDemandeLivraisonSelectionneeSansTournees extends Etat {
         c.vue.buttonChargerDemandes.setDisable(false);
     }
     public void clicGaucheSurTableau(ControleurFenetrePrincipale c) {
-        this.selectionnerDemande(c);
+        this.selectionnerDemande(c,false);
     }
     public void supprimerDemande(ControleurFenetrePrincipale c) {
         this.supprimerDemandeLivraison(c);

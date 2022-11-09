@@ -17,7 +17,7 @@ public class EtatDemandeLivraisonSelectionneeHorsCréneauAvecTournees extends Et
      
     }
     public void clicGaucheSurTableau(ControleurFenetrePrincipale c) {
-        this.selectionnerDemande(c);
+        this.selectionnerDemande(c,true);
     }
     public void supprimerDemande(ControleurFenetrePrincipale c) {
         this.supprimerDemandeLivraison(c);

@@ -34,7 +34,7 @@ public class EtatAvecDemande extends Etat{
         this.naviguerSurPlan(c, event);
     }
     public void clicGaucheSurTableau(ControleurFenetrePrincipale c) {
-        boolean demandeSelectionee = this.selectionnerDemande(c);
+        boolean demandeSelectionee = this.selectionnerDemande(c,false);
         if(demandeSelectionee){
             c.changementEtat(c.etatDemandeLivraisonSelectionneeSansTournees);
         }
