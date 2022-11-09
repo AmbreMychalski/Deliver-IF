@@ -324,7 +324,7 @@ public class Journee extends Observable {
             startIndex ++;
         }
         else{
-            heureLivraison = t.getLivraisons().get(startIndex-1).getDate();
+            heureLivraison = t.getLivraisons().get(startIndex-1).getHeure();
         }
         heureLivraison+=5/60.0f;
         for(int i=startIndex; i<t.getLivraisons().size(); i++){
@@ -333,7 +333,7 @@ public class Journee extends Observable {
             heureLivraison+= dist/(15000.0f);
 
             Livraison vielleLivraison = new Livraison(t.getLivraisons().get(i));
-            t.getLivraisons().get(i).setDate(heureLivraison);
+            t.getLivraisons().get(i).setHeure(heureLivraison);
             if(this.livraisonsNonValides.contains(vielleLivraison)){
                 this.livraisonsNonValides.remove(vielleLivraison);
             }
