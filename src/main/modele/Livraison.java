@@ -14,4 +14,11 @@ import lombok.ToString;
 public class Livraison {
 	private DemandeLivraison demandeLivraison;
 	private float date;
+	private int livreur;
+
+	public Livraison(Livraison livraison) {
+		this.date = livraison.getDate();
+		this.demandeLivraison = livraison.getDemandeLivraison();
+		this.livreur = livraison.getLivreur();
+	}
 }
