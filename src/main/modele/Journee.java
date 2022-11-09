@@ -46,6 +46,7 @@ public class Journee extends Observable {
         demandesLivraison = new ArrayList<DemandeLivraison>();
         tournees = new ArrayList<Tournee>();
         livraisonsNonValides = new ArrayList<>();
+        livraisons = new ArrayList<Livraison>();
     }
     
     public Journee() {
@@ -55,7 +56,17 @@ public class Journee extends Observable {
         livraisons =  new ArrayList<Livraison>();
         livraisonsNouveauLivreur =  new ArrayList<Livraison>();
     }
-    
+
+    public List<Livraison> getLivraisonsLivreur(int livreur){
+        List<Livraison> livraisonsDuLivreur = new ArrayList<>();
+        for(Livraison l : livraisons){
+            if(l.getLivreur()==livreur){
+                livraisonsDuLivreur.add(l);
+            }
+        }
+        return livraisonsDuLivreur;
+    }
+
     public ArrayList<DemandeLivraison> chargerDemandesLivraison(File fichier) {
         if(this.demandesLivraison == null) {
             this.demandesLivraison = new ArrayList<>();
@@ -100,12 +111,12 @@ public class Journee extends Observable {
     
     public void ajouterDemandeLivraison(DemandeLivraison demande) {
         this.demandesLivraison.add(demande);
-        notifierObservateurs();
+        notifierObservateurs("ChangementDemandeLivraison");
     }
     
     public void supprimerDemandeLivraison(DemandeLivraison demande) {
         this.demandesLivraison.remove(demande);
-        notifierObservateurs();
+        notifierObservateurs("ChangementDemandeLivraison");
     }
     public void sauvegarderDemandesLivraison(File fichier) {
         
@@ -141,6 +152,9 @@ public class Journee extends Observable {
     
     public boolean calculerTournee() {
         boolean tourneeComplete = true;
+        boolean tourneeCalculee = false;
+        List<DemandeLivraison> dmdLivrOrdonnee = new LinkedList<>();
+                
 
         List<DemandeLivraison> listDemande= new LinkedList<DemandeLivraison>(demandesLivraison);
 
@@ -169,6 +183,10 @@ public class Journee extends Observable {
 
         return tourneeComplete;
 
+    }
+    public void notifierObservateurs(String args){
+        setChanged();
+        notifyObservers(args);
     }
 
     public boolean calculerTourneeNouveauLivreur() {
@@ -206,18 +224,13 @@ public class Journee extends Observable {
         return true;
     }
 
-    public void notifierObservateurs(){
-        setChanged();
-        notifyObservers();
-    }
-
     public void ajouterObservateur(Observer obs) {
         addObserver(obs);
     }
 
     public void modifierDemandeLivraison(DemandeLivraison demande, Intersection intersection,PlageHoraire plageHoraire) {
         demande.modifierDemandeLivraison(intersection, plageHoraire);
-        notifierObservateurs();
+        notifierObservateurs("ChangementDemandeLivraison");
     }
 
     public void supprimerLivraisonTournee(Livraison livr ){

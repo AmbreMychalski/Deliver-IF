@@ -8,7 +8,9 @@ import modele.Intersection;
 import modele.PlageHoraire;
 
 public class EtatModifierDemandeLivraisonSansTournees extends Etat {
- 
+    public EtatModifierDemandeLivraisonSansTournees() {
+        super.message = "EtatModifierDemandeLivraisonSansTournees";
+    }
     public void clicGaucheSurPlan(ControleurFenetrePrincipale c, MouseEvent event) {
         this.naviguerSurPlan(c, event);
         DemandeLivraison ligne = c.vue.tableViewDemandesLivraison.getSelectionModel().getSelectedItem();
@@ -23,10 +25,10 @@ public class EtatModifierDemandeLivraisonSansTournees extends Etat {
     }
     public void validerAjouterOuModifier(ControleurFenetrePrincipale c) {
         this.effectuerModification(c);
-        c.etatCourant = c.etatDemandeLivraisonSelectionneeSansTournees;
+        c.changementEtat(c.etatDemandeLivraisonSelectionneeSansTournees);
     }
     public void annulerAjouterOuModifier(ControleurFenetrePrincipale c) {
         this.annulerModification(c);
-        c.etatCourant = c.etatDemandeLivraisonSelectionneeSansTournees;
+        c.changementEtat(c.etatDemandeLivraisonSelectionneeSansTournees);
     }
 }

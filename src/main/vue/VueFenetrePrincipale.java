@@ -79,9 +79,13 @@ public class VueFenetrePrincipale implements Observer {
     @FXML
     public Button buttonModifierLivraison;
     @FXML
+    public Button buttonAjouterLivreur;
+    @FXML
     public Button buttonEtatCourant;
     @FXML
     public TableView<DemandeLivraison> tableViewDemandesLivraison;
+    @FXML
+    public TableView<Livraison> tableViewLivraisons;
     @FXML
     public Canvas canvasPlan;
     @FXML
@@ -97,6 +101,14 @@ public class VueFenetrePrincipale implements Observer {
     @FXML
     public TableColumn<DemandeLivraison, PlageHoraire> columnPlageHoraire;
     @FXML
+    public TableColumn<Livraison, Long> columnIdentifiantLivraison;
+    @FXML
+    public TableColumn<Livraison, PlageHoraire> columnPlageHoraireLivraison;
+    @FXML
+    public TableColumn<Livraison, String> columnHeure;
+    @FXML
+    public TableColumn<Livraison, Integer> columnLivreur;
+    @FXML
     public TitledPane titlePaneSelectionDemande;
     //public ImageView im = new ImageView(".\\data\\repere.png");
     @FXML
@@ -107,6 +119,8 @@ public class VueFenetrePrincipale implements Observer {
     public TextField textfieldPlageHoraire;
     @FXML
     public Label labelGuideUtilisateur;
+    @FXML
+    public ComboBox<Integer> comboboxLivreur;
 
     @FXML
     private void initialize() {
@@ -120,8 +134,10 @@ public class VueFenetrePrincipale implements Observer {
 
         buttonSupprimerLivraison.setOnAction(this::actionBoutonSupprimerLivraison);
         buttonModifierLivraison.setOnAction(this::actionBoutonModifierLivraison);
+        buttonAjouterLivreur.setOnAction(this::actionBoutonAjouterLivreur);
         buttonSupprimerLivraison.setDisable(true);
         buttonModifierLivraison.setDisable(true);
+        buttonAjouterLivreur.setDisable(true);
 
         buttonValiderLivraison.setDisable(true);
         buttonAnnulerLivraison.setDisable(true);
@@ -131,7 +147,7 @@ public class VueFenetrePrincipale implements Observer {
         buttonAutoriserAjouterLivraison.setDisable(true);
         buttonSauvegarderDemandes.setDisable(true);
         buttonChargerDemandes.setDisable(true);
-        buttonAfficherFeuillesRoute.setDisable(true);
+        buttonAfficherFeuillesRoute.setDisable(false);
 
         textfieldIdentifiantIntersection.setDisable(true);
         textfieldPlageHoraire.setDisable(true);
@@ -139,8 +155,10 @@ public class VueFenetrePrincipale implements Observer {
         titlePaneSelectionDemande.setVisible(false);
         titledPaneEditionDemande.setVisible(false);
 
-        buttonEtatCourant.setOnAction(event -> System.out.println("Etat courant = " + controleur.getEtatCourant().getClass().getName()));
+        tableViewLivraisons.setVisible(false);
 
+        buttonEtatCourant.setOnAction(event -> System.out.println("Etat courant = " + controleur.getEtatCourant().getClass().getName()));
+        buttonAfficherFeuillesRoute.setOnAction(event -> actionBoutonAfficherFeulleDeRoute(event));
         buttonValiderLivraison.setOnAction(event -> actionBoutonAjouterLivraison(event));
         buttonAnnulerLivraison.setOnAction(event -> actionBoutonAnnulerLivraison(event));
         buttonAutoriserAjouterLivraison.setOnAction(event -> actionBoutonAutoriserAjouterLivraison(event));
@@ -165,6 +183,39 @@ public class VueFenetrePrincipale implements Observer {
                 new PropertyValueFactory<>("plageHoraire"));
         columnPlageHoraire.setComparator(new ComparateurPlageHoraire());
 
+        columnPlageHoraire.setCellFactory(
+                new Callback<TableColumn<DemandeLivraison, PlageHoraire>, TableCell<DemandeLivraison, PlageHoraire>>() {
+                    @Override
+                    public TableCell<DemandeLivraison, PlageHoraire> call(TableColumn<DemandeLivraison, PlageHoraire> param) {
+                        final TableCell<DemandeLivraison, PlageHoraire> tableCell = new TableCell<DemandeLivraison, PlageHoraire>() {
+                            @Override public void updateItem(PlageHoraire plageHoraire, boolean empty) {
+                                super.updateItem(plageHoraire, empty);
+                                if (plageHoraire != null) {
+                                    setText(plageHoraire.toString());
+                                    setTextFill(plageHoraire.getCouleur());
+                                }
+                                else {
+                                    setText(null);
+                                }
+                            }
+                        };
+                        return tableCell;
+                    }
+                });
+
+        tableViewLivraisons.setItems(FXCollections.observableArrayList());
+        columnIdentifiantLivraison.setCellValueFactory(
+                new PropertyValueFactory<>("idIntersectionLivraison"));
+        columnPlageHoraireLivraison.setCellValueFactory(
+                new PropertyValueFactory<>("plageHoraireLivraison"));
+        columnHeure.setCellValueFactory(
+                new PropertyValueFactory<>("heureAffiche"));
+        columnLivreur.setCellValueFactory(
+                new PropertyValueFactory<>("livreur"));
+
+        comboboxLivreur.getItems().add(1);
+        comboboxLivreur.getSelectionModel().selectFirst();
+
         for(int i=8; i<12; i++) {
             comboboxPlageHoraire.getItems().add(new PlageHoraire(i,i+1));
         }
@@ -172,11 +223,7 @@ public class VueFenetrePrincipale implements Observer {
                 new Callback<ListView<PlageHoraire>, ListCell<PlageHoraire>>() {
                     @Override public ListCell<PlageHoraire> call(ListView<PlageHoraire> param) {
                         final ListCell<PlageHoraire> cell = new ListCell<PlageHoraire>() {
-                            {
-                                super.setPrefWidth(100);
-                            }
-                            @Override public void updateItem(PlageHoraire plageHoraire,
-                                                             boolean empty) {
+                            @Override public void updateItem(PlageHoraire plageHoraire, boolean empty) {
                                 super.updateItem(plageHoraire, empty);
                                 if (plageHoraire != null) {
                                     setText(plageHoraire.toString());
@@ -190,6 +237,11 @@ public class VueFenetrePrincipale implements Observer {
                         return cell;
                     }
                 });
+    }
+
+    private void actionBoutonAfficherFeulleDeRoute(ActionEvent event) {
+        TourneeSerialisation serialisation = new TourneeSerialisation(controleur.getJournee().getTournees(), this.controleur.getPlanCharge());
+        serialisation.serialiser();
     }
 
 
@@ -217,6 +269,10 @@ public class VueFenetrePrincipale implements Observer {
         controleur.modifierDemande();
     }
 
+    private void actionBoutonAjouterLivreur(ActionEvent event) {
+        controleur.ajouterLivreur();
+    }
+
     private void actionBoutonChargerPlan(ActionEvent event) throws FichierNonConformeException {
         controleur.chargerPlan();
     }
@@ -239,7 +295,10 @@ public class VueFenetrePrincipale implements Observer {
     }
 
     private void actionBoutonCalculerTournees(ActionEvent event) {
+
         controleur.calculerTournees();
+        tableViewDemandesLivraison.setVisible(false);
+        tableViewLivraisons.setVisible(true);
     }
 
     public void afficherDemandeLivraison(boolean nettoyerCanvas) {
@@ -256,10 +315,6 @@ public class VueFenetrePrincipale implements Observer {
                     true,
                     "Rectangle");
         }
-        columnIdentifiant.setCellValueFactory(
-                new PropertyValueFactory<DemandeLivraison, Long>("idIntersection"));
-        columnPlageHoraire.setCellValueFactory(
-                new PropertyValueFactory<DemandeLivraison, PlageHoraire>("plageHoraire"));
 
     }
 
@@ -276,6 +331,9 @@ public class VueFenetrePrincipale implements Observer {
         controleur.sauvegarderDemandes();
     }
 
+    public void updateLabelGuideUtilisateur(String texte){
+        labelGuideUtilisateur.setText(texte);
+    }
 
     /**
      * Trouve l'intersection du plan qui se trouve aux coordonnées x,y (en pixels)
@@ -523,7 +581,9 @@ public class VueFenetrePrincipale implements Observer {
 
     @Override
     public void update(Observable o, Object arg) {
-        tableViewDemandesLivraison.refresh();
-        afficherDemandeLivraison(true);
+        if (arg == "ChangementDemandeLivraison"){
+            tableViewDemandesLivraison.refresh();
+            afficherDemandeLivraison(true);
+        }
     }
 }
