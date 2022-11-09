@@ -7,7 +7,8 @@ import modele.DemandeLivraison;
 
 public class EtatDemandeLivraisonSelectionneeSansTournees extends Etat {
     public EtatDemandeLivraisonSelectionneeSansTournees() {
-        super.message = "EtatDemandeLivraisonSelectionneeSansTournees";
+        super.message = "Cliquez sur la plan ou appuyez sur échap " +
+                "pour quitter la sélection";
     }
     public void clicGaucheSurPlan(ControleurFenetrePrincipale c, MouseEvent event) {
         this.sortieDeSelectionDemande(c);

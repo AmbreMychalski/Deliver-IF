@@ -13,7 +13,8 @@ import modele.Trajet;
 
 public class EtatDemandeLivraisonSelectionneeAvecTournees extends Etat {
     public EtatDemandeLivraisonSelectionneeAvecTournees() {
-        super.message = "EtatDemandeLivraisonSelectionneeAvecTournees";
+        super.message = "Cliquez sur la plan ou appuyez sur " +
+                "échap pour quitter la sélection";
     }
     public void clicGaucheSurPlan(ControleurFenetrePrincipale c, MouseEvent event) {
         this.sortieDeSelectionDemande(c);
@@ -51,7 +52,8 @@ public class EtatDemandeLivraisonSelectionneeAvecTournees extends Etat {
             c.changementEtat(c.etatTourneesCalculees);
         } else {
             GraphicsContext gc = c.vue.canvasPlanTrajet.getGraphicsContext2D();
-            gc.clearRect(0, 0, c.vue.canvasPlanTrajet.getWidth(), c.vue.canvasPlanTrajet.getHeight());
+            gc.clearRect(0, 0, c.vue.canvasPlanTrajet.getWidth(),
+                    c.vue.canvasPlanTrajet.getHeight());
             c.vue.buttonCalculerTournees.setDisable(true);
             c.vue.buttonSauvegarderDemandes.setDisable(true);
             c.vue.buttonChargerDemandes.setDisable(false);

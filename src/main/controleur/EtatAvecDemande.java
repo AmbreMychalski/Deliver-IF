@@ -16,7 +16,9 @@ import modele.Trajet;
 
 public class EtatAvecDemande extends Etat{
     public EtatAvecDemande() {
-        super.message = "EtatAvecDemande";
+        super.message = "Ajoutez, chargez, sauvegardez ou " +
+                "supprimez des demandes de livraisons ou " +
+                "calculez les tournées";
     }
     
     public void ajouterDemande(ControleurFenetrePrincipale c) {
@@ -49,7 +51,6 @@ public class EtatAvecDemande extends Etat{
     
     public void calculerTournees(ControleurFenetrePrincipale c) {
         boolean tourneeComplete = this.calculerEtAfficherTournee(c);
-        ControleurFenetrePrincipale.logger.debug("tourneeComplete = " + tourneeComplete);
         if(!tourneeComplete) {
             vue.PopUpTourneeImpossible.display(c);
             c.changementEtat(c.etatTourneesCalculeesPartielles);
