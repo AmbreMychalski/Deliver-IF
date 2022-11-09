@@ -16,6 +16,8 @@ public class Livraison {
 	private float heure;
 	private int livreur;
 
+	private boolean dansSaPlageHorraire;
+
 	public Long getIdIntersectionLivraison() {
 		return demandeLivraison.getIntersection().getIdIntersection();
 	}
@@ -37,6 +39,7 @@ public class Livraison {
 		this.heure = livraison.getHeure();
 		this.demandeLivraison = livraison.getDemandeLivraison();
 		this.livreur = livraison.getLivreur();
+		this.dansSaPlageHorraire = livraison.dansSaPlageHorraire;
 	}
 
 }

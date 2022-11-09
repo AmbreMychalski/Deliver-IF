@@ -26,9 +26,9 @@ public class EtatTourneesCalculees extends Etat{
         c.vue.buttonAnnulerLivraison.setDisable(false);
         c.vue.comboboxPlageHoraire.setDisable(false);
         //c.vue.tableViewDemandesLivraison.setDisable(true);
-        List<Livraison> listeLivraisons = c.journee.getLivraisonsLivreur(c.vue.comboboxLivreur.getValue());
-        c.vue.tableViewLivraisons.getItems().addAll(listeLivraisons);
-        c.vue.tableViewLivraisons.refresh();
+        //List<Livraison> listeLivraisons = c.journee.getLivraisonsLivreur(c.vue.comboboxLivreur.getValue());
+       // c.vue.tableViewLivraisons.getItems().addAll(listeLivraisons);
+        //c.vue.tableViewLivraisons.refresh();
         c.changementEtat(c.etatSaisieNouvelleDemandeAvecTournees);
     }
     public void clicGaucheSurTableau(ControleurFenetrePrincipale c) {

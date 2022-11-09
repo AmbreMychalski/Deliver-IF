@@ -22,6 +22,7 @@ public class Trajet {
 		this.segments = new ArrayList<Segment>(seg);
 		this.depart = segments.get(0).getOrigine();
 		this.arrivee = segments.get(segments.size()-1).getDestination();
+		this.longueur = longueur;
 	}
 
 }
