@@ -73,7 +73,9 @@ public abstract class Etat {
 		}
 		c.vue.buttonModifierLivraison.setDisable(true);
 		c.vue.buttonSupprimerLivraison.setDisable(true);
-		c.vue.buttonAutoriserAjouterLivraison.setDisable(false);
+		if(c.etatCourant != c.etatDemandeLivraisonSelectionneeAvecTournees){
+			c.vue.buttonAutoriserAjouterLivraison.setDisable(false);
+		}
 		c.vue.afficherDemandeLivraison(true);
 		c.vue.textfieldIdentifiantIntersectionSelection.setText("");
 		resetLabelRuesIntersection(c);

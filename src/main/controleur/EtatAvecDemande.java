@@ -49,6 +49,7 @@ public class EtatAvecDemande extends Etat{
             c.vue.buttonAfficherFeuillesRoute.setDisable(false);
             c.vue.buttonCalculerTournees.setDisable(true);
             c.vue.buttonChargerDemandes.setDisable(true);
+            c.vue.buttonAutoriserAjouterLivraison.setDisable(true);
             c.changementEtat(c.etatTourneesCalculees);
         }
         c.vue.tableViewDemandesLivraison.setVisible(false);
