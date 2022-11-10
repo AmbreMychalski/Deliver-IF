@@ -1,6 +1,9 @@
 package controleur;
 
 import javafx.scene.input.MouseEvent;
+import modele.DemandeLivraison;
+import modele.Intersection;
+import modele.PlageHoraire;
 
 public class EtatSaisieNouvelleDemandeAvecTournees extends Etat {
     public EtatSaisieNouvelleDemandeAvecTournees() {
@@ -11,10 +14,18 @@ public class EtatSaisieNouvelleDemandeAvecTournees extends Etat {
         this.naviguerSurPlan(c, event);
     }
     public void validerAjouterOuModifier(ControleurFenetrePrincipale c) {
-        boolean ajoutOK = this.validerAjoutDemande(c);
-        if(ajoutOK){
-            this.calculerEtAfficherTournee(c);
-            c.changementEtat(c.etatTourneesCalculees);
+        String champIdentifiant = c.vue.textfieldIdentifiantIntersection.getText();
+        PlageHoraire plageHoraire = c.vue.comboboxPlageHoraire.getValue();
+        if (!champIdentifiant.isEmpty() && plageHoraire != null) {
+            Intersection intersection = c.journee.getPlan().getIntersections()
+                    .get(Long.parseLong(champIdentifiant));
+            if (c.journee.getPlan().estLivrable(intersection)) {
+                DemandeLivraison demande = new DemandeLivraison(intersection, plageHoraire);
+                int livreur = c.vue.comboboxLivreur.getValue();
+                c.journee.ajouterDemandeLivraisonTournee(demande, c.journee.getTournees().get(livreur - 1).getLivraisons().get(0));
+                c.changementEtat(c.etatTourneesCalculees);
+                this.afficherTournee(c, c.journee.getTournees().get(livreur - 1));
+            }
         }
     }
     public void annulerAjouterOuModifier(ControleurFenetrePrincipale c) {

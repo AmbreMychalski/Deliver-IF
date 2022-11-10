@@ -657,7 +657,7 @@ public class VueFenetrePrincipale implements Observer {
         }
     }
 
-    public void dessinerTrajet(List<Trajet> trajets, GraphicsContext gc) {
+    public void dessinerTrajets(List<Trajet> trajets, GraphicsContext gc) {
         for (Trajet trajet : trajets) {
             List<Segment> segments = trajet.getSegments();
             for (Segment segment : segments) {

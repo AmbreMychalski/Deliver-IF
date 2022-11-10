@@ -395,7 +395,7 @@ public class Journee extends Observable {
         int index;
         Intersection intersectionAmont;
         Intersection intersectionAval;
-
+        System.out.println("non");
         Tournee t = tournees.get(livr.getLivreur()-1);
         index = t.getLivraisons().indexOf(livr);
 

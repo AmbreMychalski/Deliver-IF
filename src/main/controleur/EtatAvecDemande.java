@@ -1,6 +1,9 @@
 package controleur;
 
 import javafx.scene.input.MouseEvent;
+import modele.Livraison;
+
+import java.util.List;
 
 public class EtatAvecDemande extends Etat{
     public EtatAvecDemande() {
@@ -39,19 +42,22 @@ public class EtatAvecDemande extends Etat{
     }
     
     public void calculerTournees(ControleurFenetrePrincipale c) {
-        boolean tourneeComplete = this.calculerEtAfficherTournee(c);
-        if(!tourneeComplete) {
-            vue.PopUpTourneeImpossible.display(c);
-            c.changementEtat(c.etatTourneesCalculeesPartielles);
-            System.out.println("changement d'état : "+c.etatCourant);
-        }
-        else {
-            c.vue.buttonAfficherFeuillesRoute.setDisable(false);
-            c.vue.buttonCalculerTournees.setDisable(true);
-            c.vue.buttonChargerDemandes.setDisable(true);
-            c.vue.buttonAutoriserAjouterLivraison.setDisable(true);
-            c.changementEtat(c.etatTourneesCalculees);
-        }
+        int livreur = c.vue.comboboxLivreur.getValue();
+        long startTime = System.currentTimeMillis();
+        boolean tourneeComplete = c.journee.calculerTournee();
+        ControleurFenetrePrincipale.logger.debug("tourneeComplete = " + tourneeComplete);
+        ControleurFenetrePrincipale.logger.debug("Solution trouvé en :"+ (System.currentTimeMillis() - startTime)+"ms ");
+
+        List<Livraison> listeLivraisons = c.journee.getLivraisonsLivreur(livreur);
+        c.vue.tableViewLivraisons.getItems().addAll(listeLivraisons);
+        c.vue.tableViewLivraisons.refresh();
+
+        this.afficherTournee(c,c.journee.getTournees().get(livreur-1));
+
+        c.vue.buttonAfficherFeuillesRoute.setDisable(false);
+        c.vue.buttonCalculerTournees.setDisable(true);
+        c.vue.buttonChargerDemandes.setDisable(true);
+        c.changementEtat(c.etatTourneesCalculees);
         c.vue.tableViewDemandesLivraison.setVisible(false);
         c.vue.tableViewLivraisons.setVisible(true);
     }
