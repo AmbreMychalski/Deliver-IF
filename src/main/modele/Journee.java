@@ -322,6 +322,7 @@ public class Journee extends Observable {
         if(startIndex==0){
             heureLivraison = t.getLivraisons().get(0).getDemandeLivraison().getPlageHoraire().getDebut();
             t.getLivraisons().get(0).setHeure(heureLivraison);
+            t.getLivraisons().get(0).setDansSaPlageHorraire(true);
             startIndex ++;
         }
         else{
