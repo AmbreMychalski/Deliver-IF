@@ -33,6 +33,7 @@ public class EtatTourneesCalculees extends Etat{
     }
 
     public void clicSurLivreur(ControleurFenetrePrincipale c){
+        System.out.println("appel dans etat");
         c.vue.afficherLivraison(true);
         c.vue.tableViewLivraisons.refresh();
     }

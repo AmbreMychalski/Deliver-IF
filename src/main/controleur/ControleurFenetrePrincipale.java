@@ -115,5 +115,7 @@ public class ControleurFenetrePrincipale {
 		this.vue.updateLabelGuideUtilisateur(this.etatCourant.getMessage());
 	}
 
-	public void clicSurLivreur(){etatCourant.clicSurLivreur(this);}
+	public void clicSurLivreur() {
+		System.out.println("appel dans la vue");
+		etatCourant.clicSurLivreur(this);}
 }

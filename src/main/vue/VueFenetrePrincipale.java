@@ -362,22 +362,25 @@ public class VueFenetrePrincipale implements Observer {
     }
 
     public void afficherLivraison(boolean nettoyerCanvas){
-        GraphicsContext gc = canvasIntersectionsLivraisons.getGraphicsContext2D();
-        GraphicsContext gcTrajets = canvasPlanTrajet.getGraphicsContext2D();
-        if(nettoyerCanvas){
-            gc.clearRect(0, 0, canvasIntersectionsLivraisons.getWidth(), canvasIntersectionsLivraisons.getHeight());
-            gcTrajets.clearRect(0,0,canvasPlanTrajet.getWidth(), canvasPlanTrajet.getHeight());
+        System.out.println("appel fonction afficherlivraison");
+        if(comboboxLivreur.getValue()!=null) {
+            GraphicsContext gc = canvasIntersectionsLivraisons.getGraphicsContext2D();
+            GraphicsContext gcTrajets = canvasPlanTrajet.getGraphicsContext2D();
+            if (nettoyerCanvas) {
+                gc.clearRect(0, 0, canvasIntersectionsLivraisons.getWidth(), canvasIntersectionsLivraisons.getHeight());
+                gcTrajets.clearRect(0, 0, canvasPlanTrajet.getWidth(), canvasPlanTrajet.getHeight());
+            }
+            System.out.println("value combobox : " + comboboxLivreur.getSelectionModel().getSelectedItem()); //renvoie null
+            for (Livraison l : controleur.getJournee().getLivraisonsLivreur(comboboxLivreur.getValue())) {
+                this.dessinerIntersection(gc,
+                        l.getDemandeLivraison().getIntersection(),
+                        l.getDemandeLivraison().getPlageHoraire().getCouleur(),
+                        this.TAILLE_RECT_PT_LIVRAISON,
+                        true,
+                        FormeIntersection.RECTANGLE);
+            }
+            dessinerTrajets(controleur.getJournee().getTournees().get(comboboxLivreur.getSelectionModel().getSelectedItem() - 1).getTrajets(), gcTrajets);
         }
-
-        for(Livraison l: controleur.getJournee().getLivraisonsLivreur(comboboxLivreur.getValue())) {
-            this.dessinerIntersection(gc,
-                    l.getDemandeLivraison().getIntersection(),
-                    l.getDemandeLivraison().getPlageHoraire().getCouleur(),
-                    this.TAILLE_RECT_PT_LIVRAISON,
-                    true,
-                    FormeIntersection.RECTANGLE);
-        }
-        dessinerTrajets(controleur.getJournee().getTournees().get(comboboxLivreur.getValue()-1).getTrajets(),gcTrajets);
     }
 
     private void actionBoutonAjouterLivraison(ActionEvent event) {
@@ -385,6 +388,7 @@ public class VueFenetrePrincipale implements Observer {
     }
 
     private void actionClicSurLivreur(ActionEvent event) {
+        System.out.println("appel a action clic livreur");
         controleur.clicSurLivreur();
     }
 
