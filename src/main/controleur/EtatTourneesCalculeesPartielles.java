@@ -1,9 +1,5 @@
 package controleur;
 
-import modele.DemandeLivraison;
-
-import java.util.List;
-
 public class EtatTourneesCalculeesPartielles extends Etat {
     public EtatTourneesCalculeesPartielles() {
         super.message = "EtatTourneesCalculeesPartielles";

@@ -67,7 +67,7 @@ public class Journee extends Observable {
         return livraisonsDuLivreur;
     }
 
-    public ArrayList<DemandeLivraison> chargerDemandesLivraison(File fichier) {
+    public void chargerDemandesLivraison(File fichier) {
         if(this.demandesLivraison == null) {
             this.demandesLivraison = new ArrayList<>();
         }
@@ -106,17 +106,17 @@ public class Journee extends Observable {
         } catch(Exception e) {
             System.err.println("Problème lors de la lecture du fichier \n "+ e);
         }
-        return(demandesAjoutees);
+        notifierObservateurs(null);
     }
     
     public void ajouterDemandeLivraison(DemandeLivraison demande) {
         this.demandesLivraison.add(demande);
-        notifierObservateurs("ChangementDemandeLivraison");
+        notifierObservateurs(null);
     }
     
     public void supprimerDemandeLivraison(DemandeLivraison demande) {
         this.demandesLivraison.remove(demande);
-        notifierObservateurs("ChangementDemandeLivraison");
+        notifierObservateurs(null);
     }
     public void sauvegarderDemandesLivraison(File fichier) {
         
@@ -184,9 +184,9 @@ public class Journee extends Observable {
         return tourneeComplete;
 
     }
-    public void notifierObservateurs(String args){
+    public void notifierObservateurs(Object arg){
         setChanged();
-        notifyObservers(args);
+        notifyObservers(arg);
     }
 
     public boolean calculerTourneeNouveauLivreur() {
@@ -232,7 +232,7 @@ public class Journee extends Observable {
 
     public void modifierDemandeLivraison(DemandeLivraison demande, Intersection intersection,PlageHoraire plageHoraire) {
         demande.modifierDemandeLivraison(intersection, plageHoraire);
-        notifierObservateurs("ChangementDemandeLivraison");
+        notifierObservateurs(null);
     }
 
     public void supprimerLivraisonJournee(Livraison livr){

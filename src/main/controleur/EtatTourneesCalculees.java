@@ -1,11 +1,6 @@
 package controleur;
 
-import javafx.scene.canvas.GraphicsContext;
-import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.paint.Color;
-import modele.DemandeLivraison;
-import modele.Intersection;
 import modele.Livraison;
 
 import java.util.List;

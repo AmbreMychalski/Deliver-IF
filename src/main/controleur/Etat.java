@@ -8,6 +8,7 @@ import javafx.scene.paint.Color;
 import javafx.stage.FileChooser;
 import lombok.Getter;
 import modele.*;
+import vue.VueFenetrePrincipale;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -149,12 +150,12 @@ public abstract class Etat {
 
 		//c.vue.tableViewDemandesLivraison.refresh();
 		//c.vue.afficherDemandeLivraison(true);
-		c.vue.dessinerIntersection(c.vue.canvasInterieurPlan.getGraphicsContext2D(),
+		c.vue.dessinerIntersection(c.vue.canvasIntersectionsLivraisons.getGraphicsContext2D(),
 				demande.getIntersection(),
 				c.vue.COULEUR_POINT_LIVRAISON_SELECTIONNE,
 				c.vue.TAILLE_RECT_PT_LIVRAISON_SELECTIONNE,
 				true,
-				"Rectangle");
+				VueFenetrePrincipale.FormeIntersection.RECTANGLE);
 		c.vue.textfieldIdentifiantIntersectionSelection.setText(demande.getIdIntersection().toString());
 		c.vue.textfieldPlageHoraire.setText(demande.getPlageHoraire().toString());
 
@@ -193,12 +194,12 @@ public abstract class Etat {
 			else{
 				c.vue.afficherLivraison(true);
 			}
-			c.vue.dessinerIntersection(c.vue.canvasInterieurPlan.getGraphicsContext2D(),
+			c.vue.dessinerIntersection(c.vue.canvasIntersectionsLivraisons.getGraphicsContext2D(),
 					ligne.getIntersection(),
 					c.vue.COULEUR_POINT_LIVRAISON_SELECTIONNE,
 					c.vue.TAILLE_RECT_PT_LIVRAISON_SELECTIONNE,
 					true,
-					"Rectangle");
+					VueFenetrePrincipale.FormeIntersection.RECTANGLE);
 
 			c.vue.titlePaneSelectionDemande.setVisible(true);
 			c.vue.textfieldIdentifiantIntersectionSelection.setText(ligne.getIdIntersection().toString());
@@ -224,7 +225,7 @@ public abstract class Etat {
 			if(c.journee.getPlan().estLivrable(intersection)){
 				DemandeLivraison demande =
 						new DemandeLivraison(intersection, plageHoraire);
-				c.vue.tableViewDemandesLivraison.getItems().add(demande);
+				//c.vue.tableViewDemandesLivraison.getItems().add(demande);
 				c.journee.ajouterDemandeLivraison(demande);
 				//c.vue.tableViewDemandesLivraison.refresh();
 				//c.vue.afficherDemandeLivraison(true);
@@ -260,14 +261,14 @@ public abstract class Etat {
 				c.vue.textfieldIdentifiantIntersection.setText(
 						intersectionTrouvee.getIdIntersection().toString());
 
-				GraphicsContext gc = c.vue.canvasInterieurPlan.getGraphicsContext2D();
-				gc.clearRect(0, 0, c.vue.canvasInterieurPlan.getWidth(), c.vue.canvasInterieurPlan.getHeight());
+				GraphicsContext gc = c.vue.canvasIntersectionsLivraisons.getGraphicsContext2D();
+				gc.clearRect(0, 0, c.vue.canvasIntersectionsLivraisons.getWidth(), c.vue.canvasIntersectionsLivraisons.getHeight());
 				c.vue.dessinerIntersection(gc,
 						intersectionTrouvee,
 						Color.DARKORCHID,
 						c.vue.TAILLE_CERCLE_INTERSECTION_SELECTIONNEE,
 						true,
-						"Cercle");
+						VueFenetrePrincipale.FormeIntersection.CERCLE);
 
 				c.vue.afficherDemandeLivraison(false);
 
@@ -290,18 +291,18 @@ public abstract class Etat {
 		File fichier = fileChooser.showOpenDialog(c.vue.getStage());
 		System.out.println("Fichier choisi = " + fichier.getAbsolutePath());
 
-		ArrayList<DemandeLivraison> listeDemandes = c.journee.chargerDemandesLivraison(fichier);
-		c.vue.tableViewDemandesLivraison.getItems().addAll(listeDemandes);
-		c.vue.tableViewDemandesLivraison.refresh();
+		c.journee.chargerDemandesLivraison(fichier);
+		//c.vue.tableViewDemandesLivraison.getItems().addAll(listeDemandes);
+		//c.vue.tableViewDemandesLivraison.refresh();
 		//c.vue.afficherDemandeLivraison(true);
 	}
 
 	protected void supprimerDemandeLivraison(ControleurFenetrePrincipale c){
 		DemandeLivraison ligne = c.vue.tableViewDemandesLivraison.getSelectionModel().getSelectedItem();
 		if(ligne != null) {
-			c.vue.tableViewDemandesLivraison.getItems().remove(ligne);
+			//c.vue.tableViewDemandesLivraison.getItems().remove(ligne);
 			c.journee.supprimerDemandeLivraison(ligne);
-			c.vue.tableViewDemandesLivraison.refresh();
+			//c.vue.tableViewDemandesLivraison.refresh();
 			c.vue.textfieldIdentifiantIntersectionSelection.setText("");
 			c.vue.textfieldPlageHoraire.setText("");
 			//c.vue.afficherDemandeLivraison(true);
