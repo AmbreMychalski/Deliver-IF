@@ -63,9 +63,6 @@ public class FenetreFeuilleDeRoute {
         layout.getChildren().addAll(sauvegarderFeuilleDeRoute, scrollPane);
 
         layout.setAlignment(Pos.CENTER);
-        /*GraphicsDevice gd = GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice();
-        int width = gd.getDisplayMode().getWidth();
-        int height = gd.getDisplayMode().getHeight();*/
 
         Dimension size = Toolkit.getDefaultToolkit().getScreenSize();
         int width = (int)size.getWidth();
