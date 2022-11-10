@@ -3,6 +3,7 @@ package controleur;
 import java.io.File;
 
 import exception.FichierNonConformeException;
+import javafx.scene.canvas.GraphicsContext;
 import javafx.stage.FileChooser;
 import modele.Plan;
 import modele.Segment;
@@ -23,6 +24,9 @@ public class EtatInitial extends Etat{
         System.out.println("Fichier choisi = " + fichier.getAbsolutePath());
 
         try {
+            GraphicsContext gc = c.vue.canvasPlan.getGraphicsContext2D();
+            gc.clearRect(0, 0, c.vue.canvasPlan.getWidth(), c.vue.canvasPlan.getHeight());
+
             c.planCharge = new Plan(fichier);
             c.journee.setPlan(c.planCharge);
 
