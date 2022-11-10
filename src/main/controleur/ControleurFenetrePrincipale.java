@@ -41,13 +41,10 @@ public class ControleurFenetrePrincipale {
     final EtatTourneesCalculees etatTourneesCalculees = new EtatTourneesCalculees();
 
 	final EtatTourneesCalculeesPartielles etatTourneesCalculeesPartielles = new EtatTourneesCalculeesPartielles();
-	
-	
 
 	// modèle
 	Journee journee;
 	Plan planCharge;
-
 
 	public ControleurFenetrePrincipale(VueFenetrePrincipale vue) {
 		this.vue = vue;

@@ -217,7 +217,7 @@ public class VueFenetrePrincipale implements Observer {
         columnPlageHoraireLivraison.setCellValueFactory(
                 new PropertyValueFactory<>("plageHoraireLivraison"));
         columnHeure.setCellValueFactory(
-                new PropertyValueFactory<>("heureAffiche"));
+                new PropertyValueFactory<>("heureAffichee"));
         columnLivreur.setCellValueFactory(
                 new PropertyValueFactory<>("livreur"));
         columnPlageHoraireLivraison.setCellFactory(

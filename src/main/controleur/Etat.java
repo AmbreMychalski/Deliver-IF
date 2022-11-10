@@ -73,9 +73,7 @@ public abstract class Etat {
 		}
 		c.vue.buttonModifierLivraison.setDisable(true);
 		c.vue.buttonSupprimerLivraison.setDisable(true);
-		if(c.etatCourant != c.etatDemandeLivraisonSelectionneeAvecTournees){
-			c.vue.buttonAutoriserAjouterLivraison.setDisable(false);
-		}
+		c.vue.buttonAutoriserAjouterLivraison.setDisable(false);
 		c.vue.afficherDemandeLivraison(true);
 		c.vue.textfieldIdentifiantIntersectionSelection.setText("");
 		resetLabelRuesIntersection(c);
@@ -88,9 +86,6 @@ public abstract class Etat {
 		gc.clearRect(0, 0, c.vue.canvasPlanTrajet.getWidth(), c.vue.canvasPlanTrajet.getHeight());
 		List<Trajet> trajets = tournee.getTrajets();
 		c.vue.dessinerTrajets(trajets, gc);
-		List<Livraison> listeLivraisons = c.journee.getLivraisonsLivreur(tournee.getLivraisons().get(0).getLivreur());
-		c.vue.tableViewLivraisons.getItems().addAll(listeLivraisons);
-		c.vue.tableViewLivraisons.refresh();
 	}
 
 	protected void sauvegarderListeDemandes(ControleurFenetrePrincipale c){

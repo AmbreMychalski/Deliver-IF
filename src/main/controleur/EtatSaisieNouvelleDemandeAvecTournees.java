@@ -3,6 +3,7 @@ package controleur;
 import javafx.scene.input.MouseEvent;
 import modele.DemandeLivraison;
 import modele.Intersection;
+import modele.Livraison;
 import modele.PlageHoraire;
 
 public class EtatSaisieNouvelleDemandeAvecTournees extends Etat {
@@ -22,9 +23,21 @@ public class EtatSaisieNouvelleDemandeAvecTournees extends Etat {
             if (c.journee.getPlan().estLivrable(intersection)) {
                 DemandeLivraison demande = new DemandeLivraison(intersection, plageHoraire);
                 int livreur = c.vue.comboboxLivreur.getValue();
-                c.journee.ajouterDemandeLivraisonTournee(demande, c.journee.getTournees().get(livreur - 1).getLivraisons().get(0));
-                c.changementEtat(c.etatTourneesCalculees);
+                Livraison livraison = c.journee.ajouterDemandeLivraisonTournee(demande, c.journee.getTournees().get(livreur - 1).getLivraisons().get(0));
                 this.afficherTournee(c, c.journee.getTournees().get(livreur - 1));
+                c.vue.afficherLivraison(true);
+
+                c.vue.buttonAutoriserAjouterLivraison.setDisable(false);
+                c.vue.buttonValiderLivraison.setDisable(true);
+                c.vue.comboboxPlageHoraire.setDisable(true);
+                c.vue.buttonAnnulerLivraison.setDisable(true);
+
+                c.vue.tableViewDemandesLivraison.setDisable(false);
+                c.vue.tableViewLivraisons.setDisable(false);
+                c.vue.tableViewLivraisons.getItems().add(livraison);
+                c.vue.tableViewLivraisons.refresh();
+
+                c.changementEtat(c.etatTourneesCalculees);
             }
         }
     }

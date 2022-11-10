@@ -242,14 +242,15 @@ public class Journee extends Observable {
             this.supprimerLivraisonTournee(livr);
         }
     }
-    public void ajouterDemandeLivraisonTournee(DemandeLivraison dl,
-                                               Livraison livrAvant) {
+    public Livraison ajouterDemandeLivraisonTournee(DemandeLivraison dl,
+                                                    Livraison livrAvant) {
 
         Livraison livraison = new Livraison(dl,0,livrAvant.getLivreur(),
                             false);
 
         this.livraisons.add(livraison);
         ajouterLivraisonTournee(livraison, livrAvant);
+        return livraison;
     }
     public void ajouterDemandeLivraisonNouveauLivreur(DemandeLivraison dl,
                                                       Livraison livrAvant) {
