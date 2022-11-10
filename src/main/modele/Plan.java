@@ -41,9 +41,9 @@ public class Plan {
 		this.parseXML(fichier);
 	}
 
-	public boolean estLivrable(Intersection intersection){
+	public boolean estLivrable(Intersection intersection) {
 
-		if(!sontConnectee(intersection, this.entrepot)){
+		if(!sontConnectee(intersection, this.entrepot)) {
 			return false;
 		} else if (!sontConnectee(this.entrepot, intersection)) {
 			return false;
@@ -271,7 +271,7 @@ public class Plan {
         return interPlusProche;
     }
 
-	private boolean sontConnectee(Intersection depart, Intersection arrivee){
+	private boolean sontConnectee(Intersection depart, Intersection arrivee) {
 		HashMap<Long, Float>    distance = new HashMap<Long, Float>();
 		HashMap<Long, Float>    distanceAndHeuristic = new HashMap<Long, Float>();
 		Set<Long>               intersectionsNoires = new HashSet<Long>();
@@ -337,12 +337,12 @@ public class Plan {
 
 	}
 
-	public List<String> obtenirRuesIntersection(Intersection intersection){
+	public List<String> obtenirRuesIntersection(Intersection intersection) {
 		String rue1 = null;
 		//float longueurRue1 = 0;
 		String rue2 = null;
 		//float longueurRue2=0;
-		for(Segment seg : segments){
+		for(Segment seg : segments) {
 			if (rue1 == null && (Objects.equals(seg.getOrigine().getIdIntersection(), intersection.getIdIntersection()))){
 				rue1 = seg.getNom();
 
