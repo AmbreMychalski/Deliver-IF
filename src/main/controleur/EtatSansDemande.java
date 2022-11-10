@@ -16,6 +16,7 @@ public class EtatSansDemande extends Etat{
         c.vue.buttonValiderLivraison.setDisable(false);
         c.vue.buttonAnnulerLivraison.setDisable(false);
         c.vue.comboboxPlageHoraire.setDisable(false);
+        c.vue.buttonChargerDemandes.setDisable(true);
         c.changementEtat(c.etatSaisieNouvelleDemandeSansTournees);
     }
     public void clicGaucheSurPlan(ControleurFenetrePrincipale c, MouseEvent event) {

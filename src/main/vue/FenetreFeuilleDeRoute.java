@@ -14,6 +14,7 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 import modele.TourneeSerialisation;
 
+import java.awt.*;
 import java.io.File;
 
 public class FenetreFeuilleDeRoute {
@@ -62,7 +63,12 @@ public class FenetreFeuilleDeRoute {
         layout.getChildren().addAll(sauvegarderFeuilleDeRoute, scrollPane);
 
         layout.setAlignment(Pos.CENTER);
-        Scene scene = new Scene(layout);
+
+        Dimension size = Toolkit.getDefaultToolkit().getScreenSize();
+        int width = (int)size.getWidth();
+        int height = (int)size.getHeight();
+        System.out.println(width+"/"+height);
+        Scene scene = new Scene(layout, (0.5*width), (0.5*height));
         window.setScene(scene);
         window.show();
 

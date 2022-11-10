@@ -15,6 +15,7 @@ public class EtatAvecDemande extends Etat{
         c.vue.comboboxPlageHoraire.setDisable(false);
         c.vue.tableViewDemandesLivraison.setDisable(true);
         c.vue.buttonCalculerTournees.setDisable(true);
+        c.vue.buttonChargerDemandes.setDisable(true);
         c.changementEtat(c.etatSaisieNouvelleDemandeSansTournees);
     }
     

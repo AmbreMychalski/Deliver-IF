@@ -16,6 +16,7 @@ public class EtatSaisieNouvelleDemandeSansTournees extends Etat{
         if(ajoutOK){
             c.vue.buttonCalculerTournees.setDisable(false);
             c.changementEtat(c.etatAvecDemande);
+            c.vue.buttonChargerDemandes.setDisable(false);
         }
     }
     public void annulerAjouterOuModifier(ControleurFenetrePrincipale c) {
@@ -27,6 +28,7 @@ public class EtatSaisieNouvelleDemandeSansTournees extends Etat{
         } else {
             c.changementEtat(c.etatAvecDemande);
         }
+        c.vue.buttonChargerDemandes.setDisable(false);
     }
     
 }
