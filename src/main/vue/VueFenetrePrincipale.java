@@ -656,4 +656,16 @@ public class VueFenetrePrincipale implements Observer {
             afficherLivraison(true);
         }
     }
+
+    public void dessinerTrajet(List<Trajet> trajets, GraphicsContext gc) {
+        for (Trajet trajet : trajets) {
+            List<Segment> segments = trajet.getSegments();
+            for (Segment segment : segments) {
+                dessinerTrajetLatLong(gc, segment.getOrigine().getLatitude(),
+                        segment.getOrigine().getLongitude(),
+                        segment.getDestination().getLatitude(),
+                        segment.getDestination().getLongitude());
+            }
+        }
+    }
 }
