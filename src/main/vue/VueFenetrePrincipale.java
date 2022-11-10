@@ -123,6 +123,8 @@ public class VueFenetrePrincipale implements Observer {
     public ComboBox<Integer> comboboxLivreur;
     @FXML
     public Label labelRuesIntersection;
+    @FXML
+    public ComboBox<String> comboboxLivreurLivraison;
 
     @FXML
     private void initialize() {
@@ -163,6 +165,7 @@ public class VueFenetrePrincipale implements Observer {
         buttonValiderLivraison.setOnAction(event -> actionBoutonAjouterLivraison(event));
         buttonAnnulerLivraison.setOnAction(event -> actionBoutonAnnulerLivraison(event));
         buttonAutoriserAjouterLivraison.setOnAction(event -> actionBoutonAutoriserAjouterLivraison(event));
+        comboboxLivreur.setOnAction(event -> actionClicSurLivreur(event));
         buttonChargerDemandes.setOnAction(event -> {
             try{
                 actionBoutonChargerDemande(event);
@@ -217,7 +220,7 @@ public class VueFenetrePrincipale implements Observer {
         columnPlageHoraireLivraison.setCellValueFactory(
                 new PropertyValueFactory<>("plageHoraireLivraison"));
         columnHeure.setCellValueFactory(
-                new PropertyValueFactory<>("heureAffiche"));
+                new PropertyValueFactory<>("heureAffichee"));
         columnLivreur.setCellValueFactory(
                 new PropertyValueFactory<>("livreur"));
         columnPlageHoraireLivraison.setCellFactory(
@@ -360,8 +363,10 @@ public class VueFenetrePrincipale implements Observer {
 
     public void afficherLivraison(boolean nettoyerCanvas){
         GraphicsContext gc = canvasIntersectionsLivraisons.getGraphicsContext2D();
+        GraphicsContext gcTrajets = canvasPlanTrajet.getGraphicsContext2D();
         if(nettoyerCanvas){
             gc.clearRect(0, 0, canvasIntersectionsLivraisons.getWidth(), canvasIntersectionsLivraisons.getHeight());
+            gcTrajets.clearRect(0,0,canvasPlanTrajet.getWidth(), canvasPlanTrajet.getHeight());
         }
 
         for(Livraison l: controleur.getJournee().getLivraisonsLivreur(comboboxLivreur.getValue())) {
@@ -372,10 +377,15 @@ public class VueFenetrePrincipale implements Observer {
                     true,
                     FormeIntersection.RECTANGLE);
         }
+        dessinerTrajets(controleur.getJournee().getTournees().get(comboboxLivreur.getValue()-1).getTrajets(),gcTrajets);
     }
 
     private void actionBoutonAjouterLivraison(ActionEvent event) {
         controleur.validerAjouterOuModifier();
+    }
+
+    private void actionClicSurLivreur(ActionEvent event) {
+        controleur.clicSurLivreur();
     }
 
     /**

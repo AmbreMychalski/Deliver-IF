@@ -58,8 +58,7 @@ public abstract class Etat {
 
 	public void touchePressee(ControleurFenetrePrincipale c, KeyEvent ke) {}
 
-	public void clicSurLivreur(ControleurFenetrePrincipale c) {
-	}
+	public void clicSurLivreur(ControleurFenetrePrincipale c) {}
 
 	private void annulerModif(ControleurFenetrePrincipale c) {
 		c.vue.buttonAutoriserAjouterLivraison.setDisable(false);
@@ -94,11 +93,6 @@ public abstract class Etat {
 		gc.clearRect(0, 0, c.vue.canvasPlanTrajet.getWidth(), c.vue.canvasPlanTrajet.getHeight());
 		List<Trajet> trajets = tournee.getTrajets();
 		c.vue.dessinerTrajets(trajets, gc);
-
-		c.vue.dessinerTrajets(trajets, gc);
-		List<Livraison> listeLivraisons = c.journee.getLivraisonsLivreur(tournee.getLivraisons().get(0).getLivreur());
-		c.vue.tableViewLivraisons.getItems().addAll(listeLivraisons);
-		c.vue.tableViewLivraisons.refresh();
 	}
 
 	protected void sauvegarderListeDemandes(ControleurFenetrePrincipale c){

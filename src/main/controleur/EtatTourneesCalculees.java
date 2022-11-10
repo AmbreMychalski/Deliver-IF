@@ -36,7 +36,6 @@ public class EtatTourneesCalculees extends Etat{
     }
 
     public void clicSurLivreur(ControleurFenetrePrincipale c){
-        int livreurSelectionne = c.vue.comboboxLivreur.getValue();
         c.vue.afficherLivraison(true);
         c.vue.tableViewLivraisons.refresh();
     }
