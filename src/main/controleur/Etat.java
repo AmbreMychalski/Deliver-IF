@@ -93,21 +93,15 @@ public abstract class Etat {
 		gc.clearRect(0, 0, c.vue.canvasPlanTrajet.getWidth(), c.vue.canvasPlanTrajet.getHeight());
 		Tournee tournee = c.journee.getTournees().get(livreur-1);
 		List<Trajet> trajets = tournee.getTrajets();
-		for(Trajet trajet : trajets) {
-			List<Segment> segments = trajet.getSegments();
-			for(Segment segment : segments) {
-				c.vue.dessinerTrajetLatLong(gc, segment.getOrigine().getLatitude(),
-						segment.getOrigine().getLongitude(),
-						segment.getDestination().getLatitude(),
-						segment.getDestination().getLongitude());
-			}
-		}
+		c.vue.dessinerTrajet(trajets, gc);
+
 		List<Livraison> listeLivraisons = c.journee.getLivraisonsLivreur(livreur);
 		c.vue.tableViewLivraisons.getItems().addAll(listeLivraisons);
 		c.vue.tableViewLivraisons.refresh();
 
 		return tourneeComplete;
 	}
+
 	protected void sauvegarderListeDemandes(ControleurFenetrePrincipale c){
 		FileChooser fileChooser = new FileChooser();
 		fileChooser.setInitialDirectory(new File(".\\data"));
