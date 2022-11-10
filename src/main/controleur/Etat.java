@@ -51,13 +51,9 @@ public abstract class Etat {
 	
 	public void modifierDemande(ControleurFenetrePrincipale c) {}
 
-	public void ajouterLivreur(ControleurFenetrePrincipale c) {}
+	public void assignerAutreLivreur(ControleurFenetrePrincipale c) {}
 
 	public void touchePressee(ControleurFenetrePrincipale c, KeyEvent ke) {}
-
-	public  void supprimerLivraison(ControleurFenetrePrincipale c){
-		System.out.println("c.etatCourant : "+c.etatCourant);
-	}
 
 	private void annulerModif(ControleurFenetrePrincipale c) {
 	    c.vue.buttonAutoriserAjouterLivraison.setDisable(false);
@@ -67,11 +63,17 @@ public abstract class Etat {
         c.changementEtat(c.etatDemandeLivraisonSelectionneeSansTournees);
 	}
 
-	protected void sortieDeSelectionDemande(ControleurFenetrePrincipale c){
+	protected void sortieDeSelectionDemande(ControleurFenetrePrincipale c, boolean livraison){
+		if(livraison){
+			c.vue.buttonAssignerNvLivreur.setDisable(true);
+			c.vue.afficherLivraison(true);
+		}
+		else{
+			c.vue.afficherDemandeLivraison(true);
+		}
 		c.vue.buttonModifierLivraison.setDisable(true);
 		c.vue.buttonSupprimerLivraison.setDisable(true);
 		c.vue.buttonAutoriserAjouterLivraison.setDisable(false);
-		c.vue.afficherDemandeLivraison(true);
 		c.vue.textfieldIdentifiantIntersectionSelection.setText("");
 		c.vue.textfieldPlageHoraire.setText("");
 		c.vue.buttonSauvegarderDemandes.setDisable(false);
@@ -131,8 +133,14 @@ public abstract class Etat {
 		c.vue.tableViewDemandesLivraison.setDisable(true);
 	}
 
-	protected void effectuerModification(ControleurFenetrePrincipale c){
-		DemandeLivraison ligne = c.vue.tableViewDemandesLivraison.getSelectionModel().getSelectedItem();
+	protected void effectuerModification(ControleurFenetrePrincipale c, boolean livraison){
+		DemandeLivraison ligne;
+		if(livraison){
+			ligne = c.vue.tableViewLivraisons.getSelectionModel().getSelectedItem().getDemandeLivraison();
+		}
+		else {
+			ligne = c.vue.tableViewDemandesLivraison.getSelectionModel().getSelectedItem();
+		}
 		String champIdentifiant = c.vue.textfieldIdentifiantIntersection.getText();
 		PlageHoraire plageHoraire = c.vue.comboboxPlageHoraire.getValue();
 
@@ -190,9 +198,11 @@ public abstract class Etat {
 		if (ligne != null) {
 			if(!livraison) {
 				c.vue.afficherDemandeLivraison(true);
+				c.vue.buttonModifierLivraison.setDisable(false);
 			}
 			else{
 				c.vue.afficherLivraison(true);
+				c.vue.buttonAssignerNvLivreur.setDisable(false);
 			}
 			c.vue.dessinerIntersection(c.vue.canvasIntersectionsLivraisons.getGraphicsContext2D(),
 					ligne.getIntersection(),
@@ -208,7 +218,6 @@ public abstract class Etat {
 			c.vue.buttonAutoriserAjouterLivraison.setDisable(true);
 			c.vue.buttonSauvegarderDemandes.setDisable(true);
 			c.vue.buttonChargerDemandes.setDisable(true);
-			c.vue.buttonModifierLivraison.setDisable(false);
 			c.vue.buttonSupprimerLivraison.setDisable(false);
 			return true;
 		}
@@ -294,7 +303,7 @@ public abstract class Etat {
 		c.journee.chargerDemandesLivraison(fichier);
 		//c.vue.tableViewDemandesLivraison.getItems().addAll(listeDemandes);
 		//c.vue.tableViewDemandesLivraison.refresh();
-		//c.vue.afficherDemandeLivraison(true);
+
 	}
 
 	protected void supprimerDemandeLivraison(ControleurFenetrePrincipale c){
@@ -305,9 +314,21 @@ public abstract class Etat {
 			//c.vue.tableViewDemandesLivraison.refresh();
 			c.vue.textfieldIdentifiantIntersectionSelection.setText("");
 			c.vue.textfieldPlageHoraire.setText("");
-			//c.vue.afficherDemandeLivraison(true);
+
 		}
 	}
+	protected void supprimerLivraison(ControleurFenetrePrincipale c) {
+		Livraison ligne = c.vue.tableViewLivraisons.getSelectionModel().getSelectedItem();
+		if (ligne != null) {
+			c.vue.tableViewLivraisons.getItems().remove(ligne);
+			c.journee.supprimerDemandeLivraison(ligne.getDemandeLivraison());
+			c.journee.supprimerLivraisonJournee(ligne);
+			c.vue.tableViewLivraisons.refresh();
+			c.vue.textfieldIdentifiantIntersectionSelection.setText("");
+			c.vue.textfieldPlageHoraire.setText("");
+		}
+	}
+
 	protected  void annulerAjout (ControleurFenetrePrincipale c){
 		c.vue.buttonValiderLivraison.setDisable(true);
 		c.vue.buttonAnnulerLivraison.setDisable(true);

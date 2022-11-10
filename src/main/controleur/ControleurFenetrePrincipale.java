@@ -79,7 +79,7 @@ public class ControleurFenetrePrincipale {
 	}
 
 	public void ajouterLivreur() {
-		etatCourant.ajouterLivreur(this);
+		//etatCourant.ajouterLivreur(this);
 	}
 
 	public void modifierDemande() {

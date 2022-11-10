@@ -22,7 +22,7 @@ public class EtatModifierDemandeLivraisonSansTournees extends Etat {
         }
     }
     public void validerAjouterOuModifier(ControleurFenetrePrincipale c) {
-        this.effectuerModification(c);
+        this.effectuerModification(c,false);
         c.changementEtat(c.etatDemandeLivraisonSelectionneeSansTournees);
     }
     public void annulerAjouterOuModifier(ControleurFenetrePrincipale c) {
