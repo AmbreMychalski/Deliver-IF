@@ -80,7 +80,7 @@ public class VueFenetrePrincipale implements Observer {
     @FXML
     public Button buttonModifierLivraison;
     @FXML
-    public Button buttonAjouterLivreur;
+    public Button buttonAssignerNvLivreur;
     @FXML
     public Button buttonEtatCourant;
     @FXML
@@ -136,10 +136,10 @@ public class VueFenetrePrincipale implements Observer {
 
         buttonSupprimerLivraison.setOnAction(this::actionBoutonSupprimerLivraison);
         buttonModifierLivraison.setOnAction(this::actionBoutonModifierLivraison);
-        buttonAjouterLivreur.setOnAction(this::actionBoutonAjouterLivreur);
+        buttonAssignerNvLivreur.setOnAction(this::actionBoutonAssignerNvLivreur);
         buttonSupprimerLivraison.setDisable(true);
         buttonModifierLivraison.setDisable(true);
-        buttonAjouterLivreur.setDisable(true);
+        buttonAssignerNvLivreur.setDisable(true);
 
         buttonValiderLivraison.setDisable(true);
         buttonAnnulerLivraison.setDisable(true);
@@ -309,7 +309,7 @@ public class VueFenetrePrincipale implements Observer {
         controleur.modifierDemande();
     }
 
-    private void actionBoutonAjouterLivreur(ActionEvent event) {
+    private void actionBoutonAssignerNvLivreur(ActionEvent event) {
         controleur.ajouterLivreur();
     }
 
@@ -649,6 +649,11 @@ public class VueFenetrePrincipale implements Observer {
             tableViewDemandesLivraison.getItems().addAll(
                     ((Journee) o).getDemandesLivraison());
             afficherDemandeLivraison(true);
+        }
+        else if(arg == "ChangementLivraison"){
+            System.out.println("update tableau");
+            tableViewLivraisons.refresh();
+            afficherLivraison(true);
         }
     }
 }

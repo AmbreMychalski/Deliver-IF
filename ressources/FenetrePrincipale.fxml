@@ -97,7 +97,7 @@
                         <TextField id="textfieldIdentifiantIntersectionSelection" fx:id="textfieldIdentifiantIntersectionSelection" editable="false" layoutX="152.0" layoutY="25.0" prefHeight="25.0" prefWidth="117.0" />
                         <TextField id="textfieldPlageHoraire" fx:id="textfieldPlageHoraire" editable="false" layoutX="152.0" layoutY="60.0" prefHeight="25.0" prefWidth="117.0" />
                         <Button id="buttonSupprimerLivraison" fx:id="buttonModifierLivraison" layoutX="69.0" layoutY="95.0" mnemonicParsing="false" text="Modifier" />
-                        <Button id="buttonAjouterLivreur" fx:id="buttonAjouterLivreur" layoutX="90.0" layoutY="130.0" mnemonicParsing="false" text="Ajouter un livreur" />
+                        <Button id="buttonAssignerNvLivreur" fx:id="buttonAssignerNvLivreur" layoutX="90.0" layoutY="130.0" mnemonicParsing="false" text="Assigner à un autre livreur" />
                      </children>
                     </AnchorPane>
                 </content>

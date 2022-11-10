@@ -23,7 +23,7 @@ public class EtatModifierDemandeLivraisonAvecTournees extends Etat {
         }
     }
     public void validerAjouterOuModifier(ControleurFenetrePrincipale c) {
-        this.effectuerModification(c);
+        this.effectuerModification(c,true);
         this.calculerEtAfficherTournee(c);
         c.changementEtat(c.etatDemandeLivraisonSelectionneeAvecTournees);
     }

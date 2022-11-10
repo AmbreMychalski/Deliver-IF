@@ -9,7 +9,7 @@ public class EtatDemandeLivraisonSelectionneeSansTournees extends Etat {
                 "pour quitter la sélection";
     }
     public void clicGaucheSurPlan(ControleurFenetrePrincipale c, MouseEvent event) {
-        this.sortieDeSelectionDemande(c);
+        this.sortieDeSelectionDemande(c,false);
         c.changementEtat(c.etatAvecDemande);
         c.vue.buttonCalculerTournees.setDisable(false);
         c.vue.buttonChargerDemandes.setDisable(false);
@@ -19,7 +19,7 @@ public class EtatDemandeLivraisonSelectionneeSansTournees extends Etat {
     }
     public void supprimerDemande(ControleurFenetrePrincipale c) {
         this.supprimerDemandeLivraison(c);
-        this.sortieDeSelectionDemande(c);
+        this.sortieDeSelectionDemande(c,false);
         if(c.journee.getDemandesLivraison().size() > 0){
             c.changementEtat(c.etatAvecDemande);
             c.vue.buttonCalculerTournees.setDisable(false);
@@ -39,14 +39,14 @@ public class EtatDemandeLivraisonSelectionneeSansTournees extends Etat {
 
         switch (ke.getCode()) {
             case ESCAPE:
-                this.sortieDeSelectionDemande(c);
+                this.sortieDeSelectionDemande(c,false);
                 c.changementEtat(c.etatAvecDemande);
                 c.vue.buttonCalculerTournees.setDisable(false);
                 c.vue.buttonChargerDemandes.setDisable(false);
                 break;
             case DELETE:
                 this.supprimerDemandeLivraison(c);
-                this.sortieDeSelectionDemande(c);
+                this.sortieDeSelectionDemande(c,false);
                 c.vue.buttonCalculerTournees.setDisable(false);
                 c.vue.buttonChargerDemandes.setDisable(false);
                 if(c.journee.getDemandesLivraison().size() > 0){

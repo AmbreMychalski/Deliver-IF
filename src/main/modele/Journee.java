@@ -326,8 +326,6 @@ public class Journee extends Observable {
             float dist = t.getTrajets().get(i).getLongueur();
             heureLivraison+= dist/(15000.0f);
 
-            System.out.println("dist ="+dist);
-            System.out.println("trajet ="+t.getTrajets().get(i));
             Livraison vielleLivraison = new Livraison(t.getLivraisons().get(i));
 
             if(heureLivraison>t.getLivraisons().get(i).getDemandeLivraison().getPlageHoraire().getFin()) {
@@ -357,7 +355,6 @@ public class Journee extends Observable {
             indexCurrentDl = g.getIdDemandeLivraisonToIndex().get(livrList.get(i+1).getDemandeLivraison());
             indexPreviousDl = g.getIdDemandeLivraisonToIndex().get(livrList.get(i).getDemandeLivraison());
             dist =  g.getCost(indexPreviousDl, indexCurrentDl);
-            System.out.println("dist1 ="+dist);
             lisSeg= plan.calculerPlusCourtChemin(livrList.get(i).getDemandeLivraison().getIntersection(),livrList.get(i+1).getDemandeLivraison().getIntersection());
             trajetList.add(new Trajet(lisSeg, dist));
         }
@@ -366,7 +363,6 @@ public class Journee extends Observable {
         indexCurrentDl = 0;
         indexPreviousDl = g.getIdDemandeLivraisonToIndex().get(livrList.get(livrList.size()-1).getDemandeLivraison());
         dist =  g.getCost(indexPreviousDl, indexCurrentDl);
-        System.out.println("dist1 ="+dist);
         trajetList.add(new Trajet(lisSeg, dist));
 
         return trajetList;
