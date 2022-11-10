@@ -66,7 +66,7 @@ public class FenetreFeuilleDeRoute {
         GraphicsDevice gd = GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice();
         int width = gd.getDisplayMode().getWidth();
         int height = gd.getDisplayMode().getHeight();
-        Scene scene = new Scene(layout, width-500, height-300);
+        Scene scene = new Scene(layout, width-(0.3*width), height-(0.3*height));
         window.setScene(scene);
         window.show();
 
