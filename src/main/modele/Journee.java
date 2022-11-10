@@ -220,6 +220,8 @@ public class Journee extends Observable {
 
         this.majHeureLivraison(tournees.get(tournees.size()-1),0);
 
+        livraisonsNouveauLivreur.clear();
+
 
         return true;
     }
@@ -233,47 +235,6 @@ public class Journee extends Observable {
         notifierObservateurs("ChangementDemandeLivraison");
     }
 
-    public void supprimerLivraisonTournee(Livraison livr ){
-
-        Tournee t = tournees.get(livr.getLivreur()-1);
-        int index;
-        index = t.getLivraisons().indexOf(livr);
-        t.getLivraisons().remove(livr);
-
-        t.getTrajets().remove(index);
-        t.getTrajets().remove(index);
-
-        Intersection intersectionAmont;
-        if(index ==0){
-            intersectionAmont = plan.getEntrepot();
-        }
-        else{
-            intersectionAmont = t.getLivraisons().get(index-1).getDemandeLivraison().getIntersection();
-        }
-        Intersection intersectionAval ;
-        if(index ==t.getLivraisons().size()){
-            intersectionAval = plan.getEntrepot();
-        }
-        else{
-            intersectionAval = t.getLivraisons().get(index).getDemandeLivraison().getIntersection();
-        }
-
-        List<Segment> lisSeg = plan.calculerPlusCourtChemin(intersectionAmont, intersectionAval);
-
-        float dist = 0;
-
-        for(Segment seg : lisSeg){
-            dist+=seg.getLongueur();
-        }
-
-        t.getTrajets().add(index, new Trajet(lisSeg,dist));
-
-        this.majHeureLivraison(t,index);
-
-
-
-    }
-
     public void supprimerLivraisonJournee(Livraison livr){
         this.livraisons.remove(livr);
         if(this.livraisonsNouveauLivreur.contains(livr)){
@@ -283,29 +244,19 @@ public class Journee extends Observable {
             this.supprimerLivraisonTournee(livr);
         }
     }
-
     public void ajouterDemandeLivraisonTournee(DemandeLivraison dl, Livraison livrAvant){
-        /*Tournee t = tournees.get(livrAvant.getLivreur()-1);
-        int index = t.getLivraisons().indexOf(livrAvant);
-        t.getLivraisons().add(index+1,new Livraison(dl,0,livrAvant.getLivreur()));
-        t.getTrajets().remove(index+1);
+        Livraison livraison = new Livraison(dl,0,livrAvant.getLivreur(), false);
 
-        this.livraisons.add(t.getLivraisons().get(t.getLivraisons().size()-1));
+        this.livraisons.add(livraison);
 
-        if(t.getLivraisons().size()>index+1){
+        ajouterLivraisonTournee(livraison, livrAvant);
+    }
+    public void ajouterDemandeLivraisonNouveauLivreur(DemandeLivraison dl, Livraison livrAvant){
+        Livraison livraison = new Livraison(dl,0,livrAvant.getLivreur(), false);
 
-        }
+        this.livraisons.add(livraison);
 
-        List<Segment> lisSeg = plan.calculerPlusCourtChemin(t.getLivraisons().get(index).getDemandeLivraison().getIntersection(),
-                t.getLivraisons().get(index+1).getDemandeLivraison().getIntersection());
-
-        float dist = 0;
-
-        for(Segment seg : lisSeg){
-            dist+=seg.getLongueur();
-        }
-        t.getTrajets().add(index+1, new Trajet(lisSeg,dist));*/
-
+        assignerLivraisonNouveauLivreur(livraison);
     }
     public void assignerLivraisonNouveauLivreur(Livraison livr){
 
@@ -317,6 +268,50 @@ public class Journee extends Observable {
         this.livraisonsNouveauLivreur.add(livr);
     }
 
+    public void ajouterLivraisonTournee(Livraison livr,Livraison livrAvant ){
+        livr.setLivreur(livrAvant.getLivreur());
+        Tournee t = tournees.get(livrAvant.getLivreur()-1);
+        int index = t.getLivraisons().indexOf(livrAvant);
+        t.getLivraisons().add(index+1,livr);
+        t.getTrajets().remove(index+1);
+
+        Intersection intersectionAmont = t.getLivraisons().get(index).getDemandeLivraison().getIntersection();
+
+        Intersection intersectionAval = t.getLivraisons().get(index+1).getDemandeLivraison().getIntersection();
+
+        List<Segment> lisSeg = plan.calculerPlusCourtChemin(intersectionAmont, intersectionAval);
+
+        float dist = 0;
+
+        for(Segment seg : lisSeg){
+            dist+=seg.getLongueur();
+        }
+
+        t.getTrajets().add(index+1, new Trajet(lisSeg,dist));
+
+        intersectionAmont = t.getLivraisons().get(index+1).getDemandeLivraison().getIntersection();
+        if(index+2 == t.getLivraisons().size()){
+            intersectionAval = this.plan.getEntrepot();
+        }
+        else{
+            intersectionAval = t.getLivraisons().get(index+2).getDemandeLivraison().getIntersection();
+        }
+
+        lisSeg = plan.calculerPlusCourtChemin(intersectionAmont, intersectionAval);
+
+        dist = 0;
+
+        for(Segment seg : lisSeg){
+            dist+=seg.getLongueur();
+        }
+        t.getTrajets().add(index+2, new Trajet(lisSeg,dist));
+
+        this.majHeureLivraison(t, index);
+    }
+
+    public boolean dernierLivreurEstSansToureeCalculee(){
+        return this.livraisonsNouveauLivreur.size()!=0;
+    }
     private void majHeureLivraison(Tournee t, int startIndex){
         float heureLivraison;
         if(startIndex==0){
@@ -380,6 +375,43 @@ public class Journee extends Observable {
         return trajetList;
     }
 
+    private void supprimerLivraisonTournee(Livraison livr ){
+
+        Tournee t = tournees.get(livr.getLivreur()-1);
+        int index;
+        index = t.getLivraisons().indexOf(livr);
+        t.getLivraisons().remove(livr);
+
+        t.getTrajets().remove(index);
+        t.getTrajets().remove(index);
+
+        Intersection intersectionAmont;
+        if(index ==0){
+            intersectionAmont = plan.getEntrepot();
+        }
+        else{
+            intersectionAmont = t.getLivraisons().get(index-1).getDemandeLivraison().getIntersection();
+        }
+        Intersection intersectionAval ;
+        if(index ==t.getLivraisons().size()){
+            intersectionAval = plan.getEntrepot();
+        }
+        else{
+            intersectionAval = t.getLivraisons().get(index).getDemandeLivraison().getIntersection();
+        }
+
+        List<Segment> lisSeg = plan.calculerPlusCourtChemin(intersectionAmont, intersectionAval);
+
+        float dist = 0;
+
+        for(Segment seg : lisSeg){
+            dist+=seg.getLongueur();
+        }
+
+        t.getTrajets().add(index, new Trajet(lisSeg,dist));
+
+        this.majHeureLivraison(t,index);
+    }
 
 }
 
