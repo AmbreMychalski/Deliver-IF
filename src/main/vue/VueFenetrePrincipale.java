@@ -1,5 +1,6 @@
 package vue;
 
+
 import controleur.ControleurFenetrePrincipale;
 import exception.FichierNonConformeException;
 import javafx.collections.FXCollections;
@@ -23,10 +24,7 @@ import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.core.LoggerContext;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Observable;
-import java.util.Observer;
+import java.util.*;
 
 public class VueFenetrePrincipale implements Observer {
 
@@ -44,6 +42,8 @@ public class VueFenetrePrincipale implements Observer {
     /* Rayon en pixels définissant la zone où l'on
      reconnaît les intersections ciblées*/
     public final double RAYON_TOLERANCE_CLIC_INTERSECTION = 8;
+
+    public enum FormeIntersection { RECTANGLE, CERCLE };
 
     @Getter
     @Setter
@@ -89,7 +89,7 @@ public class VueFenetrePrincipale implements Observer {
     @FXML
     public Canvas canvasPlan;
     @FXML
-    public Canvas canvasInterieurPlan;
+    public Canvas canvasIntersectionsLivraisons;
     @FXML
     public Canvas canvasPlanTrajet;
     @FXML
@@ -163,7 +163,7 @@ public class VueFenetrePrincipale implements Observer {
         buttonAutoriserAjouterLivraison.setOnAction(event -> actionBoutonAutoriserAjouterLivraison(event));
         buttonChargerDemandes.setOnAction(event -> actionBoutonChargerDemande(event));
         buttonSauvegarderDemandes.setOnAction(event -> actionBoutonSauvegarderDemandes(event));
-        canvasInterieurPlan.setOnMouseClicked(event -> actionClicSurCanvas(event));
+        canvasIntersectionsLivraisons.setOnMouseClicked(event -> actionClicSurCanvas(event));
         tableViewDemandesLivraison.setOnMouseClicked(event -> actionClicTableau(event));
         tableViewLivraisons.setOnMouseClicked(event -> actionClicTableau(event));
         buttonChargerPlan.setOnAction(event -> {
@@ -334,9 +334,9 @@ public class VueFenetrePrincipale implements Observer {
     }
 
     public void afficherDemandeLivraison(boolean nettoyerCanvas) {
-        GraphicsContext gc = canvasInterieurPlan.getGraphicsContext2D();
+        GraphicsContext gc = canvasIntersectionsLivraisons.getGraphicsContext2D();
         if(nettoyerCanvas){
-            gc.clearRect(0, 0, canvasInterieurPlan.getWidth(), canvasInterieurPlan.getHeight());
+            gc.clearRect(0, 0, canvasIntersectionsLivraisons.getWidth(), canvasIntersectionsLivraisons.getHeight());
         }
 
         for(DemandeLivraison d: controleur.getJournee().getDemandesLivraison()) {
@@ -345,15 +345,15 @@ public class VueFenetrePrincipale implements Observer {
                     d.getPlageHoraire().getCouleur(),
                     this.TAILLE_RECT_PT_LIVRAISON,
                     true,
-                    "Rectangle");
+                    FormeIntersection.RECTANGLE);
         }
 
     }
 
     public void afficherLivraison(boolean nettoyerCanvas){
-        GraphicsContext gc = canvasInterieurPlan.getGraphicsContext2D();
+        GraphicsContext gc = canvasIntersectionsLivraisons.getGraphicsContext2D();
         if(nettoyerCanvas){
-            gc.clearRect(0, 0, canvasInterieurPlan.getWidth(), canvasInterieurPlan.getHeight());
+            gc.clearRect(0, 0, canvasIntersectionsLivraisons.getWidth(), canvasIntersectionsLivraisons.getHeight());
         }
 
         for(Livraison l: controleur.getJournee().getLivraisonsLivreur(comboboxLivreur.getValue())) {
@@ -362,7 +362,7 @@ public class VueFenetrePrincipale implements Observer {
                     l.getDemandeLivraison().getPlageHoraire().getCouleur(),
                     this.TAILLE_RECT_PT_LIVRAISON,
                     true,
-                    "Rectangle");
+                    FormeIntersection.RECTANGLE);
         }
     }
 
@@ -451,17 +451,17 @@ public class VueFenetrePrincipale implements Observer {
     /**
      * Dessine une intersection sur le canvas à partir des latitudes
      * et longitudes fournies, dans la couleur précisée.
-     * @param intersection
-     * @param couleur
-     * @param remplir
-     * @param forme -> parmi "rectangle", "circle"
+     * @param intersection intersection à dessiner
+     * @param couleur couleur de l'intersection
+     * @param remplir précise s'il faut remplir l'intersection
+     * @param forme RECTANGLE ou CERCLE
      */
     public void dessinerIntersection(GraphicsContext gc,
-                                            Intersection intersection,
-                                            Color couleur,
-                                            double taille,
-                                            boolean remplir,
-                                            String forme) {
+                                     Intersection intersection,
+                                     Color couleur,
+                                     double taille,
+                                     boolean remplir,
+                                     FormeIntersection forme) {
         dessinerIntersectionXY(gc,
                 convertirLongitudeEnX(intersection.getLongitude()),
                 convertirLatitudeEnY(intersection.getLatitude()),
@@ -475,10 +475,11 @@ public class VueFenetrePrincipale implements Observer {
      * Dessiner une intersection sur le canvas à partir des coordonnées
      * X et Y fournies, dans la couleur précisée. Les coordonnées
      * indiquent l'emplacement exact de l'intersection.
-     * @param x
-     * @param y
-     * @param couleur
-     *
+     * @param x coordonnées x sur le canvas
+     * @param y coordonnées y sur le canvas
+     * @param couleur couleur de l'intersection
+     * @param remplir true si le point doit être plein
+     * @param forme RECTANGLE, CERCLE
      */
     void dessinerIntersectionXY(GraphicsContext gc,
                                 double x,
@@ -486,32 +487,38 @@ public class VueFenetrePrincipale implements Observer {
                                 Color couleur,
                                 double taille,
                                 boolean remplir,
-                                String forme) {
+                                FormeIntersection forme) {
         if(remplir) {
             gc.setFill(couleur);
-            if(forme.equals("Rectangle")) {
-                gc.fillRect(x - (taille /2),
-                        y - (taille /2),
-                        taille,
-                        taille);
-            } else if(forme.equals("Cercle")) {
-                gc.fillOval(x - (taille /2),
-                        y - (taille /2),
-                        taille,
-                        taille);
+            switch(forme) {
+                case RECTANGLE:
+                    gc.fillRect(x - (taille /2),
+                            y - (taille /2),
+                            taille,
+                            taille);
+                    break;
+                case CERCLE:
+                    gc.fillOval(x - (taille /2),
+                            y - (taille /2),
+                            taille,
+                            taille);
+                    break;
             }
         } else {
             gc.setStroke(couleur);
-            if(forme.equals("Rectangle")) {
-                gc.strokeRect(x - (taille /2),
-                        y - (taille /2),
-                        taille,
-                        taille);
-            } else if(forme.equals("Cercle")) {
-                gc.strokeOval(x - (taille /2),
-                        y - (taille /2),
-                        taille,
-                        taille);
+            switch(forme) {
+                case RECTANGLE:
+                    gc.strokeRect(x - (taille /2),
+                            y - (taille /2),
+                            taille,
+                            taille);
+                    break;
+                case CERCLE:
+                    gc.strokeOval(x - (taille /2),
+                            y - (taille /2),
+                            taille,
+                            taille);
+                    break;
             }
         }
     }
@@ -629,8 +636,10 @@ public class VueFenetrePrincipale implements Observer {
 
     @Override
     public void update(Observable o, Object arg) {
-        if (arg == "ChangementDemandeLivraison"){
-            tableViewDemandesLivraison.refresh();
+        if(o instanceof Journee) {
+            tableViewDemandesLivraison.getItems().clear();
+            tableViewDemandesLivraison.getItems().addAll(
+                    ((Journee) o).getDemandesLivraison());
             afficherDemandeLivraison(true);
         }
     }

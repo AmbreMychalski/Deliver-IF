@@ -1,11 +1,8 @@
 package controleur;
 
-import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.paint.Color;
 import modele.DemandeLivraison;
-import modele.Intersection;
-import modele.PlageHoraire;
+import vue.VueFenetrePrincipale;
 
 public class EtatModifierDemandeLivraisonSansTournees extends Etat {
     public EtatModifierDemandeLivraisonSansTournees() {
@@ -16,12 +13,12 @@ public class EtatModifierDemandeLivraisonSansTournees extends Etat {
         DemandeLivraison ligne = c.vue.tableViewDemandesLivraison
                 .getSelectionModel().getSelectedItem();
         if (ligne != null) {
-            c.vue.dessinerIntersection(c.vue.canvasInterieurPlan.getGraphicsContext2D(),
+            c.vue.dessinerIntersection(c.vue.canvasIntersectionsLivraisons.getGraphicsContext2D(),
                     ligne.getIntersection(),
                     c.vue.COULEUR_POINT_LIVRAISON_SELECTIONNE,
                     c.vue.TAILLE_RECT_PT_LIVRAISON_SELECTIONNE,
                     true,
-                    "Rectangle");
+                    VueFenetrePrincipale.FormeIntersection.RECTANGLE);
         }
     }
     public void validerAjouterOuModifier(ControleurFenetrePrincipale c) {

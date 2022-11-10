@@ -1,15 +1,8 @@
 package controleur;
 
-import java.util.List;
-
 import javafx.scene.canvas.GraphicsContext;
-import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
-import modele.DemandeLivraison;
-import modele.Segment;
-import modele.Tournee;
-import modele.Trajet;
 
 public class EtatDemandeLivraisonSelectionneeAvecTournees extends Etat {
     public EtatDemandeLivraisonSelectionneeAvecTournees() {

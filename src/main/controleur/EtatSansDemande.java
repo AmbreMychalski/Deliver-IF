@@ -1,15 +1,7 @@
 package controleur;
 
-import java.io.File;
-import java.util.ArrayList;
-
 import exception.FichierNonConformeException;
-import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.paint.Color;
-import javafx.stage.FileChooser;
-import modele.DemandeLivraison;
-import modele.Intersection;
 
 public class EtatSansDemande extends Etat{
     public EtatSansDemande() {

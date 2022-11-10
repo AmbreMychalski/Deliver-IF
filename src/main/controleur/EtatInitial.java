@@ -6,6 +6,7 @@ import exception.FichierNonConformeException;
 import javafx.stage.FileChooser;
 import modele.Plan;
 import modele.Segment;
+import vue.VueFenetrePrincipale;
 
 public class EtatInitial extends Etat{
     public EtatInitial() {
@@ -54,7 +55,7 @@ public class EtatInitial extends Etat{
                     c.vue.COULEUR_DEPOT,
                     c.vue.TAILLE_CERCLE_INTERSECTION,
                     true,
-                    "Cercle");
+                    VueFenetrePrincipale.FormeIntersection.CERCLE);
             c.vue.titledPaneEditionDemande.setVisible(true);
             c.vue.titlePaneSelectionDemande.setVisible(true);
             c.vue.buttonChargerDemandes.setDisable(false);

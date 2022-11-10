@@ -10,12 +10,11 @@ import exception.FichierNonConformeException;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import lombok.Getter;
-import modele.*;
+import modele.Journee;
+import modele.Plan;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import vue.VueFenetrePrincipale;
-
-import java.sql.SQLOutput;
 
 /**
  * Contrôleur de la vue principale de l'application.

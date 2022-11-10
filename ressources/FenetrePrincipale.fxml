@@ -52,7 +52,7 @@
                <children>
        				<Canvas id="canvasPlanTrajet" fx:id="canvasPlanTrajet" height="667.0" layoutX="6.0" layoutY="7.0" width="723.0" />
                     <Canvas id="canvasPlan" fx:id="canvasPlan" height="667.0" layoutX="6.0" layoutY="7.0" width="723.0" />
-                  	<Canvas id="canvasInterieurPlan" fx:id="canvasInterieurPlan" height="667.0" layoutX="6.0" layoutY="7.0" width="723.0" />
+                  	<Canvas id="canvasInterieurPlan" fx:id="canvasIntersectionsLivraisons" height="667.0" layoutX="6.0" layoutY="7.0" width="723.0" />
                   	
                  
                </children>

@@ -1,18 +1,6 @@
 package controleur;
 
-import java.io.File;
-import java.util.ArrayList;
-import java.util.List;
-
-import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.paint.Color;
-import javafx.stage.FileChooser;
-import modele.DemandeLivraison;
-import modele.Intersection;
-import modele.Segment;
-import modele.Tournee;
-import modele.Trajet;
 
 public class EtatAvecDemande extends Etat{
     public EtatAvecDemande() {
