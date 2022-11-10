@@ -15,16 +15,17 @@ public class CompleteGraph implements Graph {
     private static final int MAX_COST = 40;
     private static final int MIN_COST = 10;
     
-    private Map<DemandeLivraison, Integer> idDemandeLivraisonToIndex =  new HashMap<DemandeLivraison, Integer>();
-    private Map<Integer, DemandeLivraison > idIndexToDemandeLivraison =  new HashMap<Integer, DemandeLivraison>();
+    private Map<DemandeLivraison, Integer> idDemandeLivraisonToIndex = new HashMap<DemandeLivraison, Integer>();
+    private Map<Integer, DemandeLivraison > idIndexToDemandeLivraison = new HashMap<Integer, DemandeLivraison>();
     int nbVertices;
     float[][] cost;
     
     /**
-     * Create a complete directed graph such that each edge has a weight within [MIN_COST,MAX_COST]
-     *
+     * Create a complete directed graph such that each edge has a weight within
+     * [MIN_COST,MAX_COST]
      */
-    public CompleteGraph(List<DemandeLivraison> demandesLivraisons,  Plan plan, Intersection entrepot) {
+    public CompleteGraph(List<DemandeLivraison> demandesLivraisons,  Plan plan,
+                         Intersection entrepot) {
 
         nbVertices = demandesLivraisons.size() + 1;
         cost = new float[demandesLivraisons.size() + 1][demandesLivraisons.size() + 1];
@@ -35,33 +36,43 @@ public class CompleteGraph implements Graph {
          
         Integer index = 1;      
         ArrayList<Intersection> listIntersection = new ArrayList<Intersection>();
+
         for(DemandeLivraison dl: demandesLivraisons) {
             idDemandeLivraisonToIndex.put(dl, index);
             idIndexToDemandeLivraison.put(index, dl);
             listIntersection.add(dl.getIntersection());
             index++;
         }
+
         listIntersection.add(entrepot);
-        
-        HashMap<Intersection, Float> plusCourtsChemins= plan.calculerPlusCourtsChemins(listIntersection, entrepot);
-        for(DemandeLivraison dl : demandesLivraisons ) {         
+        HashMap<Intersection, Float> plusCourtsChemins =
+                plan.calculerPlusCourtsChemins(listIntersection, entrepot);
+
+        for(DemandeLivraison dl : demandesLivraisons) {
             index = idDemandeLivraisonToIndex.get(dl);
-            cost[0][index]=plusCourtsChemins.get(dl.getIntersection());                      
+            cost[0][index] = plusCourtsChemins.get(dl.getIntersection());
         } 
         
-        // Pour chaque points de livraisons calcul les plus courts chemins à tous les autres points de livraisons       
+        /*
+            Pour chaque point de livraison, on calcule les plus courts chemins
+            à tous les autres points de livraisons
+        */
         for(DemandeLivraison currentDl: demandesLivraisons) {
-            plusCourtsChemins = plan.calculerPlusCourtsChemins(listIntersection, currentDl.getIntersection());
-            Integer currentIndex =  idDemandeLivraisonToIndex.get(currentDl);           
-            for(DemandeLivraison dl : demandesLivraisons ) {
-                if(dl != currentDl ) {
-                    if(currentDl.getPlageHoraire().getFin()<=dl.getPlageHoraire().getDebut() || currentDl.getPlageHoraire().getDebut()==dl.getPlageHoraire().getDebut()) {
+            plusCourtsChemins =
+                    plan.calculerPlusCourtsChemins(listIntersection, currentDl.getIntersection());
+            Integer currentIndex = idDemandeLivraisonToIndex.get(currentDl);
+
+            for(DemandeLivraison dl : demandesLivraisons) {
+                if(dl != currentDl) {
+                    if(currentDl.getPlageHoraire().getFin() <= dl.getPlageHoraire().getDebut()
+                            || currentDl.getPlageHoraire().getDebut() == dl.getPlageHoraire().getDebut()) {
                         index = idDemandeLivraisonToIndex.get(dl);
-                        cost[currentIndex][index]=plusCourtsChemins.get(dl.getIntersection());  
+                        cost[currentIndex][index] = plusCourtsChemins.get(dl.getIntersection());
                     }   
                 }
             }
-            cost[currentIndex][0]=plusCourtsChemins.get(entrepot);
+
+            cost[currentIndex][0] = plusCourtsChemins.get(entrepot);
         }
     }
 

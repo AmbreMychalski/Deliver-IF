@@ -1,7 +1,5 @@
 package modele;
 
-import java.util.Date;
-
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
@@ -26,13 +24,12 @@ public class Livraison {
 		return demandeLivraison.getPlageHoraire();
 	}
 
-	public String getHeureAffiche() {
-
-
+	public String getHeureAffichee() {
 		int h = (int) heure;
 		int min = (int) (60 * (heure - h));
-		//return String.valueOf(h)+"h"+String.valueOf(min);
-		return ((int) (heure) + "h" + ((int) ((heure - (int) heure) * 60) < 10 ? "0" : "") + (int) ((heure - (int) heure) * 60));
+		return ((int) (heure) + "h"
+				+ ((int) ((heure - (int) heure) * 60) < 10 ? "0" : "")
+				+ (int) ((heure - (int) heure) * 60));
 	}
 
 	public Livraison(Livraison livraison) {
