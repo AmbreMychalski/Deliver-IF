@@ -13,7 +13,7 @@ import modele.Trajet;
 
 public class EtatDemandeLivraisonSelectionneeAvecTournees extends Etat {
     public EtatDemandeLivraisonSelectionneeAvecTournees() {
-        super.message = "Cliquez sur la plan ou appuyez sur " +
+        super.message = "Cliquez sur le plan ou appuyez sur " +
                 "échap pour quitter la sélection";
     }
     public void clicGaucheSurPlan(ControleurFenetrePrincipale c, MouseEvent event) {
