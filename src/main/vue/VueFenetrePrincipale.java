@@ -6,6 +6,7 @@ import exception.FichierNonConformeException;
 import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.geometry.Pos;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.*;
@@ -120,6 +121,8 @@ public class VueFenetrePrincipale implements Observer {
     public Label labelGuideUtilisateur;
     @FXML
     public ComboBox<Integer> comboboxLivreur;
+    @FXML
+    public Label labelRuesIntersection;
 
     @FXML
     private void initialize() {
@@ -153,7 +156,6 @@ public class VueFenetrePrincipale implements Observer {
         textfieldIdentifiantIntersectionSelection.setDisable(true);
         titlePaneSelectionDemande.setVisible(false);
         titledPaneEditionDemande.setVisible(false);
-
         tableViewLivraisons.setVisible(false);
         buttonAfficherFeuillesRoute.setDisable(true);
         buttonEtatCourant.setOnAction(event -> System.out.println("Etat courant = " + controleur.getEtatCourant().getClass().getName()));
@@ -161,7 +163,13 @@ public class VueFenetrePrincipale implements Observer {
         buttonValiderLivraison.setOnAction(event -> actionBoutonAjouterLivraison(event));
         buttonAnnulerLivraison.setOnAction(event -> actionBoutonAnnulerLivraison(event));
         buttonAutoriserAjouterLivraison.setOnAction(event -> actionBoutonAutoriserAjouterLivraison(event));
-        buttonChargerDemandes.setOnAction(event -> actionBoutonChargerDemande(event));
+        buttonChargerDemandes.setOnAction(event -> {
+            try{
+                actionBoutonChargerDemande(event);
+            }catch (Exception ex){
+                System.err.println(ex);
+            }
+        });
         buttonSauvegarderDemandes.setOnAction(event -> actionBoutonSauvegarderDemandes(event));
         canvasIntersectionsLivraisons.setOnMouseClicked(event -> actionClicSurCanvas(event));
         tableViewDemandesLivraison.setOnMouseClicked(event -> actionClicTableau(event));
@@ -169,8 +177,8 @@ public class VueFenetrePrincipale implements Observer {
         buttonChargerPlan.setOnAction(event -> {
             try {
                 actionBoutonChargerPlan(event);
-            } catch (FichierNonConformeException e) {
-                ControleurFenetrePrincipale.logger.warn("Problème lors de la lecture du fichier");
+            } catch (Exception e) {
+                System.err.println(e);
             }
         });
         buttonCalculerTournees.setOnAction(event -> actionBoutonCalculerTournees(event));
@@ -305,7 +313,7 @@ public class VueFenetrePrincipale implements Observer {
         controleur.ajouterLivreur();
     }
 
-    private void actionBoutonChargerPlan(ActionEvent event) throws FichierNonConformeException {
+    private void actionBoutonChargerPlan(ActionEvent event) throws Exception {
         controleur.chargerPlan();
     }
 
@@ -322,7 +330,7 @@ public class VueFenetrePrincipale implements Observer {
      * Ouvre un explorateur de fichier pour choisir le fichier à charger.
      * @param event ActionEvent associé
      */
-    private void actionBoutonChargerDemande(ActionEvent event) {
+    private void actionBoutonChargerDemande(ActionEvent event) throws Exception{
         controleur.chargerListeDemandes();
     }
 

@@ -29,8 +29,8 @@ public class EtatAvecDemande extends Etat{
         }
     }
 
-    public void chargerListeDemandes(ControleurFenetrePrincipale c) {
-        this.chargerDemandes(c);
+    public void chargerListeDemandes(ControleurFenetrePrincipale c) throws Exception{
+        chargerDemandes(c);
         c.vue.buttonCalculerTournees.setDisable(false);
     }
 

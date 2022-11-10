@@ -86,7 +86,7 @@ public class ControleurFenetrePrincipale {
 		etatCourant.modifierDemande(this);
 	}
 
-	public void chargerPlan() throws FichierNonConformeException {
+	public void chargerPlan() throws Exception {
 		etatCourant.chargerPlan(this);
 	}
 
@@ -98,7 +98,7 @@ public class ControleurFenetrePrincipale {
 		etatCourant.supprimerLivraison(this);
 	}
 
-	public void chargerListeDemandes() {
+	public void chargerListeDemandes() throws Exception{
 		etatCourant.chargerListeDemandes(this);
 	}
 

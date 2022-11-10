@@ -21,7 +21,7 @@ public abstract class Etat {
 		this.message = "Etat";
 	}
 
-	public void chargerPlan(ControleurFenetrePrincipale c) throws FichierNonConformeException {}
+	public void chargerPlan(ControleurFenetrePrincipale c) throws Exception {}
 	
 	public void ajouterDemande(ControleurFenetrePrincipale c){}
 	
@@ -33,7 +33,7 @@ public abstract class Etat {
 	
 	public void annulerAjouterOuModifier(ControleurFenetrePrincipale c) {}
 	
-	public void chargerListeDemandes(ControleurFenetrePrincipale c) {}
+	public void chargerListeDemandes(ControleurFenetrePrincipale c) throws Exception {}
 	
 	public void supprimerDemande(ControleurFenetrePrincipale c) {}
 	
@@ -73,6 +73,7 @@ public abstract class Etat {
 		c.vue.buttonAutoriserAjouterLivraison.setDisable(false);
 		c.vue.afficherDemandeLivraison(true);
 		c.vue.textfieldIdentifiantIntersectionSelection.setText("");
+		resetLabelRuesIntersection(c);
 		c.vue.textfieldPlageHoraire.setText("");
 		c.vue.buttonSauvegarderDemandes.setDisable(false);
 	}
@@ -123,6 +124,7 @@ public abstract class Etat {
 	protected void modifierDemandeApresSelection(ControleurFenetrePrincipale c){
 		c.vue.buttonModifierLivraison.setDisable(true);
 		c.vue.textfieldIdentifiantIntersectionSelection.setText("");
+		resetLabelRuesIntersection(c);
 		c.vue.buttonSupprimerLivraison.setDisable(true);
 		c.vue.buttonAutoriserAjouterLivraison.setDisable(true);
 		c.vue.buttonValiderLivraison.setDisable(false);
@@ -157,6 +159,7 @@ public abstract class Etat {
 				true,
 				VueFenetrePrincipale.FormeIntersection.RECTANGLE);
 		c.vue.textfieldIdentifiantIntersectionSelection.setText(demande.getIdIntersection().toString());
+		remplirLabelRuesIntersection(c, intersection);
 		c.vue.textfieldPlageHoraire.setText(demande.getPlageHoraire().toString());
 
 
@@ -168,6 +171,7 @@ public abstract class Etat {
 		c.vue.comboboxPlageHoraire.setValue(null);
 		c.vue.tableViewDemandesLivraison.setDisable(false);
 		c.vue.textfieldIdentifiantIntersection.setText("");
+		resetLabelRuesIntersection(c);
 	}
 
 	protected void annulerModification(ControleurFenetrePrincipale c){
@@ -202,7 +206,8 @@ public abstract class Etat {
 					VueFenetrePrincipale.FormeIntersection.RECTANGLE);
 
 			c.vue.titlePaneSelectionDemande.setVisible(true);
-			c.vue.textfieldIdentifiantIntersectionSelection.setText(ligne.getIdIntersection().toString());
+			c.vue.textfieldIdentifiantIntersection.setText(ligne.getIdIntersection().toString());
+			remplirLabelRuesIntersection(c, ligne.getIntersection());
 			c.vue.textfieldPlageHoraire.setText(ligne.getPlageHoraire().toString());
 			c.vue.buttonCalculerTournees.setDisable(true);
 			c.vue.buttonAutoriserAjouterLivraison.setDisable(true);
@@ -234,6 +239,7 @@ public abstract class Etat {
 				c.vue.comboboxPlageHoraire.setDisable(true);
 				c.vue.comboboxPlageHoraire.setValue(null);
 				c.vue.textfieldIdentifiantIntersection.setText("");
+				resetLabelRuesIntersection(c);
 				c.vue.tableViewDemandesLivraison.setDisable(false);
 				c.vue.buttonSauvegarderDemandes.setDisable(false);
 				return true;
@@ -263,6 +269,7 @@ public abstract class Etat {
 
 				GraphicsContext gc = c.vue.canvasIntersectionsLivraisons.getGraphicsContext2D();
 				gc.clearRect(0, 0, c.vue.canvasIntersectionsLivraisons.getWidth(), c.vue.canvasIntersectionsLivraisons.getHeight());
+				remplirLabelRuesIntersection(c, intersectionTrouvee);
 				c.vue.dessinerIntersection(gc,
 						intersectionTrouvee,
 						Color.DARKORCHID,
@@ -274,6 +281,7 @@ public abstract class Etat {
 
 			} else {
 				c.vue.textfieldIdentifiantIntersection.setText("");
+				resetLabelRuesIntersection(c);
 			}
 		} else {
 			ControleurFenetrePrincipale.logger.debug("Clic sur le canvas, (x,y)=("
@@ -282,19 +290,24 @@ public abstract class Etat {
 
 	}
 
-	protected void chargerDemandes(ControleurFenetrePrincipale c){
+	protected void chargerDemandes(ControleurFenetrePrincipale c)throws Exception{
 		FileChooser fileChooser = new FileChooser();
 		fileChooser.setInitialDirectory(new File(".\\data"));
 		fileChooser.getExtensionFilters().add(
 				new FileChooser.ExtensionFilter("Fichier XML", "*.xml", "*.XML"));
 		fileChooser.setTitle("Charger des demandes de livraison");
 		File fichier = fileChooser.showOpenDialog(c.vue.getStage());
+		if (fichier == null) {
+			throw new Exception("Aucun fichier choisi");
+		}
 		System.out.println("Fichier choisi = " + fichier.getAbsolutePath());
-
-		c.journee.chargerDemandesLivraison(fichier);
 		//c.vue.tableViewDemandesLivraison.getItems().addAll(listeDemandes);
 		//c.vue.tableViewDemandesLivraison.refresh();
 		//c.vue.afficherDemandeLivraison(true);
+		ArrayList<DemandeLivraison> listeDemandes = c.journee.chargerDemandesLivraison(fichier);
+		if (listeDemandes.size()==0){
+			throw  new Exception("Aucune demande de livraison dans le fichier");
+		}
 	}
 
 	protected void supprimerDemandeLivraison(ControleurFenetrePrincipale c){
@@ -304,6 +317,7 @@ public abstract class Etat {
 			c.journee.supprimerDemandeLivraison(ligne);
 			//c.vue.tableViewDemandesLivraison.refresh();
 			c.vue.textfieldIdentifiantIntersectionSelection.setText("");
+			resetLabelRuesIntersection(c);
 			c.vue.textfieldPlageHoraire.setText("");
 			//c.vue.afficherDemandeLivraison(true);
 		}
@@ -314,8 +328,23 @@ public abstract class Etat {
 		c.vue.comboboxPlageHoraire.setDisable(true);
 		c.vue.tableViewDemandesLivraison.setDisable(false);
 		c.vue.textfieldIdentifiantIntersection.setText("");
+		resetLabelRuesIntersection(c);
 		c.vue.comboboxPlageHoraire.setValue(null);
+	}
+	protected void remplirLabelRuesIntersection(ControleurFenetrePrincipale c, Intersection intersection){
+		List<String> rues = c.planCharge.obtenirRuesIntersection(intersection);
+		String texte = "";
+		if(rues.get(1) != null){
+			texte = "Croisement \n "+rues.get(0) + " \n et \n"+ rues.get(1);
+		}
+		else {
+			texte = rues.get(0);
+		}
+		c.vue.labelRuesIntersection.setText(texte);
+	}
 
+	protected void resetLabelRuesIntersection(ControleurFenetrePrincipale c){
+		c.vue.labelRuesIntersection.setText("Aucune intersection selectionnée");
 	}
 
 }

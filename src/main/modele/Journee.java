@@ -5,14 +5,11 @@ import java.util.*;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.Transformer;
-import javax.xml.transform.TransformerException;
 import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 
-import org.w3c.dom.Attr;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NamedNodeMap;
@@ -21,7 +18,6 @@ import org.w3c.dom.NodeList;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 
@@ -67,7 +63,7 @@ public class Journee extends Observable {
         return livraisonsDuLivreur;
     }
 
-    public void chargerDemandesLivraison(File fichier) {
+    public ArrayList<DemandeLivraison> chargerDemandesLivraison(File fichier) {
         if(this.demandesLivraison == null) {
             this.demandesLivraison = new ArrayList<>();
         }
@@ -107,6 +103,7 @@ public class Journee extends Observable {
             System.err.println("Problème lors de la lecture du fichier \n "+ e);
         }
         notifierObservateurs(null);
+        return demandesAjoutees;
     }
     
     public void ajouterDemandeLivraison(DemandeLivraison demande) {

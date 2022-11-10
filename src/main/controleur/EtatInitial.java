@@ -12,14 +12,16 @@ public class EtatInitial extends Etat{
     public EtatInitial() {
         super.message = "Chargez un plan";
     }
-    public void chargerPlan(ControleurFenetrePrincipale c)
-            throws FichierNonConformeException {
+    public void chargerPlan(ControleurFenetrePrincipale c) throws Exception {
         FileChooser fileChooser = new FileChooser();
         fileChooser.setInitialDirectory(new File(".\\data"));
         fileChooser.getExtensionFilters().add(
                 new FileChooser.ExtensionFilter("Fichier XML", "*.xml", "*.XML"));
         fileChooser.setTitle("Charger un plan");
         File fichier = fileChooser.showOpenDialog(c.vue.getStage());
+        if(fichier == null){
+            throw new Exception("Aucun fichier choisi");
+        }
         System.out.println("Fichier choisi = " + fichier.getAbsolutePath());
 
         try {

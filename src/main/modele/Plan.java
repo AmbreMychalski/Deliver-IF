@@ -345,7 +345,6 @@ public class Plan {
 		for(Segment seg : segments) {
 			if (rue1 == null && (Objects.equals(seg.getOrigine().getIdIntersection(), intersection.getIdIntersection()))){
 				rue1 = seg.getNom();
-
 			}
 			if (rue2 == null && (Objects.equals(seg.getOrigine().getIdIntersection(), intersection.getIdIntersection())) && (!Objects.equals(seg.getNom(), rue1))){
 				rue2 = seg.getNom();

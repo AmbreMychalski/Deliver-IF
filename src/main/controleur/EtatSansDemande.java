@@ -9,7 +9,7 @@ public class EtatSansDemande extends Etat{
     }
 
     public void chargerPlan(ControleurFenetrePrincipale c)
-            throws FichierNonConformeException {
+            throws Exception {
         c.etatInitial.chargerPlan(c);
     }
     public void ajouterDemande(ControleurFenetrePrincipale c) {
@@ -22,10 +22,19 @@ public class EtatSansDemande extends Etat{
     public void clicGaucheSurPlan(ControleurFenetrePrincipale c, MouseEvent event) {
         this.naviguerSurPlan(c, event);
     }
-    public void chargerListeDemandes(ControleurFenetrePrincipale c) {
-        this.chargerDemandes(c);
-        c.changementEtat(c.etatAvecDemande);
-        c.vue.buttonCalculerTournees.setDisable(false);
-        c.vue.buttonSauvegarderDemandes.setDisable(false);
+    public void chargerListeDemandes(ControleurFenetrePrincipale c) throws Exception {
+        try{
+            this.chargerDemandes(c);
+            c.changementEtat(c.etatAvecDemande);
+            c.vue.buttonCalculerTournees.setDisable(false);
+            c.vue.buttonSauvegarderDemandes.setDisable(false);
+
+        }catch (Exception ex){
+            System.err.println(ex);
+            c.changementEtat(c.etatSansDemande);
+            c.vue.buttonCalculerTournees.setDisable(true);
+            c.vue.buttonSauvegarderDemandes.setDisable(true);
+            throw new Exception(ex);
+        }
     }
 }

@@ -31,10 +31,9 @@ public class FenetreFeuilleDeRoute {
         window.setTitle("Feuille de route");
         window.setMinWidth(300);
         window.setMinHeight(300);
-        window.setMaxHeight(1000);
+        window.setMaxHeight(600);
         ScrollPane scrollPane = new ScrollPane();
         Label label = new Label();
-
         label.setText(tournee);
         scrollPane.setContent(label);
         // Horizontal scroll bar is only displayed when needed
@@ -61,7 +60,6 @@ public class FenetreFeuilleDeRoute {
             }
         });
         layout.getChildren().addAll(sauvegarderFeuilleDeRoute, scrollPane);
-
         layout.setAlignment(Pos.CENTER);
 
         Dimension size = Toolkit.getDefaultToolkit().getScreenSize();
