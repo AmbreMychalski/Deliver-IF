@@ -1,6 +1,9 @@
 package controleur;
 
 import exception.FichierNonConformeException;
+import javafx.beans.Observable;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
@@ -55,12 +58,15 @@ public abstract class Etat {
 
 	public void touchePressee(ControleurFenetrePrincipale c, KeyEvent ke) {}
 
+	public void clicSurLivreur(ControleurFenetrePrincipale c) {
+	}
+
 	private void annulerModif(ControleurFenetrePrincipale c) {
-	    c.vue.buttonAutoriserAjouterLivraison.setDisable(false);
-        c.vue.buttonValiderLivraison.setDisable(true);
-        c.vue.buttonAnnulerLivraison.setDisable(true);
-        c.vue.comboboxPlageHoraire.setDisable(true);
-        c.changementEtat(c.etatDemandeLivraisonSelectionneeSansTournees);
+		c.vue.buttonAutoriserAjouterLivraison.setDisable(false);
+		c.vue.buttonValiderLivraison.setDisable(true);
+		c.vue.buttonAnnulerLivraison.setDisable(true);
+		c.vue.comboboxPlageHoraire.setDisable(true);
+		c.changementEtat(c.etatDemandeLivraisonSelectionneeSansTournees);
 	}
 
 	protected void sortieDeSelectionDemande(ControleurFenetrePrincipale c, boolean livraison){
@@ -87,6 +93,8 @@ public abstract class Etat {
 		GraphicsContext gc = c.vue.canvasPlanTrajet.getGraphicsContext2D();
 		gc.clearRect(0, 0, c.vue.canvasPlanTrajet.getWidth(), c.vue.canvasPlanTrajet.getHeight());
 		List<Trajet> trajets = tournee.getTrajets();
+		c.vue.dessinerTrajets(trajets, gc);
+
 		c.vue.dessinerTrajets(trajets, gc);
 		List<Livraison> listeLivraisons = c.journee.getLivraisonsLivreur(tournee.getLivraisons().get(0).getLivreur());
 		c.vue.tableViewLivraisons.getItems().addAll(listeLivraisons);
@@ -358,4 +366,11 @@ public abstract class Etat {
 		c.vue.labelRuesIntersection.setText("Aucune intersection selectionnée");
 	}
 
+	protected void majComboboxLivreur(ControleurFenetrePrincipale c) {
+		ObservableList<Integer> list = FXCollections.observableArrayList();
+		for (int i = 1; i <= c.journee.getNbLivreur(); i++) {
+			list.add(i);
+		}
+		c.vue.comboboxLivreur.setItems(list);
+	}
 }

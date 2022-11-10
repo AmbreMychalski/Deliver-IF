@@ -117,4 +117,6 @@ public class ControleurFenetrePrincipale {
 		this.etatCourant = nouvelEtat;
 		this.vue.updateLabelGuideUtilisateur(this.etatCourant.getMessage());
 	}
+
+	public void clicSurLivreur(){etatCourant.clicSurLivreur(this);}
 }

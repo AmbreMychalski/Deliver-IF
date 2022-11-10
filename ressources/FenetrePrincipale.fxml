@@ -87,9 +87,9 @@
                      <TableColumn fx:id="columnLivreur" prefWidth="30.0" text="Livreur" />
                  </columns>
              </TableView>
-             <TitledPane fx:id="titlePaneSelectionDemande" animated="false" collapsible="false" layoutX="7.0" layoutY="500.0" prefHeight="190.0" prefWidth="276.0" text="Selection de la demande">
+             <TitledPane fx:id="titlePaneSelectionDemande" animated="false" collapsible="false" layoutX="7.0" layoutY="500.0" prefHeight="210.0" prefWidth="276.0" text="Selection de la demande">
                  <content>
-                    <AnchorPane fx:id="anchorPaneSelectionDemande" minHeight="0.0" minWidth="0.0" prefHeight="175.0" prefWidth="292.0">
+                    <AnchorPane fx:id="anchorPaneSelectionDemande" minHeight="0.0" minWidth="0.0" prefHeight="210.0" prefWidth="292.0">
                      <children>
                         <Label layoutX="14.0" layoutY="20.0" prefHeight="36.0" prefWidth="137.0" text="Identifiant d'intersection" textAlignment="RIGHT" wrapText="true" />
                         <Label layoutX="14.0" layoutY="60.0" text="Plage horaire" />
@@ -97,7 +97,9 @@
                         <TextField id="textfieldIdentifiantIntersectionSelection" fx:id="textfieldIdentifiantIntersectionSelection" editable="false" layoutX="152.0" layoutY="25.0" prefHeight="25.0" prefWidth="117.0" />
                         <TextField id="textfieldPlageHoraire" fx:id="textfieldPlageHoraire" editable="false" layoutX="152.0" layoutY="60.0" prefHeight="25.0" prefWidth="117.0" />
                         <Button id="buttonSupprimerLivraison" fx:id="buttonModifierLivraison" layoutX="69.0" layoutY="95.0" mnemonicParsing="false" text="Modifier" />
-                        <Button id="buttonAssignerNvLivreur" fx:id="buttonAssignerNvLivreur" layoutX="90.0" layoutY="130.0" mnemonicParsing="false" text="Assigner à un autre livreur" />
+                         <Label layoutX="69.0" layoutY="130.0" text="Assigner à un autre livreur" />
+                         <ComboBox id="comboboxLivreurLivraison" fx:id="comboboxLivreurLivraison" layoutX="50.0" layoutY="150.0" prefHeight="25.0" prefWidth="100.0" />
+                        <Button id="buttonAssignerNvLivreur" fx:id="buttonAssignerNvLivreur" layoutX="170.0" layoutY="150.0" mnemonicParsing="false" text="Valider" />
                      </children>
                     </AnchorPane>
                 </content>
