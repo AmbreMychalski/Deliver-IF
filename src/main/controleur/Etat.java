@@ -356,11 +356,14 @@ public abstract class Etat {
 	protected void remplirLabelRuesIntersection(ControleurFenetrePrincipale c, Intersection intersection){
 		List<String> rues = c.planCharge.obtenirRuesIntersection(intersection);
 		String texte = "";
-		if(rues.get(1) != null){
-			texte = "Croisement \n "+rues.get(0) + " \n et \n"+ rues.get(1);
-		}
-		else {
+		if((rues.get(0) == null || rues.get(0).isEmpty()) && (rues.get(1) == null || rues.get(1).isEmpty())){
+			texte = "Aucune rue associé";
+		}else if(rues.get(1) == null || rues.get(1).isEmpty()){
 			texte = rues.get(0);
+		}else if(rues.get(0) == null|| rues.get(0).isEmpty()){
+			texte = rues.get(1);
+		}else {
+			texte = "Croisement \n "+rues.get(0) + " \n et \n"+ rues.get(1);
 		}
 		c.vue.labelRuesIntersection.setText(texte);
 	}
