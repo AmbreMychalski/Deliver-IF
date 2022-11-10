@@ -59,5 +59,6 @@ public class EtatAvecDemande extends Etat{
         c.changementEtat(c.etatTourneesCalculees);
         c.vue.tableViewDemandesLivraison.setVisible(false);
         c.vue.tableViewLivraisons.setVisible(true);
+        majComboboxLivreur(c); //temporaire
     }
 }

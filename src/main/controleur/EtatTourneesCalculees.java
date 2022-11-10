@@ -31,4 +31,9 @@ public class EtatTourneesCalculees extends Etat{
             c.changementEtat(c.etatDemandeLivraisonSelectionneeAvecTournees);
         }
     }
+
+    public void clicSurLivreur(ControleurFenetrePrincipale c){
+        c.vue.afficherLivraison(true);
+        c.vue.tableViewLivraisons.refresh();
+    }
 }
