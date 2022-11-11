@@ -11,26 +11,26 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class CompleteGraph implements Graph {
-    private static final int MAX_COST = 40;
-    private static final int MIN_COST = 10;
+public class GrapheComplet implements Graphe {
+    private static final int COUT_MAX = 40;
+    private static final int COUT_MIN = 10;
     
     private Map<DemandeLivraison, Integer> idDemandeLivraisonToIndex = new HashMap<DemandeLivraison, Integer>();
     private Map<Integer, DemandeLivraison > idIndexToDemandeLivraison = new HashMap<Integer, DemandeLivraison>();
-    int nbVertices;
-    float[][] cost;
+    int nbSommets;
+    float[][] couts;
     
     /**
      * Create a complete directed graph such that each edge has a weight within
      * [MIN_COST,MAX_COST]
      */
-    public CompleteGraph(List<DemandeLivraison> demandesLivraisons,  Plan plan,
+    public GrapheComplet(List<DemandeLivraison> demandesLivraisons, Plan plan,
                          Intersection entrepot) {
 
-        nbVertices = demandesLivraisons.size() + 1;
-        cost = new float[demandesLivraisons.size() + 1][demandesLivraisons.size() + 1];
+        nbSommets = demandesLivraisons.size() + 1;
+        couts = new float[demandesLivraisons.size() + 1][demandesLivraisons.size() + 1];
 
-        for(float[] row : cost) {
+        for(float[] row : couts) {
             Arrays.fill(row, -1.0f);
         }
          
@@ -50,7 +50,7 @@ public class CompleteGraph implements Graph {
 
         for(DemandeLivraison dl : demandesLivraisons) {
             index = idDemandeLivraisonToIndex.get(dl);
-            cost[0][index] = plusCourtsChemins.get(dl.getIntersection());
+            couts[0][index] = plusCourtsChemins.get(dl.getIntersection());
         } 
         
         /*
@@ -67,30 +67,30 @@ public class CompleteGraph implements Graph {
                     if(currentDl.getPlageHoraire().getFin() <= dl.getPlageHoraire().getDebut()
                             || currentDl.getPlageHoraire().getDebut() == dl.getPlageHoraire().getDebut()) {
                         index = idDemandeLivraisonToIndex.get(dl);
-                        cost[currentIndex][index] = plusCourtsChemins.get(dl.getIntersection());
+                        couts[currentIndex][index] = plusCourtsChemins.get(dl.getIntersection());
                     }   
                 }
             }
 
-            cost[currentIndex][0] = plusCourtsChemins.get(entrepot);
+            couts[currentIndex][0] = plusCourtsChemins.get(entrepot);
         }
     }
 
     @Override
-    public int getNbVertices() {
-        return nbVertices;
+    public int getNbSommets() {
+        return nbSommets;
     }
 
     @Override
-    public float getCost(int i, int j) {
-        if (i < 0 || i >= nbVertices || j < 0 || j >= nbVertices)
+    public float getCout(int i, int j) {
+        if (i < 0 || i >= nbSommets || j < 0 || j >= nbSommets)
             return -1;
-        return cost[i][j];
+        return couts[i][j];
     }
 
     @Override
-    public boolean isArc(int i, int j) {
-        if (cost[i][j] < 0) {
+    public boolean estUnArc(int i, int j) {
+        if (couts[i][j] < 0) {
             return false;
         }
         return true;
@@ -99,16 +99,16 @@ public class CompleteGraph implements Graph {
     /*
     Fonction servant au débugage
      */
-    public void printGraph() {
-        for(int i = 0; i < nbVertices; i++) {
-            for(int j = 0; j < nbVertices; j++) {
-                System.out.print(cost[i][j] + " ");
+    public void afficherGraphe() {
+        for(int i = 0; i < nbSommets; i++) {
+            for(int j = 0; j < nbSommets; j++) {
+                System.out.print(couts[i][j] + " ");
             } 
             System.out.println();
         }
     }
     @Override
-    public float[][] getCostMatrix() {
-        return this.cost;
+    public float[][] getMatriceCouts() {
+        return this.couts;
     }
 }

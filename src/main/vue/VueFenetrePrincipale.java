@@ -2,13 +2,9 @@ package vue;
 
 
 import controleur.ControleurFenetrePrincipale;
-import exception.FichierNonConformeException;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.geometry.Pos;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.*;
@@ -27,7 +23,11 @@ import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.core.LoggerContext;
 
-import java.util.*;
+import java.lang.reflect.Field;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Observable;
+import java.util.Observer;
 
 public class VueFenetrePrincipale implements Observer {
 
@@ -46,7 +46,7 @@ public class VueFenetrePrincipale implements Observer {
      reconnaît les intersections ciblées*/
     public final double RAYON_TOLERANCE_CLIC_INTERSECTION = 8;
 
-    public enum FormeIntersection { RECTANGLE, CERCLE };
+    public enum FormeIntersection { RECTANGLE, CERCLE }
 
     @Getter
     @Setter
@@ -168,12 +168,11 @@ public class VueFenetrePrincipale implements Observer {
         tableViewLivraisons.setVisible(false);
         buttonAfficherFeuillesRoute.setDisable(true);
         buttonEtatCourant.setOnAction(event -> System.out.println("Etat courant = " + controleur.getEtatCourant().getClass().getName()));
-        buttonAfficherFeuillesRoute.setOnAction(event -> actionBoutonAfficherFeulleDeRoute(event));
-        buttonValiderLivraison.setOnAction(event -> actionBoutonAjouterLivraison(event));
-        buttonAnnulerLivraison.setOnAction(event -> actionBoutonAnnulerLivraison(event));
-        buttonAutoriserAjouterLivraison.setOnAction(event -> actionBoutonAutoriserAjouterLivraison(event));
+        buttonAfficherFeuillesRoute.setOnAction(this::actionBoutonAfficherFeulleDeRoute);
+        buttonValiderLivraison.setOnAction(this::actionBoutonAjouterLivraison);
+        buttonAnnulerLivraison.setOnAction(this::actionBoutonAnnulerLivraison);
+        buttonAutoriserAjouterLivraison.setOnAction(this::actionBoutonAutoriserAjouterLivraison);
         comboboxLivreur.setOnAction(event -> actionClicSurLivreur());
-
         buttonChargerDemandes.setOnAction(event -> {
             try{
                 actionBoutonChargerDemande(event);
@@ -181,10 +180,10 @@ public class VueFenetrePrincipale implements Observer {
                 System.err.println(ex);
             }
         });
-        buttonSauvegarderDemandes.setOnAction(event -> actionBoutonSauvegarderDemandes(event));
-        canvasIntersectionsLivraisons.setOnMouseClicked(event -> actionClicSurCanvas(event));
-        tableViewDemandesLivraison.setOnMouseClicked(event -> actionClicTableau(event));
-        tableViewLivraisons.setOnMouseClicked(event -> actionClicTableau(event));
+        buttonSauvegarderDemandes.setOnAction(this::actionBoutonSauvegarderDemandes);
+        canvasIntersectionsLivraisons.setOnMouseClicked(this::actionClicSurCanvas);
+        tableViewDemandesLivraison.setOnMouseClicked(this::actionClicTableau);
+        tableViewLivraisons.setOnMouseClicked(this::actionClicTableau);
         buttonChargerPlan.setOnAction(event -> {
             try {
                 actionBoutonChargerPlan(event);
@@ -192,7 +191,7 @@ public class VueFenetrePrincipale implements Observer {
                 System.err.println(e);
             }
         });
-        buttonCalculerTournees.setOnAction(event -> actionBoutonCalculerTournees(event));
+        buttonCalculerTournees.setOnAction(this::actionBoutonCalculerTournees);
 
 
         tableViewDemandesLivraison.setItems(FXCollections.observableArrayList());
@@ -206,7 +205,7 @@ public class VueFenetrePrincipale implements Observer {
                 new Callback<TableColumn<DemandeLivraison, PlageHoraire>, TableCell<DemandeLivraison, PlageHoraire>>() {
                     @Override
                     public TableCell<DemandeLivraison, PlageHoraire> call(TableColumn<DemandeLivraison, PlageHoraire> param) {
-                        final TableCell<DemandeLivraison, PlageHoraire> tableCell = new TableCell<DemandeLivraison, PlageHoraire>() {
+                        return new TableCell<DemandeLivraison, PlageHoraire>() {
                             @Override public void updateItem(PlageHoraire plageHoraire, boolean empty) {
                                 super.updateItem(plageHoraire, empty);
                                 if (plageHoraire != null) {
@@ -218,7 +217,6 @@ public class VueFenetrePrincipale implements Observer {
                                 }
                             }
                         };
-                        return tableCell;
                     }
                 });
 
@@ -254,7 +252,7 @@ public class VueFenetrePrincipale implements Observer {
                 super.updateItem(liv, empty);
                 if (liv == null)
                     setStyle("");
-                else if (!liv.isDansSaPlageHorraire())
+                else if (!liv.isDansSaPlageHoraire())
                     setStyle("-fx-background-color: #ffaea8;");
                 else
                     setStyle("");
@@ -695,6 +693,36 @@ public class VueFenetrePrincipale implements Observer {
                         segment.getOrigine().getLongitude(),
                         segment.getDestination().getLatitude(),
                         segment.getDestination().getLongitude());
+            }
+        }
+    }
+
+    /**
+     * Donne la liste de tous les boutons de la vue
+     * @return liste des boutons
+     */
+    public ArrayList<Button> obtenirBoutonsVue() {
+        Field [] attributes = this.getClass().getDeclaredFields();
+        ArrayList<Button> boutons = new ArrayList<>();
+        for(int i=0; i<attributes.length; i++) {
+            try {
+                if (attributes[i].get(this) instanceof Button) {
+                    boutons.add((Button) attributes[i].get(this));
+                }
+            } catch (IllegalAccessException e) {
+                throw new RuntimeException(e);
+            }
+        }
+        return boutons;
+    }
+
+    public void activerExclusivementBoutons(ArrayList<Button> boutonsActives) {
+        ArrayList<Button> tousLesBoutons = obtenirBoutonsVue();
+        for (Button b: tousLesBoutons) {
+            if (boutonsActives.contains(b)) {
+                b.setDisable(false);
+            } else {
+                b.setDisable(true);
             }
         }
     }

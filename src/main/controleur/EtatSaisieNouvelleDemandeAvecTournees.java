@@ -24,9 +24,7 @@ public class EtatSaisieNouvelleDemandeAvecTournees extends Etat {
 
                 }
                 else{
-                    c.vue.buttonValiderLivraison.setDisable(true);
                     c.vue.comboboxPlageHoraire.setDisable(true);
-                    c.vue.buttonAnnulerLivraison.setDisable(true);
                     c.vue.tableViewDemandesLivraison.setDisable(false);
                     c.vue.tableViewLivraisons.setDisable(false);
 

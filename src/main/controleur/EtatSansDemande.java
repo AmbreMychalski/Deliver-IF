@@ -1,7 +1,8 @@
 package controleur;
 
-import exception.FichierNonConformeException;
 import javafx.scene.input.MouseEvent;
+
+import static controleur.ControleurFenetrePrincipale.LOGGER;
 
 public class EtatSansDemande extends Etat{
     public EtatSansDemande() {
@@ -13,10 +14,7 @@ public class EtatSansDemande extends Etat{
         c.etatInitial.chargerPlan(c);
     }
     public void ajouterDemande(ControleurFenetrePrincipale c) {
-        c.vue.buttonValiderLivraison.setDisable(false);
-        c.vue.buttonAnnulerLivraison.setDisable(false);
         c.vue.comboboxPlageHoraire.setDisable(false);
-        c.vue.buttonChargerDemandes.setDisable(true);
         c.changementEtat(c.etatSaisieNouvelleDemandeSansTournees);
     }
     public void clicGaucheSurPlan(ControleurFenetrePrincipale c, MouseEvent event) {
@@ -26,14 +24,10 @@ public class EtatSansDemande extends Etat{
         try{
             this.chargerDemandes(c);
             c.changementEtat(c.etatAvecDemande);
-            c.vue.buttonCalculerTournees.setDisable(false);
-            c.vue.buttonSauvegarderDemandes.setDisable(false);
 
         }catch (Exception ex){
-            System.err.println(ex);
+            LOGGER.error(ex);
             c.changementEtat(c.etatSansDemande);
-            c.vue.buttonCalculerTournees.setDisable(true);
-            c.vue.buttonSauvegarderDemandes.setDisable(true);
             throw new Exception(ex);
         }
     }

@@ -50,12 +50,12 @@ public class FenetreFeuilleDeRoute {
                 fileChooser.setTitle("Sauvegarder la feuille de route");
                 try{
                     File fichier = fileChooser.showSaveDialog(window);
-                    ControleurFenetrePrincipale.logger.info("Sauvegarde à l'emplacement "
+                    ControleurFenetrePrincipale.LOGGER.info("Sauvegarde à l'emplacement "
                             + fichier.getAbsolutePath());
                     serialisation.sauvegarderDansFichier(fichier);
                 } catch (Exception ex){
 
-                    ControleurFenetrePrincipale.logger
+                    ControleurFenetrePrincipale.LOGGER
                             .error("Erreur lors de la sauvegarde de la feuille de route");
                 }
             }

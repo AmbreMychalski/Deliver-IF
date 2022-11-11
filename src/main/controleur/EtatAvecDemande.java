@@ -14,12 +14,8 @@ public class EtatAvecDemande extends Etat{
     }
     
     public void ajouterDemande(ControleurFenetrePrincipale c) {
-        c.vue.buttonValiderLivraison.setDisable(false);
-        c.vue.buttonAnnulerLivraison.setDisable(false);
         c.vue.comboboxPlageHoraire.setDisable(false);
         c.vue.tableViewDemandesLivraison.setDisable(true);
-        c.vue.buttonCalculerTournees.setDisable(true);
-        c.vue.buttonChargerDemandes.setDisable(true);
         c.changementEtat(c.etatSaisieNouvelleDemandeSansTournees);
     }
     
@@ -35,7 +31,6 @@ public class EtatAvecDemande extends Etat{
 
     public void chargerListeDemandes(ControleurFenetrePrincipale c) throws Exception{
         chargerDemandes(c);
-        c.vue.buttonCalculerTournees.setDisable(false);
     }
 
     public void sauvegarderDemandes(ControleurFenetrePrincipale c) {
@@ -45,8 +40,8 @@ public class EtatAvecDemande extends Etat{
     public void calculerTournees(ControleurFenetrePrincipale c) {
         long startTime = System.currentTimeMillis();
         boolean tourneeComplete = c.journee.calculerTournee();
-        ControleurFenetrePrincipale.logger.debug("tourneeComplete = " + tourneeComplete);
-        ControleurFenetrePrincipale.logger.debug("Solution trouvé en :"+ (System.currentTimeMillis() - startTime)+"ms ");
+        ControleurFenetrePrincipale.LOGGER.debug("tourneeComplete = " + tourneeComplete);
+        ControleurFenetrePrincipale.LOGGER.debug("Solution trouvé en :"+ (System.currentTimeMillis() - startTime)+"ms ");
 
         List<Livraison> listeLivraisons = c.journee.getLivreurs().get(0).getTournee().getLivraisons();
         c.vue.tableViewLivraisons.getItems().addAll(listeLivraisons);

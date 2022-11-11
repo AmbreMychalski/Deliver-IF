@@ -11,8 +11,6 @@ public class EtatDemandeLivraisonSelectionneeSansTournees extends Etat {
     public void clicGaucheSurPlan(ControleurFenetrePrincipale c, MouseEvent event) {
         this.sortieDeSelectionDemande(c,false);
         c.changementEtat(c.etatAvecDemande);
-        c.vue.buttonCalculerTournees.setDisable(false);
-        c.vue.buttonChargerDemandes.setDisable(false);
     }
     public void clicGaucheSurTableau(ControleurFenetrePrincipale c) {
         this.selectionnerDemande(c,false);
@@ -22,12 +20,7 @@ public class EtatDemandeLivraisonSelectionneeSansTournees extends Etat {
         this.sortieDeSelectionDemande(c,false);
         if(c.journee.getDemandesLivraison().size() > 0){
             c.changementEtat(c.etatAvecDemande);
-            c.vue.buttonCalculerTournees.setDisable(false);
-            c.vue.buttonChargerDemandes.setDisable(false);
         } else {
-            c.vue.buttonChargerDemandes.setDisable(false);
-            c.vue.buttonSauvegarderDemandes.setDisable(true);
-            c.vue.buttonCalculerTournees.setDisable(true);
             c.changementEtat(c.etatSansDemande);
         }
     }
@@ -41,22 +34,13 @@ public class EtatDemandeLivraisonSelectionneeSansTournees extends Etat {
             case ESCAPE:
                 this.sortieDeSelectionDemande(c,false);
                 c.changementEtat(c.etatAvecDemande);
-                c.vue.buttonCalculerTournees.setDisable(false);
-                c.vue.buttonChargerDemandes.setDisable(false);
                 break;
             case DELETE:
                 this.supprimerDemandeLivraison(c);
                 this.sortieDeSelectionDemande(c,false);
-                c.vue.buttonCalculerTournees.setDisable(false);
-                c.vue.buttonChargerDemandes.setDisable(false);
                 if(c.journee.getDemandesLivraison().size() > 0){
                     c.changementEtat(c.etatAvecDemande);
-                    c.vue.buttonCalculerTournees.setDisable(false);
-                    c.vue.buttonChargerDemandes.setDisable(false);
                 } else {
-                    c.vue.buttonSauvegarderDemandes.setDisable(true);
-                    c.vue.buttonCalculerTournees.setDisable(true);
-                    c.vue.buttonChargerDemandes.setDisable(false);
                     c.changementEtat(c.etatSansDemande);
                 }
                 break;

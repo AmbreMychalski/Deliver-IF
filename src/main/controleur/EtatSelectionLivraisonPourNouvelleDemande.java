@@ -1,6 +1,5 @@
 package controleur;
 
-import javafx.scene.input.MouseEvent;
 import modele.DemandeLivraison;
 import modele.Livraison;
 import modele.Livreur;
@@ -45,12 +44,8 @@ public class EtatSelectionLivraisonPourNouvelleDemande extends Etat{
             this.afficherTournee(c, livreur.getTournee());
             c.vue.afficherLivraisons(livreur, true);
 
-            c.vue.buttonAutoriserAjouterLivraison.setDisable(false);
-            c.vue.buttonValiderLivraison.setDisable(true);
             c.vue.comboboxPlageHoraire.setDisable(true);
             c.vue.buttonAnnulerLivraison.setDisable(true);
-
-
             c.vue.tableViewLivraisons.getItems().add(livraisonAAjouter);
             c.vue.tableViewLivraisons.refresh();
 
