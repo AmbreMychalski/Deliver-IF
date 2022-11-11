@@ -11,32 +11,44 @@ public abstract class TemplateTSP implements TSP {
 	private int timeLimit;
 	private long startTime;
 	
-	public void searchSolution(int timeLimit, Graph g){
-		if (timeLimit <= 0) return;
+	public void searchSolution(int timeLimit, Graph g) {
+		if (timeLimit <= 0) {
+			return;
+		}
+
 		startTime = System.currentTimeMillis();	
 		this.timeLimit = timeLimit;
 		this.g = g;
 		bestSol = new Integer[g.getNbVertices()];
-		ArrayList<Integer> unvisited = new ArrayList<Integer>(g.getNbVertices()-1);
-		for (int i=1; i<g.getNbVertices(); i++) unvisited.add(i);
+		ArrayList<Integer> unvisited = new ArrayList<Integer>(g.getNbVertices() - 1);
 
+		for (int i = 1; i < g.getNbVertices(); i++) {
+			unvisited.add(i);
+		}
+
+		// The first visited vertex is 0
+		bestSolCost = Integer.MAX_VALUE;
 		ArrayList<Integer> visited = new ArrayList<Integer>(g.getNbVertices());
+
 		visited.add(0);
 
-		 // The first visited vertex is 0
-		bestSolCost = Integer.MAX_VALUE;
-		branchAndBound(visited.get(visited.size()-1), unvisited, visited, 0);
+		branchAndBound(visited.get(visited.size()-1), unvisited, visited,
+				0);
 	}
 	
-	public Integer getSolution(int i){
-		if (g != null && i>=0 && i<g.getNbVertices())
+	public Integer getSolution(int i) {
+		if (g != null && i >= 0 && i < g.getNbVertices()) {
 			return bestSol[i];
+		}
+
 		return -1;
 	}
 	
-	public float getSolutionCost(){
-		if (g != null)
+	public float getSolutionCost() {
+		if (g != null) {
 			return bestSolCost;
+		}
+
 		return -1;
 	}
 	
@@ -47,7 +59,7 @@ public abstract class TemplateTSP implements TSP {
 	 * @return a lower bound of the cost of paths in <code>g</code> starting from <code>currentVertex</code>, visiting 
 	 * every vertex in <code>unvisited</code> exactly once, and returning back to vertex <code>0</code>.
 	 */
-	protected abstract float bound(Integer currentVertex, Collection<Integer> unvisited, float[][] cost );
+	protected abstract float bound(Integer currentVertex, Collection<Integer> unvisited, float[][] cost);
 	
 	/**
 	 * Method that must be defined in TemplateTSP subclasses
@@ -66,28 +78,30 @@ public abstract class TemplateTSP implements TSP {
 	 * @param currentCost the cost of the path corresponding to <code>visited</code>
 	 */	
 	private void branchAndBound(int currentVertex, Collection<Integer> unvisited, 
-			Collection<Integer> visited, float currentCost){
+			Collection<Integer> visited, float currentCost) {
 		if (System.currentTimeMillis() - startTime > timeLimit) {
-		    if(bestSolCost== Integer.MAX_VALUE) {
-		        System.out.println("Le Tsp n'a pas trouvé de solution");
+		    if(bestSolCost == Integer.MAX_VALUE) {
+		        System.out.println("Le TSP n'a pas trouvé de solution");
 		    }
+
 		    return;
 		}
-	    if (unvisited.size() == 0){ 
-	    	if (g.isArc(currentVertex,0)){ 
-	    		if (currentCost+g.getCost(currentVertex,0) < bestSolCost){ 
+	    if (unvisited.size() == 0) {
+	    	if (g.isArc(currentVertex,0)) {
+	    		if (currentCost+g.getCost(currentVertex,0) < bestSolCost) {
 	    			visited.toArray(bestSol);
 	    			bestSolCost = currentCost+g.getCost(currentVertex,0);
 	    		}
 	    	}
-	    } else if (currentCost+bound(currentVertex,unvisited,g.getCostMatrix()) < bestSolCost){
+	    } else if (currentCost+bound(currentVertex,unvisited,g.getCostMatrix()) < bestSolCost) {
 	        Iterator<Integer> it = iterator(currentVertex, unvisited, g);
-	        while (it.hasNext()){
+
+	        while (it.hasNext()) {
 	        	Integer nextVertex = it.next();
 	        	visited.add(nextVertex);
 	            unvisited.remove(nextVertex);
 	            branchAndBound(nextVertex, unvisited, visited, 
-	            		currentCost+g.getCost(currentVertex, nextVertex));
+	            		currentCost + g.getCost(currentVertex, nextVertex));
 	            visited.remove(nextVertex);
 	            unvisited.add(nextVertex);
 	        }	    

@@ -43,6 +43,8 @@ public class ControleurFenetrePrincipale {
     final EtatSaisieNouvelleDemandeSansTournees etatSaisieNouvelleDemandeSansTournees = new EtatSaisieNouvelleDemandeSansTournees();
     final EtatTourneesCalculees etatTourneesCalculees = new EtatTourneesCalculees();
 
+	final EtatSelectionLivraisonPourNouvelleDemande etatSelectionLivraisonPourNouvelleDemande = new EtatSelectionLivraisonPourNouvelleDemande();
+
 	final EtatTourneesCalculeesPartielles etatTourneesCalculeesPartielles = new EtatTourneesCalculeesPartielles();
 	// Map qui associe les états à l'état des boutons sur lesquels on peut cliquer
 	private HashMap<Etat, ArrayList<Button>> boutonsActivesParEtat;
@@ -50,7 +52,6 @@ public class ControleurFenetrePrincipale {
 	// modèle
 	Journee journee;
 	Plan planCharge;
-
 
 	public ControleurFenetrePrincipale(VueFenetrePrincipale vue) {
 		this.vue = vue;
@@ -169,4 +170,8 @@ public class ControleurFenetrePrincipale {
 		this.vue.updateLabelGuideUtilisateur(this.etatCourant.getMessage());
 		this.vue.activerExclusivementBoutons(boutonsActivesParEtat.get(nouvelEtat));
 	}
+
+	public void clicSurLivreur() {
+		System.out.println("appel dans la vue");
+		etatCourant.clicSurLivreur(this);}
 }

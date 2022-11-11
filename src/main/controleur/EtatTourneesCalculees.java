@@ -15,15 +15,12 @@ public class EtatTourneesCalculees extends Etat{
         this.sauvegarderListeDemandes(c);
     }
     public void clicGaucheSurPlan(ControleurFenetrePrincipale c, MouseEvent event) {
-        this.naviguerSurPlan(c, event);
+        this.naviguerSurPlan(c, event, true);
     }
     public void ajouterDemande(ControleurFenetrePrincipale c) {
         c.vue.comboboxPlageHoraire.setDisable(false);
-        //c.vue.tableViewDemandesLivraison.setDisable(true);
-        List<Livraison> listeLivraisons = c.journee.getLivraisonsLivreur(
-                c.vue.comboboxLivreur.getValue());
-        c.vue.tableViewLivraisons.getItems().addAll(listeLivraisons);
-        c.vue.tableViewLivraisons.refresh();
+        c.vue.tableViewDemandesLivraison.setDisable(true);
+        c.vue.tableViewLivraisons.setDisable(true);
         c.changementEtat(c.etatSaisieNouvelleDemandeAvecTournees);
     }
     public void clicGaucheSurTableau(ControleurFenetrePrincipale c) {
@@ -31,5 +28,11 @@ public class EtatTourneesCalculees extends Etat{
         if (demandeSelectionee){
             c.changementEtat(c.etatDemandeLivraisonSelectionneeAvecTournees);
         }
+    }
+
+    public void clicSurLivreur(ControleurFenetrePrincipale c){
+        System.out.println("appel dans etat");
+        c.vue.afficherLivraisons(true);
+        c.vue.tableViewLivraisons.refresh();
     }
 }

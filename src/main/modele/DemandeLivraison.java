@@ -17,7 +17,6 @@ public class DemandeLivraison {
     private Intersection intersection;
 	private PlageHoraire plageHoraire;
 	
-	
 	public  void modifierDemandeLivraison(Intersection intersection, PlageHoraire plageHoraire) {
 	    if(intersection != null) {
 	        this.setIntersection(intersection);
@@ -28,7 +27,7 @@ public class DemandeLivraison {
 	}
 	
 	public Long getIdIntersection() {
-	    return intersection.getIdIntersection();
+        return intersection.getIdIntersection();
 	}
 	
     @Override
@@ -39,21 +38,14 @@ public class DemandeLivraison {
     public boolean equals(Object obj) {
         if (this == obj) {
             return true;
-        }
-
-        if (obj == null) {
+        } else if (obj == null) {
             return false;
-        }
-
-        if (getClass() != obj.getClass()) {
+        } else if (getClass() != obj.getClass()) {
             return false;
         }
 
         DemandeLivraison other = (DemandeLivraison) obj;
-        return Objects.equals(intersection, other.intersection) && Objects.equals(plageHoraire, other.plageHoraire);
+        return Objects.equals(intersection, other.intersection)
+               && Objects.equals(plageHoraire, other.plageHoraire);
     }
-	
-	
-    
-    
 }

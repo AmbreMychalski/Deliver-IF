@@ -1,5 +1,8 @@
 package controleur;
 
+import javafx.beans.Observable;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
@@ -54,6 +57,8 @@ public abstract class Etat {
 
 	public void touchePressee(ControleurFenetrePrincipale c, KeyEvent ke) {}
 
+	public void clicSurLivreur(ControleurFenetrePrincipale c) {}
+
 	private void annulerModif(ControleurFenetrePrincipale c) {
         c.vue.comboboxPlageHoraire.setDisable(true);
         c.changementEtat(c.etatDemandeLivraisonSelectionneeSansTournees);
@@ -61,42 +66,25 @@ public abstract class Etat {
 
 	protected void sortieDeSelectionDemande(ControleurFenetrePrincipale c, boolean livraison){
 		if(livraison){
-			c.vue.afficherLivraison(true);
+			c.vue.afficherLivraisons(true);
 		}
 		else{
-			c.vue.afficherDemandeLivraison(true);
+			c.vue.afficherDemandesLivraison(true);
 		}
-		c.vue.afficherDemandeLivraison(true);
 		c.vue.textfieldIdentifiantIntersectionSelection.setText("");
 		resetLabelRuesIntersection(c);
 		c.vue.textfieldPlageHoraire.setText("");
 	}
 
-	protected  boolean calculerEtAfficherTournee(ControleurFenetrePrincipale c){
-		int livreur = c.vue.comboboxLivreur.getValue();
-		long startTime = System.currentTimeMillis();
-		boolean tourneeComplete = c.journee.calculerTournee();
-		ControleurFenetrePrincipale.logger.debug("tourneeComplete = " + tourneeComplete);
-		ControleurFenetrePrincipale.logger.debug("Solution trouvé en :"+ (System.currentTimeMillis() - startTime)+"ms ");
+	protected  void afficherTournee(ControleurFenetrePrincipale c, Tournee tournee){
 		GraphicsContext gc = c.vue.canvasPlanTrajet.getGraphicsContext2D();
 		gc.clearRect(0, 0, c.vue.canvasPlanTrajet.getWidth(), c.vue.canvasPlanTrajet.getHeight());
-		Tournee tournee = c.journee.getTournees().get(livreur-1);
-		List<Trajet> trajets = tournee.getTrajets();
-		for(Trajet trajet : trajets) {
-			List<Segment> segments = trajet.getSegments();
-			for(Segment segment : segments) {
-				c.vue.dessinerTrajetLatLong(gc, segment.getOrigine().getLatitude(),
-						segment.getOrigine().getLongitude(),
-						segment.getDestination().getLatitude(),
-						segment.getDestination().getLongitude());
-			}
+		if(tournee != null){
+			List<Trajet> trajets = tournee.getTrajets();
+			c.vue.dessinerTrajets(trajets, gc);
 		}
-		List<Livraison> listeLivraisons = c.journee.getLivraisonsLivreur(livreur);
-		c.vue.tableViewLivraisons.getItems().addAll(listeLivraisons);
-		c.vue.tableViewLivraisons.refresh();
-
-		return tourneeComplete;
 	}
+
 	protected void sauvegarderListeDemandes(ControleurFenetrePrincipale c){
 		FileChooser fileChooser = new FileChooser();
 		fileChooser.setInitialDirectory(new File(".\\data"));
@@ -184,11 +172,11 @@ public abstract class Etat {
 		}
 		if (ligne != null) {
 			if(!livraison) {
-				c.vue.afficherDemandeLivraison(true);
+				c.vue.afficherDemandesLivraison(true);
 				c.vue.buttonModifierLivraison.setDisable(false);
 			}
 			else{
-				c.vue.afficherLivraison(true);
+				c.vue.afficherLivraisons(true);
 				c.vue.buttonAssignerNvLivreur.setDisable(false);
 			}
 			c.vue.dessinerIntersection(c.vue.canvasIntersectionsLivraisons.getGraphicsContext2D(),
@@ -212,7 +200,6 @@ public abstract class Etat {
 		return false;
 
 	}
-
 	protected boolean validerAjoutDemande(ControleurFenetrePrincipale c){
 		String champIdentifiant = c.vue.textfieldIdentifiantIntersection.getText();
 		PlageHoraire plageHoraire = c.vue.comboboxPlageHoraire.getValue();
@@ -245,7 +232,7 @@ public abstract class Etat {
 		return false;
 	}
 
-	protected  void naviguerSurPlan(ControleurFenetrePrincipale c, MouseEvent event){
+	protected  void naviguerSurPlan(ControleurFenetrePrincipale c, MouseEvent event, boolean tourneeCalculee){
 		if (c.journee.getPlan() != null) {
 			/*ControleurFenetrePrincipale.logger.debug("Clic sur le canvas, (x,y)=("
 					+ event.getX() + "," + event.getY() + ") (lat,long)="
@@ -262,15 +249,18 @@ public abstract class Etat {
 				GraphicsContext gc = c.vue.canvasIntersectionsLivraisons.getGraphicsContext2D();
 				gc.clearRect(0, 0, c.vue.canvasIntersectionsLivraisons.getWidth(), c.vue.canvasIntersectionsLivraisons.getHeight());
 				remplirLabelRuesIntersection(c, intersectionTrouvee);
+
+				if(tourneeCalculee){
+					c.vue.afficherLivraisons(true);
+				} else {
+					c.vue.afficherDemandesLivraison(false);
+				}
 				c.vue.dessinerIntersection(gc,
 						intersectionTrouvee,
 						Color.DARKORCHID,
 						c.vue.TAILLE_CERCLE_INTERSECTION_SELECTIONNEE,
 						true,
 						VueFenetrePrincipale.FormeIntersection.CERCLE);
-
-				c.vue.afficherDemandeLivraison(false);
-
 			} else {
 				c.vue.textfieldIdentifiantIntersection.setText("");
 				resetLabelRuesIntersection(c);
@@ -338,17 +328,36 @@ public abstract class Etat {
 	protected void remplirLabelRuesIntersection(ControleurFenetrePrincipale c, Intersection intersection){
 		List<String> rues = c.planCharge.obtenirRuesIntersection(intersection);
 		String texte;
-		if(rues.get(1) != null){
-			texte = "Croisement \n "+rues.get(0) + " \n et \n"+ rues.get(1);
-		}
-		else {
+		if((rues.get(0) == null || rues.get(0).isEmpty()) && (rues.get(1) == null || rues.get(1).isEmpty())){
+			texte = "Aucune rue associé";
+		}else if(rues.get(1) == null || rues.get(1).isEmpty()){
 			texte = rues.get(0);
+		}else if(rues.get(0) == null|| rues.get(0).isEmpty()){
+			texte = rues.get(1);
+		}else {
+			texte = "Croisement \n "+rues.get(0) + " \n et \n"+ rues.get(1);
 		}
 		c.vue.labelRuesIntersection.setText(texte);
 	}
 
 	protected void resetLabelRuesIntersection(ControleurFenetrePrincipale c){
 		c.vue.labelRuesIntersection.setText("Aucune intersection selectionnée");
+	}
+
+	protected void majComboboxLivreur(ControleurFenetrePrincipale c) {
+		ObservableList<Integer> listInt = FXCollections.observableArrayList();
+		ObservableList<String> listStr = FXCollections.observableArrayList();
+		for (int i = 1; i <= c.journee.getNbLivreur(); i++) {
+			listInt.add(i);
+			listStr.add(Integer.toString(i));
+		}
+
+		if(!c.journee.dernierLivreurEstSansToureeCalculee()){
+			listStr.add(c.journee.getNbLivreur()+1+" (nouveau livreur)");
+		}
+		c.vue.comboboxLivreurNouvelleDemande.setItems(listStr);
+		c.vue.comboboxAssignerLivreur.setItems(listStr);
+		c.vue.comboboxLivreur.setItems(listInt);
 	}
 
 }

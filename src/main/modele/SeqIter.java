@@ -15,11 +15,13 @@ public class SeqIter implements Iterator<Integer> {
 	 * @param currentVertex
 	 * @param g
 	 */
-	public SeqIter(Collection<Integer> unvisited, int currentVertex, Graph g){
+	public SeqIter(Collection<Integer> unvisited, int currentVertex, Graph g) {
 		this.candidates = new Integer[unvisited.size()];
-		for (Integer s : unvisited){
-			if (g.isArc(currentVertex, s))
+
+		for (Integer s : unvisited) {
+			if (g.isArc(currentVertex, s)) {
 				candidates[nbCandidates++] = s;
+			}
 		}
 	}
 	
@@ -36,5 +38,4 @@ public class SeqIter implements Iterator<Integer> {
 
 	@Override
 	public void remove() {}
-
 }

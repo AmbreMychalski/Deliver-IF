@@ -1,6 +1,5 @@
 package controleur;
 
-import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 
@@ -17,13 +16,16 @@ public class EtatDemandeLivraisonSelectionneeAvecTournees extends Etat {
         this.selectionnerDemande(c,true);
     }
     public void supprimerDemande(ControleurFenetrePrincipale c) {
+        int livreur = c.vue.comboboxLivreur.getValue();
         this.supprimerLivraison(c);
         this.sortieDeSelectionDemande(c,true);
-        miseAJourBoutonEtCanvas(c);
-    }
-    public void modifierDemande(ControleurFenetrePrincipale c) {
-        this.modifierDemandeApresSelection(c);
-        c.changementEtat(c.etatModifierDemandeLivraisonAvecTournees);
+        if(c.journee.getTournees().get(livreur -1) != null){
+            this.afficherTournee(c, c.journee.getTournees().get(livreur-1));
+            c.changementEtat(c.etatTourneesCalculees);
+        } else {
+            c.vue.canvasPlanTrajet.getGraphicsContext2D().clearRect(0,0, c.vue.canvasPlanTrajet.getWidth(), c.vue.canvasPlanTrajet.getHeight());
+            c.changementEtat(c.etatSansDemande);
+        }
     }
     public void assignerAutreLivreur(){
 
@@ -35,21 +37,10 @@ public class EtatDemandeLivraisonSelectionneeAvecTournees extends Etat {
                 c.changementEtat(c.etatTourneesCalculees);
                 break;
             case DELETE:
+                int livreur = c.vue.comboboxLivreur.getValue();
                 this.supprimerLivraison(c);
                 this.sortieDeSelectionDemande(c,true);
-                miseAJourBoutonEtCanvas(c);
-                break;
-        }
-    }
-    private void miseAJourBoutonEtCanvas(ControleurFenetrePrincipale c) {
-        if(c.journee.getDemandesLivraison().size() != 0) {
-            this.calculerEtAfficherTournee(c);
-            c.changementEtat(c.etatTourneesCalculees);
-        } else {
-            GraphicsContext gc = c.vue.canvasPlanTrajet.getGraphicsContext2D();
-            gc.clearRect(0, 0, c.vue.canvasPlanTrajet.getWidth(),
-                    c.vue.canvasPlanTrajet.getHeight());
-            c.changementEtat(c.etatSansDemande);
+                this.afficherTournee(c, c.journee.getTournees().get(livreur-1));
         }
     }
 }

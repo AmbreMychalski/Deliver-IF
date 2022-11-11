@@ -9,7 +9,7 @@ public class EtatSaisieNouvelleDemandeSansTournees extends Etat{
                 "intersection, puis choisissez la plage horaire";
     }
     public void clicGaucheSurPlan(ControleurFenetrePrincipale c, MouseEvent event) {
-        this.naviguerSurPlan(c, event);
+        this.naviguerSurPlan(c, event, false);
     }
     public void validerAjouterOuModifier(ControleurFenetrePrincipale c) {
         boolean ajoutOK = this.validerAjoutDemande(c);

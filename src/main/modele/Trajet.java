@@ -15,13 +15,12 @@ public class Trajet {
 	List<Segment> segments;
 	Intersection depart;
 	Intersection arrivee;
-
 	float longueur;
 
-	public Trajet(List<Segment> seg, float longueur){
+	public Trajet(List<Segment> seg, float longueur) {
 		this.segments = new ArrayList<Segment>(seg);
-		this.depart = segments.get(0).getOrigine();
-		this.arrivee = segments.get(segments.size()-1).getDestination();
+		this.depart   = segments.get(0).getOrigine();
+		this.arrivee  = segments.get(segments.size()-1).getDestination();
 		this.longueur = longueur;
 	}
 

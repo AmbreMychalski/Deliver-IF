@@ -34,7 +34,6 @@ public class Plan {
 	private Map<Long, Intersection>    intersections = new HashMap<Long, Intersection>();
 	private List<Segment>              segments = new ArrayList<Segment>();
 	private Map<Long, List<Segment>>   intersectionsNeighbours = new HashMap<Long, List<Segment>>();
-	
 	private static final Logger        LOGGER = LogManager.getLogger();
 	
 	public Plan(File fichier) throws FichierNonConformeException {
@@ -42,7 +41,6 @@ public class Plan {
 	}
 
 	public boolean estLivrable(Intersection intersection) {
-
 		if(!sontConnectee(intersection, this.entrepot)) {
 			return false;
 		} else if (!sontConnectee(this.entrepot, intersection)) {
@@ -128,15 +126,17 @@ public class Plan {
                 
         intersectionsGrises.add(depart.getIdIntersection());
         
-        while(intersectionsAVerifier.size() != 0 && intersectionsGrises.size() != 0) {
+        while(intersectionsAVerifier.size() != 0
+				&& intersectionsGrises.size() != 0) {
             
             Long currentInter = obtenirIntersectionLaPlusProche(intersectionsGrises, distance);
+
             intersectionsGrises.remove(currentInter);
             
             if(intersectionsNeighbours.get(currentInter) != null) {
                 for(Segment seg : intersectionsNeighbours.get(currentInter)) {
                     Intersection voisin = seg.getDestination();
-                    Long idVoisin = voisin.getIdIntersection();
+                    Long 		 idVoisin = voisin.getIdIntersection();
                     
                     if(!intersectionsNoires.contains(idVoisin)) {
                         if(distance.get(currentInter) + seg.getLongueur() 
@@ -291,23 +291,27 @@ public class Plan {
 			distance.put(entry.getKey(), -1.0f);
 			distanceAndHeuristic.put(entry.getKey(), -1.0f);
 		}
+
 		distance.put(depart.getIdIntersection(), 0.0f);
 		distanceAndHeuristic.put(depart.getIdIntersection(), calculHeuristique(depart, arrivee));
 		intersectionsGrises.add(depart.getIdIntersection());
 
-		while(!intersectionsGrises.isEmpty()){
+		while(!intersectionsGrises.isEmpty()) {
 			long idCourrant = intersectionsGrises.poll();
 			if(intersectionsNeighbours.get(idCourrant) != null) {
 				for(Segment seg : intersectionsNeighbours.get(idCourrant)) {
 					Intersection voisin = seg.getDestination();
 					Long idVoisin = voisin.getIdIntersection();
 					float heuristiqueVoisin = calculHeuristique(voisin, arrivee);
-					if(idVoisin==arrivee.getIdIntersection()){
+
+					if(idVoisin == arrivee.getIdIntersection()) {
 						return true;
 					}
+
 					float g = distance.get(idCourrant)+ seg.getLongueur();
-					float f = g+heuristiqueVoisin;
-					if(!intersectionsNoires.contains(idVoisin)){
+					float f = g + heuristiqueVoisin;
+
+					if(!intersectionsNoires.contains(idVoisin)) {
 						if(g<distance.get(idVoisin)
 								||distanceAndHeuristic.get(idVoisin) == -1) {
 							distance.put(idVoisin,g);
@@ -317,12 +321,15 @@ public class Plan {
 					}
 				}
 			}
+
 			intersectionsNoires.add(idCourrant);
 		}
+
 		return false;
 	}
 
-	private float calculHeuristique(Intersection interCourant, Intersection interCible){
+	private float calculHeuristique(Intersection interCourant,
+									Intersection interCible) {
 		double R = 6372.8; // Earth's Radius, in kilometers
 
 		double dLat = Math.toRadians(interCible.getLatitude() - interCourant.getLatitude());
@@ -333,8 +340,8 @@ public class Plan {
 		double a = Math.pow(Math.sin(dLat / 2),2)
 				+ Math.pow(Math.sin(dLon / 2),2) * Math.cos(lat1) * Math.cos(lat2);
 		double c = 2 * Math.asin(Math.sqrt(a));
-		return (float) (R * c);
 
+		return (float) (R * c);
 	}
 
 	public List<String> obtenirRuesIntersection(Intersection intersection) {
@@ -343,14 +350,17 @@ public class Plan {
 		String rue2 = null;
 		//float longueurRue2=0;
 		for(Segment seg : segments) {
-			if (rue1 == null && (Objects.equals(seg.getOrigine().getIdIntersection(), intersection.getIdIntersection()))){
+			if (rue1 == null && (Objects.equals(seg.getOrigine().getIdIntersection(),
+					intersection.getIdIntersection()))) {
 				rue1 = seg.getNom();
 			}
-			if (rue2 == null && (Objects.equals(seg.getOrigine().getIdIntersection(), intersection.getIdIntersection())) && (!Objects.equals(seg.getNom(), rue1))){
+
+			if (rue2 == null && (Objects.equals(seg.getOrigine().getIdIntersection(),
+					intersection.getIdIntersection())) && (!Objects.equals(seg.getNom(), rue1))) {
 				rue2 = seg.getNom();
 			}
-			if(rue1 != null && rue2 != null) break;
 		}
+
 		return Arrays.asList(rue1,rue2);
 	}
 }
