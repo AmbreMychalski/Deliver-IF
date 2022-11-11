@@ -364,5 +364,9 @@ public abstract class Etat {
 			list.add(i);
 		}
 		c.vue.comboboxLivreur.setItems(list);
+		if(!c.journee.dernierLivreurEstSansToureeCalculee()){
+			list.add(c.journee.getNbLivreur()+1);
+		}
+		c.vue.comboboxLivreurNouvelleDemande.setItems(list);
 	}
 }

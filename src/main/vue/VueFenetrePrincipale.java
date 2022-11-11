@@ -96,6 +96,10 @@ public class VueFenetrePrincipale implements Observer {
     @FXML
     public ComboBox<PlageHoraire> comboboxPlageHoraire;
     @FXML
+    public ComboBox<Integer> comboboxLivreurNouvelleDemande;
+    @FXML
+    public Label labelLivreurNouvelleDemande;
+    @FXML
     public TextField textfieldIdentifiantIntersection;
     @FXML
     public TableColumn<DemandeLivraison, Long> columnIdentifiant;
@@ -146,6 +150,9 @@ public class VueFenetrePrincipale implements Observer {
         buttonValiderLivraison.setDisable(true);
         buttonAnnulerLivraison.setDisable(true);
         comboboxPlageHoraire.setDisable(true);
+        comboboxLivreurNouvelleDemande.setDisable(true);
+        comboboxLivreurNouvelleDemande.setVisible(false);
+        labelLivreurNouvelleDemande.setVisible(false);
 
         buttonCalculerTournees.setDisable(true);
         buttonAutoriserAjouterLivraison.setDisable(true);
@@ -342,6 +349,10 @@ public class VueFenetrePrincipale implements Observer {
         controleur.calculerTournees();
         tableViewDemandesLivraison.setVisible(false);
         tableViewLivraisons.setVisible(true);
+        comboboxLivreurNouvelleDemande.setDisable(false);
+        comboboxLivreurNouvelleDemande.setVisible(true);
+        labelLivreurNouvelleDemande.setVisible(true);
+
     }
 
     public void afficherDemandeLivraison(boolean nettoyerCanvas) {

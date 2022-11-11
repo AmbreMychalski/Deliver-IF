@@ -42,6 +42,8 @@ public class ControleurFenetrePrincipale {
 
 	final EtatTourneesCalculeesPartielles etatTourneesCalculeesPartielles = new EtatTourneesCalculeesPartielles();
 
+	final EtatSelectionLivraisonPourNouvelleDemande etatSelectionLivraisonPourNouvelleDemande = new EtatSelectionLivraisonPourNouvelleDemande();
+
 	// modèle
 	Journee journee;
 	Plan planCharge;

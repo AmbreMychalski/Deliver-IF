@@ -23,7 +23,20 @@ public class EtatSaisieNouvelleDemandeAvecTournees extends Etat {
             if (c.journee.getPlan().estLivrable(intersection)) {
                 DemandeLivraison demande = new DemandeLivraison(intersection, plageHoraire);
                 int livreur = c.vue.comboboxLivreur.getValue();
-                Livraison livraison = c.journee.ajouterDemandeLivraisonTournee(demande, c.journee.getTournees().get(livreur - 1).getLivraisons().get(0));
+                if(livreur == c.journee.getNbLivreur() && c.journee.dernierLivreurEstSansToureeCalculee()){
+
+                }
+                else{
+                    c.vue.buttonValiderLivraison.setDisable(true);
+                    c.vue.comboboxPlageHoraire.setDisable(true);
+                    c.vue.buttonAnnulerLivraison.setDisable(true);
+                    c.vue.tableViewDemandesLivraison.setDisable(false);
+                    c.vue.tableViewLivraisons.setDisable(false);
+
+                    c.journee.ajouterDemandeLivraison(demande);
+                    c.changementEtat(c.etatSelectionLivraisonPourNouvelleDemande);
+                }
+                /*Livraison livraison = c.journee.ajouterDemandeLivraisonTournee(demande, c.journee.getTournees().get(livreur - 1).getLivraisons().get(0));
                 this.afficherTournee(c, c.journee.getTournees().get(livreur - 1));
                 c.vue.afficherLivraison(true);
 
@@ -37,7 +50,7 @@ public class EtatSaisieNouvelleDemandeAvecTournees extends Etat {
                 c.vue.tableViewLivraisons.getItems().add(livraison);
                 c.vue.tableViewLivraisons.refresh();
 
-                c.changementEtat(c.etatTourneesCalculees);
+                c.changementEtat(c.etatTourneesCalculees);*/
             }
         }
     }
