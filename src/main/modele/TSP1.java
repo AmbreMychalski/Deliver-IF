@@ -6,19 +6,19 @@ import java.util.Iterator;
 
 public class TSP1 extends TemplateTSP {
 	@Override
-	protected float bound(Integer currentVertex, Collection<Integer> unvisited, float[][] cost) {
+	protected float bound(Integer sommetCourant, Collection<Integer> nonVisites, float[][] couts) {
 
 		float res = 0;
-		Collection<Integer> boundCollection = new ArrayList<Integer>(unvisited);
+		Collection<Integer> boundCollection = new ArrayList<Integer>(nonVisites);
 
 		boundCollection.add(0);
-		boundCollection.add(currentVertex);
+		boundCollection.add(sommetCourant);
 
 		for(Integer i : boundCollection) {
 			float min = Float.MAX_VALUE;
 			for(Integer j : boundCollection) {
-				if(cost[i][j] < min && cost[i][j] != -1) {
-					min = cost[i][j];
+				if(couts[i][j] < min && couts[i][j] != -1) {
+					min = couts[i][j];
 				}
 			}
 			if(min != Float.MAX_VALUE) {
@@ -30,10 +30,10 @@ public class TSP1 extends TemplateTSP {
 	}
 
 	@Override
-	protected Iterator<Integer> iterator(Integer currentVertex,
-										 Collection<Integer> unvisited,
-										 Graph g) {
-		return new SeqIter(unvisited, currentVertex, g);
+	protected Iterator<Integer> iterator(Integer sommetCourant,
+										 Collection<Integer> nonVisites,
+										 Graphe g) {
+		return new SeqIter(nonVisites, sommetCourant, g);
 	}
 
 }

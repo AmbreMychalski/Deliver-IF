@@ -33,7 +33,7 @@ public class Plan {
 	private String                     nom;
 	private Map<Long, Intersection>    intersections = new HashMap<Long, Intersection>();
 	private List<Segment>              segments = new ArrayList<Segment>();
-	private Map<Long, List<Segment>>   intersectionsNeighbours = new HashMap<Long, List<Segment>>();
+	private Map<Long, List<Segment>> intersectionsVoisines = new HashMap<Long, List<Segment>>();
 	private static final Logger        LOGGER = LogManager.getLogger();
 	
 	public Plan(File fichier) throws FichierNonConformeException {
@@ -71,8 +71,8 @@ public class Plan {
 	        Long currentInter = obtenirIntersectionLaPlusProche(intersectionsGrises, 
 	                                                            distance);
             
-            if(intersectionsNeighbours.get(currentInter) != null) {
-    	        for(Segment seg : intersectionsNeighbours.get(currentInter)) {
+            if(intersectionsVoisines.get(currentInter) != null) {
+    	        for(Segment seg : intersectionsVoisines.get(currentInter)) {
     	            Intersection successeur = seg.getDestination();
     	           
     	            if(!intersectionsNoires.contains(successeur.getIdIntersection())) {
@@ -133,8 +133,8 @@ public class Plan {
 
             intersectionsGrises.remove(currentInter);
             
-            if(intersectionsNeighbours.get(currentInter) != null) {
-                for(Segment seg : intersectionsNeighbours.get(currentInter)) {
+            if(intersectionsVoisines.get(currentInter) != null) {
+                for(Segment seg : intersectionsVoisines.get(currentInter)) {
                     Intersection voisin = seg.getDestination();
                     Long 		 idVoisin = voisin.getIdIntersection();
                     
@@ -227,11 +227,11 @@ public class Plan {
 						segments.add(new Segment(this.intersections.get(origineId), 
 						        this.intersections.get(destinationId), longueur, nom));
 						
-						if(!this.intersectionsNeighbours.containsKey(origineId)) {
-                            this.intersectionsNeighbours.put(origineId, new ArrayList<Segment>());
+						if(!this.intersectionsVoisines.containsKey(origineId)) {
+                            this.intersectionsVoisines.put(origineId, new ArrayList<Segment>());
                         }
 						
-                        this.intersectionsNeighbours.get(origineId).add(
+                        this.intersectionsVoisines.get(origineId).add(
                                 segments.get(segments.size() - 1));
 					}
 				}
@@ -298,8 +298,8 @@ public class Plan {
 
 		while(!intersectionsGrises.isEmpty()) {
 			long idCourrant = intersectionsGrises.poll();
-			if(intersectionsNeighbours.get(idCourrant) != null) {
-				for(Segment seg : intersectionsNeighbours.get(idCourrant)) {
+			if(intersectionsVoisines.get(idCourrant) != null) {
+				for(Segment seg : intersectionsVoisines.get(idCourrant)) {
 					Intersection voisin = seg.getDestination();
 					Long idVoisin = voisin.getIdIntersection();
 					float heuristiqueVoisin = calculHeuristique(voisin, arrivee);

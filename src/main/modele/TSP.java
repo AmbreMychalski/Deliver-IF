@@ -1,7 +1,5 @@
 package modele;
 
-import java.util.ArrayList;
-
 public interface TSP {
 	/**
 	 * Search for a shortest cost hamiltonian circuit in <code>g</code> within <code>timeLimit</code> milliseconds
@@ -10,7 +8,7 @@ public interface TSP {
 	 * @param timeLimit
 	 * @param g
 	 */
-	public void searchSolution(int timeLimit, Graph g);
+	public void searchSolution(int timeLimit, Graphe g);
 	
 	/**
 	 * @param i

@@ -14,8 +14,13 @@ public class Livraison {
 	private float heure;
 	private int livreur;
 
-	private boolean dansSaPlageHorraire;
+	private boolean dansSaPlageHoraire;
 
+	/**
+	 * Renvoie l'id de l'intersection de la livraison (utilisé pour
+	 * l'affichage dans le TableView de la vue).
+	 * @return id de la l'intersection
+	 */
 	public Long getIdIntersectionLivraison() {
 		return demandeLivraison.getIntersection().getIdIntersection();
 	}
@@ -36,7 +41,7 @@ public class Livraison {
 		this.heure = livraison.getHeure();
 		this.demandeLivraison = livraison.getDemandeLivraison();
 		this.livreur = livraison.getLivreur();
-		this.dansSaPlageHorraire = livraison.dansSaPlageHorraire;
+		this.dansSaPlageHoraire = livraison.dansSaPlageHoraire;
 	}
 
 }

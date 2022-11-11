@@ -26,7 +26,7 @@ import java.util.*;
 @Getter
 public class ControleurFenetrePrincipale {
     
-    public static final Logger logger = LogManager.getLogger(ControleurFenetrePrincipale.class);
+    public static final Logger LOGGER = LogManager.getLogger(ControleurFenetrePrincipale.class);
 	final VueFenetrePrincipale vue;
 
 	// Etats
@@ -168,7 +168,7 @@ public class ControleurFenetrePrincipale {
 		this.etatCourant = nouvelEtat;
 		this.vue.updateLabelGuideUtilisateur(this.etatCourant.getMessage());
 		this.vue.activerExclusivementBoutons(boutonsActivesParEtat.get(nouvelEtat));
-		logger.debug("Nouvel état : " + nouvelEtat.getClass().getName());
+		LOGGER.debug("Nouvel état : " + nouvelEtat.getClass().getName());
 	}
 
 	public void clicSurLivreur() {

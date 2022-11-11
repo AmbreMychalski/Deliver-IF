@@ -158,7 +158,7 @@ public class Journee extends Observable {
         List<DemandeLivraison> dmdLivrOrdonnee = new LinkedList<>();
         List<DemandeLivraison> listDemande = new LinkedList<DemandeLivraison>(demandesLivraison);
         List<Livraison> livrList = new LinkedList<Livraison>();
-        CompleteGraph g = new CompleteGraph(listDemande,this.plan, this.plan.getEntrepot());
+        GrapheComplet g = new GrapheComplet(listDemande,this.plan, this.plan.getEntrepot());
         TSP tsp = new TSP1();
 
         tsp.searchSolution(20000, g);
@@ -200,7 +200,7 @@ public class Journee extends Observable {
             demandeToLivr.put(livr.getDemandeLivraison(), livr);
         }
 
-        CompleteGraph g = new CompleteGraph(listDemande, this.plan,
+        GrapheComplet g = new GrapheComplet(listDemande, this.plan,
                 this.plan.getEntrepot());
         TSP tsp = new TSP1();
 
@@ -327,7 +327,7 @@ public class Journee extends Observable {
                     t.getLivraisons().get(0).getDemandeLivraison().getPlageHoraire().getDebut();
 
             t.getLivraisons().get(0).setHeure(heureLivraison);
-            t.getLivraisons().get(0).setDansSaPlageHorraire(true);
+            t.getLivraisons().get(0).setDansSaPlageHoraire(true);
             startIndex++;
         } else {
             heureLivraison = t.getLivraisons().get(startIndex - 1).getHeure();
@@ -342,9 +342,9 @@ public class Journee extends Observable {
             Livraison vielleLivraison = new Livraison(t.getLivraisons().get(i));
 
             if(heureLivraison>t.getLivraisons().get(i).getDemandeLivraison().getPlageHoraire().getFin()) {
-                t.getLivraisons().get(i).setDansSaPlageHorraire(false);
+                t.getLivraisons().get(i).setDansSaPlageHoraire(false);
             } else {
-                t.getLivraisons().get(i).setDansSaPlageHorraire(true);
+                t.getLivraisons().get(i).setDansSaPlageHoraire(true);
             }
 
             if(heureLivraison < t.getLivraisons().get(i).getDemandeLivraison().getPlageHoraire().getDebut()) {
@@ -357,23 +357,23 @@ public class Journee extends Observable {
         }
     }
 
-    private List<Trajet> creerListTrajet(List<Livraison> livrList, CompleteGraph g) {
+    private List<Trajet> creerListTrajet(List<Livraison> livrList, GrapheComplet g) {
         List<Trajet> trajetList = new LinkedList<Trajet>();
         List<Segment> lisSeg = plan.calculerPlusCourtChemin(
                 plan.getEntrepot(),livrList.get(0).getDemandeLivraison().getIntersection());
         int indexCurrentDl =
                 g.getIdDemandeLivraisonToIndex().get(livrList.get(0).getDemandeLivraison());
         int indexPreviousDl = 0;
-        float dist = g.getCost(indexPreviousDl, indexCurrentDl);
+        float dist = g.getCout(indexPreviousDl, indexCurrentDl);
 
         trajetList.add(new Trajet(lisSeg, dist));
 
         for(int i = 0; i < livrList.size() - 1; i++) {
             indexCurrentDl = g.getIdDemandeLivraisonToIndex().get(livrList.get(i+1).getDemandeLivraison());
             indexPreviousDl = g.getIdDemandeLivraisonToIndex().get(livrList.get(i).getDemandeLivraison());
-            dist = g.getCost(indexPreviousDl, indexCurrentDl);
+            dist = g.getCout(indexPreviousDl, indexCurrentDl);
             lisSeg = plan.calculerPlusCourtChemin(livrList.get(i).getDemandeLivraison().getIntersection(),livrList.get(i+1).getDemandeLivraison().getIntersection());
-            dist = g.getCost(indexPreviousDl, indexCurrentDl);
+            dist = g.getCout(indexPreviousDl, indexCurrentDl);
             lisSeg = plan.calculerPlusCourtChemin(
                     livrList.get(i).getDemandeLivraison().getIntersection(),
                     livrList.get(i + 1).getDemandeLivraison().getIntersection());
@@ -385,7 +385,7 @@ public class Journee extends Observable {
 
         indexCurrentDl = 0;
         indexPreviousDl = g.getIdDemandeLivraisonToIndex().get(livrList.get(livrList.size()-1).getDemandeLivraison());
-        dist = g.getCost(indexPreviousDl, indexCurrentDl);
+        dist = g.getCout(indexPreviousDl, indexCurrentDl);
         trajetList.add(new Trajet(lisSeg, dist));
 
         return trajetList;

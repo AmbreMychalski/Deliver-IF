@@ -1,6 +1,5 @@
 package controleur;
 
-import javafx.beans.Observable;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.canvas.GraphicsContext;
@@ -94,11 +93,11 @@ public abstract class Etat {
 		File fichier = fileChooser.showSaveDialog(c.vue.getStage());
 
 		if (fichier != null) {
-			ControleurFenetrePrincipale.logger.info("Sauvegarde à l'emplacement "
+			ControleurFenetrePrincipale.LOGGER.info("Sauvegarde à l'emplacement "
 					+ fichier.getAbsolutePath());
 			c.journee.sauvegarderDemandesLivraison(fichier);
 		} else {
-			ControleurFenetrePrincipale.logger
+			ControleurFenetrePrincipale.LOGGER
 					.error("Erreur lors de la sauvegarde des demandes");
 		}
 	}
@@ -113,10 +112,12 @@ public abstract class Etat {
 	protected void effectuerModification(ControleurFenetrePrincipale c, boolean livraison){
 		DemandeLivraison ligne;
 		if(livraison){
-			ligne = c.vue.tableViewLivraisons.getSelectionModel().getSelectedItem().getDemandeLivraison();
+			ligne = c.vue.tableViewLivraisons.getSelectionModel()
+					.getSelectedItem().getDemandeLivraison();
 		}
 		else {
-			ligne = c.vue.tableViewDemandesLivraison.getSelectionModel().getSelectedItem();
+			ligne = c.vue.tableViewDemandesLivraison.getSelectionModel()
+					.getSelectedItem();
 		}
 		String champIdentifiant = c.vue.textfieldIdentifiantIntersection.getText();
 		PlageHoraire plageHoraire = c.vue.comboboxPlageHoraire.getValue();
@@ -130,18 +131,21 @@ public abstract class Etat {
 		}
 
 
-		DemandeLivraison demande = c.journee.getDemandesLivraison().get(c.journee.getDemandesLivraison().indexOf(ligne));
+		DemandeLivraison demande = c.journee.getDemandesLivraison()
+				.get(c.journee.getDemandesLivraison().indexOf(ligne));
 		c.journee.modifierDemandeLivraison(demande, intersection, plageHoraire);
 
 		//c.vue.tableViewDemandesLivraison.refresh();
 		//c.vue.afficherDemandeLivraison(true);
-		c.vue.dessinerIntersection(c.vue.canvasIntersectionsLivraisons.getGraphicsContext2D(),
+		c.vue.dessinerIntersection(
+				c.vue.canvasIntersectionsLivraisons.getGraphicsContext2D(),
 				demande.getIntersection(),
 				c.vue.COULEUR_POINT_LIVRAISON_SELECTIONNE,
 				c.vue.TAILLE_RECT_PT_LIVRAISON_SELECTIONNE,
 				true,
 				VueFenetrePrincipale.FormeIntersection.RECTANGLE);
-		c.vue.textfieldIdentifiantIntersectionSelection.setText(demande.getIdIntersection().toString());
+		c.vue.textfieldIdentifiantIntersectionSelection.setText(
+				demande.getIdIntersection().toString());
 		remplirLabelRuesIntersection(c, intersection);
 		c.vue.textfieldPlageHoraire.setText(demande.getPlageHoraire().toString());
 
@@ -154,10 +158,6 @@ public abstract class Etat {
 	}
 
 	protected void annulerModification(ControleurFenetrePrincipale c){
-		c.vue.buttonModifierLivraison.setDisable(false);
-		c.vue.buttonSupprimerLivraison.setDisable(false);
-		c.vue.buttonValiderLivraison.setDisable(true);
-		c.vue.buttonAnnulerLivraison.setDisable(true);
 		c.vue.comboboxPlageHoraire.setDisable(true);
 		c.vue.tableViewDemandesLivraison.setDisable(false);
 	}
@@ -165,21 +165,22 @@ public abstract class Etat {
 	protected boolean selectionnerDemande(ControleurFenetrePrincipale c, boolean livraison){
 		DemandeLivraison ligne;
 		if(!livraison) {
-			ligne = c.vue.tableViewDemandesLivraison.getSelectionModel().getSelectedItem();
+			ligne = c.vue.tableViewDemandesLivraison.getSelectionModel()
+					.getSelectedItem();
 		}
 		else {
-			ligne = c.vue.tableViewLivraisons.getSelectionModel().getSelectedItem().getDemandeLivraison();
+			ligne = c.vue.tableViewLivraisons.getSelectionModel()
+					.getSelectedItem().getDemandeLivraison();
 		}
 		if (ligne != null) {
 			if(!livraison) {
 				c.vue.afficherDemandesLivraison(true);
-				c.vue.buttonModifierLivraison.setDisable(false);
 			}
 			else{
 				c.vue.afficherLivraisons(true);
-				c.vue.buttonAssignerNvLivreur.setDisable(false);
 			}
-			c.vue.dessinerIntersection(c.vue.canvasIntersectionsLivraisons.getGraphicsContext2D(),
+			c.vue.dessinerIntersection(
+					c.vue.canvasIntersectionsLivraisons.getGraphicsContext2D(),
 					ligne.getIntersection(),
 					c.vue.COULEUR_POINT_LIVRAISON_SELECTIONNE,
 					c.vue.TAILLE_RECT_PT_LIVRAISON_SELECTIONNE,
@@ -187,14 +188,10 @@ public abstract class Etat {
 					VueFenetrePrincipale.FormeIntersection.RECTANGLE);
 
 			c.vue.titlePaneSelectionDemande.setVisible(true);
-			c.vue.textfieldIdentifiantIntersection.setText(ligne.getIdIntersection().toString());
+			c.vue.textfieldIdentifiantIntersection.setText(
+					ligne.getIdIntersection().toString());
 			remplirLabelRuesIntersection(c, ligne.getIntersection());
 			c.vue.textfieldPlageHoraire.setText(ligne.getPlageHoraire().toString());
-			c.vue.buttonCalculerTournees.setDisable(true);
-			c.vue.buttonAutoriserAjouterLivraison.setDisable(true);
-			c.vue.buttonSauvegarderDemandes.setDisable(true);
-			c.vue.buttonChargerDemandes.setDisable(true);
-			c.vue.buttonSupprimerLivraison.setDisable(false);
 			return true;
 		}
 		return false;
@@ -209,10 +206,7 @@ public abstract class Etat {
 			if(c.journee.getPlan().estLivrable(intersection)){
 				DemandeLivraison demande =
 						new DemandeLivraison(intersection, plageHoraire);
-				//c.vue.tableViewDemandesLivraison.getItems().add(demande);
 				c.journee.ajouterDemandeLivraison(demande);
-				//c.vue.tableViewDemandesLivraison.refresh();
-				//c.vue.afficherDemandeLivraison(true);
 				c.vue.buttonValiderLivraison.setDisable(true);
 				c.vue.buttonAnnulerLivraison.setDisable(true);
 				c.vue.comboboxPlageHoraire.setDisable(true);
@@ -224,30 +218,29 @@ public abstract class Etat {
 				return true;
 			}
 			else{
-				ControleurFenetrePrincipale.logger.warn("L'intersection n'est pas livrable");
+				ControleurFenetrePrincipale.LOGGER.warn("L'intersection n'est pas livrable");
 			}
 		} else {
-			ControleurFenetrePrincipale.logger.warn("Informations manquantes pour l'ajout de la demande");
+			ControleurFenetrePrincipale.LOGGER.warn("Informations manquantes pour l'ajout de la demande");
 		}
 		return false;
 	}
 
-	protected  void naviguerSurPlan(ControleurFenetrePrincipale c, MouseEvent event, boolean tourneeCalculee){
+	protected  void naviguerSurPlan(ControleurFenetrePrincipale c,
+									MouseEvent event,
+									boolean tourneeCalculee){
 		if (c.journee.getPlan() != null) {
-			/*ControleurFenetrePrincipale.logger.debug("Clic sur le canvas, (x,y)=("
-					+ event.getX() + "," + event.getY() + ") (lat,long)="
-					+ c.vue.convertirYEnLatitude(event.getY()) + ","
-					+ c.vue.convertirXEnLongitude(event.getX()));*/
 			Intersection intersectionTrouvee =
 					c.vue.trouverIntersectionCoordoneesPixels(event.getX(),
 							event.getY());
-			//ControleurFenetrePrincipale.logger.debug("Intersection trouvée = " + intersectionTrouvee);
 			if (intersectionTrouvee != null) {
 				c.vue.textfieldIdentifiantIntersection.setText(
 						intersectionTrouvee.getIdIntersection().toString());
 
 				GraphicsContext gc = c.vue.canvasIntersectionsLivraisons.getGraphicsContext2D();
-				gc.clearRect(0, 0, c.vue.canvasIntersectionsLivraisons.getWidth(), c.vue.canvasIntersectionsLivraisons.getHeight());
+				gc.clearRect(0, 0,
+						c.vue.canvasIntersectionsLivraisons.getWidth(),
+						c.vue.canvasIntersectionsLivraisons.getHeight());
 				remplirLabelRuesIntersection(c, intersectionTrouvee);
 
 				if(tourneeCalculee){
@@ -266,13 +259,14 @@ public abstract class Etat {
 				resetLabelRuesIntersection(c);
 			}
 		} else {
-			ControleurFenetrePrincipale.logger.debug("Clic sur le canvas, (x,y)=("
+			ControleurFenetrePrincipale.LOGGER.debug("Clic sur le canvas, (x,y)=("
 					+ event.getX() + "," + event.getY() + ")");
 		}
 
 	}
 
-	protected void chargerDemandes(ControleurFenetrePrincipale c)throws Exception{
+	protected void chargerDemandes(ControleurFenetrePrincipale c)
+			throws Exception {
 		FileChooser fileChooser = new FileChooser();
 		fileChooser.setInitialDirectory(new File(".\\data"));
 		fileChooser.getExtensionFilters().add(
@@ -283,21 +277,18 @@ public abstract class Etat {
 			throw new Exception("Aucun fichier choisi");
 		}
 		System.out.println("Fichier choisi = " + fichier.getAbsolutePath());
-		//c.vue.tableViewDemandesLivraison.getItems().addAll(listeDemandes);
-		//c.vue.tableViewDemandesLivraison.refresh();
-		//c.vue.afficherDemandeLivraison(true);
-		ArrayList<DemandeLivraison> listeDemandes = c.journee.chargerDemandesLivraison(fichier);
+		ArrayList<DemandeLivraison> listeDemandes
+				= c.journee.chargerDemandesLivraison(fichier);
 		if (listeDemandes.size()==0){
 			throw  new Exception("Aucune demande de livraison dans le fichier");
 		}
 	}
 
 	protected void supprimerDemandeLivraison(ControleurFenetrePrincipale c){
-		DemandeLivraison ligne = c.vue.tableViewDemandesLivraison.getSelectionModel().getSelectedItem();
+		DemandeLivraison ligne = c.vue.tableViewDemandesLivraison.getSelectionModel()
+				.getSelectedItem();
 		if(ligne != null) {
-			//c.vue.tableViewDemandesLivraison.getItems().remove(ligne);
 			c.journee.supprimerDemandeLivraison(ligne);
-			//c.vue.tableViewDemandesLivraison.refresh();
 			c.vue.textfieldIdentifiantIntersectionSelection.setText("");
 			resetLabelRuesIntersection(c);
 			c.vue.textfieldPlageHoraire.setText("");
@@ -305,7 +296,8 @@ public abstract class Etat {
 		}
 	}
 	protected void supprimerLivraison(ControleurFenetrePrincipale c) {
-		Livraison ligne = c.vue.tableViewLivraisons.getSelectionModel().getSelectedItem();
+		Livraison ligne = c.vue.tableViewLivraisons.getSelectionModel()
+				.getSelectedItem();
 		if (ligne != null) {
 			c.vue.tableViewLivraisons.getItems().remove(ligne);
 			c.journee.supprimerDemandeLivraison(ligne.getDemandeLivraison());
@@ -325,11 +317,13 @@ public abstract class Etat {
 		resetLabelRuesIntersection(c);
 		c.vue.comboboxPlageHoraire.setValue(null);
 	}
-	protected void remplirLabelRuesIntersection(ControleurFenetrePrincipale c, Intersection intersection){
+	protected void remplirLabelRuesIntersection(ControleurFenetrePrincipale c,
+												Intersection intersection){
 		List<String> rues = c.planCharge.obtenirRuesIntersection(intersection);
 		String texte;
-		if((rues.get(0) == null || rues.get(0).isEmpty()) && (rues.get(1) == null || rues.get(1).isEmpty())){
-			texte = "Aucune rue associé";
+		if((rues.get(0) == null || rues.get(0).isEmpty())
+				&& (rues.get(1) == null || rues.get(1).isEmpty())){
+			texte = "Aucune rue associée";
 		}else if(rues.get(1) == null || rues.get(1).isEmpty()){
 			texte = rues.get(0);
 		}else if(rues.get(0) == null|| rues.get(0).isEmpty()){

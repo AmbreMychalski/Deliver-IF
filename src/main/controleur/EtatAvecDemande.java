@@ -40,8 +40,8 @@ public class EtatAvecDemande extends Etat{
         int livreur = c.vue.comboboxLivreur.getValue();
         long startTime = System.currentTimeMillis();
         boolean tourneeComplete = c.journee.calculerTournee();
-        ControleurFenetrePrincipale.logger.debug("tourneeComplete = " + tourneeComplete);
-        ControleurFenetrePrincipale.logger.debug("Solution trouvé en :"+ (System.currentTimeMillis() - startTime)+"ms ");
+        ControleurFenetrePrincipale.LOGGER.debug("tourneeComplete = " + tourneeComplete);
+        ControleurFenetrePrincipale.LOGGER.debug("Solution trouvé en :"+ (System.currentTimeMillis() - startTime)+"ms ");
 
         List<Livraison> listeLivraisons = c.journee.getLivraisonsLivreur(livreur);
         c.vue.tableViewLivraisons.getItems().addAll(listeLivraisons);

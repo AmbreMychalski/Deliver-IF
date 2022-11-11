@@ -2,8 +2,6 @@ package vue;
 
 
 import controleur.ControleurFenetrePrincipale;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -254,7 +252,7 @@ public class VueFenetrePrincipale implements Observer {
                 super.updateItem(liv, empty);
                 if (liv == null)
                     setStyle("");
-                else if (!liv.isDansSaPlageHorraire())
+                else if (!liv.isDansSaPlageHoraire())
                     setStyle("-fx-background-color: #ffaea8;");
                 else
                     setStyle("");

@@ -2,7 +2,7 @@ package controleur;
 
 import javafx.scene.input.MouseEvent;
 
-import static controleur.ControleurFenetrePrincipale.logger;
+import static controleur.ControleurFenetrePrincipale.LOGGER;
 
 public class EtatSansDemande extends Etat{
     public EtatSansDemande() {
@@ -26,7 +26,7 @@ public class EtatSansDemande extends Etat{
             c.changementEtat(c.etatAvecDemande);
 
         }catch (Exception ex){
-            logger.error(ex);
+            LOGGER.error(ex);
             c.changementEtat(c.etatSansDemande);
             throw new Exception(ex);
         }
