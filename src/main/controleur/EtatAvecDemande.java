@@ -2,6 +2,7 @@ package controleur;
 
 import javafx.scene.input.MouseEvent;
 import modele.Livraison;
+import modele.Livreur;
 
 import java.util.List;
 
@@ -42,17 +43,16 @@ public class EtatAvecDemande extends Etat{
     }
     
     public void calculerTournees(ControleurFenetrePrincipale c) {
-        int livreur = c.vue.comboboxLivreur.getValue();
         long startTime = System.currentTimeMillis();
         boolean tourneeComplete = c.journee.calculerTournee();
         ControleurFenetrePrincipale.logger.debug("tourneeComplete = " + tourneeComplete);
         ControleurFenetrePrincipale.logger.debug("Solution trouvé en :"+ (System.currentTimeMillis() - startTime)+"ms ");
 
-        List<Livraison> listeLivraisons = c.journee.getLivraisonsLivreur(livreur);
+        List<Livraison> listeLivraisons = c.journee.getLivreurs().get(0).getTournee().getLivraisons();
         c.vue.tableViewLivraisons.getItems().addAll(listeLivraisons);
         c.vue.tableViewLivraisons.refresh();
 
-        this.afficherTournee(c,c.journee.getTournees().get(livreur-1));
+        this.afficherTournee(c, c.journee.getLivreurs().get(0).getTournee());
         c.vue.buttonAfficherFeuillesRoute.setDisable(false);
         c.vue.buttonCalculerTournees.setDisable(true);
         c.vue.buttonChargerDemandes.setDisable(true);

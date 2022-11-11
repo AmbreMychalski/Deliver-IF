@@ -3,6 +3,7 @@ package controleur;
 import javafx.scene.input.MouseEvent;
 import modele.DemandeLivraison;
 import modele.Livraison;
+import modele.Livreur;
 import vue.VueFenetrePrincipale;
 
 public class EtatSelectionLivraisonPourNouvelleDemande extends Etat{
@@ -15,12 +16,15 @@ public class EtatSelectionLivraisonPourNouvelleDemande extends Etat{
     }
     protected boolean selectionnerDemande(ControleurFenetrePrincipale c, boolean livraison){
         Livraison ligne;
+    /**********************
+     * Changements (a cause de la creation du livreur)  à vérifier avec le boss des livreurs @MathéoJoseph
+     * *******************/
 
         ligne = c.vue.tableViewLivraisons.getSelectionModel().getSelectedItem();
 
         if (ligne != null) {
 
-            c.vue.afficherLivraisons(true);
+            c.vue.afficherLivraisons(c.vue.comboboxLivreur.getValue(), true);
             c.vue.dessinerIntersection(c.vue.canvasIntersectionsLivraisons.getGraphicsContext2D(),
                     ligne.getDemandeLivraison().getIntersection(),
                     c.vue.COULEUR_POINT_LIVRAISON_SELECTIONNE,
@@ -34,11 +38,12 @@ public class EtatSelectionLivraisonPourNouvelleDemande extends Etat{
             remplirLabelRuesIntersection(c, ligne.getDemandeLivraison().getIntersection());
             c.vue.textfieldPlageHoraire.setText(ligne.getDemandeLivraison().getPlageHoraire().toString());
 
-            int livreur = (int)c.vue.comboboxLivreurNouvelleDemande.getValue().charAt(0);
+            Livreur livreur = c.vue.comboboxLivreurNouvelleDemande.getValue();
             DemandeLivraison derniereDemande = c.journee.getDemandesLivraison().get(c.journee.getDemandesLivraison().size()-1);
-            Livraison livraisonAAjoutee = c.journee.ajouterDemandeLivraisonTournee(derniereDemande, ligne);
-            this.afficherTournee(c, c.journee.getTournees().get(livreur - 1));
-            c.vue.afficherLivraisons(true);
+            Livraison livraisonAAjouter = c.journee.ajouterDemandeLivraisonTournee(derniereDemande, ligne, livreur);
+
+            this.afficherTournee(c, livreur.getTournee());
+            c.vue.afficherLivraisons(livreur, true);
 
             c.vue.buttonAutoriserAjouterLivraison.setDisable(false);
             c.vue.buttonValiderLivraison.setDisable(true);
@@ -46,7 +51,7 @@ public class EtatSelectionLivraisonPourNouvelleDemande extends Etat{
             c.vue.buttonAnnulerLivraison.setDisable(true);
 
 
-            c.vue.tableViewLivraisons.getItems().add(livraisonAAjoutee);
+            c.vue.tableViewLivraisons.getItems().add(livraisonAAjouter);
             c.vue.tableViewLivraisons.refresh();
 
             c.changementEtat(c.etatTourneesCalculees);

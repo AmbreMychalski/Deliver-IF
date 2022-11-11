@@ -12,17 +12,18 @@ import javafx.scene.layout.VBox;
 import javafx.stage.FileChooser;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
+import modele.Livreur;
 import modele.TourneeSerialisation;
 
 import java.awt.*;
 import java.io.File;
 
 public class FenetreFeuilleDeRoute {
-    public static void display (ControleurFenetrePrincipale c, int livreur) {
+    public static void display (ControleurFenetrePrincipale c, Livreur livreur) {
         Stage window = new Stage();
         window.initModality(Modality.APPLICATION_MODAL);
         String tournee = null;
-        TourneeSerialisation serialisation = new TourneeSerialisation(c.getJournee().getTournees(), c.getPlanCharge());;
+        TourneeSerialisation serialisation = new TourneeSerialisation(c.getPlanCharge());
         try{
             tournee= serialisation.serialiser(livreur);
         }catch(Exception ex){

@@ -98,7 +98,7 @@ public class VueFenetrePrincipale implements Observer {
     @FXML
     public ComboBox<PlageHoraire> comboboxPlageHoraire;
     @FXML
-    public ComboBox<String> comboboxLivreurNouvelleDemande;
+    public ComboBox<Livreur> comboboxLivreurNouvelleDemande;
     @FXML
     public Label labelLivreurNouvelleDemande;
     @FXML
@@ -124,7 +124,7 @@ public class VueFenetrePrincipale implements Observer {
     @FXML
     public Label labelGuideUtilisateur;
     @FXML
-    public ComboBox<Integer> comboboxLivreur;
+    public ComboBox<Livreur> comboboxLivreur;
     @FXML
     public Label labelRuesIntersection;
     @FXML
@@ -260,12 +260,6 @@ public class VueFenetrePrincipale implements Observer {
                     setStyle("");
             }
         });
-
-
-
-        comboboxLivreur.getItems().add(1);
-        comboboxLivreur.getSelectionModel().selectFirst();
-
         for(int i=8; i<12; i++) {
             comboboxPlageHoraire.getItems().add(new PlageHoraire(i,i+1));
         }
@@ -319,7 +313,7 @@ public class VueFenetrePrincipale implements Observer {
     }
 
     private void actionBoutonAssignerNvLivreur(ActionEvent event) {
-        controleur.ajouterLivreur();
+        controleur.assignerAutreLivreur();
     }
 
     private void actionBoutonChargerPlan(ActionEvent event) throws Exception {
@@ -371,26 +365,31 @@ public class VueFenetrePrincipale implements Observer {
 
     }
 
-    public void afficherLivraisons(boolean nettoyerCanvas){
+    public void afficherLivraisons(Livreur livreur, boolean nettoyerCanvas){
         System.out.println("appel fonction afficherlivraison");
-        if(comboboxLivreur.getValue()!=null) {
-            GraphicsContext gc = canvasIntersectionsLivraisons.getGraphicsContext2D();
-            GraphicsContext gcTrajets = canvasPlanTrajet.getGraphicsContext2D();
-            if (nettoyerCanvas) {
-                gc.clearRect(0, 0, canvasIntersectionsLivraisons.getWidth(), canvasIntersectionsLivraisons.getHeight());
-                gcTrajets.clearRect(0, 0, canvasPlanTrajet.getWidth(), canvasPlanTrajet.getHeight());
-            }
-            System.out.println("value combobox : " + comboboxLivreur.getSelectionModel().getSelectedItem()); //renvoie null
-            for (Livraison l : controleur.getJournee().getLivraisonsLivreur(comboboxLivreur.getValue())) {
-                this.dessinerIntersection(gc,
-                        l.getDemandeLivraison().getIntersection(),
-                        l.getDemandeLivraison().getPlageHoraire().getCouleur(),
-                        this.TAILLE_RECT_PT_LIVRAISON,
-                        true,
-                        FormeIntersection.RECTANGLE);
-            }
-            dessinerTrajets(controleur.getJournee().getTournees().get(comboboxLivreur.getSelectionModel().getSelectedItem() - 1).getTrajets(), gcTrajets);
+        GraphicsContext gc = canvasIntersectionsLivraisons.getGraphicsContext2D();
+        GraphicsContext gcTrajets = canvasPlanTrajet.getGraphicsContext2D();
+        if (nettoyerCanvas) {
+            gc.clearRect(0, 0, canvasIntersectionsLivraisons.getWidth(), canvasIntersectionsLivraisons.getHeight());
+            gcTrajets.clearRect(0, 0, canvasPlanTrajet.getWidth(), canvasPlanTrajet.getHeight());
         }
+        System.out.println("value combobox : " + comboboxLivreur.getSelectionModel().getSelectedItem()); //renvoie null
+        List<Livraison> livraisons;
+        if(livreur.getTournee() == null){
+            livraisons = livreur.getLivraisonsHorsTournee();
+        }else{
+            livraisons = livreur.getTournee().getLivraisons();
+        }
+        for (Livraison l : livraisons) {
+            this.dessinerIntersection(gc,
+                    l.getDemandeLivraison().getIntersection(),
+                    l.getDemandeLivraison().getPlageHoraire().getCouleur(),
+                    this.TAILLE_RECT_PT_LIVRAISON,
+                    true,
+                    FormeIntersection.RECTANGLE);
+        }
+        dessinerTrajets(livreur.getTournee().getTrajets(), gcTrajets);
+
     }
 
     private void actionBoutonAjouterLivraison(ActionEvent event) {
@@ -673,14 +672,21 @@ public class VueFenetrePrincipale implements Observer {
             tableViewDemandesLivraison.getItems().addAll(
                     ((Journee) o).getDemandesLivraison());
             afficherDemandesLivraison(true);
-        }
-        else if(arg == "ChangementLivraison"){
-            System.out.println("update tableau");
-            tableViewLivraisons.refresh();
-            afficherLivraisons(true);
+            if(arg == "ChangementLivraison"){
+                System.out.println("update tableau");
+                tableViewLivraisons.refresh();
+                afficherLivraisons(comboboxLivreur.getValue(), true);
+            } else if (arg == "AjoutLivreur") {
+                if (controleur.getJournee().getLivreurs().size() == 1){
+                    comboboxLivreur.getSelectionModel().select(0);
+                    System.out.println("oui");
+                }else{
+                    controleur.getEtatCourant().majComboboxLivreur(controleur); //pas sur que ce soit légal
+                }
+
+            }
         }
     }
-
     public void dessinerTrajets(List<Trajet> trajets, GraphicsContext gc) {
         for (Trajet trajet : trajets) {
             List<Segment> segments = trajet.getSegments();

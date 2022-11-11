@@ -34,7 +34,9 @@ public class EtatTourneesCalculees extends Etat{
 
     public void clicSurLivreur(ControleurFenetrePrincipale c){
         System.out.println("appel dans etat");
-        c.vue.afficherLivraisons(true);
+        c.vue.afficherLivraisons(c.vue.comboboxLivreur.getValue(), true);
+        c.vue.tableViewLivraisons.getItems().clear();
+        c.vue.tableViewLivraisons.getItems().addAll(c.vue.comboboxLivreur.getValue().getTournee().getLivraisons());
         c.vue.tableViewLivraisons.refresh();
     }
 }

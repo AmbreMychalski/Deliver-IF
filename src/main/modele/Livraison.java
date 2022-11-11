@@ -12,7 +12,7 @@ import lombok.ToString;
 public class Livraison {
 	private DemandeLivraison demandeLivraison;
 	private float heure;
-	private int livreur;
+	private Livreur livreur;
 
 	private boolean dansSaPlageHorraire;
 

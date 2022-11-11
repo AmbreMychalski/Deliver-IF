@@ -1,10 +1,7 @@
 package controleur;
 
 import javafx.scene.input.MouseEvent;
-import modele.DemandeLivraison;
-import modele.Intersection;
-import modele.Livraison;
-import modele.PlageHoraire;
+import modele.*;
 
 public class EtatSaisieNouvelleDemandeAvecTournees extends Etat {
     public EtatSaisieNouvelleDemandeAvecTournees() {
@@ -22,8 +19,8 @@ public class EtatSaisieNouvelleDemandeAvecTournees extends Etat {
                     .get(Long.parseLong(champIdentifiant));
             if (c.journee.getPlan().estLivrable(intersection)) {
                 DemandeLivraison demande = new DemandeLivraison(intersection, plageHoraire);
-                int livreur = c.vue.comboboxLivreur.getValue();
-                if(livreur == c.journee.getNbLivreur() && c.journee.dernierLivreurEstSansToureeCalculee()){
+                Livreur livreur = c.vue.comboboxLivreur.getValue();
+                if(livreur.getNumero() == c.journee.getNbLivreur() && c.journee.dernierLivreurEstSansTourneeCalculee()){
 
                 }
                 else{

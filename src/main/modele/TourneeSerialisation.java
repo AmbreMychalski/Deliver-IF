@@ -11,18 +11,16 @@ import java.util.Objects;
 public class TourneeSerialisation {
     List<String> coordNames = Arrays.asList("N", "NE","E","SE", "S", "SW", "W", "NW", "N");
     String[] mot_liaison = new String[]{" vers "," sur "," pour suivre ",", "," pour rejoindre "};
-    List<Tournee> tournees;
     StringWriter writer = new StringWriter();
     PrintWriter out = new PrintWriter(writer);
     Plan plan;
-    public TourneeSerialisation(List<Tournee> tournee, Plan plan) {
-        this.tournees = tournee;
+    public TourneeSerialisation(Plan plan) {
         this.plan = plan;
     }
-    public String serialiser(int livreur) throws IndexOutOfBoundsException {
+    public String serialiser(Livreur livreur) throws IndexOutOfBoundsException {
         out.println("Bienvenue sur le super sérialiseur de tournée");
         int i = 1;
-        Tournee tournee = tournees.get(livreur-1);
+        Tournee tournee = livreur.getTournee();
 
         out.println("***********************************************************");
         out.println("Tournée du livreur : " + tournee.getLivraisons().get(0).getLivreur()); //une tournée n'a pas de livreur ??

@@ -71,7 +71,7 @@ public abstract class Etat {
 	protected void sortieDeSelectionDemande(ControleurFenetrePrincipale c, boolean livraison){
 		if(livraison){
 			c.vue.buttonAssignerNvLivreur.setDisable(true);
-			c.vue.afficherLivraisons(true);
+			c.vue.afficherLivraisons(c.vue.comboboxLivreur.getValue(),true);
 		}
 		else{
 			c.vue.afficherDemandesLivraison(true);
@@ -194,7 +194,7 @@ public abstract class Etat {
 				c.vue.buttonModifierLivraison.setDisable(false);
 			}
 			else{
-				c.vue.afficherLivraisons(true);
+				c.vue.afficherLivraisons(c.vue.comboboxLivreur.getValue(),true);
 				c.vue.buttonAssignerNvLivreur.setDisable(false);
 			}
 			c.vue.dessinerIntersection(c.vue.canvasIntersectionsLivraisons.getGraphicsContext2D(),
@@ -269,7 +269,7 @@ public abstract class Etat {
 				remplirLabelRuesIntersection(c, intersectionTrouvee);
 
 				if(tourneeCalculee){
-					c.vue.afficherLivraisons(true);
+					c.vue.afficherLivraisons(c.vue.comboboxLivreur.getValue(), true);
 				} else {
 					c.vue.afficherDemandesLivraison(false);
 				}
@@ -362,20 +362,22 @@ public abstract class Etat {
 		c.vue.labelRuesIntersection.setText("Aucune intersection selectionnée");
 	}
 
-	protected void majComboboxLivreur(ControleurFenetrePrincipale c) {
-		ObservableList<Integer> listInt = FXCollections.observableArrayList();
+	public void majComboboxLivreur(ControleurFenetrePrincipale c) {
+		ObservableList<Livreur> listeLivreur = FXCollections.observableArrayList();
 		ObservableList<String> listStr = FXCollections.observableArrayList();
+		for(Livreur livreur : c.journee.getLivreurs()){
+			listeLivreur.add(livreur);
+		}
 		for (int i = 1; i <= c.journee.getNbLivreur(); i++) {
-			listInt.add(i);
+			//listInt.add(i);
 			listStr.add(Integer.toString(i));
 		}
-
-		if(!c.journee.dernierLivreurEstSansToureeCalculee()){
+		if(!c.journee.dernierLivreurEstSansTourneeCalculee()){
 			listStr.add(c.journee.getNbLivreur()+1+" (nouveau livreur)");
 		}
-		c.vue.comboboxLivreurNouvelleDemande.setItems(listStr);
+		c.vue.comboboxLivreurNouvelleDemande.setItems(listeLivreur);
 		c.vue.comboboxAssignerLivreur.setItems(listStr);
-		c.vue.comboboxLivreur.setItems(listInt);
+		c.vue.comboboxLivreur.setItems(listeLivreur);
 	}
 
 }

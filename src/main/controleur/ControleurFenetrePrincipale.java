@@ -74,8 +74,8 @@ public class ControleurFenetrePrincipale {
 		etatCourant.ajouterDemande(this);
 	}
 
-	public void ajouterLivreur() {
-		//etatCourant.ajouterLivreur(this);
+	public void assignerAutreLivreur() {
+		etatCourant.assignerAutreLivreur(this);
 	}
 
 	public void modifierDemande() {
