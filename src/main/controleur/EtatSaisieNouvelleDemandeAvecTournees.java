@@ -12,7 +12,7 @@ public class EtatSaisieNouvelleDemandeAvecTournees extends Etat {
                 "intersection, puis choisissez la plage horaire";
     }
     public void clicGaucheSurPlan(ControleurFenetrePrincipale c, MouseEvent event) {
-        this.naviguerSurPlan(c, event);
+        this.naviguerSurPlan(c, event, true);
     }
     public void validerAjouterOuModifier(ControleurFenetrePrincipale c) {
         String champIdentifiant = c.vue.textfieldIdentifiantIntersection.getText();
@@ -38,7 +38,7 @@ public class EtatSaisieNouvelleDemandeAvecTournees extends Etat {
                 }
                 /*Livraison livraison = c.journee.ajouterDemandeLivraisonTournee(demande, c.journee.getTournees().get(livreur - 1).getLivraisons().get(0));
                 this.afficherTournee(c, c.journee.getTournees().get(livreur - 1));
-                c.vue.afficherLivraison(true);
+                c.vue.afficherLivraisons(true);
 
                 c.vue.buttonAutoriserAjouterLivraison.setDisable(false);
                 c.vue.buttonValiderLivraison.setDisable(true);

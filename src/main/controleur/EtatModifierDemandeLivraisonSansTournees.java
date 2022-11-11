@@ -9,7 +9,7 @@ public class EtatModifierDemandeLivraisonSansTournees extends Etat {
         super.message = "Validez ou annulez les modifications";
     }
     public void clicGaucheSurPlan(ControleurFenetrePrincipale c, MouseEvent event) {
-        this.naviguerSurPlan(c, event);
+        this.naviguerSurPlan(c, event, false);
         DemandeLivraison ligne = c.vue.tableViewDemandesLivraison
                 .getSelectionModel().getSelectedItem();
         if (ligne != null) {

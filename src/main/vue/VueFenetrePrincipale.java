@@ -35,7 +35,7 @@ public class VueFenetrePrincipale implements Observer {
     public final double TAILLE_RECT_PT_LIVRAISON = 8;
     public final double TAILLE_RECT_PT_LIVRAISON_SELECTIONNE = 12;
     public final double TAILLE_CERCLE_INTERSECTION_SELECTIONNEE = 8;
-    public final double TAILLE_CERCLE_INTERSECTION = 5;
+    public final double TAILLE_CERCLE_INTERSECTION = 8;
     public final Color COULEUR_DEPOT = Color.RED;
     public final Color COULEUR_SEGMENT = Color.BLACK;
     public final Color COULEUR_POINT_LIVRAISON = Color.BLUE;
@@ -355,7 +355,7 @@ public class VueFenetrePrincipale implements Observer {
 
     }
 
-    public void afficherDemandeLivraison(boolean nettoyerCanvas) {
+    public void afficherDemandesLivraison(boolean nettoyerCanvas) {
         GraphicsContext gc = canvasIntersectionsLivraisons.getGraphicsContext2D();
         if(nettoyerCanvas){
             gc.clearRect(0, 0, canvasIntersectionsLivraisons.getWidth(), canvasIntersectionsLivraisons.getHeight());
@@ -372,7 +372,7 @@ public class VueFenetrePrincipale implements Observer {
 
     }
 
-    public void afficherLivraison(boolean nettoyerCanvas){
+    public void afficherLivraisons(boolean nettoyerCanvas){
         System.out.println("appel fonction afficherlivraison");
         if(comboboxLivreur.getValue()!=null) {
             GraphicsContext gc = canvasIntersectionsLivraisons.getGraphicsContext2D();
@@ -673,12 +673,12 @@ public class VueFenetrePrincipale implements Observer {
             tableViewDemandesLivraison.getItems().clear();
             tableViewDemandesLivraison.getItems().addAll(
                     ((Journee) o).getDemandesLivraison());
-            afficherDemandeLivraison(true);
+            afficherDemandesLivraison(true);
         }
         else if(arg == "ChangementLivraison"){
             System.out.println("update tableau");
             tableViewLivraisons.refresh();
-            afficherLivraison(true);
+            afficherLivraisons(true);
         }
     }
 

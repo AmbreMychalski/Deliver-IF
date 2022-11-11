@@ -23,7 +23,7 @@ public class EtatAvecDemande extends Etat{
     }
     
     public void clicGaucheSurPlan(ControleurFenetrePrincipale c, MouseEvent event) {
-        this.naviguerSurPlan(c, event);
+        this.naviguerSurPlan(c, event, false);
     }
     public void clicGaucheSurTableau(ControleurFenetrePrincipale c) {
         boolean demandeSelectionee = this.selectionnerDemande(c,false);

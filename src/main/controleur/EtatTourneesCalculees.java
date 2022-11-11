@@ -15,7 +15,7 @@ public class EtatTourneesCalculees extends Etat{
         this.sauvegarderListeDemandes(c);
     }
     public void clicGaucheSurPlan(ControleurFenetrePrincipale c, MouseEvent event) {
-        this.naviguerSurPlan(c, event);
+        this.naviguerSurPlan(c, event, true);
     }
     public void ajouterDemande(ControleurFenetrePrincipale c) {
         c.vue.buttonValiderLivraison.setDisable(false);
@@ -34,7 +34,7 @@ public class EtatTourneesCalculees extends Etat{
 
     public void clicSurLivreur(ControleurFenetrePrincipale c){
         System.out.println("appel dans etat");
-        c.vue.afficherLivraison(true);
+        c.vue.afficherLivraisons(true);
         c.vue.tableViewLivraisons.refresh();
     }
 }

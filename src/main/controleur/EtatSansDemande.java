@@ -20,7 +20,7 @@ public class EtatSansDemande extends Etat{
         c.changementEtat(c.etatSaisieNouvelleDemandeSansTournees);
     }
     public void clicGaucheSurPlan(ControleurFenetrePrincipale c, MouseEvent event) {
-        this.naviguerSurPlan(c, event);
+        this.naviguerSurPlan(c, event, false);
     }
     public void chargerListeDemandes(ControleurFenetrePrincipale c) throws Exception {
         try{

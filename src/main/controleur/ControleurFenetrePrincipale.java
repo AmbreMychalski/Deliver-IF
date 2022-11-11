@@ -39,9 +39,7 @@ public class ControleurFenetrePrincipale {
     final EtatSaisieNouvelleDemandeAvecTournees etatSaisieNouvelleDemandeAvecTournees = new EtatSaisieNouvelleDemandeAvecTournees();
     final EtatSaisieNouvelleDemandeSansTournees etatSaisieNouvelleDemandeSansTournees = new EtatSaisieNouvelleDemandeSansTournees();
     final EtatTourneesCalculees etatTourneesCalculees = new EtatTourneesCalculees();
-
-	final EtatTourneesCalculeesPartielles etatTourneesCalculeesPartielles = new EtatTourneesCalculeesPartielles();
-
+	
 	final EtatSelectionLivraisonPourNouvelleDemande etatSelectionLivraisonPourNouvelleDemande = new EtatSelectionLivraisonPourNouvelleDemande();
 
 	// modèle

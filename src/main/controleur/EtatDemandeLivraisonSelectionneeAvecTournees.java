@@ -20,7 +20,13 @@ public class EtatDemandeLivraisonSelectionneeAvecTournees extends Etat {
         int livreur = c.vue.comboboxLivreur.getValue();
         this.supprimerLivraison(c);
         this.sortieDeSelectionDemande(c,true);
-        this.afficherTournee(c, c.journee.getTournees().get(livreur-1));
+        if(c.journee.getTournees().get(livreur -1) != null){
+            this.afficherTournee(c, c.journee.getTournees().get(livreur-1));
+            c.changementEtat(c.etatTourneesCalculees);
+        } else {
+            c.vue.canvasPlanTrajet.getGraphicsContext2D().clearRect(0,0, c.vue.canvasPlanTrajet.getWidth(), c.vue.canvasPlanTrajet.getHeight());
+            c.changementEtat(c.etatSansDemande);
+        }
     }
     public void assignerAutreLivreur(){
 
@@ -32,7 +38,6 @@ public class EtatDemandeLivraisonSelectionneeAvecTournees extends Etat {
                 c.changementEtat(c.etatTourneesCalculees);
                 break;
             case DELETE:
-                this.supprimerLivraison(c);
                 int livreur = c.vue.comboboxLivreur.getValue();
                 this.supprimerLivraison(c);
                 this.sortieDeSelectionDemande(c,true);

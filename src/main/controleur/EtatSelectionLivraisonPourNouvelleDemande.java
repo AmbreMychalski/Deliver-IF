@@ -20,7 +20,7 @@ public class EtatSelectionLivraisonPourNouvelleDemande extends Etat{
 
         if (ligne != null) {
 
-            c.vue.afficherLivraison(true);
+            c.vue.afficherLivraisons(true);
             c.vue.dessinerIntersection(c.vue.canvasIntersectionsLivraisons.getGraphicsContext2D(),
                     ligne.getDemandeLivraison().getIntersection(),
                     c.vue.COULEUR_POINT_LIVRAISON_SELECTIONNE,
@@ -38,7 +38,7 @@ public class EtatSelectionLivraisonPourNouvelleDemande extends Etat{
             DemandeLivraison derniereDemande = c.journee.getDemandesLivraison().get(c.journee.getDemandesLivraison().size()-1);
             Livraison livraisonAAjoutee = c.journee.ajouterDemandeLivraisonTournee(derniereDemande, ligne);
             this.afficherTournee(c, c.journee.getTournees().get(livreur - 1));
-            c.vue.afficherLivraison(true);
+            c.vue.afficherLivraisons(true);
 
             c.vue.buttonAutoriserAjouterLivraison.setDisable(false);
             c.vue.buttonValiderLivraison.setDisable(true);

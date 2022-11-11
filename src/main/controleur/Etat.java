@@ -71,15 +71,14 @@ public abstract class Etat {
 	protected void sortieDeSelectionDemande(ControleurFenetrePrincipale c, boolean livraison){
 		if(livraison){
 			c.vue.buttonAssignerNvLivreur.setDisable(true);
-			c.vue.afficherLivraison(true);
+			c.vue.afficherLivraisons(true);
 		}
 		else{
-			c.vue.afficherDemandeLivraison(true);
+			c.vue.afficherDemandesLivraison(true);
 		}
 		c.vue.buttonModifierLivraison.setDisable(true);
 		c.vue.buttonSupprimerLivraison.setDisable(true);
 		c.vue.buttonAutoriserAjouterLivraison.setDisable(false);
-		c.vue.afficherDemandeLivraison(true);
 		c.vue.textfieldIdentifiantIntersectionSelection.setText("");
 		resetLabelRuesIntersection(c);
 		c.vue.textfieldPlageHoraire.setText("");
@@ -89,8 +88,10 @@ public abstract class Etat {
 	protected  void afficherTournee(ControleurFenetrePrincipale c, Tournee tournee){
 		GraphicsContext gc = c.vue.canvasPlanTrajet.getGraphicsContext2D();
 		gc.clearRect(0, 0, c.vue.canvasPlanTrajet.getWidth(), c.vue.canvasPlanTrajet.getHeight());
-		List<Trajet> trajets = tournee.getTrajets();
-		c.vue.dessinerTrajets(trajets, gc);
+		if(tournee != null){
+			List<Trajet> trajets = tournee.getTrajets();
+			c.vue.dessinerTrajets(trajets, gc);
+		}
 	}
 
 	protected void sauvegarderListeDemandes(ControleurFenetrePrincipale c){
@@ -189,11 +190,11 @@ public abstract class Etat {
 		}
 		if (ligne != null) {
 			if(!livraison) {
-				c.vue.afficherDemandeLivraison(true);
+				c.vue.afficherDemandesLivraison(true);
 				c.vue.buttonModifierLivraison.setDisable(false);
 			}
 			else{
-				c.vue.afficherLivraison(true);
+				c.vue.afficherLivraisons(true);
 				c.vue.buttonAssignerNvLivreur.setDisable(false);
 			}
 			c.vue.dessinerIntersection(c.vue.canvasIntersectionsLivraisons.getGraphicsContext2D(),
@@ -249,7 +250,7 @@ public abstract class Etat {
 		return false;
 	}
 
-	protected  void naviguerSurPlan(ControleurFenetrePrincipale c, MouseEvent event){
+	protected  void naviguerSurPlan(ControleurFenetrePrincipale c, MouseEvent event, boolean tourneeCalculee){
 		if (c.journee.getPlan() != null) {
 			/*ControleurFenetrePrincipale.logger.debug("Clic sur le canvas, (x,y)=("
 					+ event.getX() + "," + event.getY() + ") (lat,long)="
@@ -266,15 +267,18 @@ public abstract class Etat {
 				GraphicsContext gc = c.vue.canvasIntersectionsLivraisons.getGraphicsContext2D();
 				gc.clearRect(0, 0, c.vue.canvasIntersectionsLivraisons.getWidth(), c.vue.canvasIntersectionsLivraisons.getHeight());
 				remplirLabelRuesIntersection(c, intersectionTrouvee);
+
+				if(tourneeCalculee){
+					c.vue.afficherLivraisons(true);
+				} else {
+					c.vue.afficherDemandesLivraison(false);
+				}
 				c.vue.dessinerIntersection(gc,
 						intersectionTrouvee,
 						Color.DARKORCHID,
 						c.vue.TAILLE_CERCLE_INTERSECTION_SELECTIONNEE,
 						true,
 						VueFenetrePrincipale.FormeIntersection.CERCLE);
-
-				c.vue.afficherDemandeLivraison(false);
-
 			} else {
 				c.vue.textfieldIdentifiantIntersection.setText("");
 				resetLabelRuesIntersection(c);
