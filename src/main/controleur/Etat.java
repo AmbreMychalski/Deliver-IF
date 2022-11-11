@@ -1,6 +1,5 @@
 package controleur;
 
-import exception.FichierNonConformeException;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
@@ -56,29 +55,21 @@ public abstract class Etat {
 	public void touchePressee(ControleurFenetrePrincipale c, KeyEvent ke) {}
 
 	private void annulerModif(ControleurFenetrePrincipale c) {
-	    c.vue.buttonAutoriserAjouterLivraison.setDisable(false);
-        c.vue.buttonValiderLivraison.setDisable(true);
-        c.vue.buttonAnnulerLivraison.setDisable(true);
         c.vue.comboboxPlageHoraire.setDisable(true);
         c.changementEtat(c.etatDemandeLivraisonSelectionneeSansTournees);
 	}
 
 	protected void sortieDeSelectionDemande(ControleurFenetrePrincipale c, boolean livraison){
 		if(livraison){
-			c.vue.buttonAssignerNvLivreur.setDisable(true);
 			c.vue.afficherLivraison(true);
 		}
 		else{
 			c.vue.afficherDemandeLivraison(true);
 		}
-		c.vue.buttonModifierLivraison.setDisable(true);
-		c.vue.buttonSupprimerLivraison.setDisable(true);
-		c.vue.buttonAutoriserAjouterLivraison.setDisable(false);
 		c.vue.afficherDemandeLivraison(true);
 		c.vue.textfieldIdentifiantIntersectionSelection.setText("");
 		resetLabelRuesIntersection(c);
 		c.vue.textfieldPlageHoraire.setText("");
-		c.vue.buttonSauvegarderDemandes.setDisable(false);
 	}
 
 	protected  boolean calculerEtAfficherTournee(ControleurFenetrePrincipale c){
@@ -125,13 +116,8 @@ public abstract class Etat {
 	}
 
 	protected void modifierDemandeApresSelection(ControleurFenetrePrincipale c){
-		c.vue.buttonModifierLivraison.setDisable(true);
 		c.vue.textfieldIdentifiantIntersectionSelection.setText("");
 		resetLabelRuesIntersection(c);
-		c.vue.buttonSupprimerLivraison.setDisable(true);
-		c.vue.buttonAutoriserAjouterLivraison.setDisable(true);
-		c.vue.buttonValiderLivraison.setDisable(false);
-		c.vue.buttonAnnulerLivraison.setDisable(false);
 		c.vue.comboboxPlageHoraire.setDisable(false);
 		c.vue.tableViewDemandesLivraison.setDisable(true);
 	}
@@ -172,10 +158,6 @@ public abstract class Etat {
 		c.vue.textfieldPlageHoraire.setText(demande.getPlageHoraire().toString());
 
 
-		c.vue.buttonModifierLivraison.setDisable(false);
-		c.vue.buttonSupprimerLivraison.setDisable(false);
-		c.vue.buttonValiderLivraison.setDisable(true);
-		c.vue.buttonAnnulerLivraison.setDisable(true);
 		c.vue.comboboxPlageHoraire.setDisable(true);
 		c.vue.comboboxPlageHoraire.setValue(null);
 		c.vue.tableViewDemandesLivraison.setDisable(false);
@@ -355,7 +337,7 @@ public abstract class Etat {
 	}
 	protected void remplirLabelRuesIntersection(ControleurFenetrePrincipale c, Intersection intersection){
 		List<String> rues = c.planCharge.obtenirRuesIntersection(intersection);
-		String texte = "";
+		String texte;
 		if(rues.get(1) != null){
 			texte = "Croisement \n "+rues.get(0) + " \n et \n"+ rues.get(1);
 		}

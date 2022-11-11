@@ -10,12 +10,8 @@ public class EtatAvecDemande extends Etat{
     }
     
     public void ajouterDemande(ControleurFenetrePrincipale c) {
-        c.vue.buttonValiderLivraison.setDisable(false);
-        c.vue.buttonAnnulerLivraison.setDisable(false);
         c.vue.comboboxPlageHoraire.setDisable(false);
         c.vue.tableViewDemandesLivraison.setDisable(true);
-        c.vue.buttonCalculerTournees.setDisable(true);
-        c.vue.buttonChargerDemandes.setDisable(true);
         c.changementEtat(c.etatSaisieNouvelleDemandeSansTournees);
     }
     
@@ -31,7 +27,6 @@ public class EtatAvecDemande extends Etat{
 
     public void chargerListeDemandes(ControleurFenetrePrincipale c) throws Exception{
         chargerDemandes(c);
-        c.vue.buttonCalculerTournees.setDisable(false);
     }
 
     public void sauvegarderDemandes(ControleurFenetrePrincipale c) {
@@ -46,9 +41,6 @@ public class EtatAvecDemande extends Etat{
             System.out.println("changement d'état : "+c.etatCourant);
         }
         else {
-            c.vue.buttonAfficherFeuillesRoute.setDisable(false);
-            c.vue.buttonCalculerTournees.setDisable(true);
-            c.vue.buttonChargerDemandes.setDisable(true);
             c.changementEtat(c.etatTourneesCalculees);
         }
         c.vue.tableViewDemandesLivraison.setVisible(false);

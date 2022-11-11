@@ -18,8 +18,6 @@ public class EtatTourneesCalculees extends Etat{
         this.naviguerSurPlan(c, event);
     }
     public void ajouterDemande(ControleurFenetrePrincipale c) {
-        c.vue.buttonValiderLivraison.setDisable(false);
-        c.vue.buttonAnnulerLivraison.setDisable(false);
         c.vue.comboboxPlageHoraire.setDisable(false);
         //c.vue.tableViewDemandesLivraison.setDisable(true);
         List<Livraison> listeLivraisons = c.journee.getLivraisonsLivreur(

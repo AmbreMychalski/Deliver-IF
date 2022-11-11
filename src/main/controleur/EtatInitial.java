@@ -5,6 +5,7 @@ import java.io.File;
 import exception.FichierNonConformeException;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.stage.FileChooser;
+import modele.Intersection;
 import modele.Plan;
 import modele.Segment;
 import vue.VueFenetrePrincipale;
@@ -33,17 +34,17 @@ public class EtatInitial extends Etat{
             c.journee.setPlan(c.planCharge);
 
             c.vue.latMax = c.planCharge.getIntersections().values().stream()
-                    .map(intersection -> intersection.getLatitude())
-                    .max((a, b) -> Float.compare(a, b)).orElse(0f);
+                    .map(Intersection::getLatitude)
+                    .max(Float::compare).orElse(0f);
             c.vue.latMin = c.planCharge.getIntersections().values().stream()
-                    .map(intersection -> intersection.getLatitude())
-                    .min((a, b) -> Float.compare(a, b)).orElse(0f);
+                    .map(Intersection::getLatitude)
+                    .min(Float::compare).orElse(0f);
             c.vue.longMax = c.planCharge.getIntersections().values().stream()
-                    .map(intersection -> intersection.getLongitude())
-                    .max((a, b) -> Float.compare(a, b)).orElse(0f);
+                    .map(Intersection::getLongitude)
+                    .max(Float::compare).orElse(0f);
             c.vue.longMin = c.planCharge.getIntersections().values().stream()
-                    .map(intersection -> intersection.getLongitude())
-                    .min((a, b) -> Float.compare(a, b)).orElse(0f);
+                    .map(Intersection::getLongitude)
+                    .min(Float::compare).orElse(0f);
 
             c.vue.largeurPlan = c.vue.longMax - c.vue.longMin;
             c.vue.hauteurPlan = c.vue.latMax - c.vue.latMin;
@@ -64,8 +65,6 @@ public class EtatInitial extends Etat{
                     VueFenetrePrincipale.FormeIntersection.CERCLE);
             c.vue.titledPaneEditionDemande.setVisible(true);
             c.vue.titlePaneSelectionDemande.setVisible(true);
-            c.vue.buttonChargerDemandes.setDisable(false);
-            c.vue.buttonAutoriserAjouterLivraison.setDisable(false);
             c.changementEtat(c.etatSansDemande);
         } catch (Exception ex){
             throw  new FichierNonConformeException("Le fichier comporte des problèmes");

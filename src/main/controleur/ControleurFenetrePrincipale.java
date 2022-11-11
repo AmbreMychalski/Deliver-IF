@@ -6,7 +6,7 @@
 
 package controleur;
 
-import exception.FichierNonConformeException;
+import javafx.scene.control.Button;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import lombok.Getter;
@@ -15,6 +15,8 @@ import modele.Plan;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import vue.VueFenetrePrincipale;
+
+import java.util.*;
 
 /**
  * Contrôleur de la vue principale de l'application.
@@ -42,8 +44,8 @@ public class ControleurFenetrePrincipale {
     final EtatTourneesCalculees etatTourneesCalculees = new EtatTourneesCalculees();
 
 	final EtatTourneesCalculeesPartielles etatTourneesCalculeesPartielles = new EtatTourneesCalculeesPartielles();
-	
-	
+	// Map qui associe les états à l'état des boutons sur lesquels on peut cliquer
+	private HashMap<Etat, ArrayList<Button>> boutonsActivesParEtat;
 
 	// modèle
 	Journee journee;
@@ -52,6 +54,54 @@ public class ControleurFenetrePrincipale {
 
 	public ControleurFenetrePrincipale(VueFenetrePrincipale vue) {
 		this.vue = vue;
+
+		boutonsActivesParEtat = new HashMap<Etat, ArrayList<Button>>() {{
+			put(etatInitial, new ArrayList<>(Arrays.asList(
+					vue.buttonChargerPlan
+			)));
+			put(etatSansDemande, new ArrayList<>(Arrays.asList(
+					vue.buttonChargerPlan,
+					vue.buttonAutoriserAjouterLivraison,
+					vue.buttonChargerDemandes
+			)));
+			put(etatSaisieNouvelleDemandeSansTournees, new ArrayList<>(Arrays.asList(
+					vue.buttonValiderLivraison,
+					vue.buttonAnnulerLivraison
+			)));
+			put(etatSaisieNouvelleDemandeAvecTournees, new ArrayList<>(Arrays.asList(
+					vue.buttonValiderLivraison,
+					vue.buttonAnnulerLivraison
+			)));
+			put(etatAfficherFeuillesRoute, new ArrayList<>(Arrays.asList(
+
+			)));
+			put(etatAvecDemande, new ArrayList<>(Arrays.asList(
+					vue.buttonChargerPlan,
+					vue.buttonAutoriserAjouterLivraison,
+					vue.buttonChargerDemandes,
+					vue.buttonSauvegarderDemandes,
+					vue.buttonCalculerTournees
+			)));
+			put(etatDemandeLivraisonSelectionneeSansTournees, new ArrayList<>(Arrays.asList(
+
+			)));
+			put(etatDemandeLivraisonSelectionneeAvecTournees, new ArrayList<>(Arrays.asList(
+
+			)));
+			put(etatModifierDemandeLivraisonAvecTournees, new ArrayList<>(Arrays.asList(
+
+			)));
+			put(etatModifierDemandeLivraisonSansTournees, new ArrayList<>(Arrays.asList(
+
+			)));
+			put(etatTourneesCalculees, new ArrayList<>(Arrays.asList(
+
+			)));
+			put(etatTourneesCalculeesPartielles, new ArrayList<>(Arrays.asList(
+
+			)));
+		}};
+
 		this.changementEtat(etatInitial);
 		this.journee = new Journee();
 		this.journee.ajouterObservateur(vue);
@@ -117,5 +167,6 @@ public class ControleurFenetrePrincipale {
 	public void changementEtat(Etat nouvelEtat){
 		this.etatCourant = nouvelEtat;
 		this.vue.updateLabelGuideUtilisateur(this.etatCourant.getMessage());
+		this.vue.activerExclusivementBoutons(boutonsActivesParEtat.get(nouvelEtat));
 	}
 }

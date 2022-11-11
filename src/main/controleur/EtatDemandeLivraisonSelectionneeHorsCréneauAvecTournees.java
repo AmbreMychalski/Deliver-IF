@@ -44,15 +44,11 @@ public class EtatDemandeLivraisonSelectionneeHorsCréneauAvecTournees extends Et
     private void miseAJourBoutonEtCanvas(ControleurFenetrePrincipale c) {
         if(c.journee.getDemandesLivraison().size() != 0) {
             this.calculerEtAfficherTournee(c);
-            c.vue.buttonSauvegarderDemandes.setDisable(false);
             c.changementEtat(c.etatTourneesCalculees);
         } else {
             GraphicsContext gc = c.vue.canvasPlanTrajet.getGraphicsContext2D();
             gc.clearRect(0, 0, c.vue.canvasPlanTrajet.getWidth(),
                     c.vue.canvasPlanTrajet.getHeight());
-            c.vue.buttonCalculerTournees.setDisable(true);
-            c.vue.buttonSauvegarderDemandes.setDisable(true);
-            c.vue.buttonChargerDemandes.setDisable(false);
             c.changementEtat(c.etatSansDemande);
         }
     }
