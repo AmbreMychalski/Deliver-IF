@@ -3,7 +3,6 @@ package controleur;
 import javafx.scene.input.MouseEvent;
 import modele.DemandeLivraison;
 import modele.Intersection;
-import modele.Livraison;
 import modele.PlageHoraire;
 
 public class EtatSaisieNouvelleDemandeAvecTournees extends Etat {
@@ -27,9 +26,7 @@ public class EtatSaisieNouvelleDemandeAvecTournees extends Etat {
 
                 }
                 else{
-                    c.vue.buttonValiderLivraison.setDisable(true);
                     c.vue.comboboxPlageHoraire.setDisable(true);
-                    c.vue.buttonAnnulerLivraison.setDisable(true);
                     c.vue.tableViewDemandesLivraison.setDisable(false);
                     c.vue.tableViewLivraisons.setDisable(false);
 

@@ -1,6 +1,5 @@
 package controleur;
 
-import javafx.scene.input.MouseEvent;
 import modele.DemandeLivraison;
 import modele.Livraison;
 import vue.VueFenetrePrincipale;
@@ -34,18 +33,13 @@ public class EtatSelectionLivraisonPourNouvelleDemande extends Etat{
             remplirLabelRuesIntersection(c, ligne.getDemandeLivraison().getIntersection());
             c.vue.textfieldPlageHoraire.setText(ligne.getDemandeLivraison().getPlageHoraire().toString());
 
-            int livreur = (int)c.vue.comboboxLivreurNouvelleDemande.getValue().charAt(0);
+            int livreur = c.vue.comboboxLivreurNouvelleDemande.getValue().charAt(0);
             DemandeLivraison derniereDemande = c.journee.getDemandesLivraison().get(c.journee.getDemandesLivraison().size()-1);
             Livraison livraisonAAjoutee = c.journee.ajouterDemandeLivraisonTournee(derniereDemande, ligne);
             this.afficherTournee(c, c.journee.getTournees().get(livreur - 1));
             c.vue.afficherLivraisons(true);
 
-            c.vue.buttonAutoriserAjouterLivraison.setDisable(false);
-            c.vue.buttonValiderLivraison.setDisable(true);
             c.vue.comboboxPlageHoraire.setDisable(true);
-            c.vue.buttonAnnulerLivraison.setDisable(true);
-
-
             c.vue.tableViewLivraisons.getItems().add(livraisonAAjoutee);
             c.vue.tableViewLivraisons.refresh();
 

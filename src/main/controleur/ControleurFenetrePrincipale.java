@@ -37,15 +37,12 @@ public class ControleurFenetrePrincipale {
     final EtatAfficherFeuillesRoute etatAfficherFeuillesRoute = new EtatAfficherFeuillesRoute();
     final EtatDemandeLivraisonSelectionneeAvecTournees etatDemandeLivraisonSelectionneeAvecTournees = new EtatDemandeLivraisonSelectionneeAvecTournees();
     final EtatDemandeLivraisonSelectionneeSansTournees etatDemandeLivraisonSelectionneeSansTournees = new EtatDemandeLivraisonSelectionneeSansTournees();
-    final EtatModifierDemandeLivraisonAvecTournees etatModifierDemandeLivraisonAvecTournees = new EtatModifierDemandeLivraisonAvecTournees();
     final EtatModifierDemandeLivraisonSansTournees etatModifierDemandeLivraisonSansTournees = new EtatModifierDemandeLivraisonSansTournees();
     final EtatSaisieNouvelleDemandeAvecTournees etatSaisieNouvelleDemandeAvecTournees = new EtatSaisieNouvelleDemandeAvecTournees();
     final EtatSaisieNouvelleDemandeSansTournees etatSaisieNouvelleDemandeSansTournees = new EtatSaisieNouvelleDemandeSansTournees();
     final EtatTourneesCalculees etatTourneesCalculees = new EtatTourneesCalculees();
-
 	final EtatSelectionLivraisonPourNouvelleDemande etatSelectionLivraisonPourNouvelleDemande = new EtatSelectionLivraisonPourNouvelleDemande();
 
-	final EtatTourneesCalculeesPartielles etatTourneesCalculeesPartielles = new EtatTourneesCalculeesPartielles();
 	// Map qui associe les états à l'état des boutons sur lesquels on peut cliquer
 	private HashMap<Etat, ArrayList<Button>> boutonsActivesParEtat;
 
@@ -57,49 +54,51 @@ public class ControleurFenetrePrincipale {
 		this.vue = vue;
 
 		boutonsActivesParEtat = new HashMap<Etat, ArrayList<Button>>() {{
-			put(etatInitial, new ArrayList<>(Arrays.asList(
-					vue.buttonChargerPlan
-			)));
-			put(etatSansDemande, new ArrayList<>(Arrays.asList(
-					vue.buttonChargerPlan,
-					vue.buttonAutoriserAjouterLivraison,
-					vue.buttonChargerDemandes
-			)));
-			put(etatSaisieNouvelleDemandeSansTournees, new ArrayList<>(Arrays.asList(
-					vue.buttonValiderLivraison,
-					vue.buttonAnnulerLivraison
-			)));
-			put(etatSaisieNouvelleDemandeAvecTournees, new ArrayList<>(Arrays.asList(
-					vue.buttonValiderLivraison,
-					vue.buttonAnnulerLivraison
-			)));
 			put(etatAfficherFeuillesRoute, new ArrayList<>(Arrays.asList(
 
 			)));
 			put(etatAvecDemande, new ArrayList<>(Arrays.asList(
-					vue.buttonChargerPlan,
-					vue.buttonAutoriserAjouterLivraison,
-					vue.buttonChargerDemandes,
-					vue.buttonSauvegarderDemandes,
-					vue.buttonCalculerTournees
+				vue.buttonChargerPlan,
+				vue.buttonAutoriserAjouterLivraison,
+				vue.buttonChargerDemandes,
+				vue.buttonSauvegarderDemandes,
+				vue.buttonCalculerTournees
 			)));
 			put(etatDemandeLivraisonSelectionneeSansTournees, new ArrayList<>(Arrays.asList(
-
+				vue.buttonModifierLivraison,
+				vue.buttonSupprimerLivraison
 			)));
 			put(etatDemandeLivraisonSelectionneeAvecTournees, new ArrayList<>(Arrays.asList(
-
+				vue.buttonModifierLivraison,
+				vue.buttonSupprimerLivraison,
+				vue.buttonAssignerNvLivreur
 			)));
-			put(etatModifierDemandeLivraisonAvecTournees, new ArrayList<>(Arrays.asList(
-
+			put(etatInitial, new ArrayList<>(Arrays.asList(
+				vue.buttonChargerPlan
 			)));
 			put(etatModifierDemandeLivraisonSansTournees, new ArrayList<>(Arrays.asList(
+				vue.buttonValiderLivraison,
+				vue.buttonAnnulerLivraison
+			)));
+			put(etatSaisieNouvelleDemandeSansTournees, new ArrayList<>(Arrays.asList(
+				vue.buttonValiderLivraison,
+				vue.buttonAnnulerLivraison
+			)));
+			put(etatSaisieNouvelleDemandeAvecTournees, new ArrayList<>(Arrays.asList(
+				vue.buttonValiderLivraison,
+				vue.buttonAnnulerLivraison
+			)));
+			put(etatSansDemande, new ArrayList<>(Arrays.asList(
+				vue.buttonChargerPlan,
+				vue.buttonAutoriserAjouterLivraison,
+				vue.buttonChargerDemandes
+			)));
+			put(etatSelectionLivraisonPourNouvelleDemande, new ArrayList<>(Arrays.asList(
 
 			)));
 			put(etatTourneesCalculees, new ArrayList<>(Arrays.asList(
-
-			)));
-			put(etatTourneesCalculeesPartielles, new ArrayList<>(Arrays.asList(
-
+				vue.buttonAfficherFeuillesRoute,
+				vue.buttonAutoriserAjouterLivraison
 			)));
 		}};
 
@@ -169,6 +168,7 @@ public class ControleurFenetrePrincipale {
 		this.etatCourant = nouvelEtat;
 		this.vue.updateLabelGuideUtilisateur(this.etatCourant.getMessage());
 		this.vue.activerExclusivementBoutons(boutonsActivesParEtat.get(nouvelEtat));
+		logger.debug("Nouvel état : " + nouvelEtat.getClass().getName());
 	}
 
 	public void clicSurLivreur() {

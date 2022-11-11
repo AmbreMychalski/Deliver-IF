@@ -48,9 +48,6 @@ public class EtatAvecDemande extends Etat{
         c.vue.tableViewLivraisons.refresh();
 
         this.afficherTournee(c,c.journee.getTournees().get(livreur-1));
-        c.vue.buttonAfficherFeuillesRoute.setDisable(false);
-        c.vue.buttonCalculerTournees.setDisable(true);
-        c.vue.buttonChargerDemandes.setDisable(true);
         c.changementEtat(c.etatTourneesCalculees);
         c.vue.tableViewDemandesLivraison.setVisible(false);
         c.vue.tableViewLivraisons.setVisible(true);
