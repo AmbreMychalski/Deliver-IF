@@ -34,7 +34,7 @@ public class EtatSelectionLivraisonPourNouvelleDemande extends Etat{
             remplirLabelRuesIntersection(c, ligne.getDemandeLivraison().getIntersection());
             c.vue.textfieldPlageHoraire.setText(ligne.getDemandeLivraison().getPlageHoraire().toString());
 
-            int livreur = c.vue.comboboxLivreurNouvelleDemande.getValue();
+            int livreur = (int)c.vue.comboboxLivreurNouvelleDemande.getValue().charAt(0);
             DemandeLivraison derniereDemande = c.journee.getDemandesLivraison().get(c.journee.getDemandesLivraison().size()-1);
             Livraison livraisonAAjoutee = c.journee.ajouterDemandeLivraisonTournee(derniereDemande, ligne);
             this.afficherTournee(c, c.journee.getTournees().get(livreur - 1));

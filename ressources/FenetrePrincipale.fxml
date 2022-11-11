@@ -86,7 +86,6 @@
                      <TableColumn fx:id="columnIdentifiantLivraison" prefWidth="80.0" text="Identifiant" />
                      <TableColumn fx:id="columnPlageHoraireLivraison" prefWidth="96.0" text="Plage horaire" />
                      <TableColumn fx:id="columnHeure" prefWidth="70.0" text="Horaire" />
-                     <TableColumn fx:id="columnLivreur" prefWidth="30.0" text="Livreur" />
                  </columns>
              </TableView>
              <TitledPane fx:id="titlePaneSelectionDemande" animated="false" collapsible="false" layoutX="7.0" layoutY="500.0" prefHeight="210.0" prefWidth="276.0" text="Selection de la demande">
@@ -100,7 +99,7 @@
                         <TextField id="textfieldPlageHoraire" fx:id="textfieldPlageHoraire" editable="false" layoutX="152.0" layoutY="60.0" prefHeight="25.0" prefWidth="117.0" />
                         <Button id="buttonSupprimerLivraison" fx:id="buttonModifierLivraison" layoutX="69.0" layoutY="95.0" mnemonicParsing="false" text="Modifier" />
                          <Label layoutX="69.0" layoutY="130.0" text="Assigner à un autre livreur" />
-                         <ComboBox id="comboboxLivreurLivraison" fx:id="comboboxLivreurLivraison" layoutX="50.0" layoutY="150.0" prefHeight="25.0" prefWidth="100.0" />
+                         <ComboBox id="comboboxAssignerLivreur" fx:id="comboboxAssignerLivreur" layoutX="50.0" layoutY="150.0" prefHeight="25.0" prefWidth="100.0" />
                         <Button id="buttonAssignerNvLivreur" fx:id="buttonAssignerNvLivreur" layoutX="170.0" layoutY="150.0" mnemonicParsing="false" text="Valider" />
                      </children>
                     </AnchorPane>

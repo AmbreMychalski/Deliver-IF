@@ -359,14 +359,19 @@ public abstract class Etat {
 	}
 
 	protected void majComboboxLivreur(ControleurFenetrePrincipale c) {
-		ObservableList<Integer> list = FXCollections.observableArrayList();
+		ObservableList<Integer> listInt = FXCollections.observableArrayList();
+		ObservableList<String> listStr = FXCollections.observableArrayList();
 		for (int i = 1; i <= c.journee.getNbLivreur(); i++) {
-			list.add(i);
+			listInt.add(i);
+			listStr.add(Integer.toString(i));
 		}
-		c.vue.comboboxLivreur.setItems(list);
+
 		if(!c.journee.dernierLivreurEstSansToureeCalculee()){
-			list.add(c.journee.getNbLivreur()+1);
+			listStr.add(c.journee.getNbLivreur()+1+" (nouveau livreur)");
 		}
-		c.vue.comboboxLivreurNouvelleDemande.setItems(list);
+		c.vue.comboboxLivreurNouvelleDemande.setItems(listStr);
+		c.vue.comboboxAssignerLivreur.setItems(listStr);
+		c.vue.comboboxLivreur.setItems(listInt);
 	}
+
 }

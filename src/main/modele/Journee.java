@@ -178,7 +178,7 @@ public class Journee extends Observable {
 
         System.out.println("tourneeComplete = " + tourneeComplete);
 
-        this.nbLivreur = 3;
+        this.nbLivreur = 1;
 
         return tourneeComplete;
     }

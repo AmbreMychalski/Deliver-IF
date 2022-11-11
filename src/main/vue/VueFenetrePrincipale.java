@@ -3,6 +3,8 @@ package vue;
 
 import controleur.ControleurFenetrePrincipale;
 import exception.FichierNonConformeException;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -96,7 +98,7 @@ public class VueFenetrePrincipale implements Observer {
     @FXML
     public ComboBox<PlageHoraire> comboboxPlageHoraire;
     @FXML
-    public ComboBox<Integer> comboboxLivreurNouvelleDemande;
+    public ComboBox<String> comboboxLivreurNouvelleDemande;
     @FXML
     public Label labelLivreurNouvelleDemande;
     @FXML
@@ -112,8 +114,6 @@ public class VueFenetrePrincipale implements Observer {
     @FXML
     public TableColumn<Livraison, String> columnHeure;
     @FXML
-    public TableColumn<Livraison, Integer> columnLivreur;
-    @FXML
     public TitledPane titlePaneSelectionDemande;
     @FXML
     public TitledPane titledPaneEditionDemande;
@@ -128,7 +128,7 @@ public class VueFenetrePrincipale implements Observer {
     @FXML
     public Label labelRuesIntersection;
     @FXML
-    public ComboBox<String> comboboxLivreurLivraison;
+    public ComboBox<String> comboboxAssignerLivreur;
 
     @FXML
     private void initialize() {
@@ -172,7 +172,8 @@ public class VueFenetrePrincipale implements Observer {
         buttonValiderLivraison.setOnAction(event -> actionBoutonAjouterLivraison(event));
         buttonAnnulerLivraison.setOnAction(event -> actionBoutonAnnulerLivraison(event));
         buttonAutoriserAjouterLivraison.setOnAction(event -> actionBoutonAutoriserAjouterLivraison(event));
-        comboboxLivreur.setOnAction(event -> actionClicSurLivreur(event));
+        comboboxLivreur.setOnAction(event -> actionClicSurLivreur());
+
         buttonChargerDemandes.setOnAction(event -> {
             try{
                 actionBoutonChargerDemande(event);
@@ -228,8 +229,6 @@ public class VueFenetrePrincipale implements Observer {
                 new PropertyValueFactory<>("plageHoraireLivraison"));
         columnHeure.setCellValueFactory(
                 new PropertyValueFactory<>("heureAffichee"));
-        columnLivreur.setCellValueFactory(
-                new PropertyValueFactory<>("livreur"));
         columnPlageHoraireLivraison.setCellFactory(
                 new Callback<TableColumn<Livraison, PlageHoraire>, TableCell<Livraison, PlageHoraire>>() {
                     @Override
@@ -398,7 +397,7 @@ public class VueFenetrePrincipale implements Observer {
         controleur.validerAjouterOuModifier();
     }
 
-    private void actionClicSurLivreur(ActionEvent event) {
+    private void actionClicSurLivreur() {
         System.out.println("appel a action clic livreur");
         controleur.clicSurLivreur();
     }
