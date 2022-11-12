@@ -162,6 +162,7 @@ public class VueFenetrePrincipale implements Observer {
         buttonAnnulerLivraison.setOnAction(this::actionBoutonAnnulerLivraison);
         buttonAutoriserAjouterLivraison.setOnAction(this::actionBoutonAutoriserAjouterLivraison);
         comboboxLivreur.setOnAction(event -> actionClicSurLivreur());
+        comboboxAssignerLivreur.setOnAction(event -> actionClicComboboxAssisgnerLivreur());
         buttonChargerDemandes.setOnAction(event -> {
             try{
                 actionBoutonChargerDemande(event);
@@ -270,6 +271,10 @@ public class VueFenetrePrincipale implements Observer {
                 });
     }
 
+    private void actionClicComboboxAssisgnerLivreur() {
+        controleur.actionClicComboboxAssisgnerLivreur();
+    }
+
     private void actionBoutonAfficherFeulleDeRoute(ActionEvent event) {
         if(this.comboboxLivreur.getValue() != null){
             vue.FenetreFeuilleDeRoute.display(controleur, this.comboboxLivreur.getValue());
@@ -278,7 +283,6 @@ public class VueFenetrePrincipale implements Observer {
         }
 
     }
-
 
     @FXML
     private void handleKeyPressed(KeyEvent ke){
@@ -366,26 +370,25 @@ public class VueFenetrePrincipale implements Observer {
         }
     }
     public void afficherLivraisons(Livreur livreur, boolean nettoyerCanvas){
-        System.out.println("appel fonction afficherlivraison");
         GraphicsContext gc = canvasIntersectionsLivraisons.getGraphicsContext2D();
         GraphicsContext gcTrajets = canvasPlanTrajet.getGraphicsContext2D();
         if (nettoyerCanvas) {
             gc.clearRect(0, 0, canvasIntersectionsLivraisons.getWidth(), canvasIntersectionsLivraisons.getHeight());
             gcTrajets.clearRect(0, 0, canvasPlanTrajet.getWidth(), canvasPlanTrajet.getHeight());
         }
-        System.out.println("value combobox : " + comboboxLivreur.getSelectionModel().getSelectedItem()); //renvoie null
         List<Livraison> livraisons;
+        if(livreur.getTournee() != null){
+            livraisons = livreur.getTournee().getLivraisons();
+            dessinerTrajets(livreur.getTournee().getTrajets(), gcTrajets);
 
-        livraisons = livreur.getTournee().getLivraisons();
-        dessinerTrajets(livreur.getTournee().getTrajets(), gcTrajets);
-
-        for (Livraison l : livraisons) {
-            this.dessinerIntersection(gc,
-                    l.getDemandeLivraison().getIntersection(),
-                    l.getDemandeLivraison().getPlageHoraire().getCouleur(),
-                    this.TAILLE_RECT_PT_LIVRAISON,
-                    true,
-                    FormeIntersection.RECTANGLE);
+            for (Livraison l : livraisons) {
+                this.dessinerIntersection(gc,
+                        l.getDemandeLivraison().getIntersection(),
+                        l.getDemandeLivraison().getPlageHoraire().getCouleur(),
+                        this.TAILLE_RECT_PT_LIVRAISON,
+                        true,
+                        FormeIntersection.RECTANGLE);
+            }
         }
     }
 
@@ -678,10 +681,15 @@ public class VueFenetrePrincipale implements Observer {
             } else if (arg == "AjoutLivreur") {
                 if (controleur.getJournee().getLivreurs().size() == 1){
                     comboboxLivreur.getSelectionModel().select(0);
-                    System.out.println("oui");
                 }else{
                     controleur.getEtatCourant().majComboboxLivreur(controleur); //pas sur que ce soit légal
                 }
+            } else if (arg == "SuppressionLivraison") {
+                tableViewLivraisons.getItems().clear();
+                tableViewLivraisons.getItems().addAll(
+                        comboboxLivreur.getValue().getLivraisons()
+                );
+                afficherLivraisons(comboboxLivreur.getValue(), true);
             }
         }else if(o instanceof Livreur){
             if(arg == "AjoutDemandeLivraison"){
@@ -689,6 +697,13 @@ public class VueFenetrePrincipale implements Observer {
                 tableViewDemandesLivraison.getItems().addAll(
                         ((Livreur) o).getDemandeLivraisons());
                 afficherDemandesLivraison(true);
+            }else if(arg == "SuppressionTournee"){
+                tableViewLivraisons.getItems().clear();
+                tableViewDemandesLivraison.setVisible(true);
+                tableViewLivraisons.setVisible(false);
+                canvasIntersectionsLivraisons.getGraphicsContext2D().clearRect(0, 0,
+                                                                            canvasIntersectionsLivraisons.getWidth(),
+                                                                            canvasIntersectionsLivraisons.getHeight());
             }
         }
     }
@@ -728,11 +743,7 @@ public class VueFenetrePrincipale implements Observer {
     public void activerExclusivementBoutons(ArrayList<Control> controlsActives) {
         ArrayList<Control> tousLesControls = obtenirControlsVue();
         for (Control b: tousLesControls) {
-            if (controlsActives.contains(b)) {
-                b.setDisable(false);
-            } else {
-                b.setDisable(true);
-            }
+            b.setDisable(!controlsActives.contains(b));
         }
     }
 }

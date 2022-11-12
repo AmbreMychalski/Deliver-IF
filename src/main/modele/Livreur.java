@@ -49,6 +49,12 @@ public class Livreur extends Observable {
     public void ajouterObservateur(Observer obj) {
         addObserver(obj);
     }
+
+    public void supprimerTournee() {
+        this.tournee = null;
+        this.livraisons = null;
+        notifierObservateurs("SuppressionTournee");
+    }
 }
 
 
