@@ -43,10 +43,21 @@ public class EtatDemandeLivraisonSelectionneeAvecTournees extends Etat {
             this.majComboboxLivreur(c);
         }
         if(livreur != ancienLivreur){
-            c.journee.assignerLivraisonNouveauLivreur(livraison, livreur);
-            this.miseAjourDonneesTableView(c, ancienLivreur);
-            c.vue.afficherLivraisons(ancienLivreur, true);
-            c.changementEtat(c.etatTourneesCalculees);
+            if(livreur.getTournee()==null) {
+                c.journee.assignerLivraisonNouveauLivreur(livraison, livreur);
+                this.miseAjourDonneesTableView(c, ancienLivreur);
+                c.vue.afficherLivraisons(ancienLivreur, true);
+                c.changementEtat(c.etatTourneesCalculees);
+            }
+            else{
+                this.changerLivreur(c, livreur);
+                livreur.ajouterDemandeLivraison(livraison.getDemandeLivraison());
+                c.journee.supprimerLivraisonJournee(livraison);
+                c.vue.comboboxLivreur.getSelectionModel().select(livreur.getNumero()-1);
+                this.afficherTournee(c, livreur.getTournee());
+                c.vue.afficherLivraisons(livreur, true);
+                c.changementEtat(c.etatSelectionLivraisonPourNouvelleDemande);
+            }
             //c.journee.calculerTourneeNouveauLivreur(livreur);
             //this.afficherTournee(c, livreur.getTournee());
         }
