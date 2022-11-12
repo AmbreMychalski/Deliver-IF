@@ -2,6 +2,7 @@ package controleur;
 
 import javafx.scene.input.MouseEvent;
 import modele.Livraison;
+import modele.Livreur;
 
 import java.util.List;
 
@@ -30,11 +31,16 @@ public class EtatTourneesCalculees extends Etat{
         }
     }
 
-    public void clicSurLivreur(ControleurFenetrePrincipale c){
-        System.out.println("appel dans etat");
-        c.vue.afficherLivraisons(c.vue.comboboxLivreur.getValue(), true);
-        c.vue.tableViewLivraisons.getItems().clear();
-        c.vue.tableViewLivraisons.getItems().addAll(c.vue.comboboxLivreur.getValue().getTournee().getLivraisons());
-        c.vue.tableViewLivraisons.refresh();
+    public void clicSurLivreur(ControleurFenetrePrincipale c) {
+        Livreur livreur = c.vue.comboboxLivreur.getValue();
+        if(livreur != null){
+            this.changerLivreur(c, livreur);
+            if(livreur.getTournee() == null){
+                c.changementEtat(c.etatAvecDemande);
+                c.vue.buttonChargerDemandes.setDisable(true);
+            }else{
+                c.changementEtat(c.etatTourneesCalculees);
+            }
+        }
     }
 }

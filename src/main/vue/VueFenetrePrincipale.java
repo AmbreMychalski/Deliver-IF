@@ -11,6 +11,8 @@ import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.transform.Affine;
 import javafx.scene.transform.Transform;
@@ -143,31 +145,17 @@ public class VueFenetrePrincipale implements Observer {
         buttonSupprimerLivraison.setOnAction(this::actionBoutonSupprimerLivraison);
         buttonModifierLivraison.setOnAction(this::actionBoutonModifierLivraison);
         buttonAssignerNvLivreur.setOnAction(this::actionBoutonAssignerNvLivreur);
-        buttonSupprimerLivraison.setDisable(true);
-        buttonModifierLivraison.setDisable(true);
-        buttonAssignerNvLivreur.setDisable(true);
 
-        buttonValiderLivraison.setDisable(true);
-        buttonAnnulerLivraison.setDisable(true);
-        comboboxPlageHoraire.setDisable(true);
-        comboboxLivreurNouvelleDemande.setDisable(true);
         comboboxLivreurNouvelleDemande.setVisible(false);
         labelLivreurNouvelleDemande.setVisible(false);
 
-        buttonCalculerTournees.setDisable(true);
-        buttonAutoriserAjouterLivraison.setDisable(true);
-        buttonSauvegarderDemandes.setDisable(true);
-        buttonChargerDemandes.setDisable(true);
-        buttonAfficherFeuillesRoute.setDisable(false);
 
-        textfieldIdentifiantIntersection.setDisable(true);
-        textfieldPlageHoraire.setDisable(true);
-        textfieldIdentifiantIntersectionSelection.setDisable(true);
         titlePaneSelectionDemande.setVisible(false);
         titledPaneEditionDemande.setVisible(false);
         tableViewLivraisons.setVisible(false);
-        buttonAfficherFeuillesRoute.setDisable(true);
+
         buttonEtatCourant.setOnAction(event -> System.out.println("Etat courant = " + controleur.getEtatCourant().getClass().getName()));
+
         buttonAfficherFeuillesRoute.setOnAction(this::actionBoutonAfficherFeulleDeRoute);
         buttonValiderLivraison.setOnAction(this::actionBoutonAjouterLivraison);
         buttonAnnulerLivraison.setOnAction(this::actionBoutonAnnulerLivraison);
@@ -282,7 +270,12 @@ public class VueFenetrePrincipale implements Observer {
     }
 
     private void actionBoutonAfficherFeulleDeRoute(ActionEvent event) {
-        vue.FenetreFeuilleDeRoute.display(controleur, this.comboboxLivreur.getValue());
+        if(this.comboboxLivreur.getValue() != null){
+            vue.FenetreFeuilleDeRoute.display(controleur, this.comboboxLivreur.getValue());
+        }else{
+            vue.FenetreFeuilleDeRoute.display(controleur, controleur.getJournee().getLivreurs().get(0));
+        }
+
     }
 
 
@@ -340,29 +333,37 @@ public class VueFenetrePrincipale implements Observer {
         controleur.calculerTournees();
         tableViewDemandesLivraison.setVisible(false);
         tableViewLivraisons.setVisible(true);
-        comboboxLivreurNouvelleDemande.setDisable(false);
-        comboboxLivreurNouvelleDemande.setVisible(true);
-        labelLivreurNouvelleDemande.setVisible(true);
 
     }
 
     public void afficherDemandesLivraison(boolean nettoyerCanvas) {
         GraphicsContext gc = canvasIntersectionsLivraisons.getGraphicsContext2D();
+        GraphicsContext gcTrajet = canvasPlanTrajet.getGraphicsContext2D();
         if(nettoyerCanvas){
             gc.clearRect(0, 0, canvasIntersectionsLivraisons.getWidth(), canvasIntersectionsLivraisons.getHeight());
+            gcTrajet.clearRect(0, 0, canvasPlanTrajet.getWidth(), canvasPlanTrajet.getHeight());
         }
-
-        for(DemandeLivraison d: controleur.getJournee().getDemandesLivraison()) {
-            this.dessinerIntersection(gc,
-                    d.getIntersection(),
-                    d.getPlageHoraire().getCouleur(),
-                    this.TAILLE_RECT_PT_LIVRAISON,
-                    true,
-                    FormeIntersection.RECTANGLE);
+        if( comboboxLivreur.getValue() == null){
+            for(DemandeLivraison d: controleur.getJournee().getDemandesLivraison()) {
+                this.dessinerIntersection(gc,
+                        d.getIntersection(),
+                        d.getPlageHoraire().getCouleur(),
+                        this.TAILLE_RECT_PT_LIVRAISON,
+                        true,
+                        FormeIntersection.RECTANGLE);
+            }
+        }else{
+            Livreur livreur = comboboxLivreur.getValue();
+            for(DemandeLivraison d: livreur.getDemandeLivraisons()) {
+                this.dessinerIntersection(gc,
+                        d.getIntersection(),
+                        d.getPlageHoraire().getCouleur(),
+                        this.TAILLE_RECT_PT_LIVRAISON,
+                        true,
+                        FormeIntersection.RECTANGLE);
+            }
         }
-
     }
-
     public void afficherLivraisons(Livreur livreur, boolean nettoyerCanvas){
         System.out.println("appel fonction afficherlivraison");
         GraphicsContext gc = canvasIntersectionsLivraisons.getGraphicsContext2D();
@@ -373,11 +374,10 @@ public class VueFenetrePrincipale implements Observer {
         }
         System.out.println("value combobox : " + comboboxLivreur.getSelectionModel().getSelectedItem()); //renvoie null
         List<Livraison> livraisons;
-        if(livreur.getTournee() == null){
-            livraisons = livreur.getLivraisonsHorsTournee();
-        }else{
-            livraisons = livreur.getTournee().getLivraisons();
-        }
+
+        livraisons = livreur.getTournee().getLivraisons();
+        dessinerTrajets(livreur.getTournee().getTrajets(), gcTrajets);
+
         for (Livraison l : livraisons) {
             this.dessinerIntersection(gc,
                     l.getDemandeLivraison().getIntersection(),
@@ -386,8 +386,6 @@ public class VueFenetrePrincipale implements Observer {
                     true,
                     FormeIntersection.RECTANGLE);
         }
-        dessinerTrajets(livreur.getTournee().getTrajets(), gcTrajets);
-
     }
 
     private void actionBoutonAjouterLivraison(ActionEvent event) {
@@ -681,7 +679,13 @@ public class VueFenetrePrincipale implements Observer {
                 }else{
                     controleur.getEtatCourant().majComboboxLivreur(controleur); //pas sur que ce soit légal
                 }
-
+            }
+        }else if(o instanceof Livreur){
+            if(arg == "AjoutDemandeLivraison"){
+                tableViewDemandesLivraison.getItems().clear();
+                tableViewDemandesLivraison.getItems().addAll(
+                        ((Livreur) o).getDemandeLivraisons());
+                afficherDemandesLivraison(true);
             }
         }
     }
@@ -701,25 +705,27 @@ public class VueFenetrePrincipale implements Observer {
      * Donne la liste de tous les boutons de la vue
      * @return liste des boutons
      */
-    public ArrayList<Button> obtenirBoutonsVue() {
+    public ArrayList<Control> obtenirControlsVue() {
         Field [] attributes = this.getClass().getDeclaredFields();
-        ArrayList<Button> boutons = new ArrayList<>();
-        for(int i=0; i<attributes.length; i++) {
+        ArrayList<Control> controls = new ArrayList<>();
+        for (Field attribute : attributes) {
             try {
-                if (attributes[i].get(this) instanceof Button) {
-                    boutons.add((Button) attributes[i].get(this));
+                if (attribute.get(this) instanceof Control) {
+                    if( (!(attribute.get(this) instanceof TableView)) && (!(attribute.get(this) instanceof TitledPane)) && (attribute.get(this) != buttonEtatCourant)){
+                        controls.add((Control) attribute.get(this));
+                    }
                 }
             } catch (IllegalAccessException e) {
                 throw new RuntimeException(e);
             }
         }
-        return boutons;
+        return controls;
     }
 
-    public void activerExclusivementBoutons(ArrayList<Button> boutonsActives) {
-        ArrayList<Button> tousLesBoutons = obtenirBoutonsVue();
-        for (Button b: tousLesBoutons) {
-            if (boutonsActives.contains(b)) {
+    public void activerExclusivementBoutons(ArrayList<Control> controlsActives) {
+        ArrayList<Control> tousLesControls = obtenirControlsVue();
+        for (Control b: tousLesControls) {
+            if (controlsActives.contains(b)) {
                 b.setDisable(false);
             } else {
                 b.setDisable(true);

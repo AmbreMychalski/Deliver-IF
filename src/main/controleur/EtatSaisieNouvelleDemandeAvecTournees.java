@@ -20,32 +20,17 @@ public class EtatSaisieNouvelleDemandeAvecTournees extends Etat {
             if (c.journee.getPlan().estLivrable(intersection)) {
                 DemandeLivraison demande = new DemandeLivraison(intersection, plageHoraire);
                 Livreur livreur = c.vue.comboboxLivreur.getValue();
-                if(livreur.getNumero() == c.journee.getNbLivreur() && c.journee.dernierLivreurEstSansTourneeCalculee()){
-
+                if(livreur == null){
+                    livreur = c.journee.getLivreurs().get(0);
                 }
-                else{
-                    c.vue.comboboxPlageHoraire.setDisable(true);
+                if( !(livreur.getNumero() == c.journee.getNbLivreur() && c.journee.dernierLivreurEstSansTourneeCalculee()) ){
                     c.vue.tableViewDemandesLivraison.setDisable(false);
                     c.vue.tableViewLivraisons.setDisable(false);
-
                     c.journee.ajouterDemandeLivraison(demande);
+                    livreur.ajouterDemandeLivraison(demande);
                     c.changementEtat(c.etatSelectionLivraisonPourNouvelleDemande);
+                    this.afficherTournee(c, livreur.getTournee());
                 }
-                /*Livraison livraison = c.journee.ajouterDemandeLivraisonTournee(demande, c.journee.getTournees().get(livreur - 1).getLivraisons().get(0));
-                this.afficherTournee(c, c.journee.getTournees().get(livreur - 1));
-                c.vue.afficherLivraisons(true);
-
-                c.vue.buttonAutoriserAjouterLivraison.setDisable(false);
-                c.vue.buttonValiderLivraison.setDisable(true);
-                c.vue.comboboxPlageHoraire.setDisable(true);
-                c.vue.buttonAnnulerLivraison.setDisable(true);
-
-                c.vue.tableViewDemandesLivraison.setDisable(false);
-                c.vue.tableViewLivraisons.setDisable(false);
-                c.vue.tableViewLivraisons.getItems().add(livraison);
-                c.vue.tableViewLivraisons.refresh();
-
-                c.changementEtat(c.etatTourneesCalculees);*/
             }
         }
     }

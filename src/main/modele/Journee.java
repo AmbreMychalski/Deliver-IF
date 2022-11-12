@@ -32,9 +32,7 @@ public class Journee extends Observable {
     private List<DemandeLivraison> demandesLivraison;
     private List<Livraison> livraisons;
     private List<Livraison> livraisonsNonValides;
-    private List<Livraison> livraisonsNouveauLivreur;
     private List<Livreur> livreurs;
-    //private TemplateTSP template;
 
     public Journee(Plan p) {
         plan = p;
@@ -49,23 +47,7 @@ public class Journee extends Observable {
         this.livraisonsNonValides =  new ArrayList<Livraison>();
         livreurs = new ArrayList<>();
         livraisons =  new ArrayList<Livraison>();
-        livraisonsNouveauLivreur =  new ArrayList<Livraison>();
     }
-    /*
-    public List<Livraison> getLivraisonsLivreur(int livreur) {
-
-        List<Livraison> livraisonsDuLivreur = new ArrayList<>();
-
-        for(Livraison l : livraisons) {
-            if(l.getLivreur() == livreur) {
-                livraisonsDuLivreur.add(l);
-            }
-        }
-
-        return livraisonsDuLivreur;
-    }
-
-     */
 
     public ArrayList<DemandeLivraison> chargerDemandesLivraison(File fichier) {
         if(this.demandesLivraison == null) {
@@ -154,7 +136,7 @@ public class Journee extends Observable {
         }
     }
 
-    public boolean calculerTournee() {
+    public boolean calculerTournee(Livreur livreur) {
         boolean tourneeComplete = true;
         boolean tourneeCalculee = false;
         List<DemandeLivraison> dmdLivrOrdonnee = new LinkedList<>();
@@ -164,7 +146,6 @@ public class Journee extends Observable {
         TSP tsp = new TSP1();
 
         tsp.searchSolution(20000, g);
-        Livreur livreur = new Livreur();
         for(int i = 1; i < listDemande.size() + 1; i++) {
             int x = tsp.getSolution(i);
             DemandeLivraison demande = g.getIdIndexToDemandeLivraison().get(x);
@@ -176,7 +157,6 @@ public class Journee extends Observable {
         List<Trajet> trajetList = this.creerListTrajet(livrList, g);
         Tournee t = new Tournee(trajetList, livrList);
         livreur.setTournee(t);
-        ajouterLivreur(livreur);
         this.majHeureLivraison(t,0);
         System.out.println("tourneeComplete = " + tourneeComplete);
         return tourneeComplete;
@@ -185,14 +165,41 @@ public class Journee extends Observable {
         setChanged();
         notifyObservers(arg);
     }
+    public boolean calculerTourneeNouveauLivreur(Livreur livreur) {
+        boolean tourneeComplete = true;
+        boolean tourneeCalculee = false;
+        List<DemandeLivraison> dmdLivrOrdonnee = new LinkedList<>();
+        List<DemandeLivraison> listDemande = new LinkedList<>(livreur.getDemandeLivraisons());
+        List<Livraison> livrList = new LinkedList<>();
+        GrapheComplet g = new GrapheComplet(listDemande,this.plan, this.plan.getEntrepot());
+        TSP tsp = new TSP1();
 
+        tsp.searchSolution(20000, g);
+        for(int i = 1; i < listDemande.size() + 1; i++) {
+            int x = tsp.getSolution(i);
+            DemandeLivraison demande = g.getIdIndexToDemandeLivraison().get(x);
+
+            this.livraisons.add(new Livraison(demande, 0, livreur, false));
+            livrList.add(this.livraisons.get(this.livraisons.size()-1));
+        }
+
+        List<Trajet> trajetList = this.creerListTrajet(livrList, g);
+        Tournee t = new Tournee(trajetList, livrList);
+        livreur.setTournee(t);
+        this.majHeureLivraison(t,0);
+        System.out.println("tourneeComplete = " + tourneeComplete);
+        return tourneeComplete;
+    }
+    /*
     public boolean calculerTourneeNouveauLivreur(Livreur livreur) {
         Map<DemandeLivraison, Livraison> demandeToLivr = new HashMap<>();
         boolean tourneeComplete = true;
         boolean tourneeCalculee = false;
         List<DemandeLivraison> dmdLivrOrdonnee = new LinkedList<>();
-        List<DemandeLivraison> listDemande = new LinkedList<>(demandesLivraison);
+        //List<DemandeLivraison> listDemande = new LinkedList<>(demandesLivraison);
+        List<DemandeLivraison> listDemande = new LinkedList<>();
         List<Livraison> livrList = new LinkedList<>();
+
 
         for(Livraison livr : livreur.getLivraisonsHorsTournee()) {
             listDemande.add(livr.getDemandeLivraison());
@@ -222,6 +229,8 @@ public class Journee extends Observable {
         return true;
     }
 
+     */
+
     public void ajouterLivreur(Livreur livreur) {
         this.livreurs.add(livreur);
         this.nbLivreur++;
@@ -241,11 +250,8 @@ public class Journee extends Observable {
 
     public void supprimerLivraisonJournee(Livraison livr) {
         this.livraisons.remove(livr);
-        if(this.livraisonsNouveauLivreur.contains(livr)) {
-            this.livraisonsNouveauLivreur.remove(livr);
-        } else {
-            this.supprimerLivraisonTournee(livr);
-        }
+        this.supprimerLivraisonTournee(livr);
+
     }
     public Livraison ajouterDemandeLivraisonTournee(DemandeLivraison dl,
                                                     Livraison livrAvant, Livreur livreur) {
@@ -270,8 +276,7 @@ public class Journee extends Observable {
     public void assignerLivraisonNouveauLivreur(Livraison livr, Livreur livreur) {
         supprimerLivraisonTournee(livr);
         livr.setLivreur(livreur);
-        livreur.ajouterLivraisonHorsTournee(livr);
-        this.livraisonsNouveauLivreur.add(livr);
+        livreur.ajouterDemandeLivraison(livr.getDemandeLivraison());
     }
 
     public void ajouterLivraisonTournee(Livraison livr,Livraison livrAvant, Livreur livreur) {
@@ -319,7 +324,7 @@ public class Journee extends Observable {
     }
 
     public boolean dernierLivreurEstSansTourneeCalculee(){
-        return this.livraisonsNouveauLivreur.size() != 0;
+        return (this.livreurs.get(this.livreurs.size()-1).getTournee() == null);
     }
     private void majHeureLivraison(Tournee t, int startIndex) {
         float heureLivraison;

@@ -11,6 +11,7 @@ import lombok.Getter;
 import modele.*;
 import vue.VueFenetrePrincipale;
 
+import javax.naming.ldap.Control;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
@@ -66,7 +67,12 @@ public abstract class Etat {
 	protected void sortieDeSelectionDemande(ControleurFenetrePrincipale c, boolean livraison){
 		if(livraison){
 			c.vue.buttonAssignerNvLivreur.setDisable(true);
-			c.vue.afficherLivraisons(c.vue.comboboxLivreur.getValue(),true);
+			if(c.vue.comboboxLivreur.getValue() == null){
+				c.vue.afficherLivraisons(c.journee.getLivreurs().get(0), true);
+			}else{
+				c.vue.afficherLivraisons(c.vue.comboboxLivreur.getValue(),true);
+			}
+
 		}
 		else{
 			c.vue.afficherDemandesLivraison(true);
@@ -164,22 +170,30 @@ public abstract class Etat {
 	}
 
 	protected boolean selectionnerDemande(ControleurFenetrePrincipale c, boolean livraison){
-		DemandeLivraison ligne;
+		DemandeLivraison ligne = null;
+		Livraison liv = null;
 		if(!livraison) {
 			ligne = c.vue.tableViewDemandesLivraison.getSelectionModel()
 					.getSelectedItem();
 		}
 		else {
-			ligne = c.vue.tableViewLivraisons.getSelectionModel()
-					.getSelectedItem().getDemandeLivraison();
+			liv = c.vue.tableViewLivraisons.getSelectionModel()
+					.getSelectedItem();
+		}
+		if(liv != null){
+			ligne = liv.getDemandeLivraison();
 		}
 		if (ligne != null) {
 			if(!livraison) {
 				c.vue.afficherDemandesLivraison(true);
 			}
 			else{
-				c.vue.afficherLivraisons(c.vue.comboboxLivreur.getValue(),true);
-				c.vue.buttonAssignerNvLivreur.setDisable(false);
+				if(c.vue.comboboxLivreur.getValue() == null){
+					c.vue.afficherLivraisons(c.journee.getLivreurs().get(0), true);
+				}else{
+					c.vue.afficherLivraisons(c.vue.comboboxLivreur.getValue(), true);
+				}
+
 			}
 			c.vue.dessinerIntersection(
 					c.vue.canvasIntersectionsLivraisons.getGraphicsContext2D(),
@@ -190,8 +204,10 @@ public abstract class Etat {
 					VueFenetrePrincipale.FormeIntersection.RECTANGLE);
 
 			c.vue.titlePaneSelectionDemande.setVisible(true);
-			c.vue.textfieldIdentifiantIntersection.setText(
-					ligne.getIdIntersection().toString());
+			c.vue.textfieldIdentifiantIntersectionSelection.setText(
+													ligne
+													.getIdIntersection()
+													.toString());
 			remplirLabelRuesIntersection(c, ligne.getIntersection());
 			c.vue.textfieldPlageHoraire.setText(ligne.getPlageHoraire().toString());
 			return true;
@@ -208,15 +224,16 @@ public abstract class Etat {
 			if(c.journee.getPlan().estLivrable(intersection)){
 				DemandeLivraison demande =
 						new DemandeLivraison(intersection, plageHoraire);
-				c.journee.ajouterDemandeLivraison(demande);
-				c.vue.buttonValiderLivraison.setDisable(true);
-				c.vue.buttonAnnulerLivraison.setDisable(true);
-				c.vue.comboboxPlageHoraire.setDisable(true);
+				if(c.vue.comboboxLivreur.getValue() == null){
+					c.journee.ajouterDemandeLivraison(demande);
+				}else{
+					c.vue.comboboxLivreur.getValue().ajouterDemandeLivraison(demande);
+				}
 				c.vue.comboboxPlageHoraire.setValue(null);
+				c.vue.tableViewDemandesLivraison.setDisable(false);
+				c.vue.tableViewLivraisons.setDisable(false);
 				c.vue.textfieldIdentifiantIntersection.setText("");
 				resetLabelRuesIntersection(c);
-				c.vue.tableViewDemandesLivraison.setDisable(false);
-				c.vue.buttonSauvegarderDemandes.setDisable(false);
 				return true;
 			}
 			else{
@@ -246,7 +263,12 @@ public abstract class Etat {
 				remplirLabelRuesIntersection(c, intersectionTrouvee);
 
 				if(tourneeCalculee){
-					c.vue.afficherLivraisons(c.vue.comboboxLivreur.getValue(), true);
+					if(c.vue.comboboxLivreur.getValue() == null){
+						c.vue.afficherLivraisons(c.journee.getLivreurs().get(0), true);
+					}else {
+						c.vue.afficherLivraisons(c.vue.comboboxLivreur.getValue(), true);
+					}
+
 				} else {
 					c.vue.afficherDemandesLivraison(false);
 				}
@@ -277,13 +299,15 @@ public abstract class Etat {
 		File fichier = fileChooser.showOpenDialog(c.vue.getStage());
 		if (fichier == null) {
 			throw new Exception("Aucun fichier choisi");
+		}else{
+			System.out.println("Fichier choisi = " + fichier.getAbsolutePath());
+			ArrayList<DemandeLivraison> listeDemandes
+					= c.journee.chargerDemandesLivraison(fichier);
+			if (listeDemandes.size()==0){
+				throw  new Exception("Aucune demande de livraison dans le fichier");
+			}
 		}
-		System.out.println("Fichier choisi = " + fichier.getAbsolutePath());
-		ArrayList<DemandeLivraison> listeDemandes
-				= c.journee.chargerDemandesLivraison(fichier);
-		if (listeDemandes.size()==0){
-			throw  new Exception("Aucune demande de livraison dans le fichier");
-		}
+
 	}
 
 	protected void supprimerDemandeLivraison(ControleurFenetrePrincipale c){
@@ -311,10 +335,8 @@ public abstract class Etat {
 	}
 
 	protected  void annulerAjout (ControleurFenetrePrincipale c){
-		c.vue.buttonValiderLivraison.setDisable(true);
-		c.vue.buttonAnnulerLivraison.setDisable(true);
-		c.vue.comboboxPlageHoraire.setDisable(true);
 		c.vue.tableViewDemandesLivraison.setDisable(false);
+		c.vue.tableViewLivraisons.setDisable(false);
 		c.vue.textfieldIdentifiantIntersection.setText("");
 		resetLabelRuesIntersection(c);
 		c.vue.comboboxPlageHoraire.setValue(null);
@@ -343,9 +365,7 @@ public abstract class Etat {
 	public void majComboboxLivreur(ControleurFenetrePrincipale c) {
 		ObservableList<Livreur> listeLivreur = FXCollections.observableArrayList();
 		ObservableList<String> listStr = FXCollections.observableArrayList();
-		for(Livreur livreur : c.journee.getLivreurs()){
-			listeLivreur.add(livreur);
-		}
+		listeLivreur.addAll(c.journee.getLivreurs());
 		for (int i = 1; i <= c.journee.getNbLivreur(); i++) {
 			//listInt.add(i);
 			listStr.add(Integer.toString(i));
@@ -353,9 +373,31 @@ public abstract class Etat {
 		if(!c.journee.dernierLivreurEstSansTourneeCalculee()){
 			listStr.add(c.journee.getNbLivreur()+1+" (nouveau livreur)");
 		}
-		c.vue.comboboxLivreurNouvelleDemande.setItems(listeLivreur);
 		c.vue.comboboxAssignerLivreur.setItems(listStr);
 		c.vue.comboboxLivreur.setItems(listeLivreur);
 	}
 
+	protected void miseAjourDonneesTableView(ControleurFenetrePrincipale c, Livreur livreur){
+		c.vue.tableViewLivraisons.getItems().clear();
+		c.vue.tableViewDemandesLivraison.getItems().clear();
+		if(livreur.getTournee() != null){
+			c.vue.tableViewLivraisons.setVisible(true);
+			c.vue.tableViewDemandesLivraison.setVisible(false);
+			c.vue.tableViewLivraisons.getItems().addAll(livreur.getTournee().getLivraisons());
+		}else{
+			c.vue.tableViewLivraisons.setVisible(false);
+			c.vue.tableViewDemandesLivraison.setVisible(true);
+			c.vue.tableViewDemandesLivraison.getItems().addAll(livreur.getDemandeLivraisons());
+		}
+		c.vue.tableViewLivraisons.refresh();
+		c.vue.tableViewDemandesLivraison.refresh();
+	}
+	protected void changerLivreur(ControleurFenetrePrincipale c, Livreur livreur) {
+		if(livreur.getTournee() != null){
+			c.vue.afficherLivraisons(livreur, true);
+		}else{
+			c.vue.afficherDemandesLivraison(true);
+		}
+		miseAjourDonneesTableView(c, livreur);
+	}
 }

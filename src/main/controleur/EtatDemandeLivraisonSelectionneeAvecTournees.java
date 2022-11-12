@@ -31,19 +31,25 @@ public class EtatDemandeLivraisonSelectionneeAvecTournees extends Etat {
     }
     public void assignerAutreLivreur(ControleurFenetrePrincipale c){
         Livraison livraison = c.vue.tableViewLivraisons.getSelectionModel().getSelectedItem();
+        Livreur ancienLivreur = livraison.getLivreur();
         String livreurText = c.vue.comboboxAssignerLivreur.getValue();
         Livreur livreur;
         if(livreurText.length()<5){ //arbitraire
             int numLivreur = Integer.parseInt(livreurText);
             livreur = c.journee.getLivreurs().get(numLivreur-1); //a changer plus tard
         }else {
-            livreur = new Livreur();
-            c.journee.ajouterLivreur(livreur);
+            livreur = c.creerLivreur();
+
             this.majComboboxLivreur(c);
         }
-        c.journee.assignerLivraisonNouveauLivreur(livraison, livreur);
-        //c.journee.calculerTourneeNouveauLivreur(livreur);
-        //this.afficherTournee(c, livreur.getTournee());
+        if(livreur != ancienLivreur){
+            c.journee.assignerLivraisonNouveauLivreur(livraison, livreur);
+            this.miseAjourDonneesTableView(c, ancienLivreur);
+            c.vue.afficherLivraisons(ancienLivreur, true);
+            c.changementEtat(c.etatTourneesCalculees);
+            //c.journee.calculerTourneeNouveauLivreur(livreur);
+            //this.afficherTournee(c, livreur.getTournee());
+        }
     }
     public  void touchePressee(ControleurFenetrePrincipale c, KeyEvent ke) {
         switch (ke.getCode()){

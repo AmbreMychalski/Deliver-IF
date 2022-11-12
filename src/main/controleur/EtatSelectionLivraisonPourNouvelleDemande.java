@@ -20,9 +20,7 @@ public class EtatSelectionLivraisonPourNouvelleDemande extends Etat{
      * *******************/
 
         ligne = c.vue.tableViewLivraisons.getSelectionModel().getSelectedItem();
-
         if (ligne != null) {
-
             c.vue.afficherLivraisons(c.vue.comboboxLivreur.getValue(), true);
             c.vue.dessinerIntersection(c.vue.canvasIntersectionsLivraisons.getGraphicsContext2D(),
                     ligne.getDemandeLivraison().getIntersection(),
@@ -31,21 +29,19 @@ public class EtatSelectionLivraisonPourNouvelleDemande extends Etat{
                     true,
                     VueFenetrePrincipale.FormeIntersection.RECTANGLE);
 
-
             c.vue.titlePaneSelectionDemande.setVisible(true);
             c.vue.textfieldIdentifiantIntersection.setText(ligne.getDemandeLivraison().getIdIntersection().toString());
             remplirLabelRuesIntersection(c, ligne.getDemandeLivraison().getIntersection());
             c.vue.textfieldPlageHoraire.setText(ligne.getDemandeLivraison().getPlageHoraire().toString());
 
-            Livreur livreur = c.vue.comboboxLivreurNouvelleDemande.getValue();
+            Livreur livreur = c.vue.comboboxLivreur.getValue();
             DemandeLivraison derniereDemande = c.journee.getDemandesLivraison().get(c.journee.getDemandesLivraison().size()-1);
             Livraison livraisonAAjouter = c.journee.ajouterDemandeLivraisonTournee(derniereDemande, ligne, livreur);
 
             this.afficherTournee(c, livreur.getTournee());
             c.vue.afficherLivraisons(livreur, true);
 
-            c.vue.comboboxPlageHoraire.setDisable(true);
-            c.vue.buttonAnnulerLivraison.setDisable(true);
+
             c.vue.tableViewLivraisons.getItems().add(livraisonAAjouter);
             c.vue.tableViewLivraisons.refresh();
 

@@ -26,7 +26,7 @@ public class EtatSansDemande extends Etat{
             c.changementEtat(c.etatAvecDemande);
 
         }catch (Exception ex){
-            LOGGER.error(ex);
+            ex.printStackTrace();
             c.changementEtat(c.etatSansDemande);
             throw new Exception(ex);
         }
