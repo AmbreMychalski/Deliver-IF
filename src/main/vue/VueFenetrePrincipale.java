@@ -58,6 +58,7 @@ public class VueFenetrePrincipale implements Observer {
     public double echelleLong;
     public double echelleLat;
 
+
     public Float latMax;
     public Float latMin;
     public Float longMax;
@@ -646,6 +647,7 @@ public class VueFenetrePrincipale implements Observer {
 
         double latitudeYPx = (this.canvasPlan.getHeight() - (y - this.latMin) * this.echelleLat);
         return  latitudeYPx - aRemonter;
+
     }
 
     /**
@@ -702,8 +704,8 @@ public class VueFenetrePrincipale implements Observer {
                 tableViewDemandesLivraison.setVisible(true);
                 tableViewLivraisons.setVisible(false);
                 canvasIntersectionsLivraisons.getGraphicsContext2D().clearRect(0, 0,
-                                                                            canvasIntersectionsLivraisons.getWidth(),
-                                                                            canvasIntersectionsLivraisons.getHeight());
+                        canvasIntersectionsLivraisons.getWidth(),
+                        canvasIntersectionsLivraisons.getHeight());
             }
         }
     }
