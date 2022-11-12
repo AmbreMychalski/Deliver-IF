@@ -35,15 +35,15 @@ public class Journee extends Observable {
 
     public Journee(Plan p) {
         plan = p;
-        demandesLivraison = new ArrayList<DemandeLivraison>();
+        demandesLivraison = new ArrayList<>();
         livreurs = new ArrayList<>();
-        livraisons = new ArrayList<Livraison>();
+        livraisons = new ArrayList<>();
     }
 
     public Journee() {
-        demandesLivraison = new ArrayList<DemandeLivraison>();
+        demandesLivraison = new ArrayList<>();
         livreurs = new ArrayList<>();
-        livraisons =  new ArrayList<Livraison>();
+        livraisons =  new ArrayList<>();
     }
 
     public ArrayList<DemandeLivraison> chargerDemandesLivraison(File fichier) {

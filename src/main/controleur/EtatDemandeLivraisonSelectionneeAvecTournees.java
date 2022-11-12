@@ -35,7 +35,7 @@ public class EtatDemandeLivraisonSelectionneeAvecTournees extends Etat {
         }
         if(livreur != ancienLivreur){
             if(livreur.getTournee()==null) {
-                c.journee.assignerLivraisonNouveauLivreur(livraison, livreur);
+                c.journee.assignerLivraisonNouveauLivreur(livraison, livreur, ancienLivreur);
                 this.miseAjourDonneesTableView(c, ancienLivreur);
                 c.vue.afficherLivraisons(ancienLivreur, true);
                 c.changementEtat(c.etatTourneesCalculees);
@@ -43,7 +43,7 @@ public class EtatDemandeLivraisonSelectionneeAvecTournees extends Etat {
             else{
                 this.changerLivreur(c, livreur);
                 livreur.ajouterDemandeLivraison(livraison.getDemandeLivraison());
-                c.journee.supprimerLivraisonJournee(livraison);
+                c.journee.supprimerLivraisonJournee(livreur, livraison);
                 c.vue.comboboxLivreur.getSelectionModel().select(livreur.getNumero()-1);
                 this.afficherTournee(c, livreur.getTournee());
                 c.vue.afficherLivraisons(livreur, true);
@@ -68,9 +68,7 @@ public class EtatDemandeLivraisonSelectionneeAvecTournees extends Etat {
         String liv = c.vue.comboboxAssignerLivreur.getValue();
         if(liv != null){
             if(liv.length() < 5){
-                c.vue.buttonAssignerNvLivreur.setDisable((c.journee.getLivreurs().get(Integer.parseInt(liv)-1) == c.vue.comboboxLivreur.getValue())
-                        ||
-                        (c.journee.getLivreurs().get(Integer.parseInt(liv)-1).getTournee() != null));
+                c.vue.buttonAssignerNvLivreur.setDisable(c.journee.getLivreurs().get(Integer.parseInt(liv) - 1) == c.vue.comboboxLivreur.getValue());
             }else{
                 c.vue.buttonAssignerNvLivreur.setDisable(false);
             }
