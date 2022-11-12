@@ -72,7 +72,6 @@ public abstract class Etat {
 			}else{
 				c.vue.afficherLivraisons(c.vue.comboboxLivreur.getValue(),true);
 			}
-
 		}
 		else{
 			c.vue.afficherDemandesLivraison(true);
@@ -322,15 +321,22 @@ public abstract class Etat {
 		}
 	}
 	protected void supprimerLivraison(ControleurFenetrePrincipale c) {
-		Livraison ligne = c.vue.tableViewLivraisons.getSelectionModel()
-				.getSelectedItem();
-		if (ligne != null) {
-			c.vue.tableViewLivraisons.getItems().remove(ligne);
-			c.journee.supprimerDemandeLivraison(ligne.getDemandeLivraison());
-			c.journee.supprimerLivraisonJournee(ligne);
-			c.vue.tableViewLivraisons.refresh();
+		Livreur livreur = c.vue.comboboxLivreur.getValue();
+		Livraison livraisonASupp = c.vue.tableViewLivraisons.getSelectionModel().getSelectedItem();
+		if(livraisonASupp != null){
+			c.journee.supprimerDemandeLivraison(livraisonASupp.getDemandeLivraison());
+			c.journee.supprimerLivraisonJournee(livreur, livraisonASupp);
 			c.vue.textfieldIdentifiantIntersectionSelection.setText("");
 			c.vue.textfieldPlageHoraire.setText("");
+
+			this.sortieDeSelectionDemande(c,true);
+			if(livreur.getTournee() != null){
+				//this.afficherTournee(c, livreur.getTournee());
+				c.changementEtat(c.etatTourneesCalculees);
+			} else {
+				c.vue.canvasPlanTrajet.getGraphicsContext2D().clearRect(0,0, c.vue.canvasPlanTrajet.getWidth(), c.vue.canvasPlanTrajet.getHeight());
+				c.changementEtat(c.etatSansDemande);
+			}
 		}
 	}
 
@@ -399,5 +405,8 @@ public abstract class Etat {
 			c.vue.afficherDemandesLivraison(true);
 		}
 		miseAjourDonneesTableView(c, livreur);
+	}
+
+	public void clicSurComboboxAssignerLivreur(ControleurFenetrePrincipale controleurFenetrePrincipale) {
 	}
 }

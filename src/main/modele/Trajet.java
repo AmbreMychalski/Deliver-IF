@@ -18,7 +18,7 @@ public class Trajet {
 	float longueur;
 
 	public Trajet(List<Segment> segments, float longueur) {
-		this.segments = new ArrayList<Segment>(segments);
+		this.segments = new ArrayList<>(segments);
 		this.depart   = this.segments.get(0).getOrigine();
 		this.arrivee  = this.segments.get(this.segments.size()-1).getDestination();
 		this.longueur = longueur;

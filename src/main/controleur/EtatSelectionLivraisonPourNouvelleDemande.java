@@ -38,7 +38,7 @@ public class EtatSelectionLivraisonPourNouvelleDemande extends Etat{
             DemandeLivraison derniereDemande = c.journee.getDemandesLivraison().get(c.journee.getDemandesLivraison().size()-1);
             Livraison livraisonAAjouter = c.journee.ajouterDemandeLivraisonTournee(derniereDemande, ligne, livreur);
 
-            this.afficherTournee(c, livreur.getTournee());
+            //this.afficherTournee(c, livreur.getTournee());
             c.vue.afficherLivraisons(livreur, true);
 
 

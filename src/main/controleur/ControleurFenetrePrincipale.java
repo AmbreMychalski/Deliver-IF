@@ -73,7 +73,6 @@ public class ControleurFenetrePrincipale {
 			)));
 			put(etatDemandeLivraisonSelectionneeAvecTournees, new ArrayList<>(Arrays.asList(
 					vue.buttonSupprimerLivraison,
-					vue.buttonAssignerNvLivreur,
 					vue.comboboxAssignerLivreur
 			)));
 			put(etatInitial, new ArrayList<>(Arrays.asList(
@@ -188,5 +187,9 @@ public class ControleurFenetrePrincipale {
 		livreur.ajouterObservateur(vue);
 		journee.ajouterLivreur(livreur);
 		return livreur;
+	}
+
+	public void actionClicComboboxAssisgnerLivreur() {
+		etatCourant.clicSurComboboxAssignerLivreur(this);
 	}
 }
