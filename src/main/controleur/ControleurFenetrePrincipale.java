@@ -96,7 +96,8 @@ public class ControleurFenetrePrincipale {
 			put(etatSansDemande, new ArrayList<>(Arrays.asList(
 					vue.buttonChargerPlan,
 					vue.buttonAutoriserAjouterLivraison,
-					vue.buttonChargerDemandes
+					vue.buttonChargerDemandes,
+					vue.comboboxLivreur
 			)));
 			put(etatSelectionLivraisonPourNouvelleDemande, new ArrayList<>(Arrays.asList(
 
@@ -111,6 +112,13 @@ public class ControleurFenetrePrincipale {
 		this.changementEtat(etatInitial);
 		this.journee = new Journee();
 		this.journee.ajouterObservateur(vue);
+
+		Livreur liv = new Livreur();
+		liv.ajouterObservateur(vue);
+		this.journee.getLivreurs().add(liv);
+
+		etatCourant.majComboboxLivreur(this);
+		this.vue.comboboxLivreur.getSelectionModel().selectFirst();
 	}
 
 

@@ -15,8 +15,8 @@ public class GrapheComplet implements Graphe {
     private static final int COUT_MAX = 40;
     private static final int COUT_MIN = 10;
     
-    private Map<DemandeLivraison, Integer> idDemandeLivraisonToIndex = new HashMap<DemandeLivraison, Integer>();
-    private Map<Integer, DemandeLivraison > idIndexToDemandeLivraison = new HashMap<Integer, DemandeLivraison>();
+    private Map<DemandeLivraison, Integer> idDemandeLivraisonToIndex = new HashMap<>();
+    private Map<Integer, DemandeLivraison > idIndexToDemandeLivraison = new HashMap<>();
     int nbSommets;
     float[][] couts;
     
@@ -35,7 +35,7 @@ public class GrapheComplet implements Graphe {
         }
          
         Integer index = 1;      
-        ArrayList<Intersection> listIntersection = new ArrayList<Intersection>();
+        ArrayList<Intersection> listIntersection = new ArrayList<>();
 
         for(DemandeLivraison dl: demandesLivraisons) {
             idDemandeLivraisonToIndex.put(dl, index);

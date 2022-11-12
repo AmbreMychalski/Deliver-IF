@@ -1,6 +1,7 @@
 package controleur;
 
 import javafx.scene.input.MouseEvent;
+import modele.Livreur;
 
 public class EtatSaisieNouvelleDemandeSansTournees extends Etat{
 
@@ -19,7 +20,7 @@ public class EtatSaisieNouvelleDemandeSansTournees extends Etat{
     }
     public void annulerAjouterOuModifier(ControleurFenetrePrincipale c) {
         this.annulerAjout(c);
-        if (c.journee.getDemandesLivraison().size() == 0) {
+        if (c.vue.comboboxLivreur.getValue().getDemandeLivraisons().size() == 0) {
             c.changementEtat(c.etatSansDemande);
         } else {
             c.changementEtat(c.etatAvecDemande);

@@ -15,9 +15,6 @@ public class EtatSelectionLivraisonPourNouvelleDemande extends Etat{
     }
     protected boolean selectionnerDemande(ControleurFenetrePrincipale c, boolean livraison){
         Livraison ligne;
-    /**********************
-     * Changements (a cause de la creation du livreur)  à vérifier avec le boss des livreurs @MathéoJoseph
-     * *******************/
 
         ligne = c.vue.tableViewLivraisons.getSelectionModel().getSelectedItem();
         if (ligne != null) {
@@ -36,14 +33,9 @@ public class EtatSelectionLivraisonPourNouvelleDemande extends Etat{
 
             Livreur livreur = c.vue.comboboxLivreur.getValue();
             DemandeLivraison derniereDemande = livreur.getDemandeLivraisons().get(livreur.getDemandeLivraisons().size()-1);
-            Livraison livraisonAAjouter = c.journee.ajouterDemandeLivraisonTournee(derniereDemande, ligne, livreur);
-
-            //this.afficherTournee(c, livreur.getTournee());
+            c.journee.ajouterDemandeLivraisonTournee(derniereDemande, ligne, livreur);
             c.vue.afficherLivraisons(livreur, true);
 
-
-            c.vue.tableViewLivraisons.getItems().add(livraisonAAjouter);
-            c.vue.tableViewLivraisons.refresh();
 
             c.changementEtat(c.etatTourneesCalculees);
 

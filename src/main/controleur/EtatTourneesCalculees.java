@@ -32,15 +32,6 @@ public class EtatTourneesCalculees extends Etat{
     }
 
     public void clicSurLivreur(ControleurFenetrePrincipale c) {
-        Livreur livreur = c.vue.comboboxLivreur.getValue();
-        if(livreur != null){
-            this.changerLivreur(c, livreur);
-            if(livreur.getTournee() == null){
-                c.changementEtat(c.etatAvecDemande);
-                c.vue.buttonChargerDemandes.setDisable(true);
-            }else{
-                c.changementEtat(c.etatTourneesCalculees);
-            }
-        }
+        this.changementLivreur(c);
     }
 }

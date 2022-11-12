@@ -2,6 +2,7 @@ package controleur;
 
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
+import modele.Livreur;
 
 public class EtatDemandeLivraisonSelectionneeSansTournees extends Etat {
     public EtatDemandeLivraisonSelectionneeSansTournees() {
@@ -16,9 +17,10 @@ public class EtatDemandeLivraisonSelectionneeSansTournees extends Etat {
         this.selectionnerDemande(c,false);
     }
     public void supprimerDemande(ControleurFenetrePrincipale c) {
-        this.supprimerDemandeLivraison(c);
+        Livreur livreur = c.vue.comboboxLivreur.getValue();
+        this.supprimerDemandeLivraison(c, livreur);
         this.sortieDeSelectionDemande(c,false);
-        if(c.journee.getDemandesLivraison().size() > 0){
+        if(livreur.getDemandeLivraisons().size() > 0){
             c.changementEtat(c.etatAvecDemande);
         } else {
             c.changementEtat(c.etatSansDemande);
@@ -36,9 +38,11 @@ public class EtatDemandeLivraisonSelectionneeSansTournees extends Etat {
                 c.changementEtat(c.etatAvecDemande);
                 break;
             case DELETE:
-                this.supprimerDemandeLivraison(c);
+                Livreur livreur = c.vue.comboboxLivreur.getValue();
+                this.supprimerDemandeLivraison(c, livreur);
                 this.sortieDeSelectionDemande(c,false);
-                if(c.journee.getDemandesLivraison().size() > 0){
+
+                if(livreur.getDemandeLivraisons().size() > 0){
                     c.changementEtat(c.etatAvecDemande);
                 } else {
                     c.changementEtat(c.etatSansDemande);

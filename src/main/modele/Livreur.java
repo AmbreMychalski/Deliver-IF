@@ -1,7 +1,6 @@
 package modele;
 
 import lombok.*;
-import vue.VueFenetrePrincipale;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -14,7 +13,7 @@ import java.util.Observer;
 public class Livreur extends Observable {
     private int numero;
     private Tournee tournee;
-    private List<Livraison> livraisons;
+    private List<Livraison> livraisons = new ArrayList<>();
     private List<DemandeLivraison> demandeLivraisons = new ArrayList<>();
     static int nbLivreur = 0;
 
@@ -29,10 +28,6 @@ public class Livreur extends Observable {
         numero = nbLivreur;
     }
 
-    public void setTournee(Tournee tournee){
-        this.tournee = tournee;
-        this.livraisons = tournee.getLivraisons();
-    }
     public String toString(){
         return Integer.toString(numero);
     }
@@ -40,6 +35,12 @@ public class Livreur extends Observable {
     public void ajouterDemandeLivraison(DemandeLivraison livr) {
         this.getDemandeLivraisons().add(livr);
         notifierObservateurs("AjoutDemandeLivraison");
+    }
+
+    public void modifierTournee(Tournee tournee){
+        this.tournee = tournee;
+        this.livraisons = tournee.getLivraisons();
+        notifierObservateurs("ModificationTournee");
     }
     public void notifierObservateurs(Object arg){
         setChanged();
@@ -52,9 +53,35 @@ public class Livreur extends Observable {
 
     public void supprimerTournee() {
         this.tournee = null;
-        this.livraisons = null;
+        this.livraisons = new ArrayList<>();
+        this.demandeLivraisons = new ArrayList<>();
         notifierObservateurs("SuppressionTournee");
     }
+
+    public void supprimerDemandeLivraison(DemandeLivraison ligne) {
+        this.demandeLivraisons.remove(ligne);
+        notifierObservateurs("SuppressionDemandeLivraison");
+    }
+
+    public void supprimerLivraison(Livraison livr) {
+        this.livraisons.remove(livr);
+        this.demandeLivraisons.remove(livr.getDemandeLivraison());
+        notifierObservateurs("ModificationTournee");
+    }
+
+    public void ajouterLivraisonTournee(int index, Livraison livr) {
+        //t.getLivraisons().add(index+1,livr);
+        this.tournee.getLivraisons().add(index, livr);
+        notifierObservateurs("ModificationTournee");
+    }
+
+    /*
+    public void ajouterLivraison(int index, Livraison livr) {
+        livraisons.add(index+1,livr);
+        notifierObservateurs("ModificationTournee");
+    }
+    */
+
 }
 
 

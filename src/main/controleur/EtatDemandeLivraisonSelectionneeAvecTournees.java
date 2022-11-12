@@ -30,16 +30,25 @@ public class EtatDemandeLivraisonSelectionneeAvecTournees extends Etat {
             livreur = c.journee.getLivreurs().get(numLivreur-1); //a changer plus tard
         }else {
             livreur = c.creerLivreur();
-
-            this.majComboboxLivreur(c);
         }
         if(livreur != ancienLivreur){
             c.journee.assignerLivraisonNouveauLivreur(livraison, livreur, ancienLivreur);
-            this.miseAjourDonneesTableView(c, ancienLivreur);
-            c.vue.afficherLivraisons(ancienLivreur, true);
-            c.changementEtat(c.etatTourneesCalculees);
-            //c.journee.calculerTourneeNouveauLivreur(livreur);
-            //this.afficherTournee(c, livreur.getTournee());
+            miseAjourDonneesTableView(c, ancienLivreur);
+
+            if(livreur.getTournee() != null){
+                c.vue.comboboxLivreur.getSelectionModel().select(livreur);
+                changerLivreur(c, livreur);
+                c.changementEtat(c.etatSelectionLivraisonPourNouvelleDemande);
+            }else{
+                c.vue.afficherLivraisons(ancienLivreur, true);
+                if(ancienLivreur.getDemandeLivraisons().size() > 0){
+                    c.changementEtat(c.etatTourneesCalculees);
+                }else{
+                    c.changementEtat(c.etatSansDemande);
+                }
+
+            }
+            c.vue.comboboxAssignerLivreur.getSelectionModel().select(null);
         }
     }
     public  void touchePressee(ControleurFenetrePrincipale c, KeyEvent ke) {
@@ -57,9 +66,7 @@ public class EtatDemandeLivraisonSelectionneeAvecTournees extends Etat {
         String liv = c.vue.comboboxAssignerLivreur.getValue();
         if(liv != null){
             if(liv.length() < 5){
-                c.vue.buttonAssignerNvLivreur.setDisable((c.journee.getLivreurs().get(Integer.parseInt(liv)-1) == c.vue.comboboxLivreur.getValue())
-                        ||
-                        (c.journee.getLivreurs().get(Integer.parseInt(liv)-1).getTournee() != null));
+                c.vue.buttonAssignerNvLivreur.setDisable((c.journee.getLivreurs().get(Integer.parseInt(liv)-1) == c.vue.comboboxLivreur.getValue()));
             }else{
                 c.vue.buttonAssignerNvLivreur.setDisable(false);
             }

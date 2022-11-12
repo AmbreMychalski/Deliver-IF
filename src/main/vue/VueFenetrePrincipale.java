@@ -33,6 +33,7 @@ import java.util.Observer;
 
 public class VueFenetrePrincipale implements Observer {
 
+
     ControleurFenetrePrincipale controleur;
 
     final int ARR_SIZE = 5;
@@ -65,6 +66,8 @@ public class VueFenetrePrincipale implements Observer {
     public Float longMin;
 
     // objets FXML
+    @FXML
+    public AnchorPane anchorPaneSelectionDemande;
     @FXML
     public Button buttonValiderLivraison;
     @FXML
@@ -342,32 +345,20 @@ public class VueFenetrePrincipale implements Observer {
 
     }
 
-    public void afficherDemandesLivraison(boolean nettoyerCanvas) {
+    public void afficherDemandesLivraison(Livreur livreur, boolean nettoyerCanvas) {
         GraphicsContext gc = canvasIntersectionsLivraisons.getGraphicsContext2D();
         GraphicsContext gcTrajet = canvasPlanTrajet.getGraphicsContext2D();
         if(nettoyerCanvas){
             gc.clearRect(0, 0, canvasIntersectionsLivraisons.getWidth(), canvasIntersectionsLivraisons.getHeight());
             gcTrajet.clearRect(0, 0, canvasPlanTrajet.getWidth(), canvasPlanTrajet.getHeight());
         }
-        if( comboboxLivreur.getValue() == null){
-            for(DemandeLivraison d: controleur.getJournee().getDemandesLivraison()) {
-                this.dessinerIntersection(gc,
-                        d.getIntersection(),
-                        d.getPlageHoraire().getCouleur(),
-                        this.TAILLE_RECT_PT_LIVRAISON,
-                        true,
-                        FormeIntersection.RECTANGLE);
-            }
-        }else{
-            Livreur livreur = comboboxLivreur.getValue();
-            for(DemandeLivraison d: livreur.getDemandeLivraisons()) {
-                this.dessinerIntersection(gc,
-                        d.getIntersection(),
-                        d.getPlageHoraire().getCouleur(),
-                        this.TAILLE_RECT_PT_LIVRAISON,
-                        true,
-                        FormeIntersection.RECTANGLE);
-            }
+        for(DemandeLivraison d: livreur.getDemandeLivraisons()) {
+            this.dessinerIntersection(gc,
+                    d.getIntersection(),
+                    d.getPlageHoraire().getCouleur(),
+                    this.TAILLE_RECT_PT_LIVRAISON,
+                    true,
+                    FormeIntersection.RECTANGLE);
         }
     }
     public void afficherLivraisons(Livreur livreur, boolean nettoyerCanvas){
@@ -671,41 +662,35 @@ public class VueFenetrePrincipale implements Observer {
 
     @Override
     public void update(Observable o, Object arg) {
+        Livreur livreur = comboboxLivreur.getValue();
         if(o instanceof Journee) {
-            tableViewDemandesLivraison.getItems().clear();
-            tableViewDemandesLivraison.getItems().addAll(
-                    ((Journee) o).getDemandesLivraison());
-            afficherDemandesLivraison(true);
-            if(arg == "ChangementLivraison"){
-                System.out.println("update tableau");
-                tableViewLivraisons.refresh();
-                afficherLivraisons(comboboxLivreur.getValue(), true);
-            } else if (arg == "AjoutLivreur") {
-                if (controleur.getJournee().getLivreurs().size() == 1){
-                    comboboxLivreur.getSelectionModel().select(0);
-                }else{
-                    controleur.getEtatCourant().majComboboxLivreur(controleur); //pas sur que ce soit légal
-                }
-            } else if (arg == "SuppressionLivraison") {
-                tableViewLivraisons.getItems().clear();
-                tableViewLivraisons.getItems().addAll(
-                        comboboxLivreur.getValue().getLivraisons()
-                );
-                afficherLivraisons(comboboxLivreur.getValue(), true);
+            if (arg == "AjoutLivreur") {
+                controleur.getEtatCourant().majComboboxLivreur(controleur); //pas sur que ce soit légal
             }
         }else if(o instanceof Livreur){
-            if(arg == "AjoutDemandeLivraison"){
+            if(arg == "AjoutDemandeLivraison") {
                 tableViewDemandesLivraison.getItems().clear();
                 tableViewDemandesLivraison.getItems().addAll(
                         ((Livreur) o).getDemandeLivraisons());
-                afficherDemandesLivraison(true);
+                afficherDemandesLivraison(livreur, true);
+            } else if (arg == "SuppressionDemandeLivraison") {
+                tableViewDemandesLivraison.getItems().clear();
+                tableViewDemandesLivraison.getItems().addAll(
+                        ((Livreur) o).getDemandeLivraisons());
+                afficherDemandesLivraison(livreur, true);
+
             }else if(arg == "SuppressionTournee"){
+                    tableViewLivraisons.getItems().clear();
+                    tableViewDemandesLivraison.setVisible(true);
+                    tableViewLivraisons.setVisible(false);
+                    canvasIntersectionsLivraisons.getGraphicsContext2D().clearRect(0, 0,
+                            canvasIntersectionsLivraisons.getWidth(),
+                            canvasIntersectionsLivraisons.getHeight());
+            } else if (arg == "ModificationTournee") {
                 tableViewLivraisons.getItems().clear();
-                tableViewDemandesLivraison.setVisible(true);
-                tableViewLivraisons.setVisible(false);
-                canvasIntersectionsLivraisons.getGraphicsContext2D().clearRect(0, 0,
-                        canvasIntersectionsLivraisons.getWidth(),
-                        canvasIntersectionsLivraisons.getHeight());
+                tableViewLivraisons.getItems().addAll(
+                        ((Livreur) o).getLivraisons());
+                afficherLivraisons(livreur, true);
             }
         }
     }

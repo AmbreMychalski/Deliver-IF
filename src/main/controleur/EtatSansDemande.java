@@ -31,4 +31,8 @@ public class EtatSansDemande extends Etat{
             throw new Exception(ex);
         }
     }
+    @Override
+    public void clicSurLivreur(ControleurFenetrePrincipale c) {
+        this.changementLivreur(c);
+    }
 }

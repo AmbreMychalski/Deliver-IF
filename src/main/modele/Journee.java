@@ -26,31 +26,14 @@ import lombok.ToString;
 @AllArgsConstructor
 @ToString
 public class Journee extends Observable {
-    private int nbMaxLivreur;
-    private int nbLivreur = 0;
     private Plan plan;
-    private List<DemandeLivraison> demandesLivraison;
-    private List<Livraison> livraisons;
     private List<Livreur> livreurs;
 
-    public Journee(Plan p) {
-        plan = p;
-        demandesLivraison = new ArrayList<DemandeLivraison>();
-        livreurs = new ArrayList<>();
-        livraisons = new ArrayList<Livraison>();
-    }
-
     public Journee() {
-        demandesLivraison = new ArrayList<DemandeLivraison>();
         livreurs = new ArrayList<>();
-        livraisons =  new ArrayList<Livraison>();
     }
 
-    public ArrayList<DemandeLivraison> chargerDemandesLivraison(File fichier) {
-        if(this.demandesLivraison == null) {
-            this.demandesLivraison = new ArrayList<>();
-        }
-
+    public ArrayList<DemandeLivraison> chargerDemandesLivraison(File fichier, Livreur livreur) {
         Node node = null;
         NodeList list = null;
 
@@ -79,10 +62,9 @@ public class Journee extends Observable {
                         if(heureFin - heureDebut != 1) {
                             throw new Exception("Plage horaire incompatible");
                         }
-
                         if(this.plan.estLivrable(this.plan.getIntersections().get(intersectionId))) {
                             DemandeLivraison demande = new DemandeLivraison(this.plan.getIntersections().get(intersectionId), new PlageHoraire(heureDebut, heureFin));
-                            ajouterDemandeLivraison(demande);
+                            livreur.ajouterDemandeLivraison(demande);
                             demandesAjoutees.add(demande);
                         }
                     }
@@ -91,20 +73,10 @@ public class Journee extends Observable {
         } catch(Exception e) {
             System.err.println("Problème lors de la lecture du fichier \n "+ e);
         }
-        notifierObservateurs(null);
+        notifierObservateurs("AjoutListeDemandeLivraison");
         return demandesAjoutees;
     }
-
-    public void ajouterDemandeLivraison(DemandeLivraison demande) {
-        this.demandesLivraison.add(demande);
-        notifierObservateurs(null);
-    }
-
-    public void supprimerDemandeLivraison(DemandeLivraison demande) {
-        this.demandesLivraison.remove(demande);
-        notifierObservateurs(null);
-    }
-    public void sauvegarderDemandesLivraison(File fichier) {
+    public void sauvegarderDemandesLivraison(File fichier, Livreur livreur) {
         try {
             DocumentBuilderFactory documentFactory = DocumentBuilderFactory.newInstance();
             DocumentBuilder documentBuilder = documentFactory.newDocumentBuilder();
@@ -113,7 +85,7 @@ public class Journee extends Observable {
             Element root = document.createElement("listeDemandes");
             document.appendChild(root);
 
-            for(DemandeLivraison demande : this.demandesLivraison) {
+            for(DemandeLivraison demande : livreur.getDemandeLivraisons()) {
                 Element demandeLivraison = document.createElement("demandeLivraison");
 
                 root.appendChild(demandeLivraison);
@@ -137,35 +109,6 @@ public class Journee extends Observable {
         boolean tourneeComplete = true;
         boolean tourneeCalculee = false;
         List<DemandeLivraison> dmdLivrOrdonnee = new LinkedList<>();
-        List<DemandeLivraison> listDemande = new LinkedList<>(demandesLivraison);
-        List<Livraison> livrList = new LinkedList<>();
-        GrapheComplet g = new GrapheComplet(listDemande,this.plan, this.plan.getEntrepot());
-        TSP tsp = new TSP1();
-
-        tsp.searchSolution(20000, g);
-        for(int i = 1; i < listDemande.size() + 1; i++) {
-            int x = tsp.getSolution(i);
-            DemandeLivraison demande = g.getIdIndexToDemandeLivraison().get(x);
-
-            this.livraisons.add(new Livraison(demande, 0, livreur, false));
-            livrList.add(this.livraisons.get(this.livraisons.size()-1));
-        }
-
-        List<Trajet> trajetList = this.creerListTrajet(livrList, g);
-        Tournee t = new Tournee(trajetList, livrList);
-        livreur.setTournee(t);
-        this.majHeureLivraison(t,0);
-        System.out.println("tourneeComplete = " + tourneeComplete);
-        return tourneeComplete;
-    }
-    public void notifierObservateurs(Object arg){
-        setChanged();
-        notifyObservers(arg);
-    }
-    public boolean calculerTourneeNouveauLivreur(Livreur livreur) {
-        boolean tourneeComplete = true;
-        boolean tourneeCalculee = false;
-        List<DemandeLivraison> dmdLivrOrdonnee = new LinkedList<>();
         List<DemandeLivraison> listDemande = new LinkedList<>(livreur.getDemandeLivraisons());
         List<Livraison> livrList = new LinkedList<>();
         GrapheComplet g = new GrapheComplet(listDemande,this.plan, this.plan.getEntrepot());
@@ -175,61 +118,24 @@ public class Journee extends Observable {
         for(int i = 1; i < listDemande.size() + 1; i++) {
             int x = tsp.getSolution(i);
             DemandeLivraison demande = g.getIdIndexToDemandeLivraison().get(x);
-
-            this.livraisons.add(new Livraison(demande, 0, livreur, false));
-            livrList.add(this.livraisons.get(this.livraisons.size()-1));
+            livreur.getLivraisons().add(new Livraison(demande, 0, livreur, false));
+            livrList.add(livreur.getLivraisons().get(livreur.getLivraisons().size()-1));
         }
 
         List<Trajet> trajetList = this.creerListTrajet(livrList, g);
         Tournee t = new Tournee(trajetList, livrList);
-        livreur.setTournee(t);
+        livreur.modifierTournee(t);
         this.majHeureLivraison(t,0);
         System.out.println("tourneeComplete = " + tourneeComplete);
         return tourneeComplete;
     }
-    /*
-    public boolean calculerTourneeNouveauLivreur(Livreur livreur) {
-        Map<DemandeLivraison, Livraison> demandeToLivr = new HashMap<>();
-        boolean tourneeComplete = true;
-        boolean tourneeCalculee = false;
-        List<DemandeLivraison> dmdLivrOrdonnee = new LinkedList<>();
-        //List<DemandeLivraison> listDemande = new LinkedList<>(demandesLivraison);
-        List<DemandeLivraison> listDemande = new LinkedList<>();
-        List<Livraison> livrList = new LinkedList<>();
-
-
-        for(Livraison livr : livreur.getLivraisonsHorsTournee()) {
-            listDemande.add(livr.getDemandeLivraison());
-            demandeToLivr.put(livr.getDemandeLivraison(), livr);
-        }
-
-        GrapheComplet g = new GrapheComplet(listDemande, this.plan,
-                this.plan.getEntrepot());
-        TSP tsp = new TSP1();
-
-        tsp.searchSolution(20000, g);
-
-        for(int i = 1; i < listDemande.size() + 1; i++) {
-            int x = tsp.getSolution(i);
-            DemandeLivraison demande = g.getIdIndexToDemandeLivraison().get(x);
-
-            livrList.add(demandeToLivr.get(demande));
-        }
-
-        List<Trajet> trajetList = this.creerListTrajet(livrList, g);
-
-        Tournee t = new Tournee(trajetList, livrList);
-        livreur.setTournee(t);
-        this.majHeureLivraison(t,0);
-        livreur.getLivraisonsHorsTournee().clear();
-
-        return true;
+    public void notifierObservateurs(Object arg){
+        setChanged();
+        notifyObservers(arg);
     }
-     */
 
     public void ajouterLivreur(Livreur livreur) {
         this.livreurs.add(livreur);
-        this.nbLivreur++;
         notifierObservateurs("AjoutLivreur");
     }
 
@@ -244,18 +150,12 @@ public class Journee extends Observable {
         notifierObservateurs(null);
     }
 
-    public void supprimerLivraisonJournee(Livreur livreur, Livraison livr) {
-        this.livraisons.remove(livr);
-        this.supprimerLivraisonTournee(livreur, livr);
-
-    }
     public Livraison ajouterDemandeLivraisonTournee(DemandeLivraison dl,
                                                     Livraison livrAvant, Livreur livreur) {
 
         Livraison livraison = new Livraison(dl,0,livrAvant.getLivreur(),
                 false);
 
-        this.livraisons.add(livraison);
         ajouterLivraisonTournee(livraison, livrAvant, livreur);
         return livraison;
     }
@@ -271,7 +171,8 @@ public class Journee extends Observable {
         Tournee t = livreur.getTournee();
         int index = t.getLivraisons().indexOf(livrAvant);
 
-        t.getLivraisons().add(index+1,livr);
+        //t.getLivraisons().add(index+1,livr);
+        livreur.ajouterLivraisonTournee(index+1, livr);
         t.getTrajets().remove(index+1);
 
         Intersection intersectionAmont =
@@ -384,7 +285,7 @@ public class Journee extends Observable {
         return trajetList;
     }
 
-    private void supprimerLivraisonTournee(Livreur livreur, Livraison livr) {
+    public void supprimerLivraisonTournee(Livreur livreur, Livraison livr) {
         Tournee t = livreur.getTournee();
         if(t.getLivraisons().size() != 1){
             int index;
@@ -392,7 +293,7 @@ public class Journee extends Observable {
             Intersection intersectionAval;
             index = t.getLivraisons().indexOf(livr);
 
-            t.getLivraisons().remove(livr);
+            livreur.supprimerLivraison(livr);
             t.getTrajets().remove(index);
             t.getTrajets().remove(index);
             if (index == 0) {
