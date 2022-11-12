@@ -55,7 +55,8 @@ public class VueFenetrePrincipale implements Observer {
     Stage stage;
     public float largeurPlan;
     public float hauteurPlan;
-    public double echelle;
+    public double echelleLong;
+    public double echelleLat;
 
     public Float latMax;
     public Float latMin;
@@ -627,7 +628,7 @@ public class VueFenetrePrincipale implements Observer {
      * @return coordonnée X sur le Canvas
      */
     double convertirLongitudeEnX(double x) {
-        return /*this.canvasPlan.getHeight() -*/ (x - this.longMin) * this.echelle;
+        return /*this.canvasPlan.getHeight() -*/ (x - this.longMin) * this.echelleLong;
     }
 
     /**
@@ -638,8 +639,10 @@ public class VueFenetrePrincipale implements Observer {
     double convertirLatitudeEnY(double y) {
         // quand on retourne la carte, elle n'est pas calée en haut,
         // on la cale donc en lui retirant "aRemonter"
-        double aRemonter = this.canvasPlan.getWidth() - (this.latMax - this.latMin) * this.echelle;
-        return (this.canvasPlan.getWidth() - (y - this.latMin) * this.echelle) - aRemonter;
+        double aRemonter = this.canvasPlan.getHeight() - (this.latMax - this.latMin) * this.echelleLat;
+
+        double latitudeYPx = (this.canvasPlan.getHeight() - (y - this.latMin) * this.echelleLat);
+        return  latitudeYPx - aRemonter;
     }
 
     /**
@@ -648,7 +651,7 @@ public class VueFenetrePrincipale implements Observer {
      * @return longitude
      */
     public double convertirXEnLongitude(double x) {
-        return this.longMin +/*- */(x /*- this.canvasPlan.getHeight()*/) / this.echelle;
+        return this.longMin +/*- */(x /*- this.canvasPlan.getHeight()*/) / this.echelleLong;
     }
 
     /**
@@ -657,8 +660,8 @@ public class VueFenetrePrincipale implements Observer {
      * @return latitude
      */
     public double convertirYEnLatitude(double y) {
-        double aRemonter = this.canvasPlan.getWidth() - (this.latMax - this.latMin) * this.echelle;
-        return this.latMin - (y + aRemonter - this.canvasPlan.getWidth()) / this.echelle;
+        double aRemonter = this.canvasPlan.getWidth() - (this.latMax - this.latMin) * this.echelleLat;
+        return this.latMin - (y + aRemonter - this.canvasPlan.getWidth()) / this.echelleLat;
     }
 
     @Override

@@ -49,8 +49,10 @@ public class EtatInitial extends Etat{
             c.vue.largeurPlan = c.vue.longMax - c.vue.longMin;
             c.vue.hauteurPlan = c.vue.latMax - c.vue.latMin;
 
-            c.vue.echelle = Math.min(c.vue.canvasPlan.getWidth() / c.vue.largeurPlan,
-                    c.vue.canvasPlan.getHeight() / c.vue.hauteurPlan);
+            /*c.vue.echelle = Math.min(c.vue.canvasPlan.getWidth() / c.vue.largeurPlan,
+                    c.vue.canvasPlan.getHeight() / c.vue.hauteurPlan);*/
+            c.vue.echelleLong = c.vue.canvasPlan.getWidth() / c.vue.largeurPlan;
+            c.vue.echelleLat = c.vue.canvasPlan.getHeight() / c.vue.hauteurPlan;
 
             for (Segment segment : c.planCharge.getSegments()) {
                 c.vue.dessinerSegment(segment,
