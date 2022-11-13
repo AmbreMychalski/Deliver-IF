@@ -12,8 +12,11 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
-import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
+import javafx.scene.paint.CycleMethod;
+import javafx.scene.paint.LinearGradient;
+import javafx.scene.paint.Stop;
+import javafx.scene.shape.Rectangle;
 import javafx.scene.transform.Affine;
 import javafx.scene.transform.Transform;
 import javafx.stage.Stage;
@@ -30,6 +33,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Observable;
 import java.util.Observer;
+import java.util.concurrent.atomic.AtomicInteger;
 
 public class VueFenetrePrincipale implements Observer {
 
@@ -564,9 +568,9 @@ public class VueFenetrePrincipale implements Observer {
     }
 
 
-    public void dessinerTrajetLatLong(GraphicsContext gc, double lat1, double long1,
+    public void dessinerTrajetLatLong(GraphicsContext gc, LinearGradient color, double lat1, double long1,
                                       double lat2, double long2) {
-        dessinerSegmentGradientXY(gc, convertirLongitudeEnX(long1),
+        dessinerSegmentGradientXY(gc, color, convertirLongitudeEnX(long1),
                 convertirLatitudeEnY(lat1),
                 convertirLongitudeEnX(long2),
                 convertirLatitudeEnY(lat2));
@@ -589,14 +593,11 @@ public class VueFenetrePrincipale implements Observer {
         gc.strokeLine(x1, y1, x2, y2);
     }
 
-    private void dessinerSegmentGradientXY(GraphicsContext gc, double x1, double y1,
+    private void dessinerSegmentGradientXY(GraphicsContext gc, LinearGradient color, double x1, double y1,
                                            double x2, double y2) {
 
-        //     Stop[] stops = new Stop[] { new Stop(0, Color.WHITE), new Stop(1, Color.MAROON)};
-        //     LinearGradient lg1 = new LinearGradient(0, 0, 1, 0, true, CycleMethod.REFLECT, stops);
         gc.setLineWidth(3);
-
-        gc.setStroke(Color.DODGERBLUE);
+        gc.setStroke(color);
         gc.strokeLine(x1, y1, x2, y2);
 
         //this.drawArrow(gc, (int)(x1), (int)(y1), (int)(x2), (int)(y2));
@@ -698,14 +699,39 @@ public class VueFenetrePrincipale implements Observer {
         }
     }
     public void dessinerTrajets(List<Trajet> trajets, GraphicsContext gc) {
+        int size = 0;
+        for(Trajet trajet : trajets){
+            size+=trajet.getSegments().size();
+        }
+        size++;
+        List<Color> couleurs = new ArrayList<>();
+        for(double i = 0; i< size; i++){
+            couleurs.add(new Color(1-(i/ size), (i/ size), (i/ size), 1));
+        }
+        List<LinearGradient> linearGradients = new ArrayList<>();
+        for(int i = 1; i< size; i++){
+            Stop[] stops = new Stop[] { new Stop(0, couleurs.get(i-1)), new Stop(1, couleurs.get(i))};
+            linearGradients.add(new LinearGradient(0, 0, 1, 0, true, CycleMethod.NO_CYCLE, stops));
+        }
+        int i=0;
         for (Trajet trajet : trajets) {
             List<Segment> segments = trajet.getSegments();
             for (Segment segment : segments) {
-                dessinerTrajetLatLong(gc, segment.getOrigine().getLatitude(),
+                dessinerTrajetLatLong(gc, linearGradients.get(i),segment.getOrigine().getLatitude(),
                         segment.getOrigine().getLongitude(),
                         segment.getDestination().getLatitude(),
                         segment.getDestination().getLongitude());
+                i++;
             }
+        }
+        double width = 100;
+        int height = 20;
+        int x_shift = 150;
+        int y_shift = 20;
+        size--;
+        for(i = 0; i< size; i++){
+            gc.setFill(linearGradients.get(i));
+            gc.fillRect(x_shift + i*(width/size) , y_shift, width/size, height);
         }
     }
 

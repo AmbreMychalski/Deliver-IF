@@ -154,8 +154,6 @@ public abstract class Etat {
 
 		c.journee.modifierDemandeLivraison(ligne, intersection, plageHoraire);
 
-		//c.vue.tableViewDemandesLivraison.refresh();
-		//c.vue.afficherDemandeLivraison(true);
 		c.vue.dessinerIntersection(
 				c.vue.canvasIntersectionsLivraisons.getGraphicsContext2D(),
 				ligne.getIntersection(),

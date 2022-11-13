@@ -56,21 +56,8 @@ public class EtatAvecDemande extends Etat{
 
         ControleurFenetrePrincipale.LOGGER.debug("tourneeComplete = " + tourneeComplete);
         ControleurFenetrePrincipale.LOGGER.debug("Solution trouvé en :"+ (System.currentTimeMillis() - startTime)+"ms ");
-        List<Livraison> listeLivraisons;
-        if(livreur == null){
-            listeLivraisons = c.journee.getLivreurs().get(0).getTournee().getLivraisons();
-        }else{
-            listeLivraisons = livreur.getLivraisons();
-        }
 
-        c.vue.tableViewLivraisons.getItems().addAll(listeLivraisons);
-        c.vue.tableViewLivraisons.refresh();
-
-        if(livreur == null){
-            this.afficherTournee(c, c.journee.getLivreurs().get(0).getTournee());
-        }else{
-            this.afficherTournee(c, livreur.getTournee());
-        }
+        this.afficherTournee(c, livreur.getTournee());
         c.changementEtat(c.etatTourneesCalculees);
         c.vue.tableViewDemandesLivraison.setVisible(false);
         c.vue.tableViewLivraisons.setVisible(true);
