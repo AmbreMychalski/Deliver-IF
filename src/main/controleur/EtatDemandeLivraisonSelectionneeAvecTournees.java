@@ -1,5 +1,6 @@
 package controleur;
 
+import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import modele.Livraison;
@@ -46,20 +47,30 @@ public class EtatDemandeLivraisonSelectionneeAvecTournees extends Etat {
                 }else{
                     c.changementEtat(c.etatSansDemande);
                 }
-
             }
             c.vue.comboboxAssignerLivreur.getSelectionModel().select(null);
         }
     }
     public  void touchePressee(ControleurFenetrePrincipale c, KeyEvent ke) {
-        switch (ke.getCode()){
+        super.touchePressee(c, ke);
+        switch (ke.getCode()) {
             case ESCAPE:
-                this.sortieDeSelectionDemande(c,true);
+                this.sortieDeSelectionDemande(c, true);
                 c.changementEtat(c.etatTourneesCalculees);
                 break;
             case DELETE:
                 supprimerLivraison(c);
+                break;
+            case Z:
+                c.vue.tableViewLivraisons.getSelectionModel().selectAboveCell();
+                this.selectionnerDemande(c, true);
+                break;
+            case S:
+                c.vue.tableViewLivraisons.getSelectionModel().selectBelowCell();
+                this.selectionnerDemande(c, true);
+                break;
         }
+
     }
 
     public void clicSurComboboxAssignerLivreur(ControleurFenetrePrincipale c){

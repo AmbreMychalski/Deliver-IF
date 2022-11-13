@@ -40,7 +40,7 @@ public class VueFenetrePrincipale implements Observer {
     public final double TAILLE_RECT_PT_LIVRAISON = 8;
     public final double TAILLE_RECT_PT_LIVRAISON_SELECTIONNE = 12;
     public final double TAILLE_CERCLE_INTERSECTION_SELECTIONNEE = 8;
-    public final double TAILLE_CERCLE_INTERSECTION = 8;
+    public final double TAILLE_CERCLE_INTERSECTION = 15;
     public final Color COULEUR_DEPOT = Color.RED;
     public final Color COULEUR_SEGMENT = Color.BLACK;
     public final Color COULEUR_POINT_LIVRAISON = Color.BLUE;
@@ -219,8 +219,11 @@ public class VueFenetrePrincipale implements Observer {
                 new PropertyValueFactory<>("idIntersectionLivraison"));
         columnPlageHoraireLivraison.setCellValueFactory(
                 new PropertyValueFactory<>("plageHoraireLivraison"));
+        columnPlageHoraireLivraison.setComparator(new ComparateurPlageHoraire());
+
         columnHeure.setCellValueFactory(
                 new PropertyValueFactory<>("heureAffichee"));
+        columnHeure.setComparator(new ComparateurHeureLivraison());
         columnPlageHoraireLivraison.setCellFactory(
                 new Callback<TableColumn<Livraison, PlageHoraire>, TableCell<Livraison, PlageHoraire>>() {
                     @Override

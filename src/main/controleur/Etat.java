@@ -3,6 +3,7 @@ package controleur;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.paint.Color;
@@ -55,7 +56,18 @@ public abstract class Etat {
 
 	public void assignerAutreLivreur(ControleurFenetrePrincipale c) {}
 
-	public void touchePressee(ControleurFenetrePrincipale c, KeyEvent ke) {}
+	public void touchePressee(ControleurFenetrePrincipale c, KeyEvent ke) {
+		System.out.println(ke.getCode());
+		if(! c.vue.comboboxLivreur.isDisable()){
+			if(ke.getCode() == KeyCode.Q){
+				c.vue.comboboxLivreur.getSelectionModel().selectPrevious();
+				this.changementLivreur(c);
+			} else if (ke.getCode() == KeyCode.D) {
+				c.vue.comboboxLivreur.getSelectionModel().selectNext();
+				this.changementLivreur(c);
+			}
+		}
+	}
 
 	public void clicSurLivreur(ControleurFenetrePrincipale c) {}
 	public void clicSurComboboxAssignerLivreur(ControleurFenetrePrincipale controleurFenetrePrincipale) {
@@ -245,12 +257,13 @@ public abstract class Etat {
 		return false;
 	}
 
-	protected  void naviguerSurPlan(ControleurFenetrePrincipale c,
+	protected  Intersection naviguerSurPlan(ControleurFenetrePrincipale c,
 									MouseEvent event,
 									boolean tourneeCalculee){
 		Livreur livreur = c.vue.comboboxLivreur.getValue();
+		Intersection intersectionTrouvee = null;
 		if (c.journee.getPlan() != null) {
-			Intersection intersectionTrouvee =
+			intersectionTrouvee =
 					c.vue.trouverIntersectionCoordoneesPixels(event.getX(),
 							event.getY());
 			if (intersectionTrouvee != null) {
@@ -287,7 +300,7 @@ public abstract class Etat {
 			ControleurFenetrePrincipale.LOGGER.debug("Clic sur le canvas, (x,y)=("
 					+ event.getX() + "," + event.getY() + ")");
 		}
-
+		return intersectionTrouvee;
 	}
 
 	protected void chargerDemandes(ControleurFenetrePrincipale c)

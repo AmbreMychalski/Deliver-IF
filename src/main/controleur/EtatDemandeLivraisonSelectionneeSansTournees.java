@@ -31,7 +31,7 @@ public class EtatDemandeLivraisonSelectionneeSansTournees extends Etat {
         c.changementEtat(c.etatModifierDemandeLivraisonSansTournees);
     }
     public  void touchePressee(ControleurFenetrePrincipale c, KeyEvent ke) {
-
+        super.touchePressee(c, ke);
         switch (ke.getCode()) {
             case ESCAPE:
                 this.sortieDeSelectionDemande(c,false);
@@ -47,6 +47,14 @@ public class EtatDemandeLivraisonSelectionneeSansTournees extends Etat {
                 } else {
                     c.changementEtat(c.etatSansDemande);
                 }
+                break;
+            case Z:
+                c.vue.tableViewDemandesLivraison.getSelectionModel().selectAboveCell();
+                this.selectionnerDemande(c, false);
+                break;
+            case S:
+                c.vue.tableViewDemandesLivraison.getSelectionModel().selectBelowCell();
+                this.selectionnerDemande(c, false);
                 break;
         }
     }
