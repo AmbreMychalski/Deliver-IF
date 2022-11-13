@@ -1,6 +1,8 @@
 package controleur;
 
 import javafx.scene.input.MouseEvent;
+import modele.DemandeLivraison;
+import modele.Intersection;
 import modele.Livraison;
 import modele.Livreur;
 
@@ -16,7 +18,16 @@ public class EtatTourneesCalculees extends Etat{
         this.sauvegarderListeDemandes(c);
     }
     public void clicGaucheSurPlan(ControleurFenetrePrincipale c, MouseEvent event) {
-        this.naviguerSurPlan(c, event, true);
+        Intersection intersectionTrouvee = this.naviguerSurPlan(c, event, true);
+        Livraison livraisonAssociee = null;
+        for(Livraison livraison : c.vue.comboboxLivreur.getValue().getLivraisons()){
+            if(intersectionTrouvee == livraison.getDemandeLivraison().getIntersection()){
+                livraisonAssociee = livraison;
+            }
+        }
+        c.vue.tableViewLivraisons.getSelectionModel().select(livraisonAssociee);
+        this.selectionnerDemande(c, true);
+        c.changementEtat(c.etatDemandeLivraisonSelectionneeAvecTournees);
     }
     public void ajouterDemande(ControleurFenetrePrincipale c) {
         c.vue.comboboxPlageHoraire.setDisable(false);
