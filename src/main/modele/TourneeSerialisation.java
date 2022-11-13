@@ -3,13 +3,21 @@ package modele;
 import lombok.AllArgsConstructor;
 
 import java.io.*;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 
 @AllArgsConstructor
 public class TourneeSerialisation {
     List<String> coordNames = Arrays.asList("N", "NE","E","SE", "S", "SW", "W", "NW", "N");
+    Map<String, String> coord = new HashMap<String, String>(){{
+        put("N","Nord");
+        put("NE","Nord-Est");
+        put("E","Est");
+        put("SE","Sud-Est");
+        put("S","Sud");
+        put("SW","Sud-Ouest");
+        put("W","Ouest");
+        put("NW","Nord-Ouest");
+    }};
     String[] mot_liaison = new String[]{" vers "," sur "," pour suivre ",", "," pour rejoindre "};
     StringWriter writer = new StringWriter();
     PrintWriter out = new PrintWriter(writer);
@@ -45,10 +53,13 @@ public class TourneeSerialisation {
                     + plan.obtenirRuesIntersection(trajet.getArrivee())
                     + "-----/// \n");
 
-            int    a = 0;
+            int a = 0;
             String directionPrecedente = null;
             String ruePrecedente = null;
-            float  somme = 0;
+            float somme = 0;
+            boolean premiereSomme = true;
+            String phraseDirection = null;
+
 
             for(Segment segment : trajet.getSegments()) {
                 String direction = bearing(segment.getOrigine().getLatitude(),
@@ -56,28 +67,41 @@ public class TourneeSerialisation {
                         segment.getDestination().getLatitude(),
                         segment.getDestination().getLongitude());
 
-                out.print((a + 1) + "/");
-
                 if(a == 0) {
-                    out.println("Prenez sur " + segment.getNom() + " sur "
-                            + (int) segment.getLongueur() + " mètres.");
-                    somme += segment.getLongueur();
+                    out.print((a + 1) + "/ ");
+                    out.print("Prenez la rue " + segment.getNom() + " direction "+ coord.get(direction) + " sur ");
+                    somme = segment.getLongueur();
+                    a++;
                 } else {
-                    if(segment.getNom() == ruePrecedente) {
+                    if (segment.getNom().equals(ruePrecedente)) {
                         somme += segment.getLongueur();
                     } else {
+                        if (premiereSomme) {
+                            out.println((int) somme + " mètres.");
+                            premiereSomme = false;
+                            phraseDirection = direction(directionPrecedente,direction);
+                        } else {
+                            out.print((a + 1) + "/ ");
+                            out.println(phraseDirection
+                                    + mot_liaison[(int) (Math.random() * (mot_liaison.length - 1))]
+                                    + ruePrecedente
+                                    + " sur " + (int) somme + " mètres.");
+                            a++;
+                            phraseDirection = direction(directionPrecedente, direction);
+                        }
+                        somme = segment.getLongueur();
+                    }
+                    if(segment == trajet.segments.get(trajet.getSegments().size()-1)){
+                        out.print((a + 1) + "/ ");
                         out.println(direction(directionPrecedente, direction)
-                                + mot_liaison[(int)(Math.random()*(mot_liaison.length-1))]
+                                + mot_liaison[(int) (Math.random() * (mot_liaison.length - 1))]
                                 + segment.getNom()
-                                + " sur " + (int)(segment.getLongueur())+" mètres.");
-
-                        somme = 0;
+                                + " sur " + (int) somme + " mètres.");
                     }
                 }
 
                 ruePrecedente = segment.getNom();
                 directionPrecedente = direction;
-                a++;
             }
 
             j++;
@@ -147,10 +171,10 @@ public class TourneeSerialisation {
             }
         }
 
-        String[] adverbes = new String[]{"", "légèrement", "", "complètement", ""};
+        String[] adverbes = new String[]{"", " légèrement", "", " complètement", ""};
 
         if (Math.abs(diffIndex) != 4 && Math.abs(diffIndex) != 0) {
-            directive = "Tournez " + adverbes[Math.abs(diffIndex)]
+            directive = "Tournez" + adverbes[Math.abs(diffIndex)]
                     + (diffIndex < 0 ? " à gauche" : " à droite");
         } else if (Math.abs(diffIndex) == 0) {
             directive = "Continuez tout droit";
