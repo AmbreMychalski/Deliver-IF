@@ -576,6 +576,16 @@ public class VueFenetrePrincipale implements Observer {
                 convertirLatitudeEnY(lat2));
     }
 
+    public void dessinerTrajetLatLong(GraphicsContext gc, double lat1, double long1,
+                                      double lat2, double long2) {
+        gc.setLineWidth(4);
+        gc.setStroke(Color.YELLOW);
+        gc.strokeLine(convertirLongitudeEnX(long1),
+                convertirLatitudeEnY(lat1),
+                convertirLongitudeEnX(long2),
+                convertirLatitudeEnY(lat2));
+    }
+
     /**
      * Dessine un segment entre deux points sur le canvas dans la
      * couleur précisée. Les coodonnées sont données en pixels.
@@ -732,6 +742,16 @@ public class VueFenetrePrincipale implements Observer {
         for(i = 0; i< size; i++){
             gc.setFill(linearGradients.get(i));
             gc.fillRect(x_shift + i*(width/size) , y_shift, width/size, height);
+        }
+    }
+
+    public void dessinerTrajet (Trajet trajet, GraphicsContext gc){
+        List<Segment> segments = trajet.getSegments();
+        for (Segment segment : segments) {
+            dessinerTrajetLatLong(gc, segment.getOrigine().getLatitude(),
+                    segment.getOrigine().getLongitude(),
+                    segment.getDestination().getLatitude(),
+                    segment.getDestination().getLongitude());
         }
     }
 

@@ -17,6 +17,7 @@ public class EtatDemandeLivraisonSelectionneeAvecTournees extends Etat {
     }
     public void clicGaucheSurTableau(ControleurFenetrePrincipale c) {
         this.selectionnerDemande(c,true);
+        this.selectionTrajet(c);
     }
     public void supprimerDemande(ControleurFenetrePrincipale c) {
         supprimerLivraison(c);
