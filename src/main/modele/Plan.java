@@ -219,7 +219,7 @@ public class Plan {
 						        || intersections.get(origineId) == null) {
 						    LOGGER.error("La destination ou l'origine d'un segment "
 						            + "n'a pas été reconnue.");
-						    throw new IntersectionIntrouvableException("Intersection introuvable");
+						    throw new IntersectionIntrouvableException("Intersection introuvable.");
 						}
 						
 						// On gère le voisinage des intersections

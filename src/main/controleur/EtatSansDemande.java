@@ -11,9 +11,12 @@ public class EtatSansDemande extends Etat{
         super.message = "Ajoutez ou chargez des demandes de livraison";
     }
 
-    public void chargerPlan(ControleurFenetrePrincipale c)
-            throws Exception {
-        c.etatInitial.chargerPlan(c);
+    public void chargerPlan(ControleurFenetrePrincipale c) {
+        try {
+            c.etatInitial.chargerPlan(c);
+        } catch(Exception e) {
+            c.vue.labelGuideUtilisateur.setText("Erreur lors du chargement du plan.");
+        }
     }
     public void ajouterDemande(ControleurFenetrePrincipale c) {
         c.vue.comboboxPlageHoraire.setDisable(false);
