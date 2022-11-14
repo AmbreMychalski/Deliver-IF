@@ -1,22 +1,36 @@
 package controleur;
 
 import modele.DemandeLivraison;
+import modele.Intersection;
 import modele.Livraison;
 import modele.Livreur;
 import vue.VueFenetrePrincipale;
+
+import javafx.scene.input.MouseEvent;
 
 public class EtatSelectionLivraisonPourNouvelleDemande extends Etat{
     public EtatSelectionLivraisonPourNouvelleDemande() {
         super.message = "Sélectionner la livraison qui viendra avant la livraison correspondant à la nouvelle deamnde";
     }
-
+    public void clicGaucheSurPlan(ControleurFenetrePrincipale c, MouseEvent event){
+        Intersection intersectionTrouvee = this.naviguerSurPlan(c, event, false);
+        Livraison livraisonAssociee = null;
+        for(Livraison livraison : c.vue.comboboxLivreur.getValue().getLivraisons()){
+            if(intersectionTrouvee == livraison.getDemandeLivraison().getIntersection()){
+                livraisonAssociee = livraison;
+            }
+        }
+        selectionPourNouvelleDemande(c, livraisonAssociee);
+    }
     public void clicGaucheSurTableau(ControleurFenetrePrincipale c) {
         this.selectionnerDemande(c,false);
     }
-    protected boolean selectionnerDemande(ControleurFenetrePrincipale c, boolean livraison){
+    protected boolean selectionnerDemande(ControleurFenetrePrincipale c, boolean livraison) {
         Livraison ligne;
-
         ligne = c.vue.tableViewLivraisons.getSelectionModel().getSelectedItem();
+        return selectionPourNouvelleDemande(c, ligne);
+    }
+    private boolean selectionPourNouvelleDemande(ControleurFenetrePrincipale c, Livraison ligne){
         if (ligne != null) {
             c.vue.afficherLivraisons(c.vue.comboboxLivreur.getValue(), true);
             c.vue.dessinerIntersection(c.vue.canvasIntersectionsLivraisons.getGraphicsContext2D(),
@@ -44,4 +58,5 @@ public class EtatSelectionLivraisonPourNouvelleDemande extends Etat{
         return false;
 
     }
+
 }

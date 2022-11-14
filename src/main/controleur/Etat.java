@@ -65,9 +65,25 @@ public abstract class Etat {
 			} else if (ke.getCode() == KeyCode.D) {
 				c.vue.comboboxLivreur.getSelectionModel().selectNext();
 				this.changementLivreur(c);
+			}else if(ke.getCode() == KeyCode.P){
+				c.vue.redessinerPlan(true,1.5);
+				if(c.vue.comboboxLivreur.getValue().getTournee() != null){
+					c.vue.afficherLivraisons(c.vue.comboboxLivreur.getValue(), true);
+				} else {
+					c.vue.afficherDemandesLivraison(c.vue.comboboxLivreur.getValue(), true);
+				}
+
+			} else if (ke.getCode() == KeyCode.M) {
+				c.vue.redessinerPlan(true,0.66);
+				if(c.vue.comboboxLivreur.getValue().getTournee() != null){
+					c.vue.afficherLivraisons(c.vue.comboboxLivreur.getValue(), true);
+				} else {
+					c.vue.afficherDemandesLivraison(c.vue.comboboxLivreur.getValue(), false);
+				}
 			}
 		}
 	}
+
 
 	public void clicSurLivreur(ControleurFenetrePrincipale c) {}
 	public void clicSurComboboxAssignerLivreur(ControleurFenetrePrincipale controleurFenetrePrincipale) {

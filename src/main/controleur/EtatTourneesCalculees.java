@@ -25,9 +25,11 @@ public class EtatTourneesCalculees extends Etat{
                 livraisonAssociee = livraison;
             }
         }
-        c.vue.tableViewLivraisons.getSelectionModel().select(livraisonAssociee);
-        this.selectionnerDemande(c, true);
-        c.changementEtat(c.etatDemandeLivraisonSelectionneeAvecTournees);
+        if (livraisonAssociee != null) {
+            c.vue.tableViewLivraisons.getSelectionModel().select(livraisonAssociee);
+            this.selectionnerDemande(c, true);
+            c.changementEtat(c.etatDemandeLivraisonSelectionneeAvecTournees);
+        }
     }
     public void ajouterDemande(ControleurFenetrePrincipale c) {
         c.vue.comboboxPlageHoraire.setDisable(false);

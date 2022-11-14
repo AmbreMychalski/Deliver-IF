@@ -62,6 +62,10 @@ public class VueFenetrePrincipale implements Observer {
     public float hauteurPlan;
     public double echelleLong;
     public double echelleLat;
+    public double dernierePositionX = 0;
+    public double dernierePositionY = 0;
+    public double decalageX = 0;
+    public double decalageY = 0;
 
 
     public Float latMax;
@@ -280,6 +284,27 @@ public class VueFenetrePrincipale implements Observer {
                         return cell;
                     }
                 });
+
+        canvasIntersectionsLivraisons.setOnMouseDragged(this::actionDeplacerPlan);
+        canvasIntersectionsLivraisons.setOnMousePressed(event -> {
+            dernierePositionY = event.getY();
+            dernierePositionX = event.getX();
+        });
+    }
+
+    private void actionDeplacerPlan(MouseEvent event) {
+        double x =  event.getX();
+        double y = event.getY();
+        decalageX += x - dernierePositionX;
+        decalageY += y - dernierePositionY;
+        dernierePositionY = y;
+        dernierePositionX = x;
+        redessinerPlan(false, 0);
+        if(comboboxLivreur.getValue().getTournee() != null){
+            afficherLivraisons(comboboxLivreur.getValue(), true);
+        } else {
+            afficherDemandesLivraison(comboboxLivreur.getValue(), true);
+        }
     }
 
     private void actionClicComboboxAssisgnerLivreur() {
@@ -627,7 +652,7 @@ public class VueFenetrePrincipale implements Observer {
      * @return coordonnée X sur le Canvas
      */
     double convertirLongitudeEnX(double x) {
-        return /*this.canvasPlan.getHeight() -*/ (x - this.longMin) * this.echelleLong;
+        return /*this.canvasPlan.getHeight() -*/ decalageX + (x - this.longMin) * this.echelleLong;
     }
 
     /**
@@ -641,7 +666,7 @@ public class VueFenetrePrincipale implements Observer {
         double aRemonter = this.canvasPlan.getHeight() - (this.latMax - this.latMin) * this.echelleLat;
 
         double latitudeYPx = (this.canvasPlan.getHeight() - (y - this.latMin) * this.echelleLat);
-        return  latitudeYPx - aRemonter;
+        return  decalageY + latitudeYPx - aRemonter;
 
     }
 
@@ -761,5 +786,59 @@ public class VueFenetrePrincipale implements Observer {
         for (Control b: tousLesControls) {
             b.setDisable(!controlsActives.contains(b));
         }
+    }
+
+    public void dessinerPlan(){
+        latMax = controleur.getPlanCharge().getIntersections().values().stream()
+                .map(Intersection::getLatitude)
+                .max(Float::compare).orElse(0f);
+        latMin = controleur.getPlanCharge().getIntersections().values().stream()
+                .map(Intersection::getLatitude)
+                .min(Float::compare).orElse(0f);
+        longMax = controleur.getPlanCharge().getIntersections().values().stream()
+                .map(Intersection::getLongitude)
+                .max(Float::compare).orElse(0f);
+        longMin = controleur.getPlanCharge().getIntersections().values().stream()
+                .map(Intersection::getLongitude)
+                .min(Float::compare).orElse(0f);
+
+        largeurPlan = longMax - longMin;
+        hauteurPlan = latMax - latMin;
+
+        echelleLong =  canvasPlan.getWidth() / largeurPlan;
+        echelleLat =  canvasPlan.getHeight() / hauteurPlan;
+
+        canvasPlan.getGraphicsContext2D().clearRect(0,0, canvasPlan.getWidth(), canvasPlan.getHeight());
+        for (Segment segment : controleur.getPlanCharge().getSegments()) {
+            dessinerSegment(segment,
+                    COULEUR_SEGMENT);
+        }
+
+        dessinerIntersection(canvasPlan.getGraphicsContext2D(),
+                controleur.getJournee().getPlan().getEntrepot(),
+                COULEUR_DEPOT,
+                TAILLE_CERCLE_INTERSECTION,
+                true,
+                VueFenetrePrincipale.FormeIntersection.CERCLE);
+
+    }
+
+    public void redessinerPlan(boolean miseAEchelle, double echelleGlobale){
+        if(miseAEchelle) {
+            this.echelleLat *= echelleGlobale;
+            this.echelleLong *= echelleGlobale;
+        }
+
+        canvasPlan.getGraphicsContext2D().clearRect(0, 0, canvasPlan.getWidth(), canvasPlan.getHeight());
+        for (Segment segment : controleur.getPlanCharge().getSegments()) {
+            dessinerSegment(segment,
+                    COULEUR_SEGMENT);
+        }
+        dessinerIntersection(canvasPlan.getGraphicsContext2D(),
+                controleur.getJournee().getPlan().getEntrepot(),
+                COULEUR_DEPOT,
+                TAILLE_CERCLE_INTERSECTION,
+                true,
+                VueFenetrePrincipale.FormeIntersection.CERCLE);
     }
 }

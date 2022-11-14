@@ -29,9 +29,11 @@ public class EtatAvecDemande extends Etat{
                 demandeAssociee = demande;
             }
         }
-        c.vue.tableViewDemandesLivraison.getSelectionModel().select(demandeAssociee);
-        this.selectionnerDemande(c, false);
-        c.changementEtat(c.etatDemandeLivraisonSelectionneeSansTournees);
+        if(demandeAssociee != null) {
+            c.vue.tableViewDemandesLivraison.getSelectionModel().select(demandeAssociee);
+            this.selectionnerDemande(c, false);
+            c.changementEtat(c.etatDemandeLivraisonSelectionneeSansTournees);
+        }
     }
     public void clicGaucheSurTableau(ControleurFenetrePrincipale c) {
         boolean demandeSelectionee = this.selectionnerDemande(c,false);
