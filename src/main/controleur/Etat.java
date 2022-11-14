@@ -242,6 +242,21 @@ public abstract class Etat {
 		return false;
 
 	}
+
+	protected void selectionTrajet(ControleurFenetrePrincipale c){
+		Livraison liv = c.vue.tableViewLivraisons.getSelectionModel()
+				.getSelectedItem();
+		Intersection intersectionLiv = liv.getDemandeLivraison().getIntersection();
+
+		Livreur livreur = c.vue.comboboxLivreur.getValue();
+		Tournee tournee = livreur.getTournee();
+		for(Trajet trajet : tournee.getTrajets()){
+			if(trajet.getArrivee()==intersectionLiv){
+				c.vue.dessinerTrajet(trajet, c.vue.canvasPlanTrajet.getGraphicsContext2D());
+			}
+		}
+
+	}
 	protected boolean validerAjoutDemande(ControleurFenetrePrincipale c){
 		String champIdentifiant = c.vue.textfieldIdentifiantIntersection.getText();
 		PlageHoraire plageHoraire = c.vue.comboboxPlageHoraire.getValue();

@@ -40,6 +40,7 @@ public class EtatTourneesCalculees extends Etat{
     public void clicGaucheSurTableau(ControleurFenetrePrincipale c) {
         boolean demandeSelectionee = this.selectionnerDemande(c,true);
         if (demandeSelectionee){
+            this.selectionTrajet(c);
             c.changementEtat(c.etatDemandeLivraisonSelectionneeAvecTournees);
         }
     }
