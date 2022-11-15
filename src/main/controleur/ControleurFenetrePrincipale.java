@@ -38,7 +38,6 @@ public class ControleurFenetrePrincipale {
 	final EtatInitial etatInitial = new EtatInitial();
 	final EtatSansDemande etatSansDemande = new EtatSansDemande();
 	final EtatAvecDemande etatAvecDemande = new EtatAvecDemande();
-	final EtatAfficherFeuillesRoute etatAfficherFeuillesRoute = new EtatAfficherFeuillesRoute();
 	final EtatDemandeLivraisonSelectionneeAvecTournees etatDemandeLivraisonSelectionneeAvecTournees = new EtatDemandeLivraisonSelectionneeAvecTournees();
 	final EtatDemandeLivraisonSelectionneeSansTournees etatDemandeLivraisonSelectionneeSansTournees = new EtatDemandeLivraisonSelectionneeSansTournees();
 	final EtatModifierDemandeLivraisonSansTournees etatModifierDemandeLivraisonSansTournees = new EtatModifierDemandeLivraisonSansTournees();
@@ -64,9 +63,6 @@ public class ControleurFenetrePrincipale {
 		context.updateLoggers(config);
 
 		controlsActivesParEtat = new HashMap<Etat, ArrayList<Control>>() {{
-			put(etatAfficherFeuillesRoute, new ArrayList<>(Arrays.asList(
-
-			)));
 			put(etatAvecDemande, new ArrayList<>(Arrays.asList(
 					vue.buttonAutoriserAjouterLivraison,
 					vue.buttonChargerDemandes,

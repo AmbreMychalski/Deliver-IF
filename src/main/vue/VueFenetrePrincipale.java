@@ -59,6 +59,8 @@ public class VueFenetrePrincipale implements Observer {
     public double   dernierePositionY = 0;
     public double   decalageX = 0;
     public double   decalageY = 0;
+    public double   positionCouranteX = 0;
+    public double   positionCouranteY = 0;
 
 
     public Float latMax;
@@ -271,6 +273,10 @@ public class VueFenetrePrincipale implements Observer {
         canvasIntersectionsLivraisons.setOnMousePressed(event -> {
             dernierePositionY = event.getY();
             dernierePositionX = event.getX();
+        });
+        canvasIntersectionsLivraisons.setOnMouseMoved(event -> {
+            positionCouranteY = event.getY();
+            positionCouranteX = event.getX();
         });
     }
 
@@ -778,6 +784,8 @@ public class VueFenetrePrincipale implements Observer {
         if(miseAEchelle) {
             this.echelleLat *= echelleGlobale;
             this.echelleLong *= echelleGlobale;
+            this.decalageX = this.decalageX*echelleGlobale + this.positionCouranteX-(this.positionCouranteX * echelleGlobale);
+            this.decalageY = this.decalageY*echelleGlobale + this.positionCouranteY-(this.positionCouranteY * echelleGlobale);
         }
 
         canvasPlan.getGraphicsContext2D().clearRect(0, 0, canvasPlan.getWidth(), canvasPlan.getHeight());
