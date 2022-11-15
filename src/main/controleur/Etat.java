@@ -250,12 +250,9 @@ public abstract class Etat {
 
 		Livreur livreur = c.vue.comboboxLivreur.getValue();
 		Tournee tournee = livreur.getTournee();
-		for(Trajet trajet : tournee.getTrajets()){
-			if(trajet.getArrivee()==intersectionLiv){
-				c.vue.dessinerTrajet(trajet, c.vue.canvasPlanTrajet.getGraphicsContext2D());
-			}
-		}
 
+		int indexLivr = (tournee.getLivraisons()).indexOf(liv);
+		c.vue.dessinerTrajet(tournee.getTrajets().get(indexLivr), c.vue.canvasPlanTrajet.getGraphicsContext2D());
 	}
 	protected boolean validerAjoutDemande(ControleurFenetrePrincipale c){
 		String champIdentifiant = c.vue.textfieldIdentifiantIntersection.getText();
