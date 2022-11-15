@@ -1,8 +1,6 @@
 package vue;
 
 import controleur.ControleurFenetrePrincipale;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
@@ -18,12 +16,14 @@ import modele.TourneeSerialisation;
 import java.awt.*;
 import java.io.File;
 
+import static controleur.ControleurFenetrePrincipale.LOGGER;
+
 public class FenetreFeuilleDeRoute {
     public static void display (ControleurFenetrePrincipale c, Livreur livreur) {
         Stage window = new Stage();
         window.initModality(Modality.APPLICATION_MODAL);
         String tournee = null;
-        TourneeSerialisation serialisation = new TourneeSerialisation(c.getPlanCharge());
+        TourneeSerialisation serialisation = new TourneeSerialisation(c.getJournee().getPlan());
         try{
             tournee= serialisation.serialiser(livreur);
         }catch(Exception ex){
@@ -42,22 +42,21 @@ public class FenetreFeuilleDeRoute {
 
         VBox layout = new VBox(10);
         Button sauvegarderFeuilleDeRoute = new Button("Sauvegarder la feuille de route");
-        sauvegarderFeuilleDeRoute.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent e) {
-                FileChooser fileChooser = new FileChooser();
-                fileChooser.setInitialDirectory(new File(".\\data"));
-                fileChooser.setTitle("Sauvegarder la feuille de route");
-                try{
-                    File fichier = fileChooser.showSaveDialog(window);
-                    ControleurFenetrePrincipale.LOGGER.info("Sauvegarde à l'emplacement "
-                            + fichier.getAbsolutePath());
-                    serialisation.sauvegarderDansFichier(fichier);
-                } catch (Exception ex){
+        sauvegarderFeuilleDeRoute.setOnAction(e -> {
+            FileChooser fileChooser = new FileChooser();
+            fileChooser.setInitialDirectory(new File(".\\data"));
+            fileChooser.setTitle("Sauvegarder la feuille de route");
+            fileChooser.getExtensionFilters().add(
+                    new FileChooser.ExtensionFilter("Fichier TXT", "*.txt", "*.TXT"));
+            try{
+                File fichier = fileChooser.showSaveDialog(window);
+                LOGGER.info("Sauvegarde à l'emplacement "
+                        + fichier.getAbsolutePath());
+                serialisation.sauvegarderDansFichier(fichier);
+            } catch (Exception ex){
 
-                    ControleurFenetrePrincipale.LOGGER
-                            .error("Erreur lors de la sauvegarde de la feuille de route");
-                }
+                LOGGER
+                        .error("Erreur lors de la sauvegarde de la feuille de route");
             }
         });
         layout.getChildren().addAll(sauvegarderFeuilleDeRoute, scrollPane);
@@ -66,7 +65,7 @@ public class FenetreFeuilleDeRoute {
         Dimension size = Toolkit.getDefaultToolkit().getScreenSize();
         int width = (int)size.getWidth();
         int height = (int)size.getHeight();
-        System.out.println(width+"/"+height);
+        LOGGER.debug(width+"/"+height);
         Scene scene = new Scene(layout, (0.5*width), (0.5*height));
         window.setScene(scene);
         window.show();
