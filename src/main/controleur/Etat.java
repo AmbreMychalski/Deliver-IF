@@ -109,7 +109,7 @@ public abstract class Etat {
 	protected void sauvegarderListeDemandes(ControleurFenetrePrincipale c){
 		Livreur livreur = c.vue.comboboxLivreur.getValue();
 		FileChooser fileChooser = new FileChooser();
-		fileChooser.setInitialDirectory(new File(".\\data"));
+		fileChooser.setInitialDirectory(new File(System.getProperty("user.home")));
 		fileChooser.setTitle("Sauvegarder des demandes de livraison");
 		fileChooser.getExtensionFilters().add(
 				new FileChooser.ExtensionFilter("Fichier XML", "*.xml", "*.XML"));
