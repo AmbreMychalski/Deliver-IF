@@ -1,12 +1,13 @@
 package controleur;
 
+import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import modele.DemandeLivraison;
 import modele.Intersection;
 import modele.Livraison;
 import modele.Livreur;
 
-import java.util.List;
+import static controleur.ControleurFenetrePrincipale.LOGGER;
 
 public class EtatTourneesCalculees extends Etat{
     public EtatTourneesCalculees() {
@@ -50,11 +51,23 @@ public class EtatTourneesCalculees extends Etat{
     }
 
     @Override
-    public void redo(ListOfCommands liste) {
-        liste.redoCommand();
+    public void redo(ListeDeCommandes liste) {
+        liste.redoCommande();
     }
 
-    public void undo(ListOfCommands liste) {
-        liste.undoCommand();
+    public void undo(ListeDeCommandes liste) {
+        liste.undoCommande();
+    }
+
+    public void touchePressee(ControleurFenetrePrincipale c, KeyEvent ke){
+        super.touchePressee(c,ke);
+        LOGGER.info(ke.getCode());
+        ListeDeCommandes liste = c.getListeCommandes();
+        switch(ke.getCode()) {
+            case Z: //undo
+                liste.undoCommande();
+            case R: //redo
+                liste.redoCommande();
+        }
     }
 }

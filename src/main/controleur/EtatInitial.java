@@ -45,10 +45,7 @@ public class EtatInitial extends Etat {
             }
 
             c.journee.setPlan(plan);
-
-            Command com = new PlanCommand (c);
-            com.undoCommand();
-            com.doCommand();
+            c.vue.dessinerPlan();
 
             c.vue.titledPaneEditionDemande.setVisible(true);
             c.vue.titlePaneSelectionDemande.setVisible(true);

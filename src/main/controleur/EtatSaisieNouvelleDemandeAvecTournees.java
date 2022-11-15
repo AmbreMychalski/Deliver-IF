@@ -26,7 +26,8 @@ public class EtatSaisieNouvelleDemandeAvecTournees extends Etat {
                 if( !(livreur.getNumero() == c.journee.getLivreurs().size()-1 && c.journee.dernierLivreurEstSansTourneeCalculee()) ){
                     c.vue.tableViewDemandesLivraison.setDisable(false);
                     c.vue.tableViewLivraisons.setDisable(false);
-                    livreur.ajouterDemandeLivraison(demande);
+                  //  livreur.ajouterDemandeLivraison(demande);
+                    c.getListeCommandes().ajouterCommand(new AjouterCommande(demande,livreur));
                     c.changementEtat(c.etatSelectionLivraisonPourNouvelleDemande);
                     this.afficherTournee(c, livreur.getTournee());
                 }

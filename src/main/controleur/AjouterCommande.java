@@ -3,19 +3,19 @@ package controleur;
 import modele.DemandeLivraison;
 import modele.Livreur;
 
-public class AjouterCommand implements Command{
+public class AjouterCommande implements Commande {
 
     private DemandeLivraison demande;
     private Livreur livreur;
 
-    public AjouterCommand(DemandeLivraison d, Livreur l){
+    public AjouterCommande(DemandeLivraison d, Livreur l){
         demande = d;
         livreur = l;
     }
-    public void doCommand(){
+    public void doCommande(){
         livreur.ajouterDemandeLivraison(demande);
     }
-    public void undoCommand (){
+    public void undoCommande (){
         livreur.supprimerDemandeLivraison(demande);
     }
 

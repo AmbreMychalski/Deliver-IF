@@ -11,7 +11,6 @@ import lombok.Getter;
 import modele.*;
 import vue.VueFenetrePrincipale;
 
-import java.awt.*;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
@@ -451,8 +450,8 @@ public abstract class Etat {
 		}
 	}
 
-	public void undo(ListOfCommands liste) {
+	public void undo(ListeDeCommandes liste) {
 	}
-	public void redo(ListOfCommands liste) {
+	public void redo(ListeDeCommandes liste) {
 	}
 }
