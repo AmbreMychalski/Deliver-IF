@@ -15,11 +15,11 @@ public class PlageHoraireTest {
     void isEgalTest() {
         Plan plan = new Plan();
 
-        Assertions.assertFalse(plageHoraire1.equals(null)); // null
-        Assertions.assertTrue(plageHoraire1.equals(plageHoraire1)); // self
-        Assertions.assertFalse(plageHoraire1.equals(plan)); // obj de type différent
+        Assertions.assertNotEquals(null, plageHoraire1); // null
+        Assertions.assertEquals(plageHoraire1, plageHoraire1); // self
+        Assertions.assertNotEquals(plageHoraire1, plan); // obj de type différent
 
-        Assertions.assertTrue(plageHoraire1.equals(plageHoraire2));
-        Assertions.assertFalse(plageHoraire1.equals(plageHoraire3));
+        Assertions.assertEquals(plageHoraire1, plageHoraire2);
+        Assertions.assertNotEquals(plageHoraire1, plageHoraire3);
     }
 }

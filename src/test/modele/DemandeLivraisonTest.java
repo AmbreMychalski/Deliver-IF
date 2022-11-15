@@ -18,10 +18,10 @@ public class DemandeLivraisonTest {
     @DisplayName("Test de la modification d'une demande de livraison")
     void modifierDemandeLivraisonTest() {
         demandeLivraisonAModifier.modifierDemandeLivraison(intersection1, plageHoraire1);
-        Assertions.assertTrue(demandeLivraisonAModifier.getIntersection() == intersection1);
+        Assertions.assertSame(demandeLivraisonAModifier.getIntersection(), intersection1);
 
         demandeLivraisonAModifier.modifierDemandeLivraison(intersection1, plageHoraire2);
-        Assertions.assertTrue(demandeLivraisonAModifier.getPlageHoraire() == plageHoraire2);
+        Assertions.assertSame(demandeLivraisonAModifier.getPlageHoraire(), plageHoraire2);
 
     }
 
@@ -36,9 +36,9 @@ public class DemandeLivraisonTest {
     void isEgalTest() {
         Plan plan = new Plan();
 
-        Assertions.assertFalse(demandeLivraison1.equals(null));
-        Assertions.assertTrue(demandeLivraison1.equals(demandeLivraison1));
-        Assertions.assertFalse(demandeLivraison1.equals(plan));
-        Assertions.assertFalse(demandeLivraison1.equals(demandeLivraison2));
+        Assertions.assertNotEquals(null, demandeLivraison1);
+        Assertions.assertEquals(demandeLivraison1, demandeLivraison1);
+        Assertions.assertNotEquals(demandeLivraison1, plan);
+        Assertions.assertNotEquals(demandeLivraison1, demandeLivraison2);
     }
 }
