@@ -604,7 +604,7 @@ public class VueFenetrePrincipale implements Observer {
     public void dessinerTrajetLatLong(GraphicsContext gc, double lat1, double long1,
                                       double lat2, double long2) {
         gc.setLineWidth(4);
-        gc.setStroke(Color.YELLOW);
+        gc.setStroke(Color.GREEN);
         gc.strokeLine(convertirLongitudeEnX(long1),
                 convertirLatitudeEnY(lat1),
                 convertirLongitudeEnX(long2),
