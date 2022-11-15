@@ -31,14 +31,22 @@ import lombok.ToString;
 public class Journee extends Observable {
 
     public static final Logger LOGGER = LogManager.getLogger(ControleurFenetrePrincipale.class);
-
     private Plan plan;
     private List<Livreur> livreurs;
 
+    /**
+     * Constructeur avec un seul paramètre
+     */
     public Journee() {
         livreurs = new ArrayList<>();
     }
 
+    /**
+     * Permet de charger un fichier de demandes de livraison.
+     * @param fichier Le fichier que l'on veut charger
+     * @param livreur Le livreur auquel on associera les demandes
+     * @return La liste des demandes de livraison qui ont pu être lues
+     */
     public ArrayList<DemandeLivraison> chargerDemandesLivraison(File fichier, Livreur livreur) {
         Node node;
         NodeList list;
@@ -87,6 +95,12 @@ public class Journee extends Observable {
         notifierObservateurs("AjoutListeDemandeLivraison");
         return demandesAjoutees;
     }
+
+    /**
+     * Permet de sauvegarder les demandes de livraison
+     * @param fichier Le fichier dans lequel on va sauvegarder les demandes
+     * @param livreur Le livreur pour lequel on sauvegarde les demandes
+     */
     public void sauvegarderDemandesLivraison(File fichier, Livreur livreur) {
         try {
             DocumentBuilderFactory documentFactory = DocumentBuilderFactory.newInstance();
@@ -112,10 +126,15 @@ public class Journee extends Observable {
 
             transformer.transform(domSource, streamResult);
         } catch (Exception e) {
-            LOGGER.error("Erreur lors de la sauvegarde des demandes de livraison : \n)"+e);
+            LOGGER.error("Erreur lors de la sauvegarde des demandes de livraison : \n)" + e);
         }
     }
 
+    /**
+     * Calcul d'une tournée pour un livreur.
+     * @param livreur Le livreur pour lequel on veut sauvegarder la tournée
+     * @return true si la tournée est complète (et valide), false sinon
+     */
     public boolean calculerTournee(Livreur livreur) {
         // boolean tourneeCalculee = false;
 
@@ -145,27 +164,52 @@ public class Journee extends Observable {
 
         return tourneeComplete;
     }
+
+    /**
+     * Notifie les observateurs de l'objet passé en paramètre
+     * @param arg L'objet dont on veut notifier les observateurs
+     */
     public void notifierObservateurs(Object arg) {
         setChanged();
         notifyObservers(arg);
     }
 
+    /**
+     * Permet d'ajouter un livreur à la journée considérée.
+     * @param livreur Le livreur que l'on veut ajouter à la liste
+     */
     public void ajouterLivreur(Livreur livreur) {
         this.livreurs.add(livreur);
         notifierObservateurs("AjoutLivreur");
     }
 
+    /**
+     * Ajoute l'objservateur.
+     * @param obs L'observateur que l'on veut ajouter
+     */
     public void ajouterObservateur(Observer obs) {
         addObserver(obs);
     }
 
-    public void modifierDemandeLivraison(DemandeLivraison demande,
+    /**
+     * Modifie la demande de livraison considérée.
+     * @param demande La demande de livraison à modifier
+     * @param intersection La nouvelle intersection à définir (peut être null)
+     * @param plageHoraire La nouvelle plage horaire à définir (peut être null)
+     */
+    public void modifierDemandeLivraison(Livreur livreur, DemandeLivraison demande,
                                          Intersection intersection,
                                          PlageHoraire plageHoraire) {
-        demande.modifierDemandeLivraison(intersection, plageHoraire);
-        notifierObservateurs(null);
+        livreur.modifierDemandeLivraison(demande, intersection, plageHoraire);
     }
 
+    /**
+     * Permet d'ajouter une demande de livraison à la tournée considérée
+     * @param dl La demande de livraison que l'on veut ajouter
+     * @param livrAvant La dernière livraison
+     * @param livreur Le livreur auquel on veut associer la demande
+     * @return La livraison créée et ajoutée
+     */
     public Livraison ajouterDemandeLivraisonTournee(DemandeLivraison dl,
                                                     Livraison livrAvant,
                                                     Livreur livreur) {
@@ -183,15 +227,22 @@ public class Journee extends Observable {
         livreur.ajouterDemandeLivraison(livr.getDemandeLivraison());
     }
 
-    public void ajouterLivraisonTournee(Livraison livr,Livraison livrAvant, Livreur livreur) {
+    /**
+     * Permet d'ajouter la livraison à la tournée pour le livreur donné
+     * @param livr La livraison que l'on veut ajouter
+     * @param livrAvant La dernière livraison (avant celle que l'on veut ajouter)
+     * @param livreur Le livreur auquel on veut ajouter la livraison
+     */
+    public void ajouterLivraisonTournee(Livraison livr, Livraison livrAvant,
+                                        Livreur livreur) {
         livr.setLivreur(livreur);
 
         Tournee t = livreur.getTournee();
         int index = t.getLivraisons().indexOf(livrAvant);
 
-        //t.getLivraisons().add(index+1,livr);
-        livreur.ajouterLivraisonTournee(index+1, livr);
-        t.getTrajets().remove(index+1);
+        // t.getLivraisons().add(index+1,livr);
+        livreur.ajouterLivraisonTournee(index + 1, livr);
+        t.getTrajets().remove(index + 1);
 
         Intersection intersectionAmont =
                 t.getLivraisons().get(index).getDemandeLivraison().getIntersection();
@@ -214,7 +265,7 @@ public class Journee extends Observable {
             intersectionAval = this.plan.getEntrepot();
         } else {
             intersectionAval =
-                    t.getLivraisons().get(index+2).getDemandeLivraison().getIntersection();
+                    t.getLivraisons().get(index + 2).getDemandeLivraison().getIntersection();
         }
 
         lisSeg = plan.calculerPlusCourtChemin(intersectionAmont, intersectionAval);
@@ -228,9 +279,19 @@ public class Journee extends Observable {
         this.majHeureLivraison(t, index);
     }
 
+    /**
+     * Vérifie si le dernier livreur a une tournée calculée
+     * @return true si le dernier livreurs n'a pas de tournée calculée, false sinon
+     */
     public boolean dernierLivreurEstSansTourneeCalculee() {
         return (this.livreurs.get(this.livreurs.size() - 1).getTournee() == null);
     }
+
+    /**
+     *
+     * @param t
+     * @param startIndex
+     */
     private void majHeureLivraison(Tournee t, int startIndex) {
         float heureLivraison;
 

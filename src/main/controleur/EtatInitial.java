@@ -1,11 +1,13 @@
 package controleur;
 
-import java.io.File;
-
 import exception.FichierNonConformeException;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.stage.FileChooser;
 import modele.Plan;
+
+import java.io.File;
+
+import static controleur.ControleurFenetrePrincipale.LOGGER;
 
 public class EtatInitial extends Etat {
 
@@ -28,23 +30,21 @@ public class EtatInitial extends Etat {
             c.vue.labelGuideUtilisateur.setText("Problème lors du chargement du fichier.");
             throw new FichierNonConformeException("Problème lors du choix du fichier.");
         }
-        System.out.println("Fichier choisi = " + fichier.getAbsolutePath());
+        LOGGER.info("Fichier choisi = " + fichier.getAbsolutePath());
 
         try {
-//            GraphicsContext gc = c.vue.canvasPlan.getGraphicsContext2D();
-//            gc.clearRect(0, 0, c.vue.canvasPlan.getWidth(), c.vue.canvasPlan.getHeight());
-            c.planCharge = new Plan(fichier);
             GraphicsContext gc = c.vue.canvasPlan.getGraphicsContext2D();
             gc.clearRect(0, 0, c.vue.canvasPlan.getWidth(), c.vue.canvasPlan.getHeight());
 
+            Plan plan;
             try {
-                c.planCharge = new Plan(fichier);
+                plan = new Plan(fichier);
             } catch(Exception e) {
                 c.vue.labelGuideUtilisateur.setText("Problème lors du chargement du fichier.");
                 throw new FichierNonConformeException("Problème lors du chargement du fichier.");
             }
 
-            c.journee.setPlan(c.planCharge);
+            c.journee.setPlan(plan);
 
             Command com = new PlanCommand (c);
             com.undoCommand();
