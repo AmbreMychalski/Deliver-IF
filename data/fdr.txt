@@ -1,59 +1,88 @@
 Sérialiseur de tournée
 ***********************************************************
 Tournée du livreur : 1
-************* Liste des livraisons et horaire de livraison : *********** 
+*********** Liste des livraisons et horaire de livraison : *********** 
 
-1/ Croisement de la Passage Feuillat et de la Rue de Domrémy à 8h00
-2/ Croisement de la Rue des Tuiliers et de la Rue Édouard Rochet à 9h00
-3/ Croisement de la Rue du Général Mouton-Duvernet et de la Rue Jeanne Hachette à 10h00
-4/ Croisement de la Avenue Georges Pompidou et de la Rue Gandolière à 10h09
+1/ Croisement de la Place Bellecour Rue de la Barre et de la Rue Marcel-Gabriel Rivière Rue Bellecordière Place de l'Hôpital à 8h00
+2/ Croisement de la Rue Alexis Perroncel et de la null à 10h00
+3/ Croisement de la Avenue Lacassagne et de la Boulevard Pinel à 11h00
 *******************************************************
 ****************** Itinéraire détaillé ****************
-La tournée est composée de 5 trajets : 
+La tournée est composée de 4 trajets : 
 
-///--- /1/ de [Rue Feuillat, Rue Bara] à [Passage Feuillat, Rue de Domrémy]-----/// 
+///--- /1/ de [Rue Feuillat, Rue Bara] à [Place Bellecour Rue de la Barre, Rue Marcel-Gabriel Rivière Rue Bellecordière Place de l'Hôpital]-----/// 
 
-1/ Prenez la rue Rue Feuillat direction Nord sur 153 mètres.
-2/ Continuez tout droit vers Passage Feuillat sur 254 mètres.
-
-*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/
-
-///--- /2/ de [Passage Feuillat, Rue de Domrémy] à [Rue des Tuiliers, Rue Édouard Rochet]-----/// 
-
-1/ Prenez la rue Rue de Domrémy direction Sud-Ouest sur 67 mètres.
-2/ Tournez à gauche sur Avenue Lacassagne sur 113 mètres.
-3/ Tournez légèrement à droite vers Rue du Docteur Rebatel sur 339 mètres.
-4/ Tournez à droite sur Rue Saint-Maximin sur 357 mètres.
-5/ Tournez à gauche vers Rue Villon sur 312 mètres.
-6/ Tournez à droite sur Rue Saint-Firmin sur 167 mètres.
-7/ Tournez à droite, Rue des Tuiliers sur 68 mètres.
+1/ Prenez la rue Rue Feuillat direction Sud sur 64 mètres.
+2/ Tournez  à droite pour suivre Rue Fiol sur 174 mètres.
+3/ Tournez  à gauche sur Rue du Docteur Rebatel sur 224 mètres.
+4/ Tournez  à droite vers Rue Saint-Maximin sur 675 mètres.
+5/ Tournez  légèrement à gauche sur Rue du Dauphiné sur 311 mètres.
+6/ Tournez  à gauche sur Rue du Général Mouton-Duvernet sur 61 mètres.
+7/ Tournez  complètement à droite, Cours Albert Thomas sur 66 mètres.
+8/ Continuez tout droit vers  sur 10 mètres.
+9/ Tournez  légèrement à gauche, Cours Gambetta sur 1650 mètres.
+10/ Continuez tout droit, Cours Gambetta Pont de la Guillotière sur 192 mètres.
+11/ Tournez  légèrement à gauche, Pont de la Guillotière sur 97 mètres.
+12/ Continuez tout droit pour suivre Rue de la Barre sur 126 mètres.
 
 */*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/
 
-///--- /3/ de [Rue des Tuiliers, Rue Édouard Rochet] à [Rue du Général Mouton-Duvernet, Rue Jeanne Hachette]-----/// 
+///--- /2/ de [Place Bellecour Rue de la Barre, Rue Marcel-Gabriel Rivière Rue Bellecordière Place de l'Hôpital] à [Rue Alexis Perroncel, null]-----/// 
 
-1/ Prenez la rue Rue des Tuiliers direction Nord sur 33 mètres.
-2/ Tournez légèrement à gauche sur Cours Albert Thomas sur 432 mètres.
-3/ Tournez légèrement à droite sur Rue du Général Mouton-Duvernet sur 167 mètres.
+1/ Prenez la rue Place Bellecour Rue de la Barre direction Ouest sur 104 mètres.
+2/ Continuez tout droit pour suivre Place Bellecour sur 26 mètres.
+3/ Tournez  à droite sur Rue du Président Édouard Herriot sur 300 mètres.
+4/ Tournez  à droite, Place de la République Rue Jean de Tournes sur 152 mètres.
+5/ Continuez tout droit sur Rue Stella sur 77 mètres.
+6/ Tournez  à gauche sur Rue Grolée sur 145 mètres.
+7/ Tournez  légèrement à droite pour suivre Rue du Président Carnot sur 209 mètres.
+8/ Tournez  légèrement à gauche vers Quai Jules Courmont sur 14 mètres.
+9/ Tournez  à droite, Pont Lafayette Quai Jules Courmont sur 230 mètres.
+10/ Continuez tout droit sur Cours Lafayette sur 870 mètres.
+11/ Tournez  légèrement à gauche sur Rue Juliette Récamier sur 351 mètres.
+12/ Tournez  légèrement à gauche, Place René Deroudille sur 25 mètres.
+13/ Tournez  légèrement à gauche sur Rue Juliette Récamier sur 336 mètres.
+14/ Continuez tout droit, Rue des Émeraudes sur 417 mètres.
+15/ Continuez tout droit sur Rue Gabriel Péri sur 289 mètres.
+16/ Tournez  légèrement à droite vers Rond-Point des Charpennes sur 24 mètres.
+17/ Tournez  légèrement à droite sur Cours André Philip sur 148 mètres.
+18/ Tournez  à gauche pour suivre Rue Pierre Larousse sur 100 mètres.
+19/ Tournez  à droite vers Place Wilson sur 18 mètres.
+20/ Continuez tout droit sur Rue Melzet sur 81 mètres.
+21/ Tournez  à gauche vers Rue Gervais Bussière sur 135 mètres.
+22/ Continuez tout droit vers Rue Alexis Perroncel sur 261 mètres.
 
 */*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/
 
-///--- /4/ de [Rue du Général Mouton-Duvernet, Rue Jeanne Hachette] à [Avenue Georges Pompidou, Rue Gandolière]-----/// 
+///--- /3/ de [Rue Alexis Perroncel, null] à [Avenue Lacassagne, Boulevard Pinel]-----/// 
 
-1/ Prenez la rue Rue du Général Mouton-Duvernet direction Nord sur 704 mètres.
-2/ Continuez tout droit sur Rue de la Villette sur 211 mètres.
-3/ Continuez tout droit, Avenue Georges Pompidou sur 289 mètres.
+1/ Prenez la rue Rue Alexis Perroncel direction Est sur 346 mètres.
+2/ Tournez  à droite sur Rue Mauvert sur 343 mètres.
+3/ Tournez  à gauche sur Rue Francis de Pressensé sur 220 mètres.
+4/ Tournez  à droite vers Rue Jean Bourgey sur 253 mètres.
+5/ Tournez  à droite vers Cours Émile Zola sur 6 mètres.
+6/ Tournez  à gauche, Rue Paul Verlaine sur 825 mètres.
+7/ Tournez  à gauche pour suivre Cours Tolstoï sur 331 mètres.
+8/ Tournez  à droite pour suivre Rue Antonin Perrin sur 764 mètres.
+9/ Continuez tout droit vers Rue Bonnand sur 710 mètres.
+10/ Tournez  à gauche, Rue Ferdinand Buisson sur 53 mètres.
+11/ Tournez  complètement à droite sur Rue Jean-Marc Bernard sur 160 mètres.
+12/ Tournez  légèrement à gauche, Avenue Lacassagne sur 838 mètres.
+13/ Tournez  à gauche pour suivre Boulevard Pinel sur 30 mètres.
 
 */*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/
 
-///--- /5/ de [Avenue Georges Pompidou, Rue Gandolière] à [Rue Feuillat, Rue Bara]-----/// 
+///--- /4/ de [Avenue Lacassagne, Boulevard Pinel] à [Rue Feuillat, Rue Bara]-----/// 
 
-1/ Prenez la rue Avenue Georges Pompidou direction Est sur 48 mètres.
-2/ Tournez à droite sur Rue Étienne Richerand sur 115 mètres.
-3/ Tournez à gauche sur Rue Antoine Charial sur 210 mètres.
-4/ Tournez à droite vers Rue Turbil sur 377 mètres.
-5/ Continuez tout droit sur Place Rouget de l'Isle sur 61 mètres.
-6/ Continuez tout droit, Avenue Lacassagne sur 814 mètres.
+1/ Prenez la rue Avenue Lacassagne direction Ouest sur 519 mètres.
+2/ Tournez  légèrement à droite, Rue Constant sur 403 mètres.
+3/ Tournez  légèrement à droite, Rue Ferdinand Buisson sur 56 mètres.
+4/ Tournez  à gauche, Rue Charles Richard sur 152 mètres.
+5/ Tournez  à gauche pour suivre Cours Docteur Long sur 165 mètres.
+6/ Tournez  à droite, Rue Louise sur 76 mètres.
+7/ Tournez  légèrement à gauche sur Rue du Capitaine sur 78 mètres.
+8/ Continuez tout droit, Rue Jeanne d'Arc sur 629 mètres.
+9/ Continuez tout droit pour suivre Rue Feuillat sur 236 mètres.
 
 */*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/
 

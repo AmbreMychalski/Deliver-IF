@@ -7,6 +7,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.VBox;
+import javafx.scene.text.TextAlignment;
 import javafx.stage.FileChooser;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
@@ -22,13 +23,8 @@ public class FenetreFeuilleDeRoute {
     public static void display (ControleurFenetrePrincipale c, Livreur livreur) {
         Stage window = new Stage();
         window.initModality(Modality.APPLICATION_MODAL);
-        String tournee = null;
         TourneeSerialisation serialisation = new TourneeSerialisation(c.getJournee().getPlan());
-        try{
-            tournee= serialisation.serialiser(livreur);
-        }catch(Exception ex){
-            ex.printStackTrace();
-        }
+        String tournee= serialisation.serialiser(livreur);
         window.setTitle("Feuille de route");
         window.setMinWidth(300);
         window.setMinHeight(300);
@@ -36,6 +32,8 @@ public class FenetreFeuilleDeRoute {
         ScrollPane scrollPane = new ScrollPane();
         Label label = new Label();
         label.setText(tournee);
+        label.setAlignment(Pos.CENTER);
+        label.setTextAlignment(TextAlignment.CENTER);
         scrollPane.setContent(label);
         // Horizontal scroll bar is only displayed when needed
         scrollPane.setHbarPolicy(ScrollPane.ScrollBarPolicy.AS_NEEDED);
@@ -55,8 +53,7 @@ public class FenetreFeuilleDeRoute {
                 serialisation.sauvegarderDansFichier(fichier);
             } catch (Exception ex){
 
-                LOGGER
-                        .error("Erreur lors de la sauvegarde de la feuille de route");
+                LOGGER.error("Erreur lors de la sauvegarde de la feuille de route");
             }
         });
         layout.getChildren().addAll(sauvegarderFeuilleDeRoute, scrollPane);
@@ -65,8 +62,7 @@ public class FenetreFeuilleDeRoute {
         Dimension size = Toolkit.getDefaultToolkit().getScreenSize();
         int width = (int)size.getWidth();
         int height = (int)size.getHeight();
-        LOGGER.debug(width+"/"+height);
-        Scene scene = new Scene(layout, (0.5*width), (0.5*height));
+        Scene scene = new Scene(layout, (0.35*width), (0.5*height));
         window.setScene(scene);
         window.show();
 

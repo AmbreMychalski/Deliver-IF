@@ -311,6 +311,11 @@ public class VueFenetrePrincipale implements Observer {
 
     private void actionButtonReinitZoomPlan(ActionEvent actionEvent) {
         dessinerPlan();
+        if(comboboxLivreur.getValue().getTournee() == null){
+            afficherDemandesLivraison(comboboxLivreur.getValue(), true);
+        }else{
+            afficherLivraisons(comboboxLivreur.getValue(), true);
+        }
     }
 
     public File choisirFichier(String titreFenetre) throws Exception {
@@ -351,7 +356,11 @@ public class VueFenetrePrincipale implements Observer {
         dernierePositionY = y;
         dernierePositionX = x;
         redessinerPlan(false, 0);
-        afficherLivraisons(comboboxLivreur.getValue(), true);
+        if(comboboxLivreur.getValue().getTournee() == null){
+            afficherDemandesLivraison(comboboxLivreur.getValue(), true);
+        }else{
+            afficherLivraisons(comboboxLivreur.getValue(), true);
+        }
     }
 
     private void actionClicComboboxAssisgnerLivreur() {

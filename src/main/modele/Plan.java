@@ -412,7 +412,6 @@ public class Plan {
 				rue2 = seg.getNom();
 			}
 		}
-
 		return Arrays.asList(rue1,rue2);
 	}
 }
