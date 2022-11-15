@@ -25,7 +25,7 @@ public class EtatSelectionLivraisonPourNouvelleDemande extends Etat{
     public void clicGaucheSurTableau(ControleurFenetrePrincipale c) {
         this.selectionnerDemande(c,false);
     }
-    protected boolean selectionnerDemande(ControleurFenetrePrincipale c, boolean livraison) {
+    public boolean selectionnerDemande(ControleurFenetrePrincipale c, boolean livraison) {
         Livraison ligne;
         ligne = c.vue.tableViewLivraisons.getSelectionModel().getSelectedItem();
         return selectionPourNouvelleDemande(c, ligne);

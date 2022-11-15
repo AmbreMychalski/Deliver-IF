@@ -6,6 +6,10 @@ import modele.DemandeLivraison;
 import modele.Intersection;
 import modele.Livraison;
 import modele.Livreur;
+import vue.FenetrePlusieursLivraisonsAuMemeEndroit;
+
+import java.util.ArrayList;
+import java.util.Arrays;
 
 import static controleur.ControleurFenetrePrincipale.LOGGER;
 
@@ -20,16 +24,18 @@ public class EtatTourneesCalculees extends Etat{
     }
     public void clicGaucheSurPlan(ControleurFenetrePrincipale c, MouseEvent event) {
         Intersection intersectionTrouvee = this.naviguerSurPlan(c, event, true);
-        Livraison livraisonAssociee = null;
+        ArrayList<Livraison> livraisonsAssociees = new ArrayList<>();
         for(Livraison livraison : c.vue.comboboxLivreur.getValue().getLivraisons()){
             if(intersectionTrouvee == livraison.getDemandeLivraison().getIntersection()){
-                livraisonAssociee = livraison;
+                livraisonsAssociees.add(livraison);
             }
         }
-        if (livraisonAssociee != null) {
-            c.vue.tableViewLivraisons.getSelectionModel().select(livraisonAssociee);
+        if (livraisonsAssociees.size() == 1) {
+            c.vue.tableViewLivraisons.getSelectionModel().select(livraisonsAssociees.get(0));
             this.selectionnerDemande(c, true);
             c.changementEtat(c.etatDemandeLivraisonSelectionneeAvecTournees);
+        } else if (livraisonsAssociees.size() > 1) {
+            FenetrePlusieursLivraisonsAuMemeEndroit.display(c, null, livraisonsAssociees);
         }
     }
     public void ajouterDemande(ControleurFenetrePrincipale c) {

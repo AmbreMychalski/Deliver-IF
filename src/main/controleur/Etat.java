@@ -171,7 +171,7 @@ public abstract class Etat {
 		c.vue.tableViewDemandesLivraison.setDisable(false);
 	}
 
-	protected boolean selectionnerDemande(ControleurFenetrePrincipale c, boolean livraison){
+	public boolean selectionnerDemande(ControleurFenetrePrincipale c, boolean livraison){
 		DemandeLivraison ligne = null;
 		Livraison liv = null;
 		Livreur livreur = c.vue.comboboxLivreur.getValue();

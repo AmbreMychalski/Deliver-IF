@@ -3,10 +3,10 @@ package controleur;
 import javafx.scene.input.MouseEvent;
 import modele.DemandeLivraison;
 import modele.Intersection;
-import modele.Livraison;
 import modele.Livreur;
+import vue.FenetrePlusieursLivraisonsAuMemeEndroit;
 
-import java.util.List;
+import java.util.ArrayList;
 
 public class EtatAvecDemande extends Etat {
     public EtatAvecDemande() {
@@ -23,16 +23,18 @@ public class EtatAvecDemande extends Etat {
 
     public void clicGaucheSurPlan(ControleurFenetrePrincipale c, MouseEvent event) {
         Intersection intersectionTrouvee = this.naviguerSurPlan(c, event, false);
-        DemandeLivraison demandeAssociee = null;
+        ArrayList<DemandeLivraison> demandesAssociees = new ArrayList<>();
         for (DemandeLivraison demande : c.vue.comboboxLivreur.getValue().getDemandeLivraisons()) {
             if (intersectionTrouvee == demande.getIntersection()) {
-                demandeAssociee = demande;
+                demandesAssociees.add(demande);
             }
         }
-        if (demandeAssociee != null) {
-            c.vue.tableViewDemandesLivraison.getSelectionModel().select(demandeAssociee);
+        if (demandesAssociees.size() == 1) {
+            c.vue.tableViewDemandesLivraison.getSelectionModel().select(demandesAssociees.get(0));
             this.selectionnerDemande(c, false);
             c.changementEtat(c.etatDemandeLivraisonSelectionneeSansTournees);
+        } else if (demandesAssociees.size() > 1) {
+            FenetrePlusieursLivraisonsAuMemeEndroit.display(c, demandesAssociees, null);
         }
     }
 
