@@ -1,19 +1,16 @@
 package modele;
 
-import java.io.File;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-
-import controleur.ControleurFenetrePrincipale;
+import exception.FichierNonConformeException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
-import exception.FichierNonConformeException;
-import modele.Plan;
+import java.io.File;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
 
 public class PlanTest {
 
@@ -34,9 +31,7 @@ public class PlanTest {
     @Test
     @DisplayName("Test de l'exception en cas de fichier null en entrée")
     void exceptionFichierNullTest() {        
-        Assertions.assertThrows(Exception.class, () -> {
-            new Plan(null);
-        });
+        Assertions.assertThrows(Exception.class, () -> new Plan(null));
     }
     
     @Test
@@ -44,9 +39,7 @@ public class PlanTest {
     void exceptionFichierNonConformeTest() {
         File fichierPlan = new File("data/testExceptionPlan.xml");
 
-        Assertions.assertThrows(FichierNonConformeException.class,() -> {
-            new Plan(fichierPlan);
-        });
+        Assertions.assertThrows(FichierNonConformeException.class,() -> new Plan(fichierPlan));
     }
 
     @Test
@@ -54,8 +47,6 @@ public class PlanTest {
     void estLivrableTest() throws Exception {
         File fichierPlan = new File("data\\testPlan.xml");
         Plan plan = new Plan(fichierPlan);
-
-        Long l = 1L;
 
         logger.error("Valeurs : " + plan.getIntersections().get(Long.valueOf(7)));
 
@@ -73,14 +64,14 @@ public class PlanTest {
         Intersection intersection0 = plan.getIntersections().get(Long.valueOf(0));
         Intersection intersection4 = plan.getIntersections().get(Long.valueOf(4));
 
-        List<Segment> listeSegments = new ArrayList<Segment>();
+        List<Segment> listeSegments = new ArrayList<>();
 
         listeSegments.add(plan.getSegments().get(1));
         listeSegments.add(plan.getSegments().get(3));
         listeSegments.add(plan.getSegments().get(4));
         listeSegments.add(plan.getSegments().get(7));
 
-        Assertions.assertTrue(plan.calculerPlusCourtChemin(intersection0, intersection4).equals(listeSegments));
+        Assertions.assertEquals(plan.calculerPlusCourtChemin(intersection0, intersection4), listeSegments);
     }
 
     @Test
@@ -89,21 +80,19 @@ public class PlanTest {
         File fichierPlan = new File("data\\testPlan.xml");
         Plan plan = new Plan(fichierPlan);
 
-        List<Intersection> listeIntersections = new ArrayList<Intersection>();
+        List<Intersection> listeIntersections = new ArrayList<>();
         listeIntersections.add(plan.getIntersections().get(Long.valueOf(0)));
         listeIntersections.add(plan.getIntersections().get(Long.valueOf(3)));
         listeIntersections.add(plan.getIntersections().get(Long.valueOf(7)));
 
         Intersection depart = plan.getIntersections().get(Long.valueOf(5));
 
-        HashMap<Intersection, Float> hashMap = new HashMap<Intersection, Float>();
+        HashMap<Intersection, Float> hashMap = new HashMap<>();
         hashMap.put(listeIntersections.get(0), Float.valueOf(16));
         hashMap.put(listeIntersections.get(1), Float.valueOf(15));
         hashMap.put(listeIntersections.get(2), Float.valueOf(19));
 
-        HashMap<Intersection, Float> blabla = plan.calculerPlusCourtsChemins(listeIntersections, depart);
-
-        Assertions.assertTrue(hashMap.equals(plan.calculerPlusCourtsChemins(listeIntersections, depart)));
+        Assertions.assertEquals(hashMap, plan.calculerPlusCourtsChemins(listeIntersections, depart));
     }
 
     @Test
@@ -141,12 +130,12 @@ public class PlanTest {
 
         Intersection intersection4 = plan.getIntersections().get(Long.valueOf(4));
 
-        List<String> listeRues = new ArrayList<String>();
+        List<String> listeRues = new ArrayList<>();
 
         // On ne prend que les deux premières rues de la liste
         listeRues.add("Rue Rousseau");
         listeRues.add("Rue Bellecour");
 
-        Assertions.assertTrue(listeRues.equals(plan.obtenirRuesIntersection(intersection4)));
+        Assertions.assertEquals(listeRues, plan.obtenirRuesIntersection(intersection4));
     }
 }

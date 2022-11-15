@@ -23,17 +23,27 @@ public class TourneeSerialisation {
     StringWriter  writer = new StringWriter();
     PrintWriter      out = new PrintWriter(writer);
 
+    /**
+     * Constructeur de la classe, ne prenant qu'un plan en paramètre
+     * @param plan que l'on veut charger
+     */
     public TourneeSerialisation(Plan plan) {
         this.plan = plan;
     }
-    public String serialiser(Livreur livreur) throws IndexOutOfBoundsException {
-        out.println("Sérialiseur de tournée");
+
+    /**
+     * Pour un livreur donné, génère la feuille de route
+     * @param livreur dont on veut sérialiser la tournée
+     * @return le texte entier
+     */
+    public String serialiser(Livreur livreur) {
         int i = 1;
         Tournee tournee = livreur.getTournee();
 
+        out.println("Sérialiseur de tournée");
         out.println("***********************************************************");
         out.println("Tournée du livreur : " + tournee.getLivraisons().get(0).getLivreur());
-        out.println("************* Liste des livraisons et horaire de livraison : *********** \n");
+        out.println("*********** Liste des livraisons et horaire de livraison : *********** \n");
 
         for(Livraison liv : tournee.getLivraisons()) {
             List<String> rues = plan.obtenirRuesIntersection(liv.getDemandeLivraison().getIntersection());
@@ -69,7 +79,8 @@ public class TourneeSerialisation {
 
                 if(a == 0) {
                     out.print((a + 1) + "/ ");
-                    out.print("Prenez la rue " + segment.getNom() + " direction "+ coord.get(direction) + " sur ");
+                    out.print("Prenez la rue " + segment.getNom() + " direction "
+                            + coord.get(direction) + " sur ");
                     somme = segment.getLongueur();
                     a++;
                 } else {
@@ -114,6 +125,11 @@ public class TourneeSerialisation {
         return writer.toString();
     }
 
+    /**
+     * Permet de sauvegarder la liste des demandes
+     * @param fichier Fichier dans lequel on veut sauvegarder la feuille de route
+     * @throws IOException en cas d'erreur d'écriture
+     */
     public void sauvegarderDansFichier(File fichier) throws IOException {
          FileWriter fw = new FileWriter(fichier);
 
@@ -121,7 +137,14 @@ public class TourneeSerialisation {
          fw.close();
     }
 
-
+    /**
+     * Permet de trouver l'orientation de l'endroit 1 à l'endroit 2
+     * @param lat1 Première latitude
+     * @param lon1 Première longitude
+     * @param lat2 Seconde latitude
+     * @param lon2 Seconde longitude
+     * @return l'instruction d'orientation (S, SW, W, NW, ...)
+     */
     //https://stackoverflow.com/questions/9457988/bearing-from-one-coordinate-to-another
     private String bearing(double lat1, double lon1, double lat2, double lon2) {
         double      latitude1 = Math.toRadians(lat1);
@@ -140,7 +163,13 @@ public class TourneeSerialisation {
         return this.coordNames.get((int) directionId);
     }
 
-    private String direction (String card1, String card2) {
+    /**
+     * Permet de définir la directive pour aller de la direction 1 à la 2
+     * @param card1 La première direction
+     * @param card2 La seconde direction
+     * @return la directive générée
+     */
+    private String direction(String card1, String card2) {
         int    diffIndex;
         String directive;
 
@@ -173,16 +202,15 @@ public class TourneeSerialisation {
 
         String[] adverbes = new String[]{"", " légèrement", "", " complètement", ""};
 
-        if (Math.abs(diffIndex) != 4 && Math.abs(diffIndex) != 0) {
-            directive = "Tournez" + adverbes[Math.abs(diffIndex)]
-                    + (diffIndex < 0 ? " à gauche" : " à droite");
-        } else if (Math.abs(diffIndex) == 0) {
+        if (Math.abs(diffIndex) == 0) {
             directive = "Continuez tout droit";
         } else if (Math.abs(diffIndex) == 4) {
             directive = "Faites presque demi-tour";
-        } else{
-            directive = "Aucune idée, j'ai bug mdr";
+        } else {
+            directive = "Tournez " + adverbes[Math.abs(diffIndex)]
+                    + (diffIndex < 0 ? " à gauche" : " à droite");
         }
+
         return directive;
     }
 }

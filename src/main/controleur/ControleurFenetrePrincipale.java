@@ -69,7 +69,8 @@ public class ControleurFenetrePrincipale {
 					vue.buttonSauvegarderDemandes,
 					vue.buttonCalculerTournees,
 					vue.comboboxLivreur,
-					vue.buttonReinitAffPlan
+					vue.buttonReinitAffPlan,
+					vue.buttonChargerPlan
 			)));
 			put(etatDemandeLivraisonSelectionneeSansTournees, new ArrayList<>(Arrays.asList(
 					vue.buttonModifierLivraison,
@@ -110,6 +111,7 @@ public class ControleurFenetrePrincipale {
 					vue.buttonAfficherFeuillesRoute,
 					vue.buttonAutoriserAjouterLivraison,
 					vue.comboboxLivreur,
+					vue.buttonChargerPlan,
 					vue.buttonReinitAffPlan
 			)));
 		}};
@@ -204,5 +206,4 @@ public class ControleurFenetrePrincipale {
 	public void actionClicComboboxAssisgnerLivreur() {
 		etatCourant.clicSurComboboxAssignerLivreur(this);
 	}
-
 }

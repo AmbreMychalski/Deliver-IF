@@ -57,6 +57,7 @@ public class GrapheComplet implements Graphe {
             Pour chaque point de livraison, on calcule les plus courts chemins
             à tous les autres points de livraisons
         */
+
         for(DemandeLivraison currentDl: demandesLivraisons) {
             plusCourtsChemins =
                     plan.calculerPlusCourtsChemins(listIntersection, currentDl.getIntersection());
@@ -76,11 +77,12 @@ public class GrapheComplet implements Graphe {
         }
     }
 
-    @Override
-    public int getNbSommets() {
-        return nbSommets;
-    }
-
+    /**
+     * Surcharge du getter pour récupérer le coût [i,j].
+     * @param i L'indice 1
+     * @param j L'indice 2
+     * @return La valeur associée
+     */
     @Override
     public float getCout(int i, int j) {
         if (i < 0 || i >= nbSommets || j < 0 || j >= nbSommets) {
@@ -90,6 +92,12 @@ public class GrapheComplet implements Graphe {
         return couts[i][j];
     }
 
+    /**
+     * Vérifie s'il existe un chemin entre le sommet i et le sommet j
+     * @param i Le premier sommet
+     * @param j Le second sommet
+     * @return false s'il n'y a pas de lien entre les deux, true sinons
+     */
     @Override
     public boolean estUnArc(int i, int j) {
         if (couts[i][j] < 0) {
@@ -99,7 +107,7 @@ public class GrapheComplet implements Graphe {
     }
 
     /*
-    Fonction servant au débugage
+        Fonction servant au débugage
      */
     public void afficherGraphe() {
         for(int i = 0; i < nbSommets; i++) {
@@ -109,6 +117,11 @@ public class GrapheComplet implements Graphe {
             System.out.println();
         }
     }
+
+    /**
+     * Permet de récupérer la matrice des coûts.
+     * @return la matrice des coûts.
+     */
     @Override
     public float[][] getMatriceCouts() {
         return this.couts;

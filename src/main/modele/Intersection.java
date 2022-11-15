@@ -17,8 +17,8 @@ public class Intersection {
 	private float longitude;
 
     /**
-     *
-     * @return le hashCode de l'ensemble des objets considérés
+     * Permet de récupérer le hashCode pour les valeurs indiquées.
+     * @return le hashCode de l'ensemble des objets considérés.
      */
     @Override
     public int hashCode() {

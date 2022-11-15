@@ -11,11 +11,11 @@ public class IntersectionTest {
     @Test
     @DisplayName("Test des valeurs de retour du test d'égalité de la classe Intersection")
     void isEgalTest() {
-        Assertions.assertFalse(intersection.equals(null));
-        Assertions.assertTrue(intersection.equals(intersection));
+        Assertions.assertNotEquals(null, intersection);
+        Assertions.assertEquals(intersection, intersection);
 
         Plan plan = new Plan();
 
-        Assertions.assertFalse(intersection.equals(plan));
+        Assertions.assertNotEquals(intersection, plan);
     }
 }

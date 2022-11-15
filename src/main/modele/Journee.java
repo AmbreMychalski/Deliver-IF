@@ -136,7 +136,6 @@ public class Journee extends Observable {
      * @return true si la tournée est complète (et valide), false sinon
      */
     public boolean calculerTournee(Livreur livreur) {
-        // boolean tourneeCalculee = false;
 
         boolean            tourneeComplete = true;
         List<DemandeLivraison> listDemande = new LinkedList<>(livreur.getDemandeLivraisons());
@@ -221,6 +220,12 @@ public class Journee extends Observable {
 
         return livraison;
     }
+    /**
+     * Permet de changer le livreur d'une livraison
+     * @param livr La livraison que l'on veut modifier
+     * @param livreur Le livreur a qui on va ajouter la livraison
+     * @param ancienLivreur Le livreur qui va perdre la livraison
+     */
     public void assignerLivraisonNouveauLivreur(Livraison livr, Livreur livreur, Livreur ancienLivreur) {
         supprimerLivraisonTournee(ancienLivreur, livr);
         livr.setLivreur(livreur);
@@ -256,7 +261,7 @@ public class Journee extends Observable {
             dist += seg.getLongueur();
         }
 
-        t.getTrajets().add(index + 1, new Trajet(lisSeg, dist));
+        t.getTrajets().add(index + 1, new Trajet(lisSeg, dist,intersectionAmont, intersectionAval));
 
         intersectionAmont =
                 t.getLivraisons().get(index + 1).getDemandeLivraison().getIntersection();
@@ -275,7 +280,7 @@ public class Journee extends Observable {
             dist += seg.getLongueur();
         }
 
-        t.getTrajets().add(index + 2, new Trajet(lisSeg, dist));
+        t.getTrajets().add(index + 2, new Trajet(lisSeg, dist,intersectionAmont, intersectionAval));
         this.majHeureLivraison(t, index);
     }
 
@@ -287,6 +292,90 @@ public class Journee extends Observable {
         return (this.livreurs.get(this.livreurs.size() - 1).getTournee() == null);
     }
 
+
+    /**
+     * Permet de supprimer une livraison d'une tournée
+     * @param livreur Le livreur qui possède la tournée
+     * @param livr La livraison qui sera supprimmée de la tournée
+     */
+    public void supprimerLivraisonTournee(Livreur livreur, Livraison livr) {
+        Tournee t = livreur.getTournee();
+
+        if(t.getLivraisons().size() != 1) {
+            int          index;
+            Intersection intersectionAmont;
+            Intersection intersectionAval;
+
+            index = t.getLivraisons().indexOf(livr);
+
+            livreur.supprimerLivraison(livr);
+            t.getTrajets().remove(index);
+            t.getTrajets().remove(index);
+
+            if (index == 0) {
+                intersectionAmont = plan.getEntrepot();
+            } else {
+                intersectionAmont = t.getLivraisons().get(index - 1).getDemandeLivraison().getIntersection();
+            }
+
+            if (index == t.getLivraisons().size()) {
+                intersectionAval = plan.getEntrepot();
+            } else {
+                intersectionAval = t.getLivraisons().get(index).getDemandeLivraison().getIntersection();
+            }
+
+            List<Segment> lisSeg = plan.calculerPlusCourtChemin(intersectionAmont, intersectionAval);
+            float           dist = 0;
+
+            for (Segment seg : lisSeg) {
+                dist += seg.getLongueur();
+            }
+
+            t.getTrajets().add(index, new Trajet(lisSeg, dist,intersectionAmont, intersectionAval));
+            this.majHeureLivraison(t, index);
+            notifierObservateurs("SuppressionLivraison");
+        } else {
+            livr.getLivreur().supprimerTournee();
+        }
+    }
+    private List<Trajet> creerListTrajet(List<Livraison> livrList, GrapheComplet g) {
+        List<Trajet> trajetList = new LinkedList<>();
+        List<Segment>    lisSeg = plan.calculerPlusCourtChemin(
+                plan.getEntrepot(),livrList.get(0).getDemandeLivraison().getIntersection());
+        int      indexCurrentDl =
+                g.getIdDemandeLivraisonToIndex().get(livrList.get(0).getDemandeLivraison());
+        int     indexPreviousDl = 0;
+        float              dist = g.getCout(indexPreviousDl, indexCurrentDl);
+
+        trajetList.add(new Trajet(lisSeg, dist,plan.getEntrepot(),
+                livrList.get(0).getDemandeLivraison().getIntersection()));
+
+        for(int i = 0; i < livrList.size() - 1; i++) {
+            indexCurrentDl = g.getIdDemandeLivraisonToIndex().get(livrList.get(i+1).getDemandeLivraison());
+            indexPreviousDl = g.getIdDemandeLivraisonToIndex().get(livrList.get(i).getDemandeLivraison());
+            // dist = g.getCout(indexPreviousDl, indexCurrentDl);
+            // lisSeg = plan.calculerPlusCourtChemin(livrList.get(i).getDemandeLivraison().getIntersection(),livrList.get(i+1).getDemandeLivraison().getIntersection());
+            dist = g.getCout(indexPreviousDl, indexCurrentDl);
+            lisSeg = plan.calculerPlusCourtChemin(
+                    livrList.get(i).getDemandeLivraison().getIntersection(),
+                    livrList.get(i + 1).getDemandeLivraison().getIntersection());
+            trajetList.add(new Trajet(lisSeg, dist,
+                    livrList.get(i).getDemandeLivraison().getIntersection(),
+                    livrList.get(i + 1).getDemandeLivraison().getIntersection()));
+        }
+
+        lisSeg = plan.calculerPlusCourtChemin(
+                livrList.get(livrList.size() - 1).getDemandeLivraison().getIntersection(),plan.getEntrepot());
+
+        indexCurrentDl = 0;
+        indexPreviousDl = g.getIdDemandeLivraisonToIndex().get(livrList.get(livrList.size()-1).getDemandeLivraison());
+        dist = g.getCout(indexPreviousDl, indexCurrentDl);
+
+        trajetList.add(new Trajet(lisSeg, dist,
+                livrList.get(livrList.size() - 1).getDemandeLivraison().getIntersection(),plan.getEntrepot()));
+
+        return trajetList;
+    }
     /**
      *
      * @param t
@@ -327,82 +416,6 @@ public class Journee extends Observable {
             t.getLivraisons().get(i).setHeure(heureLivraison);
 
             heureLivraison += 5 / 60.0f;
-        }
-    }
-
-    private List<Trajet> creerListTrajet(List<Livraison> livrList, GrapheComplet g) {
-        List<Trajet> trajetList = new LinkedList<>();
-        List<Segment>    lisSeg = plan.calculerPlusCourtChemin(
-                plan.getEntrepot(),livrList.get(0).getDemandeLivraison().getIntersection());
-        int      indexCurrentDl =
-                g.getIdDemandeLivraisonToIndex().get(livrList.get(0).getDemandeLivraison());
-        int     indexPreviousDl = 0;
-        float              dist = g.getCout(indexPreviousDl, indexCurrentDl);
-
-        trajetList.add(new Trajet(lisSeg, dist));
-
-        for(int i = 0; i < livrList.size() - 1; i++) {
-            indexCurrentDl = g.getIdDemandeLivraisonToIndex().get(livrList.get(i+1).getDemandeLivraison());
-            indexPreviousDl = g.getIdDemandeLivraisonToIndex().get(livrList.get(i).getDemandeLivraison());
-            // dist = g.getCout(indexPreviousDl, indexCurrentDl);
-            // lisSeg = plan.calculerPlusCourtChemin(livrList.get(i).getDemandeLivraison().getIntersection(),livrList.get(i+1).getDemandeLivraison().getIntersection());
-            dist = g.getCout(indexPreviousDl, indexCurrentDl);
-            lisSeg = plan.calculerPlusCourtChemin(
-                    livrList.get(i).getDemandeLivraison().getIntersection(),
-                    livrList.get(i + 1).getDemandeLivraison().getIntersection());
-            trajetList.add(new Trajet(lisSeg, dist));
-        }
-
-        lisSeg = plan.calculerPlusCourtChemin(
-                livrList.get(livrList.size() - 1).getDemandeLivraison().getIntersection(),plan.getEntrepot());
-
-        indexCurrentDl = 0;
-        indexPreviousDl = g.getIdDemandeLivraisonToIndex().get(livrList.get(livrList.size()-1).getDemandeLivraison());
-        dist = g.getCout(indexPreviousDl, indexCurrentDl);
-
-        trajetList.add(new Trajet(lisSeg, dist));
-
-        return trajetList;
-    }
-
-    public void supprimerLivraisonTournee(Livreur livreur, Livraison livr) {
-        Tournee t = livreur.getTournee();
-
-        if(t.getLivraisons().size() != 1) {
-            int          index;
-            Intersection intersectionAmont;
-            Intersection intersectionAval;
-
-            index = t.getLivraisons().indexOf(livr);
-
-            livreur.supprimerLivraison(livr);
-            t.getTrajets().remove(index);
-            t.getTrajets().remove(index);
-
-            if (index == 0) {
-                intersectionAmont = plan.getEntrepot();
-            } else {
-                intersectionAmont = t.getLivraisons().get(index - 1).getDemandeLivraison().getIntersection();
-            }
-
-            if (index == t.getLivraisons().size()) {
-                intersectionAval = plan.getEntrepot();
-            } else {
-                intersectionAval = t.getLivraisons().get(index).getDemandeLivraison().getIntersection();
-            }
-
-            List<Segment> lisSeg = plan.calculerPlusCourtChemin(intersectionAmont, intersectionAval);
-            float           dist = 0;
-
-            for (Segment seg : lisSeg) {
-                dist += seg.getLongueur();
-            }
-
-            t.getTrajets().add(index, new Trajet(lisSeg, dist));
-            this.majHeureLivraison(t, index);
-            notifierObservateurs("SuppressionLivraison");
-        } else {
-            livr.getLivreur().supprimerTournee();
         }
     }
 }
