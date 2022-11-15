@@ -51,6 +51,11 @@ public class Plan {
 	}
 
 	public List<Segment> calculerPlusCourtChemin(Intersection depart, Intersection arrivee) {
+
+		if(depart == arrivee){
+			return new LinkedList<Segment>();
+		}
+
 	    List <Segment>          chemin = new LinkedList<Segment>();
 	    HashMap<Long, Float>    distance = new HashMap<Long, Float>();
         HashMap<Long, Segment>  parents = new HashMap<Long, Segment>(); // <Long idIntersection, Segment segParent>
