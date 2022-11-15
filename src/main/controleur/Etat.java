@@ -139,37 +139,21 @@ public abstract class Etat {
 		}
 	}
 
-	protected void modifierDemandeApresSelection(ControleurFenetrePrincipale c){
-		c.vue.textfieldIdentifiantIntersectionSelection.setText("");
-		resetLabelRuesIntersection(c);
-		c.vue.comboboxPlageHoraire.setDisable(false);
-		c.vue.tableViewDemandesLivraison.setDisable(true);
-	}
-
-	protected void effectuerModification(ControleurFenetrePrincipale c, boolean livraison){
+	protected void effectuerModification(ControleurFenetrePrincipale c){
 		DemandeLivraison ligne;
 		Livreur livreur = c.vue.comboboxLivreur.getValue();
-		if(livraison){
-			ligne = c.vue.tableViewLivraisons.getSelectionModel()
-					.getSelectedItem().getDemandeLivraison();
-		}
-		else {
-			ligne = c.vue.tableViewDemandesLivraison.getSelectionModel()
-					.getSelectedItem();
-		}
+		ligne = c.vue.tableViewDemandesLivraison.getSelectionModel()
+				.getSelectedItem();
 		String champIdentifiant = c.vue.textfieldIdentifiantIntersection.getText();
 		PlageHoraire plageHoraire = c.vue.comboboxPlageHoraire.getValue();
-
 		Intersection intersection;
 		if(champIdentifiant.isEmpty()) {
-			intersection = null;
+			intersection = ligne.getIntersection();
 		} else {
 			intersection = c.journee.getPlan().getIntersections()
 					.get(Long.parseLong(champIdentifiant));
 		}
-
-		c.journee.modifierDemandeLivraison(ligne, intersection, plageHoraire);
-
+		c.journee.modifierDemandeLivraison(livreur, ligne, intersection, plageHoraire);
 		c.vue.dessinerIntersection(
 				c.vue.canvasIntersectionsLivraisons.getGraphicsContext2D(),
 				ligne.getIntersection(),
@@ -177,17 +161,14 @@ public abstract class Etat {
 				c.vue.TAILLE_RECT_PT_LIVRAISON_SELECTIONNE,
 				true,
 				VueFenetrePrincipale.FormeIntersection.RECTANGLE);
+
 		c.vue.textfieldIdentifiantIntersectionSelection.setText(
 				ligne.getIdIntersection().toString());
 		remplirLabelRuesIntersection(c, intersection);
 		c.vue.textfieldPlageHoraire.setText(ligne.getPlageHoraire().toString());
-
-
-		c.vue.comboboxPlageHoraire.setDisable(true);
 		c.vue.comboboxPlageHoraire.setValue(null);
 		c.vue.tableViewDemandesLivraison.setDisable(false);
 		c.vue.textfieldIdentifiantIntersection.setText("");
-		resetLabelRuesIntersection(c);
 	}
 
 	protected void annulerModification(ControleurFenetrePrincipale c){

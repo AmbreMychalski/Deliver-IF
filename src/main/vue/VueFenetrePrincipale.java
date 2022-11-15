@@ -638,24 +638,6 @@ public class VueFenetrePrincipale implements Observer {
         //this.drawArrow(gc, (int)(x1), (int)(y1), (int)(x2), (int)(y2));
     }
 
-    // depuis https://stackoverflow.com/questions/35751576/javafx-draw-line-with-arrow-canvas
-
-    private void drawArrow(GraphicsContext gc, int x1, int y1, int x2, int y2) {
-        gc.setFill(Color.BLUE);
-
-        double dx = x2 - x1, dy = y2 - y1;
-        double angle = Math.atan2(dy, dx);
-        int len = (int) Math.sqrt(dx * dx + dy * dy);
-
-        Transform transform = Transform.translate(x1, y1);
-        transform = transform.createConcatenation(Transform.rotate(Math.toDegrees(angle), 0, 0));
-        gc.setTransform(new Affine(transform));
-        gc.setLineWidth(3);
-        gc.strokeLine(0, 0, len, 0);
-        gc.fillPolygon(new double[]{len, len - ARR_SIZE, len - ARR_SIZE, len}, new double[]{0, -ARR_SIZE, ARR_SIZE, 0},
-                4);
-    }
-
     /**
      * Convertit une longitude en pixels sur le Canvas (axe X).
      * @param x longitude
@@ -707,17 +689,11 @@ public class VueFenetrePrincipale implements Observer {
                 controleur.getEtatCourant().majComboboxLivreur(controleur); //pas sur que ce soit légal
             }
         }else if(o instanceof Livreur){
-            if(arg == "AjoutDemandeLivraison") {
+            if(arg == "ModificationAjoutSuppressionDemandeLivraison") {
                 tableViewDemandesLivraison.getItems().clear();
                 tableViewDemandesLivraison.getItems().addAll(
                         ((Livreur) o).getDemandeLivraisons());
                 afficherDemandesLivraison(livreur, true);
-            } else if (arg == "SuppressionDemandeLivraison") {
-                tableViewDemandesLivraison.getItems().clear();
-                tableViewDemandesLivraison.getItems().addAll(
-                        ((Livreur) o).getDemandeLivraisons());
-                afficherDemandesLivraison(livreur, true);
-
             }else if(arg == "SuppressionTournee"){
                     tableViewLivraisons.getItems().clear();
                     tableViewDemandesLivraison.setVisible(true);

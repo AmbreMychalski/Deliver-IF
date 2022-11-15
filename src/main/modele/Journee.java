@@ -143,11 +143,10 @@ public class Journee extends Observable {
         addObserver(obs);
     }
 
-    public void modifierDemandeLivraison(DemandeLivraison demande,
+    public void modifierDemandeLivraison(Livreur livreur, DemandeLivraison demande,
                                          Intersection intersection,
                                          PlageHoraire plageHoraire) {
-        demande.modifierDemandeLivraison(intersection, plageHoraire);
-        notifierObservateurs(null);
+        livreur.modifierDemandeLivraison(demande, intersection, plageHoraire);
     }
 
     public Livraison ajouterDemandeLivraisonTournee(DemandeLivraison dl,

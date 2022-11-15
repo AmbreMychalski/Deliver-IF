@@ -2,6 +2,7 @@ package controleur;
 
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
+import modele.DemandeLivraison;
 import modele.Livreur;
 
 public class EtatDemandeLivraisonSelectionneeSansTournees extends Etat {
@@ -27,7 +28,13 @@ public class EtatDemandeLivraisonSelectionneeSansTournees extends Etat {
         }
     }
     public void modifierDemande(ControleurFenetrePrincipale c) {
-        this.modifierDemandeApresSelection(c);
+        DemandeLivraison ligne = c.vue.tableViewDemandesLivraison.getSelectionModel().getSelectedItem();
+        c.vue.textfieldIdentifiantIntersectionSelection.setText(ligne.getIdIntersection().toString());
+        c.vue.textfieldIdentifiantIntersection.setText(ligne.getIdIntersection().toString());
+        c.vue.comboboxPlageHoraire.setDisable(false);
+        c.vue.comboboxPlageHoraire.getSelectionModel().select(ligne.getPlageHoraire());
+        this.remplirLabelRuesIntersection(c, ligne.getIntersection());
+        c.vue.tableViewDemandesLivraison.setDisable(true);
         c.changementEtat(c.etatModifierDemandeLivraisonSansTournees);
     }
     public  void touchePressee(ControleurFenetrePrincipale c, KeyEvent ke) {

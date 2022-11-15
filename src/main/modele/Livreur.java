@@ -34,7 +34,7 @@ public class Livreur extends Observable {
 
     public void ajouterDemandeLivraison(DemandeLivraison livr) {
         this.getDemandeLivraisons().add(livr);
-        notifierObservateurs("AjoutDemandeLivraison");
+        notifierObservateurs("ModificationAjoutSuppressionDemandeLivraison");
     }
 
     public void modifierTournee(Tournee tournee){
@@ -60,7 +60,7 @@ public class Livreur extends Observable {
 
     public void supprimerDemandeLivraison(DemandeLivraison ligne) {
         this.demandeLivraisons.remove(ligne);
-        notifierObservateurs("SuppressionDemandeLivraison");
+        notifierObservateurs("ModificationAjoutSuppressionDemandeLivraison");
     }
 
     public void supprimerLivraison(Livraison livr) {
@@ -73,6 +73,11 @@ public class Livreur extends Observable {
         //t.getLivraisons().add(index+1,livr);
         this.tournee.getLivraisons().add(index, livr);
         notifierObservateurs("ModificationTournee");
+    }
+
+    public void modifierDemandeLivraison(DemandeLivraison demande, Intersection intersection, PlageHoraire plageHoraire) {
+        demande.modifierDemandeLivraison(intersection, plageHoraire);
+        notifierObservateurs("ModificationAjoutSuppressionDemandeLivraison");
     }
 
     /*
