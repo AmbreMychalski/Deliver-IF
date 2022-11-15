@@ -26,10 +26,15 @@ public class EtatInitial extends Etat {
 
         try {
             fichier = fileChooser.showOpenDialog(c.vue.getStage());
+
+            if(fichier == null) {
+                throw new Exception();
+            }
         } catch(Exception e) {
-            c.vue.labelGuideUtilisateur.setText("Problème lors du chargement du fichier.");
+            c.vue.labelGuideUtilisateur.setText("Aucun fichier sélectionné. Veuillez réessayer.");
             throw new FichierNonConformeException("Problème lors du choix du fichier.");
         }
+
         LOGGER.info("Fichier choisi = " + fichier.getAbsolutePath());
 
         try {
@@ -37,11 +42,12 @@ public class EtatInitial extends Etat {
             gc.clearRect(0, 0, c.vue.canvasPlan.getWidth(), c.vue.canvasPlan.getHeight());
 
             Plan plan;
+
             try {
                 plan = new Plan(fichier);
             } catch(Exception e) {
-                c.vue.labelGuideUtilisateur.setText("Problème lors du chargement du fichier.");
-                throw new FichierNonConformeException("Problème lors du chargement du fichier.");
+                c.vue.labelGuideUtilisateur.setText("Problème lors de la lecture du fichier.");
+                throw new FichierNonConformeException("Problème lors de la lecture du fichier.");
             }
 
             c.journee.setPlan(plan);
@@ -55,7 +61,6 @@ public class EtatInitial extends Etat {
             c.changementEtat(c.etatSansDemande);
         } catch (Exception ex) {
             c.vue.labelGuideUtilisateur.setText("Problème lors de la lecture du fichier.");
-            throw new FichierNonConformeException("Problème lors de la lecture du fichier.");
         }
     }
 }
