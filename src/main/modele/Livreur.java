@@ -123,7 +123,15 @@ public class Livreur extends Observable {
         notifierObservateurs("ModificationTournee");
     }
 
-    public void modifierDemandeLivraison(DemandeLivraison demande, Intersection intersection, PlageHoraire plageHoraire) {
+    /**
+     * Permet de modifier une demande de livraison associée au livreur courant
+     * @param demande La demande à modifier
+     * @param intersection La valeur de la nouvelle intersection (peut être null)
+     * @param plageHoraire La valeur de la nouvelle plage horaire (peut être null)
+     */
+    public void modifierDemandeLivraison(DemandeLivraison demande,
+                                         Intersection intersection,
+                                         PlageHoraire plageHoraire) {
         demande.modifierDemandeLivraison(intersection, plageHoraire);
         notifierObservateurs("ModificationAjoutSuppressionDemandeLivraison");
     }
