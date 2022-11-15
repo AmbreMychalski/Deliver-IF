@@ -68,7 +68,8 @@ public class ControleurFenetrePrincipale {
 					vue.buttonChargerDemandes,
 					vue.buttonSauvegarderDemandes,
 					vue.buttonCalculerTournees,
-					vue.comboboxLivreur
+					vue.comboboxLivreur,
+					vue.buttonReinitAffPlan
 			)));
 			put(etatDemandeLivraisonSelectionneeSansTournees, new ArrayList<>(Arrays.asList(
 					vue.buttonModifierLivraison,
@@ -88,8 +89,7 @@ public class ControleurFenetrePrincipale {
 			)));
 			put(etatSaisieNouvelleDemandeSansTournees, new ArrayList<>(Arrays.asList(
 					vue.buttonValiderLivraison,
-					vue.buttonAnnulerLivraison,
-					vue.comboboxPlageHoraire
+					vue.buttonAnnulerLivraison
 			)));
 			put(etatSaisieNouvelleDemandeAvecTournees, new ArrayList<>(Arrays.asList(
 					vue.comboboxPlageHoraire,
@@ -100,7 +100,8 @@ public class ControleurFenetrePrincipale {
 					vue.buttonChargerPlan,
 					vue.buttonAutoriserAjouterLivraison,
 					vue.buttonChargerDemandes,
-					vue.comboboxLivreur
+					vue.comboboxLivreur,
+					vue.buttonReinitAffPlan
 			)));
 			put(etatSelectionLivraisonPourNouvelleDemande, new ArrayList<>(Arrays.asList(
 
@@ -108,7 +109,8 @@ public class ControleurFenetrePrincipale {
 			put(etatTourneesCalculees, new ArrayList<>(Arrays.asList(
 					vue.buttonAfficherFeuillesRoute,
 					vue.buttonAutoriserAjouterLivraison,
-					vue.comboboxLivreur
+					vue.comboboxLivreur,
+					vue.buttonReinitAffPlan
 			)));
 		}};
 
@@ -202,4 +204,5 @@ public class ControleurFenetrePrincipale {
 	public void actionClicComboboxAssisgnerLivreur() {
 		etatCourant.clicSurComboboxAssignerLivreur(this);
 	}
+
 }

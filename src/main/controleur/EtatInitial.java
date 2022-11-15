@@ -52,6 +52,7 @@ public class EtatInitial extends Etat {
 
             c.vue.titledPaneEditionDemande.setVisible(true);
             c.vue.titlePaneSelectionDemande.setVisible(true);
+            c.vue.buttonReinitAffPlan.setVisible(true);
             c.changementEtat(c.etatSansDemande);
         } catch (Exception ex) {
             c.vue.labelGuideUtilisateur.setText("Problème lors de la lecture du fichier.");
