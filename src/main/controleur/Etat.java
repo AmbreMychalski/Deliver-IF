@@ -12,7 +12,6 @@ import lombok.Getter;
 import modele.*;
 import vue.VueFenetrePrincipale;
 
-import java.awt.*;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
@@ -473,5 +472,10 @@ public abstract class Etat {
 				c.changementEtat(c.etatTourneesCalculees);
 			}
 		}
+	}
+
+	public void undo(ListeDeCommandes liste) {
+	}
+	public void redo(ListeDeCommandes liste) {
 	}
 }

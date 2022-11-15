@@ -119,6 +119,8 @@ public class VueFenetrePrincipale implements Observer {
     @FXML
     public Button   buttonAfficherFeuillesRoute;
     @FXML
+    public Button buttonReinitAffPlan;
+    @FXML
     public Button   buttonChargerPlan;
     @FXML
     public Button   buttonSupprimerLivraison;
@@ -206,6 +208,8 @@ public class VueFenetrePrincipale implements Observer {
         canvasIntersectionsLivraisons.setOnMouseClicked(this::actionClicSurCanvas);
         tableViewDemandesLivraison.setOnMouseClicked(this::actionClicTableau);
         tableViewLivraisons.setOnMouseClicked(this::actionClicTableau);
+        buttonReinitAffPlan.setOnAction(this::actionButtonReinitZoomPlan);
+        buttonReinitAffPlan.setVisible(false);
         buttonChargerPlan.setOnAction(event -> {
             try {
                 actionBoutonChargerPlan(event);
@@ -313,6 +317,11 @@ public class VueFenetrePrincipale implements Observer {
             positionCouranteX = event.getX();
         });
     }
+
+    private void actionButtonReinitZoomPlan(ActionEvent actionEvent) {
+        dessinerPlan();
+    }
+
 
     private void actionDeplacerPlan(MouseEvent event) {
         double x =  event.getX();
@@ -798,6 +807,9 @@ public class VueFenetrePrincipale implements Observer {
 
         echelleLong =  canvasPlan.getWidth() / largeurPlan;
         echelleLat =  canvasPlan.getHeight() / hauteurPlan;
+
+        decalageX = 0;
+        decalageY = 0;
 
         canvasPlan.getGraphicsContext2D().clearRect(0,0, canvasPlan.getWidth(), canvasPlan.getHeight());
         for (Segment segment : controleur.getJournee().getPlan().getSegments()) {
