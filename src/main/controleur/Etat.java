@@ -78,7 +78,7 @@ public abstract class Etat {
 				if(c.vue.comboboxLivreur.getValue().getTournee() != null){
 					c.vue.afficherLivraisons(c.vue.comboboxLivreur.getValue(), true);
 				} else {
-					c.vue.afficherDemandesLivraison(c.vue.comboboxLivreur.getValue(), false);
+					c.vue.afficherDemandesLivraison(c.vue.comboboxLivreur.getValue(), true);
 				}
 			}
 		}

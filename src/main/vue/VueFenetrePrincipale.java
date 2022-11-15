@@ -680,25 +680,6 @@ public class VueFenetrePrincipale implements Observer {
 
     }
 
-    /**
-     * Convertit une coordonnées en pixels sur l'axe X en longitude.
-     * @param x coordonnée X sur le canvas
-     * @return longitude
-     */
-    public double convertirXEnLongitude(double x) {
-        return this.longMin +/*- */(x /*- this.canvasPlan.getHeight()*/) / this.echelleLong;
-    }
-
-    /**
-     * Convertit une coordonnées en pixels sur l'axe Y en latitude.
-     * @param y coordonnée Y sur le canvas
-     * @return latitude
-     */
-    public double convertirYEnLatitude(double y) {
-        double aRemonter = this.canvasPlan.getWidth() - (this.latMax - this.latMin) * this.echelleLat;
-        return this.latMin - (y + aRemonter - this.canvasPlan.getWidth()) / this.echelleLat;
-    }
-
     @Override
     public void update(Observable o, Object arg) {
         Livreur livreur = comboboxLivreur.getValue();
