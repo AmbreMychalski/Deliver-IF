@@ -15,7 +15,7 @@
 
 <Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" onKeyPressed="#handleKeyPressed" prefHeight="746.0" prefWidth="1317.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="vue.VueFenetrePrincipale">
    <children>
-      <Pane prefHeight="735.0" prefWidth="289.0">
+      <Pane prefHeight="681.0" prefWidth="289.0">
          <children>
             <TitledPane id="titledPaneEditionDemande" fx:id="titledPaneEditionDemande" animated="false" collapsible="false" layoutX="7.0" layoutY="20.0" prefHeight="298.0" prefWidth="276.0" text="Demande de livraison">
               <content>
@@ -87,9 +87,9 @@
                      <TableColumn fx:id="columnHeure" prefWidth="70.0" text="Horaire" />
                  </columns>
              </TableView>
-             <TitledPane fx:id="titlePaneSelectionDemande" animated="false" collapsible="false" layoutX="7.0" layoutY="500.0" prefHeight="210.0" prefWidth="276.0" text="Selection de la demande">
+             <TitledPane fx:id="titlePaneSelectionDemande" animated="false" collapsible="false" layoutX="7.0" layoutY="500.0" prefHeight="221.0" prefWidth="276.0" text="Selection de la demande">
                  <content>
-                    <AnchorPane fx:id="anchorPaneSelectionDemande" minHeight="0.0" minWidth="0.0" prefHeight="210.0" prefWidth="292.0">
+                    <AnchorPane fx:id="anchorPaneSelectionDemande" minHeight="0.0" minWidth="0.0" prefHeight="190.0" prefWidth="274.0">
                      <children>
                         <Label layoutX="14.0" layoutY="20.0" prefHeight="36.0" prefWidth="137.0" text="Identifiant d'intersection" textAlignment="RIGHT" wrapText="true" />
                         <Label layoutX="14.0" layoutY="60.0" text="Plage horaire" />
@@ -106,10 +106,13 @@
             </TitledPane>
          </children>
       </Pane>
-      <Label fx:id="labelGuideUtilisateur" layoutY="728.0" prefHeight="19.0" style="-fx-border-color: black;">
+      <Label fx:id="labelGuideUtilisateur" layoutY="724.0" prefHeight="19.0" style="-fx-border-color: black;">
          <padding>
             <Insets left="5.0" right="5.0" />
          </padding>
+         <font>
+            <Font size="14.0" />
+         </font>
       </Label>
    </children>
 </Pane>

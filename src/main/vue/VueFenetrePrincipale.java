@@ -35,14 +35,12 @@ public class VueFenetrePrincipale implements Observer {
 
     ControleurFenetrePrincipale controleur;
 
-    final int ARR_SIZE = 5;
     public final double TAILLE_RECT_PT_LIVRAISON = 8;
     public final double TAILLE_RECT_PT_LIVRAISON_SELECTIONNE = 12;
     public final double TAILLE_CERCLE_INTERSECTION_SELECTIONNEE = 8;
     public final double TAILLE_CERCLE_INTERSECTION = 15;
     public final Color COULEUR_DEPOT = Color.RED;
     public final Color COULEUR_SEGMENT = Color.BLACK;
-    public final Color COULEUR_POINT_LIVRAISON = Color.BLUE;
     public final Color COULEUR_POINT_LIVRAISON_SELECTIONNE = Color.RED;
     /* Rayon en pixels définissant la zone où l'on
      reconnaît les intersections ciblées*/
@@ -61,6 +59,8 @@ public class VueFenetrePrincipale implements Observer {
     public double   dernierePositionY = 0;
     public double   decalageX = 0;
     public double   decalageY = 0;
+    public double   positionCouranteX = 0;
+    public double   positionCouranteY = 0;
 
 
     public Float latMax;
@@ -273,6 +273,10 @@ public class VueFenetrePrincipale implements Observer {
         canvasIntersectionsLivraisons.setOnMousePressed(event -> {
             dernierePositionY = event.getY();
             dernierePositionX = event.getX();
+        });
+        canvasIntersectionsLivraisons.setOnMouseMoved(event -> {
+            positionCouranteY = event.getY();
+            positionCouranteX = event.getX();
         });
     }
 
@@ -780,6 +784,8 @@ public class VueFenetrePrincipale implements Observer {
         if(miseAEchelle) {
             this.echelleLat *= echelleGlobale;
             this.echelleLong *= echelleGlobale;
+            this.decalageX = this.decalageX*echelleGlobale + this.positionCouranteX-(this.positionCouranteX * echelleGlobale);
+            this.decalageY = this.decalageY*echelleGlobale + this.positionCouranteY-(this.positionCouranteY * echelleGlobale);
         }
 
         canvasPlan.getGraphicsContext2D().clearRect(0, 0, canvasPlan.getWidth(), canvasPlan.getHeight());
