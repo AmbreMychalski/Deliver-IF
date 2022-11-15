@@ -90,7 +90,8 @@ public class ControleurFenetrePrincipale {
 			)));
 			put(etatSaisieNouvelleDemandeSansTournees, new ArrayList<>(Arrays.asList(
 					vue.buttonValiderLivraison,
-					vue.buttonAnnulerLivraison
+					vue.buttonAnnulerLivraison,
+					vue.comboboxPlageHoraire
 			)));
 			put(etatSaisieNouvelleDemandeAvecTournees, new ArrayList<>(Arrays.asList(
 					vue.comboboxPlageHoraire,
