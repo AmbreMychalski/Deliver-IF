@@ -16,7 +16,13 @@ import lombok.ToString;
 public class DemandeLivraison {
     private Intersection intersection;
 	private PlageHoraire plageHoraire;
-	
+
+    /**
+     * Pour la demande de livraison courante, modifie son intersection et
+     * sa plage horaire
+     * @param intersection La nouvelle intersection (peut être vide)
+     * @param plageHoraire La nouvelle plage horaire (peut être vide)
+     */
 	public  void modifierDemandeLivraison(Intersection intersection,
                                           PlageHoraire plageHoraire) {
 	    if(intersection != null) {
@@ -26,15 +32,29 @@ public class DemandeLivraison {
 	        this.setPlageHoraire(plageHoraire);
 	    }
 	}
-	
+
+    /**
+     *
+     * @return l'ID de l'intersection où se situe la demande
+     */
 	public Long getIdIntersection() {
         return intersection.getIdIntersection();
 	}
-	
+
+    /**
+     *
+     * @return
+     */
     @Override
     public int hashCode() {
         return Objects.hash(intersection, plageHoraire);
     }
+
+    /**
+     * Vérifie l'égalité entre l'objet courant et celui en paramètre
+     * @param obj L'objet par rapport auquel on compare l'objet courant
+     * @return true si les objets sont égaux, false sinon
+     */
     @Override
     public boolean equals(Object obj) {
         if (this == obj) {

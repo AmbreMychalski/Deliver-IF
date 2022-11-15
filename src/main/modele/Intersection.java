@@ -15,10 +15,21 @@ public class Intersection {
 	private Long idIntersection;
 	private float latitude;
 	private float longitude;
+
+    /**
+     *
+     * @return le hashCode de l'ensemble des objets considérés
+     */
     @Override
     public int hashCode() {
         return Objects.hash(idIntersection, latitude, longitude);
     }
+
+    /**
+     * Vérifie l'égalité entre l'objet courant et celui passé en paramètre.
+     * @param obj L'objet auquel on compare l'objet courant
+     * @return true si les objets sont égaux, false sinon
+     */
     @Override
     public boolean equals(Object obj) {
         if (this == obj) {
