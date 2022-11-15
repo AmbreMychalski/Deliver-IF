@@ -7,15 +7,10 @@ import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.Cursor;
-import javafx.scene.ImageCursor;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.*;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
-import javafx.scene.image.Image;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
@@ -30,8 +25,7 @@ import lombok.Getter;
 import lombok.Setter;
 import modele.*;
 
-import java.awt.*;
-import java.io.*;
+import java.io.File;
 import java.lang.reflect.Field;
 import java.nio.file.Files;
 import java.util.ArrayList;
@@ -321,7 +315,7 @@ public class VueFenetrePrincipale implements Observer {
     public File choisirFichier(String titreFenetre) throws Exception {
         File fichier;
         FileChooser fileChooser = new FileChooser();
-        fileChooser.setInitialDirectory(new File(".\\data"));
+        fileChooser.setInitialDirectory(new File(System.getProperty("user.home")));
         fileChooser.getExtensionFilters().add(
                 new FileChooser.ExtensionFilter("Fichier XML",
                         "*.xml", "*.XML"));
