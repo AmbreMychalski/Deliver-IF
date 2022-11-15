@@ -68,7 +68,8 @@ public class ControleurFenetrePrincipale {
 					vue.buttonChargerDemandes,
 					vue.buttonSauvegarderDemandes,
 					vue.buttonCalculerTournees,
-					vue.comboboxLivreur
+					vue.comboboxLivreur,
+					vue.buttonChargerPlan
 			)));
 			put(etatDemandeLivraisonSelectionneeSansTournees, new ArrayList<>(Arrays.asList(
 					vue.buttonModifierLivraison,
@@ -108,7 +109,8 @@ public class ControleurFenetrePrincipale {
 			put(etatTourneesCalculees, new ArrayList<>(Arrays.asList(
 					vue.buttonAfficherFeuillesRoute,
 					vue.buttonAutoriserAjouterLivraison,
-					vue.comboboxLivreur
+					vue.comboboxLivreur,
+					vue.buttonChargerPlan
 			)));
 		}};
 

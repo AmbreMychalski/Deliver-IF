@@ -135,6 +135,11 @@ public class Livreur extends Observable {
         demande.modifierDemandeLivraison(intersection, plageHoraire);
         notifierObservateurs("ModificationAjoutSuppressionDemandeLivraison");
     }
+
+    public static void reinitializeNbLivreurs(){
+        nbLivreur = 0;
+        System.out.println(nbLivreur);
+    }
 }
 
 
