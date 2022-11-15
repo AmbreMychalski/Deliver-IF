@@ -83,8 +83,10 @@ public class Journee extends Observable {
 
                         if(this.plan.estLivrable(this.plan.getIntersections().get(intersectionId))) {
                             DemandeLivraison demande = new DemandeLivraison(this.plan.getIntersections().get(intersectionId), new PlageHoraire(heureDebut, heureFin));
-                            livreur.ajouterDemandeLivraison(demande);
-                            demandesAjoutees.add(demande);
+                            if(!livreur.getDemandeLivraisons().contains(demande)) {
+                                livreur.ajouterDemandeLivraison(demande);
+                                demandesAjoutees.add(demande);
+                            }
                         }
                     }
                 }
@@ -289,14 +291,6 @@ public class Journee extends Observable {
             index = 0;
         }
         this.majHeureLivraison(t, index);
-    }
-
-    /**
-     * Vérifie si le dernier livreur a une tournée calculée
-     * @return true si le dernier livreurs n'a pas de tournée calculée, false sinon
-     */
-    public boolean dernierLivreurEstSansTourneeCalculee() {
-        return (this.livreurs.get(this.livreurs.size() - 1).getTournee() == null);
     }
 
     /**

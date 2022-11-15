@@ -2,14 +2,11 @@ package controleur;
 
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
-import modele.DemandeLivraison;
 import modele.Intersection;
 import modele.Livraison;
-import modele.Livreur;
 import vue.FenetrePlusieursLivraisonsAuMemeEndroit;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 
 import static controleur.ControleurFenetrePrincipale.LOGGER;
 
@@ -35,7 +32,7 @@ public class EtatTourneesCalculees extends Etat{
             this.selectionnerDemande(c, true);
             c.changementEtat(c.etatDemandeLivraisonSelectionneeAvecTournees);
         } else if (livraisonsAssociees.size() > 1) {
-            FenetrePlusieursLivraisonsAuMemeEndroit.display(c, null, livraisonsAssociees);
+            FenetrePlusieursLivraisonsAuMemeEndroit.display(c, null, livraisonsAssociees, false);
         }
     }
     public void ajouterDemande(ControleurFenetrePrincipale c) {

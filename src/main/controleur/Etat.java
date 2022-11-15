@@ -233,6 +233,12 @@ public abstract class Etat {
 				c.vue.dessinerPlan();
 				c.vue.titledPaneEditionDemande.setVisible(true);
 				c.vue.titlePaneSelectionDemande.setVisible(true);
+				c.vue.buttonReinitAffPlan.setVisible(true);
+				c.vue.tableViewLivraisons.getItems().clear();
+				c.vue.tableViewLivraisons.refresh();
+				c.vue.tableViewDemandesLivraison.getItems().clear();
+				c.vue.tableViewDemandesLivraison.refresh();
+
 				c.changementEtat(c.etatSansDemande);
 			}
 		} catch (Exception ex) {
@@ -260,20 +266,32 @@ public abstract class Etat {
 			if(c.journee.getPlan().estLivrable(intersection)){
 				DemandeLivraison demande =
 						new DemandeLivraison(intersection, plageHoraire);
+				boolean dejaPresente = false;
+				for(DemandeLivraison demandeCrees : livreur.getDemandeLivraisons()){
+					if(demandeCrees.equals(demande)){
+						dejaPresente = true;
+					}
+				}
+				if(!dejaPresente) {
+					livreur.ajouterDemandeLivraison(demande);
 
-				livreur.ajouterDemandeLivraison(demande);
-
-				c.vue.comboboxPlageHoraire.setValue(null);
-				c.vue.tableViewDemandesLivraison.setDisable(false);
-				c.vue.tableViewLivraisons.setDisable(false);
-				c.vue.textfieldIdentifiantIntersection.setText("");
-				resetLabelRuesIntersection(c);
-				return true;
+					c.vue.comboboxPlageHoraire.setValue(null);
+					c.vue.tableViewDemandesLivraison.setDisable(false);
+					c.vue.tableViewLivraisons.setDisable(false);
+					c.vue.textfieldIdentifiantIntersection.setText("");
+					resetLabelRuesIntersection(c);
+					return true;
+				}else {
+					c.vue.labelGuideUtilisateur.setText("La demande est déjà présente");
+					LOGGER.warn("La demande est déjà présente");
+				}
 			}
 			else{
+				c.vue.labelGuideUtilisateur.setText("L'intersection n'est pas livrable");
 				LOGGER.warn("L'intersection n'est pas livrable");
 			}
 		} else {
+			c.vue.labelGuideUtilisateur.setText("Informations manquantes pour l'ajout de la demande");
 			LOGGER.warn("Informations manquantes pour l'ajout de la demande");
 		}
 		return false;
@@ -405,9 +423,7 @@ public abstract class Etat {
 		for (int i = 1; i <= c.journee.getLivreurs().size(); i++) {
 			listStr.add(Integer.toString(i));
 		}
-		if(!c.journee.dernierLivreurEstSansTourneeCalculee()){
-			listStr.add(c.journee.getLivreurs().size()+1+" (nouveau livreur)");
-		}
+		listStr.add(c.journee.getLivreurs().size()+1+" (nouveau livreur)");
 		c.vue.comboboxAssignerLivreur.setItems(listStr);
 		c.vue.comboboxLivreur.setItems(listeLivreur);
 	}
@@ -435,7 +451,7 @@ public abstract class Etat {
 		}
 		miseAjourDonneesTableView(c, livreur);
 	}
-
+	public void selectionPourNouvelleDemande(ControleurFenetrePrincipale c, Livraison ligne){}
 	public void changementLivreur(ControleurFenetrePrincipale c){
 		Livreur livreur = c.vue.comboboxLivreur.getValue();
 		if(livreur != null){

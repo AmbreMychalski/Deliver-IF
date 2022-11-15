@@ -4,23 +4,33 @@ import modele.DemandeLivraison;
 import modele.Intersection;
 import modele.Livraison;
 import modele.Livreur;
+import vue.FenetrePlusieursLivraisonsAuMemeEndroit;
 import vue.VueFenetrePrincipale;
 
 import javafx.scene.input.MouseEvent;
 
+import java.util.ArrayList;
+
 public class EtatSelectionLivraisonPourNouvelleDemande extends Etat{
     public EtatSelectionLivraisonPourNouvelleDemande() {
-        super.message = "Sélectionner la livraison qui viendra avant la livraison correspondant à la nouvelle deamnde";
+        super.message = "Sélectionner la livraison qui viendra avant la livraison correspondant à la nouvelle demande, ou sur l'entrepot si c'est la première livraison";
     }
     public void clicGaucheSurPlan(ControleurFenetrePrincipale c, MouseEvent event){
-        Intersection intersectionTrouvee = this.naviguerSurPlan(c, event, false);
-        Livraison livraisonAssociee = null;
+        Intersection intersectionTrouvee = this.naviguerSurPlan(c, event, true);
+        if(intersectionTrouvee.equals(c.getJournee().getPlan().getEntrepot())){
+            selectionPourNouvelleDemande(c, null);
+        }
+        ArrayList<Livraison> livraisonsAssociees = new ArrayList<>();
         for(Livraison livraison : c.vue.comboboxLivreur.getValue().getLivraisons()){
             if(intersectionTrouvee == livraison.getDemandeLivraison().getIntersection()){
-                livraisonAssociee = livraison;
+                livraisonsAssociees.add(livraison);
             }
         }
-        selectionPourNouvelleDemande(c, livraisonAssociee);
+        if (livraisonsAssociees.size() == 1) {
+            selectionPourNouvelleDemande(c, livraisonsAssociees.get(0));
+        } else if (livraisonsAssociees.size() > 1) {
+            FenetrePlusieursLivraisonsAuMemeEndroit.display(c, null, livraisonsAssociees, true);
+        }
     }
     public void clicGaucheSurTableau(ControleurFenetrePrincipale c) {
         this.selectionnerDemande(c,false);
@@ -28,11 +38,12 @@ public class EtatSelectionLivraisonPourNouvelleDemande extends Etat{
     public boolean selectionnerDemande(ControleurFenetrePrincipale c, boolean livraison) {
         Livraison ligne;
         ligne = c.vue.tableViewLivraisons.getSelectionModel().getSelectedItem();
-        return selectionPourNouvelleDemande(c, ligne);
+        selectionPourNouvelleDemande(c, ligne);
+        return true;
     }
-    private boolean selectionPourNouvelleDemande(ControleurFenetrePrincipale c, Livraison ligne){
-        if (ligne != null) {
-            c.vue.afficherLivraisons(c.vue.comboboxLivreur.getValue(), true);
+    public void selectionPourNouvelleDemande(ControleurFenetrePrincipale c, Livraison ligne){
+        c.vue.afficherLivraisons(c.vue.comboboxLivreur.getValue(), true);
+        if(ligne != null) {
             c.vue.dessinerIntersection(c.vue.canvasIntersectionsLivraisons.getGraphicsContext2D(),
                     ligne.getDemandeLivraison().getIntersection(),
                     c.vue.COULEUR_POINT_LIVRAISON_SELECTIONNE,
@@ -44,18 +55,11 @@ public class EtatSelectionLivraisonPourNouvelleDemande extends Etat{
             c.vue.textfieldIdentifiantIntersection.setText(ligne.getDemandeLivraison().getIdIntersection().toString());
             remplirLabelRuesIntersection(c, ligne.getDemandeLivraison().getIntersection());
             c.vue.textfieldPlageHoraire.setText(ligne.getDemandeLivraison().getPlageHoraire().toString());
-
-            Livreur livreur = c.vue.comboboxLivreur.getValue();
-            DemandeLivraison derniereDemande = livreur.getDemandeLivraisons().get(livreur.getDemandeLivraisons().size()-1);
-            Commande commandeAjout = new CommandeAjouter(c, livreur, ligne, derniereDemande);
-            c.getListeCommandes().ajouterCommande(commandeAjout);
-            c.changementEtat(c.etatTourneesCalculees);
-
-
-            return true;
         }
-        return false;
-
+        Livreur livreur = c.vue.comboboxLivreur.getValue();
+        DemandeLivraison derniereDemande = livreur.getDemandeLivraisons().get(livreur.getDemandeLivraisons().size()-1);
+        Commande commandeAjout = new CommandeAjouter(c, livreur, ligne, derniereDemande);
+        c.getListeCommandes().ajouterCommande(commandeAjout);
+        c.changementEtat(c.etatTourneesCalculees);
     }
-
 }
