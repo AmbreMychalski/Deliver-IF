@@ -45,14 +45,6 @@ public abstract class Etat {
 	
 	public void calculerTournees(ControleurFenetrePrincipale c) {}
 	
-	public void afficherFeuillesRoute(ControleurFenetrePrincipale c) {}
-	
-	public void sauvegarderFeuillesRoute(ControleurFenetrePrincipale c) {}
-	
-	public void fermerFenetre(ControleurFenetrePrincipale c) {}
-	
-	public void quitterLogiciel(ControleurFenetrePrincipale c) {}
-	
 	public void modifierDemande(ControleurFenetrePrincipale c) {}
 
 	public void assignerAutreLivreur(ControleurFenetrePrincipale c) {}
@@ -94,10 +86,6 @@ public abstract class Etat {
 
 	public void clicSurLivreur(ControleurFenetrePrincipale c) {}
 	public void clicSurComboboxAssignerLivreur(ControleurFenetrePrincipale controleurFenetrePrincipale) {
-	}
-	private void annulerModif(ControleurFenetrePrincipale c) {
-        c.vue.comboboxPlageHoraire.setDisable(true);
-        c.changementEtat(c.etatDemandeLivraisonSelectionneeSansTournees);
 	}
 
 	protected void sortieDeSelectionDemande(ControleurFenetrePrincipale c, boolean livraison){
@@ -251,11 +239,7 @@ public abstract class Etat {
 					c.vue.comboboxLivreur.getSelectionModel().selectFirst();
 				}
 				c.journee.setPlan(plan);
-
-				Command com = new PlanCommand(c);
-				com.undoCommand();
-				com.doCommand();
-
+				c.vue.dessinerPlan();
 				c.vue.titledPaneEditionDemande.setVisible(true);
 				c.vue.titlePaneSelectionDemande.setVisible(true);
 				c.changementEtat(c.etatSansDemande);
@@ -268,7 +252,6 @@ public abstract class Etat {
 	protected void selectionTrajet(ControleurFenetrePrincipale c){
 		Livraison liv = c.vue.tableViewLivraisons.getSelectionModel()
 				.getSelectedItem();
-		liv.getDemandeLivraison().getIntersection();
 
 		Livreur livreur = c.vue.comboboxLivreur.getValue();
 		Tournee tournee = livreur.getTournee();
