@@ -12,10 +12,11 @@ import lombok.Getter;
 import modele.*;
 import vue.VueFenetrePrincipale;
 
-import javax.naming.ldap.Control;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
+
+import static controleur.ControleurFenetrePrincipale.LOGGER;
 
 @Getter
 public abstract class Etat {
@@ -57,7 +58,7 @@ public abstract class Etat {
 	public void assignerAutreLivreur(ControleurFenetrePrincipale c) {}
 
 	public void touchePressee(ControleurFenetrePrincipale c, KeyEvent ke) {
-		System.out.println(ke.getCode());
+		LOGGER.info(ke.getCode());
 		if(! c.vue.comboboxLivreur.isDisable()){
 			if(ke.getCode() == KeyCode.Q){
 				c.vue.comboboxLivreur.getSelectionModel().selectPrevious();
@@ -78,7 +79,7 @@ public abstract class Etat {
 				if(c.vue.comboboxLivreur.getValue().getTournee() != null){
 					c.vue.afficherLivraisons(c.vue.comboboxLivreur.getValue(), true);
 				} else {
-					c.vue.afficherDemandesLivraison(c.vue.comboboxLivreur.getValue(), false);
+					c.vue.afficherDemandesLivraison(c.vue.comboboxLivreur.getValue(), true);
 				}
 			}
 		}
@@ -130,11 +131,11 @@ public abstract class Etat {
 		File fichier = fileChooser.showSaveDialog(c.vue.getStage());
 
 		if (fichier != null) {
-			ControleurFenetrePrincipale.LOGGER.info("Sauvegarde à l'emplacement "
+			LOGGER.info("Sauvegarde à l'emplacement "
 					+ fichier.getAbsolutePath());
 			c.journee.sauvegarderDemandesLivraison(fichier, livreur);
 		} else {
-			ControleurFenetrePrincipale.LOGGER
+			LOGGER
 					.error("Erreur lors de la sauvegarde des demandes");
 		}
 	}
@@ -231,12 +232,9 @@ public abstract class Etat {
 
 		Livreur livreur = c.vue.comboboxLivreur.getValue();
 		Tournee tournee = livreur.getTournee();
-		for(Trajet trajet : tournee.getTrajets()){
-			if(trajet.getArrivee()==intersectionLiv){
-				c.vue.dessinerTrajet(trajet, c.vue.canvasPlanTrajet.getGraphicsContext2D());
-			}
-		}
 
+		int indexLivr = (tournee.getLivraisons()).indexOf(liv);
+		c.vue.dessinerTrajet(tournee.getTrajets().get(indexLivr), c.vue.canvasPlanTrajet.getGraphicsContext2D());
 	}
 	protected boolean validerAjoutDemande(ControleurFenetrePrincipale c){
 		String champIdentifiant = c.vue.textfieldIdentifiantIntersection.getText();
@@ -259,10 +257,10 @@ public abstract class Etat {
 				return true;
 			}
 			else{
-				ControleurFenetrePrincipale.LOGGER.warn("L'intersection n'est pas livrable");
+				LOGGER.warn("L'intersection n'est pas livrable");
 			}
 		} else {
-			ControleurFenetrePrincipale.LOGGER.warn("Informations manquantes pour l'ajout de la demande");
+			LOGGER.warn("Informations manquantes pour l'ajout de la demande");
 		}
 		return false;
 	}
@@ -307,7 +305,7 @@ public abstract class Etat {
 				resetLabelRuesIntersection(c);
 			}
 		} else {
-			ControleurFenetrePrincipale.LOGGER.debug("Clic sur le canvas, (x,y)=("
+			LOGGER.debug("Clic sur le canvas, (x,y)=("
 					+ event.getX() + "," + event.getY() + ")");
 		}
 		return intersectionTrouvee;
@@ -325,7 +323,7 @@ public abstract class Etat {
 		if (fichier == null) {
 			throw new Exception("Aucun fichier choisi");
 		}else{
-			System.out.println("Fichier choisi = " + fichier.getAbsolutePath());
+			LOGGER.info("Fichier choisi = " + fichier.getAbsolutePath());
 			ArrayList<DemandeLivraison> listeDemandes
 					= c.journee.chargerDemandesLivraison(fichier,livreur);
 			if (listeDemandes.size()==0){
@@ -374,7 +372,7 @@ public abstract class Etat {
 	}
 	protected void remplirLabelRuesIntersection(ControleurFenetrePrincipale c,
 												Intersection intersection){
-		List<String> rues = c.planCharge.obtenirRuesIntersection(intersection);
+		List<String> rues = c.getJournee().getPlan().obtenirRuesIntersection(intersection);
 		String texte;
 		if((rues.get(0) == null || rues.get(0).isEmpty())
 				&& (rues.get(1) == null || rues.get(1).isEmpty())){

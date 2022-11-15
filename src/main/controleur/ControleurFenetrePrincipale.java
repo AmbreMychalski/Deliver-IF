@@ -6,19 +6,21 @@
 
 package controleur;
 
-import javafx.scene.control.Button;
 import javafx.scene.control.Control;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import lombok.Getter;
 import modele.Journee;
 import modele.Livreur;
-import modele.Plan;
+import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.core.LoggerContext;
 import vue.VueFenetrePrincipale;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
 
 /**
  * Contrôleur de la vue principale de l'application.
@@ -46,21 +48,26 @@ public class ControleurFenetrePrincipale {
 	final EtatSelectionLivraisonPourNouvelleDemande etatSelectionLivraisonPourNouvelleDemande = new EtatSelectionLivraisonPourNouvelleDemande();
 
 	// Map qui associe les états à l'état des boutons sur lesquels on peut cliquer
-	private HashMap<Etat, ArrayList<Control>> controlsActivesParEtat;
+	private final HashMap<Etat, ArrayList<Control>> controlsActivesParEtat;
 
 	// modèle
 	Journee journee;
-	Plan planCharge;
 
 	public ControleurFenetrePrincipale(VueFenetrePrincipale vue) {
 		this.vue = vue;
+
+		// Initilisation et configuration du LOGGER
+		final LoggerContext context = (LoggerContext) LogManager.getContext(false);
+		final org.apache.logging.log4j.core.config.Configuration config = context.getConfiguration();
+		config.getLoggerConfig(LogManager.ROOT_LOGGER_NAME).setLevel(Level.ALL);
+		config.getLoggerConfig(ControleurFenetrePrincipale.class.getPackage().getName()).setLevel(Level.ALL);
+		context.updateLoggers(config);
 
 		controlsActivesParEtat = new HashMap<Etat, ArrayList<Control>>() {{
 			put(etatAfficherFeuillesRoute, new ArrayList<>(Arrays.asList(
 
 			)));
 			put(etatAvecDemande, new ArrayList<>(Arrays.asList(
-					vue.buttonChargerPlan,
 					vue.buttonAutoriserAjouterLivraison,
 					vue.buttonChargerDemandes,
 					vue.buttonSauvegarderDemandes,
@@ -186,7 +193,6 @@ public class ControleurFenetrePrincipale {
 	}
 
 	public void clicSurLivreur() {
-		System.out.println("appel dans la vue");
 		etatCourant.clicSurLivreur(this);
 	}
 
