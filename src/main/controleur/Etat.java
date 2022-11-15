@@ -1,5 +1,6 @@
 package controleur;
 
+import exception.FichierNonConformeException;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.canvas.GraphicsContext;
@@ -208,7 +209,7 @@ public abstract class Etat {
 				}else{
 					c.vue.afficherLivraisons(c.vue.comboboxLivreur.getValue(), true);
 				}
-
+				c.vue.comboboxAssignerLivreur.getSelectionModel().select(null);
 			}
 			c.vue.dessinerIntersection(
 					c.vue.canvasIntersectionsLivraisons.getGraphicsContext2D(),
@@ -229,6 +230,40 @@ public abstract class Etat {
 		}
 		return false;
 
+	}
+	protected  void chargerNouveauPlan(ControleurFenetrePrincipale c) throws Exception{
+		File fichier ;
+		try {
+			fichier = c.vue.choisirFichier("Choisir un plan");
+			LOGGER.info("Fichier choisi = " + fichier.getAbsolutePath());
+			Plan plan;
+			plan = new Plan(fichier);
+			if(plan.getEntrepot() != null) {
+				c.vue.nettoyerToutesLesInformations(c);
+				this.resetLabelRuesIntersection(c);
+				if (c.journee.getLivreurs().get(0).getDemandeLivraisons().size() != 0) {
+					c.journee = new Journee();
+					c.journee.ajouterObservateur(c.vue);
+					Livreur.reinitializeNbLivreurs();
+					Livreur liv = new Livreur();
+					liv.ajouterObservateur(c.vue);
+					c.journee.getLivreurs().add(liv);
+					c.etatCourant.majComboboxLivreur(c);
+					c.vue.comboboxLivreur.getSelectionModel().selectFirst();
+				}
+				c.journee.setPlan(plan);
+
+				Command com = new PlanCommand(c);
+				com.undoCommand();
+				com.doCommand();
+
+				c.vue.titledPaneEditionDemande.setVisible(true);
+				c.vue.titlePaneSelectionDemande.setVisible(true);
+				c.changementEtat(c.etatSansDemande);
+			}
+		} catch (Exception ex) {
+			throw new FichierNonConformeException("Problème lors de la lecture du fichier");
+		}
 	}
 
 	protected void selectionTrajet(ControleurFenetrePrincipale c){
@@ -270,7 +305,6 @@ public abstract class Etat {
 		}
 		return false;
 	}
-
 	protected  Intersection naviguerSurPlan(ControleurFenetrePrincipale c,
 									MouseEvent event,
 									boolean tourneeCalculee){
@@ -320,23 +354,13 @@ public abstract class Etat {
 	protected void chargerDemandes(ControleurFenetrePrincipale c)
 			throws Exception {
 		Livreur livreur = c.vue.comboboxLivreur.getValue();
-		FileChooser fileChooser = new FileChooser();
-		fileChooser.setInitialDirectory(new File(".\\data"));
-		fileChooser.getExtensionFilters().add(
-				new FileChooser.ExtensionFilter("Fichier XML", "*.xml", "*.XML"));
-		fileChooser.setTitle("Charger des demandes de livraison");
-		File fichier = fileChooser.showOpenDialog(c.vue.getStage());
-		if (fichier == null) {
-			throw new Exception("Aucun fichier choisi");
-		}else{
-			LOGGER.info("Fichier choisi = " + fichier.getAbsolutePath());
-			ArrayList<DemandeLivraison> listeDemandes
-					= c.journee.chargerDemandesLivraison(fichier,livreur);
-			if (listeDemandes.size()==0){
-				throw  new Exception("Aucune demande de livraison dans le fichier");
-			}
+		File fichier = c.vue.choisirFichier("Charger des demandes de livraison");
+		LOGGER.info("Fichier choisi = " + fichier.getAbsolutePath());
+		ArrayList<DemandeLivraison> listeDemandes
+				= c.journee.chargerDemandesLivraison(fichier,livreur);
+		if (listeDemandes.size()==0){
+			throw  new Exception("Aucune demande de livraison dans le fichier");
 		}
-
 	}
 
 	protected void supprimerDemandeLivraison(ControleurFenetrePrincipale c, Livreur livreur){

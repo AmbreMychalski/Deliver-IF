@@ -16,6 +16,8 @@ public class EtatSaisieNouvelleDemandeSansTournees extends Etat{
         boolean ajoutOK = this.validerAjoutDemande(c);
         if(ajoutOK){
             c.changementEtat(c.etatAvecDemande);
+        }else{
+            c.vue.labelGuideUtilisateur.setText("Veuillez ajouter les informations manquantes");
         }
     }
     public void annulerAjouterOuModifier(ControleurFenetrePrincipale c) {

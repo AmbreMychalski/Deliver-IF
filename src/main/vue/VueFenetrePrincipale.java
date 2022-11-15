@@ -2,6 +2,7 @@ package vue;
 
 
 import controleur.ControleurFenetrePrincipale;
+import exception.FichierNonConformeException;
 import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -16,12 +17,14 @@ import javafx.scene.paint.Color;
 import javafx.scene.paint.CycleMethod;
 import javafx.scene.paint.LinearGradient;
 import javafx.scene.paint.Stop;
+import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import javafx.util.Callback;
 import lombok.Getter;
 import lombok.Setter;
 import modele.*;
 
+import java.io.File;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
@@ -31,7 +34,6 @@ import java.util.Observer;
 import static controleur.ControleurFenetrePrincipale.LOGGER;
 
 public class VueFenetrePrincipale implements Observer {
-
 
     ControleurFenetrePrincipale controleur;
 
@@ -45,6 +47,37 @@ public class VueFenetrePrincipale implements Observer {
     /* Rayon en pixels définissant la zone où l'on
      reconnaît les intersections ciblées*/
     public final double RAYON_TOLERANCE_CLIC_INTERSECTION = 8;
+
+    public File choisirFichier(String titreFenetre) throws Exception {
+        File fichier;
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.setInitialDirectory(new File(".\\data"));
+        fileChooser.getExtensionFilters().add(
+                new FileChooser.ExtensionFilter("Fichier XML",
+                        "*.xml", "*.XML"));
+        fileChooser.setTitle(titreFenetre);
+        try {
+            fichier = fileChooser.showOpenDialog(this.stage);
+
+            if(fichier == null) {
+                throw new Exception();
+            }
+        } catch(Exception e) {
+            throw new FichierNonConformeException("Problème lors du choix du fichier.");
+        }
+        return fichier;
+    }
+
+    public void nettoyerToutesLesInformations(ControleurFenetrePrincipale c) {
+        GraphicsContext gc = canvasPlan.getGraphicsContext2D();
+        GraphicsContext gcTrajet = canvasPlanTrajet.getGraphicsContext2D();
+        GraphicsContext gcIntersection = canvasIntersectionsLivraisons.getGraphicsContext2D();
+        gc.clearRect(0, 0, canvasPlan.getWidth(), canvasPlan.getHeight());
+        gcTrajet.clearRect(0, 0, canvasPlanTrajet.getWidth(), canvasPlanTrajet.getHeight());
+        gcIntersection.clearRect(0, 0, canvasIntersectionsLivraisons.getWidth(), canvasIntersectionsLivraisons.getHeight());
+        textfieldIdentifiantIntersectionSelection.setText("");
+        textfieldPlageHoraire.setText("");
+    }
 
     public enum FormeIntersection { RECTANGLE, CERCLE }
 
@@ -165,7 +198,8 @@ public class VueFenetrePrincipale implements Observer {
             try{
                 actionBoutonChargerDemande(event);
             } catch (Exception ex) {
-                LOGGER.error(ex);
+                LOGGER.error(ex.getMessage());
+                labelGuideUtilisateur.setText("Problème lors du chargement du fichier");
             }
         });
         buttonSauvegarderDemandes.setOnAction(this::actionBoutonSauvegarderDemandes);

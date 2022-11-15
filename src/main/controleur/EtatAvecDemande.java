@@ -71,12 +71,7 @@ public class EtatAvecDemande extends Etat {
         this.changementLivreur(c);
     }
 
-    public void chargerPlan(ControleurFenetrePrincipale c) {
-        try {
-            c.etatInitial.chargerPlan(c);
-        } catch (Exception e) {
-            c.vue.labelGuideUtilisateur.setText("Erreur lors du chargement du plan.");
-        }
-
+    public void chargerPlan(ControleurFenetrePrincipale c) throws Exception {
+        this.chargerNouveauPlan(c);
     }
 }

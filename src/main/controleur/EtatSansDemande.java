@@ -11,12 +11,8 @@ public class EtatSansDemande extends Etat{
         super.message = "Ajoutez ou chargez des demandes de livraison";
     }
 
-    public void chargerPlan(ControleurFenetrePrincipale c) {
-        try {
-            c.etatInitial.chargerPlan(c);
-        } catch(Exception e) {
-            c.vue.labelGuideUtilisateur.setText("Erreur lors du chargement du plan.");
-        }
+    public void chargerPlan(ControleurFenetrePrincipale c) throws Exception{
+        this.chargerNouveauPlan(c);
     }
     public void ajouterDemande(ControleurFenetrePrincipale c) {
         c.vue.comboboxPlageHoraire.setDisable(false);
@@ -31,7 +27,6 @@ public class EtatSansDemande extends Etat{
             c.changementEtat(c.etatAvecDemande);
 
         }catch (Exception ex){
-            ex.printStackTrace();
             c.changementEtat(c.etatSansDemande);
             throw new Exception(ex);
         }

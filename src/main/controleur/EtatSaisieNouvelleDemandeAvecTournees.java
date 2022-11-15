@@ -23,14 +23,16 @@ public class EtatSaisieNouvelleDemandeAvecTournees extends Etat {
                 if(livreur == null){
                     livreur = c.journee.getLivreurs().get(0);
                 }
-                if( !(livreur.getNumero() == c.journee.getLivreurs().size()-1 && c.journee.dernierLivreurEstSansTourneeCalculee()) ){
-                    c.vue.tableViewDemandesLivraison.setDisable(false);
-                    c.vue.tableViewLivraisons.setDisable(false);
-                    livreur.ajouterDemandeLivraison(demande);
-                    c.changementEtat(c.etatSelectionLivraisonPourNouvelleDemande);
-                    this.afficherTournee(c, livreur.getTournee());
-                }
+                c.vue.tableViewDemandesLivraison.setDisable(false);
+                c.vue.tableViewLivraisons.setDisable(false);
+                livreur.ajouterDemandeLivraison(demande);
+                c.changementEtat(c.etatSelectionLivraisonPourNouvelleDemande);
+                this.afficherTournee(c, livreur.getTournee());
+            }else{
+                c.vue.labelGuideUtilisateur.setText("Veuillez saisir toutes les informations");
             }
+        }else{
+            c.vue.labelGuideUtilisateur.setText("Veuillez saisir toutes les informations");
         }
     }
     public void annulerAjouterOuModifier(ControleurFenetrePrincipale c) {
