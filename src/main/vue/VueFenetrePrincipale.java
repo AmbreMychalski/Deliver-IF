@@ -16,24 +16,19 @@ import javafx.scene.paint.Color;
 import javafx.scene.paint.CycleMethod;
 import javafx.scene.paint.LinearGradient;
 import javafx.scene.paint.Stop;
-import javafx.scene.shape.Rectangle;
-import javafx.scene.transform.Affine;
-import javafx.scene.transform.Transform;
 import javafx.stage.Stage;
 import javafx.util.Callback;
 import lombok.Getter;
 import lombok.Setter;
 import modele.*;
-import org.apache.logging.log4j.Level;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.core.LoggerContext;
 
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Observable;
 import java.util.Observer;
-import java.util.concurrent.atomic.AtomicInteger;
+
+import static controleur.ControleurFenetrePrincipale.LOGGER;
 
 public class VueFenetrePrincipale implements Observer {
 
@@ -58,14 +53,14 @@ public class VueFenetrePrincipale implements Observer {
     @Getter
     @Setter
     Stage stage;
-    public float largeurPlan;
-    public float hauteurPlan;
-    public double echelleLong;
-    public double echelleLat;
-    public double dernierePositionX = 0;
-    public double dernierePositionY = 0;
-    public double decalageX = 0;
-    public double decalageY = 0;
+    public float    largeurPlan;
+    public float    hauteurPlan;
+    public double   echelleLong;
+    public double   echelleLat;
+    public double   dernierePositionX = 0;
+    public double   dernierePositionY = 0;
+    public double   decalageX = 0;
+    public double   decalageY = 0;
 
 
     public Float latMax;
@@ -77,83 +72,76 @@ public class VueFenetrePrincipale implements Observer {
     @FXML
     public AnchorPane anchorPaneSelectionDemande;
     @FXML
-    public Button buttonValiderLivraison;
+    public Button   buttonValiderLivraison;
     @FXML
-    public Button buttonAnnulerLivraison;
+    public Button   buttonAnnulerLivraison;
     @FXML
-    public Button buttonAutoriserAjouterLivraison;
+    public Button   buttonAutoriserAjouterLivraison;
     @FXML
-    public Button buttonCalculerTournees;
+    public Button   buttonCalculerTournees;
     @FXML
-    public Button buttonSauvegarderDemandes;
+    public Button   buttonSauvegarderDemandes;
     @FXML
-    public Button buttonChargerDemandes;
+    public Button   buttonChargerDemandes;
     @FXML
-    public Button buttonAfficherFeuillesRoute;
+    public Button   buttonAfficherFeuillesRoute;
     @FXML
-    public Button buttonChargerPlan;
+    public Button   buttonChargerPlan;
     @FXML
-    public Button buttonSupprimerLivraison;
+    public Button   buttonSupprimerLivraison;
     @FXML
-    public Button buttonModifierLivraison;
+    public Button   buttonModifierLivraison;
     @FXML
-    public Button buttonAssignerNvLivreur;
+    public Button   buttonAssignerNvLivreur;
     @FXML
-    public Button buttonEtatCourant;
+    public TableView<DemandeLivraison>  tableViewDemandesLivraison;
     @FXML
-    public TableView<DemandeLivraison> tableViewDemandesLivraison;
+    public TableView<Livraison>         tableViewLivraisons;
     @FXML
-    public TableView<Livraison> tableViewLivraisons;
-    @FXML
-    public Canvas canvasPlan;
-    @FXML
-    public Canvas canvasIntersectionsLivraisons;
-    @FXML
-    public Canvas canvasPlanTrajet;
-    @FXML
-    public ComboBox<PlageHoraire> comboboxPlageHoraire;
-    @FXML
-    public ComboBox<Livreur> comboboxLivreurNouvelleDemande;
-    @FXML
-    public Label labelLivreurNouvelleDemande;
-    @FXML
-    public TextField textfieldIdentifiantIntersection;
-    @FXML
-    public TableColumn<DemandeLivraison, Long> columnIdentifiant;
+    public TableColumn<DemandeLivraison, Long>      columnIdentifiant;
     @FXML
     public TableColumn<DemandeLivraison, PlageHoraire> columnPlageHoraire;
     @FXML
-    public TableColumn<Livraison, Long> columnIdentifiantLivraison;
+    public TableColumn<Livraison, Long>             columnIdentifiantLivraison;
     @FXML
-    public TableColumn<Livraison, PlageHoraire> columnPlageHoraireLivraison;
+    public TableColumn<Livraison, PlageHoraire>     columnPlageHoraireLivraison;
     @FXML
-    public TableColumn<Livraison, String> columnHeure;
+    public TableColumn<Livraison, String>           columnHeure;
     @FXML
-    public TitledPane titlePaneSelectionDemande;
+    public Canvas   canvasPlan;
     @FXML
-    public TitledPane titledPaneEditionDemande;
+    public Canvas   canvasIntersectionsLivraisons;
     @FXML
-    public TextField textfieldIdentifiantIntersectionSelection;
+    public Canvas   canvasPlanTrajet;
     @FXML
-    public TextField textfieldPlageHoraire;
+    public ComboBox<PlageHoraire>   comboboxPlageHoraire;
+    @FXML
+    public ComboBox<Livreur>        comboboxLivreurNouvelleDemande;
+    @FXML
+    public ComboBox<Livreur>        comboboxLivreur;
+    @FXML
+    public ComboBox<String>         comboboxAssignerLivreur;
+    @FXML
+    public TextField    textfieldIdentifiantIntersection;
+    @FXML
+    public TextField    textfieldPlageHoraire;
+    @FXML
+    public TextField    textfieldIdentifiantIntersectionSelection;
+    @FXML
+    public TitledPane   titlePaneSelectionDemande;
+    @FXML
+    public TitledPane   titledPaneEditionDemande;
     @FXML
     public Label labelGuideUtilisateur;
     @FXML
-    public ComboBox<Livreur> comboboxLivreur;
-    @FXML
     public Label labelRuesIntersection;
     @FXML
-    public ComboBox<String> comboboxAssignerLivreur;
+    public Label labelLivreurNouvelleDemande;
+
 
     @FXML
     private void initialize() {
         controleur = new ControleurFenetrePrincipale(this);
-
-        final LoggerContext context = (LoggerContext) LogManager.getContext(false);
-        final org.apache.logging.log4j.core.config.Configuration config = context.getConfiguration();
-        config.getLoggerConfig(LogManager.ROOT_LOGGER_NAME).setLevel(Level.ALL);
-        config.getLoggerConfig(ControleurFenetrePrincipale.class.getPackage().getName()).setLevel(Level.ALL);
-        context.updateLoggers(config);
 
         buttonSupprimerLivraison.setOnAction(this::actionBoutonSupprimerLivraison);
         buttonModifierLivraison.setOnAction(this::actionBoutonModifierLivraison);
@@ -167,8 +155,6 @@ public class VueFenetrePrincipale implements Observer {
         titledPaneEditionDemande.setVisible(false);
         tableViewLivraisons.setVisible(false);
 
-        buttonEtatCourant.setOnAction(event -> System.out.println("Etat courant = " + controleur.getEtatCourant().getClass().getName()));
-
         buttonAfficherFeuillesRoute.setOnAction(this::actionBoutonAfficherFeulleDeRoute);
         buttonValiderLivraison.setOnAction(this::actionBoutonAjouterLivraison);
         buttonAnnulerLivraison.setOnAction(this::actionBoutonAnnulerLivraison);
@@ -178,8 +164,8 @@ public class VueFenetrePrincipale implements Observer {
         buttonChargerDemandes.setOnAction(event -> {
             try{
                 actionBoutonChargerDemande(event);
-            }catch (Exception ex){
-                System.err.println(ex);
+            } catch (Exception ex) {
+                LOGGER.error(ex);
             }
         });
         buttonSauvegarderDemandes.setOnAction(this::actionBoutonSauvegarderDemandes);
@@ -190,7 +176,7 @@ public class VueFenetrePrincipale implements Observer {
             try {
                 actionBoutonChargerPlan(event);
             } catch (Exception e) {
-                System.err.println(e);
+                LOGGER.error(e);
             }
         });
         buttonCalculerTournees.setOnAction(this::actionBoutonCalculerTournees);
@@ -204,23 +190,23 @@ public class VueFenetrePrincipale implements Observer {
         columnPlageHoraire.setComparator(new ComparateurPlageHoraire());
 
         columnPlageHoraire.setCellFactory(
-                new Callback<TableColumn<DemandeLivraison, PlageHoraire>, TableCell<DemandeLivraison, PlageHoraire>>() {
-                    @Override
-                    public TableCell<DemandeLivraison, PlageHoraire> call(TableColumn<DemandeLivraison, PlageHoraire> param) {
-                        return new TableCell<DemandeLivraison, PlageHoraire>() {
-                            @Override public void updateItem(PlageHoraire plageHoraire, boolean empty) {
-                                super.updateItem(plageHoraire, empty);
-                                if (plageHoraire != null) {
-                                    setText(plageHoraire.toString());
-                                    setTextFill(plageHoraire.getCouleur());
-                                }
-                                else {
-                                    setText(null);
-                                }
+            new Callback<TableColumn<DemandeLivraison, PlageHoraire>, TableCell<DemandeLivraison, PlageHoraire>>() {
+                @Override
+                public TableCell<DemandeLivraison, PlageHoraire> call(TableColumn<DemandeLivraison, PlageHoraire> param) {
+                    return new TableCell<DemandeLivraison, PlageHoraire>() {
+                        @Override public void updateItem(PlageHoraire plageHoraire, boolean empty) {
+                            super.updateItem(plageHoraire, empty);
+                            if (plageHoraire != null) {
+                                setText(plageHoraire.toString());
+                                setTextFill(plageHoraire.getCouleur());
                             }
-                        };
-                    }
-                });
+                            else {
+                                setText(null);
+                            }
+                        }
+                    };
+                }
+        });
 
         tableViewLivraisons.setItems(FXCollections.observableArrayList());
         columnIdentifiantLivraison.setCellValueFactory(
@@ -236,7 +222,7 @@ public class VueFenetrePrincipale implements Observer {
                 new Callback<TableColumn<Livraison, PlageHoraire>, TableCell<Livraison, PlageHoraire>>() {
                     @Override
                     public TableCell<Livraison, PlageHoraire> call(TableColumn<Livraison, PlageHoraire> param) {
-                        final TableCell<Livraison, PlageHoraire> tableCell = new TableCell<Livraison, PlageHoraire>() {
+                        return new TableCell<Livraison, PlageHoraire>() {
                             @Override public void updateItem(PlageHoraire plageHoraire, boolean empty) {
                                 super.updateItem(plageHoraire, empty);
                                 if (plageHoraire != null) {
@@ -248,7 +234,6 @@ public class VueFenetrePrincipale implements Observer {
                                 }
                             }
                         };
-                        return tableCell;
                     }
                 });
         tableViewLivraisons.setRowFactory(tv -> new TableRow<Livraison>() {
@@ -269,7 +254,7 @@ public class VueFenetrePrincipale implements Observer {
         comboboxPlageHoraire.setCellFactory(
                 new Callback<ListView<PlageHoraire>, ListCell<PlageHoraire>>() {
                     @Override public ListCell<PlageHoraire> call(ListView<PlageHoraire> param) {
-                        final ListCell<PlageHoraire> cell = new ListCell<PlageHoraire>() {
+                        return new ListCell<PlageHoraire>() {
                             @Override public void updateItem(PlageHoraire plageHoraire, boolean empty) {
                                 super.updateItem(plageHoraire, empty);
                                 if (plageHoraire != null) {
@@ -281,7 +266,6 @@ public class VueFenetrePrincipale implements Observer {
                                 }
                             }
                         };
-                        return cell;
                     }
                 });
 
@@ -421,7 +405,7 @@ public class VueFenetrePrincipale implements Observer {
     }
 
     private void actionClicSurLivreur() {
-        System.out.println("appel a action clic livreur");
+        LOGGER.debug("appel a action clic livreur");
         controleur.clicSurLivreur();
     }
 
@@ -461,14 +445,6 @@ public class VueFenetrePrincipale implements Observer {
                     candidats.add(intersection);
                 }
             }
-			/*
-			logger.debug("candidats = " + candidats);
-			candidats.forEach(
-			        i -> System.out.println("lat,long = "
-			                + i.getLatitude()+","+i.getLongitude()+" x,y = "
-			                + this.convertirLongitudeEnX(i.getLongitude())
-			                +","+this.convertirLatitudeEnY(i.getLatitude())));
-							*/
             // sélectionner l'intersection à retourner
             if (candidats.isEmpty()) {
                 return null;
@@ -582,7 +558,7 @@ public class VueFenetrePrincipale implements Observer {
      * Dessine un segment entre deux points sur le canvas dans la
      * couleur précisée. Les coordonnées sont données en latitude/longitude.
      * @param segment Segment à dessiner
-     * @param couleur
+     * @param couleur couleur du segment
      */
     public void dessinerSegment(Segment segment, Color couleur) {
         dessinerSegmentXY(convertirLongitudeEnX(segment.getOrigine().getLongitude()),
@@ -618,7 +594,7 @@ public class VueFenetrePrincipale implements Observer {
      * @param y1 Coordonnée sur l'axe y du premier point
      * @param x2 Coordonnée sur l'axe x du second point
      * @param y2 Coordonnée sur l'axe y du second point
-     * @param couleur
+     * @param couleur couleur du segment
      */
     void dessinerSegmentXY(double x1, double y1,
                            double x2, double y2,
@@ -634,26 +610,6 @@ public class VueFenetrePrincipale implements Observer {
         gc.setLineWidth(3);
         gc.setStroke(color);
         gc.strokeLine(x1, y1, x2, y2);
-
-        //this.drawArrow(gc, (int)(x1), (int)(y1), (int)(x2), (int)(y2));
-    }
-
-    // depuis https://stackoverflow.com/questions/35751576/javafx-draw-line-with-arrow-canvas
-
-    private void drawArrow(GraphicsContext gc, int x1, int y1, int x2, int y2) {
-        gc.setFill(Color.BLUE);
-
-        double dx = x2 - x1, dy = y2 - y1;
-        double angle = Math.atan2(dy, dx);
-        int len = (int) Math.sqrt(dx * dx + dy * dy);
-
-        Transform transform = Transform.translate(x1, y1);
-        transform = transform.createConcatenation(Transform.rotate(Math.toDegrees(angle), 0, 0));
-        gc.setTransform(new Affine(transform));
-        gc.setLineWidth(3);
-        gc.strokeLine(0, 0, len, 0);
-        gc.fillPolygon(new double[]{len, len - ARR_SIZE, len - ARR_SIZE, len}, new double[]{0, -ARR_SIZE, ARR_SIZE, 0},
-                4);
     }
 
     /**
@@ -662,7 +618,7 @@ public class VueFenetrePrincipale implements Observer {
      * @return coordonnée X sur le Canvas
      */
     double convertirLongitudeEnX(double x) {
-        return /*this.canvasPlan.getHeight() -*/ decalageX + (x - this.longMin) * this.echelleLong;
+        return decalageX + (x - this.longMin) * this.echelleLong;
     }
 
     /**
@@ -686,7 +642,7 @@ public class VueFenetrePrincipale implements Observer {
      * @return longitude
      */
     public double convertirXEnLongitude(double x) {
-        return this.longMin +/*- */(x /*- this.canvasPlan.getHeight()*/) / this.echelleLong;
+        return this.longMin + x / this.echelleLong;
     }
 
     /**
@@ -781,18 +737,20 @@ public class VueFenetrePrincipale implements Observer {
     }
 
     /**
-     * Donne la liste de tous les boutons de la vue
-     * @return liste des boutons
+     * Donne la liste de tous les Controls de la vue (boutons, combobox, etc)
+     * SAUF les TableView, TitlePane, Label
+     * @return liste des Controls
      */
     public ArrayList<Control> obtenirControlsVue() {
         Field [] attributes = this.getClass().getDeclaredFields();
         ArrayList<Control> controls = new ArrayList<>();
         for (Field attribute : attributes) {
             try {
-                if (attribute.get(this) instanceof Control) {
-                    if( (!(attribute.get(this) instanceof TableView)) && (!(attribute.get(this) instanceof TitledPane)) && (attribute.get(this) != buttonEtatCourant)){
-                        controls.add((Control) attribute.get(this));
-                    }
+                if (attribute.get(this) instanceof Control
+                        && !(attribute.get(this) instanceof TableView)
+                        && !(attribute.get(this) instanceof TitledPane)
+                        && !(attribute.get(this) instanceof Label)) {
+                    controls.add((Control) attribute.get(this));
                 }
             } catch (IllegalAccessException e) {
                 throw new RuntimeException(e);
@@ -809,16 +767,16 @@ public class VueFenetrePrincipale implements Observer {
     }
 
     public void dessinerPlan(){
-        latMax = controleur.getPlanCharge().getIntersections().values().stream()
+        latMax = controleur.getJournee().getPlan().getIntersections().values().stream()
                 .map(Intersection::getLatitude)
                 .max(Float::compare).orElse(0f);
-        latMin = controleur.getPlanCharge().getIntersections().values().stream()
+        latMin = controleur.getJournee().getPlan().getIntersections().values().stream()
                 .map(Intersection::getLatitude)
                 .min(Float::compare).orElse(0f);
-        longMax = controleur.getPlanCharge().getIntersections().values().stream()
+        longMax = controleur.getJournee().getPlan().getIntersections().values().stream()
                 .map(Intersection::getLongitude)
                 .max(Float::compare).orElse(0f);
-        longMin = controleur.getPlanCharge().getIntersections().values().stream()
+        longMin = controleur.getJournee().getPlan().getIntersections().values().stream()
                 .map(Intersection::getLongitude)
                 .min(Float::compare).orElse(0f);
 
@@ -829,7 +787,7 @@ public class VueFenetrePrincipale implements Observer {
         echelleLat =  canvasPlan.getHeight() / hauteurPlan;
 
         canvasPlan.getGraphicsContext2D().clearRect(0,0, canvasPlan.getWidth(), canvasPlan.getHeight());
-        for (Segment segment : controleur.getPlanCharge().getSegments()) {
+        for (Segment segment : controleur.getJournee().getPlan().getSegments()) {
             dessinerSegment(segment,
                     COULEUR_SEGMENT);
         }
@@ -850,7 +808,7 @@ public class VueFenetrePrincipale implements Observer {
         }
 
         canvasPlan.getGraphicsContext2D().clearRect(0, 0, canvasPlan.getWidth(), canvasPlan.getHeight());
-        for (Segment segment : controleur.getPlanCharge().getSegments()) {
+        for (Segment segment : controleur.getJournee().getPlan().getSegments()) {
             dessinerSegment(segment,
                     COULEUR_SEGMENT);
         }
