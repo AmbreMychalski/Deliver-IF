@@ -29,6 +29,11 @@ public class Livraison {
 		return demandeLivraison.getPlageHoraire();
 	}
 
+	/**
+	 * Pour l'heure de la livraison, permet de la retourner sous forme de chaîne
+	 * de caractère
+	 * @return L'heure sous forme de chaîne de caractère
+	 */
 	public String getHeureAffichee() {
 		int h = (int) heure;
 		int min = (int) (60 * (heure - h));
@@ -37,6 +42,10 @@ public class Livraison {
 				+ (int) ((heure - (int) heure) * 60));
 	}
 
+	/**
+	 * Constructeur de copie
+	 * @param livraison La livraison que l'on veut copier
+	 */
 	public Livraison(Livraison livraison) {
 		this.heure = livraison.getHeure();
 		this.demandeLivraison = livraison.getDemandeLivraison();
