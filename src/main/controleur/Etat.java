@@ -72,7 +72,7 @@ public abstract class Etat {
 					break;
 				case M:
 				case SUBTRACT:
-					c.vue.redessinerPlan(true,0.66);
+					c.vue.redessinerPlan(true,0.6667);
 					if(c.vue.comboboxLivreur.getValue().getTournee() != null){
 						c.vue.afficherLivraisons(c.vue.comboboxLivreur.getValue(), true);
 					} else {
@@ -104,15 +104,6 @@ public abstract class Etat {
 		c.vue.textfieldIdentifiantIntersectionSelection.setText("");
 		resetLabelRuesIntersection(c);
 		c.vue.textfieldPlageHoraire.setText("");
-	}
-
-	protected  void afficherTournee(ControleurFenetrePrincipale c, Tournee tournee){
-		GraphicsContext gc = c.vue.canvasPlanTrajet.getGraphicsContext2D();
-		gc.clearRect(0, 0, c.vue.canvasPlanTrajet.getWidth(), c.vue.canvasPlanTrajet.getHeight());
-		if(tournee != null){
-			List<Trajet> trajets = tournee.getTrajets();
-			c.vue.dessinerTrajets(trajets, gc);
-		}
 	}
 
 	protected void sauvegarderListeDemandes(ControleurFenetrePrincipale c){
@@ -458,6 +449,7 @@ public abstract class Etat {
 			}else{
 				c.changementEtat(c.etatTourneesCalculees);
 			}
+			c.viderListeDeCommandes();
 		}
 	}
 

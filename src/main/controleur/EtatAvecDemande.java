@@ -62,7 +62,7 @@ public class EtatAvecDemande extends Etat {
         ControleurFenetrePrincipale.LOGGER.debug("tourneeComplete = " + tourneeComplete);
         ControleurFenetrePrincipale.LOGGER.debug("Solution trouvé en :" + (System.currentTimeMillis() - startTime) + "ms ");
 
-        this.afficherTournee(c, livreur.getTournee());
+        c.vue.afficherLivraisons(livreur, true);
         c.changementEtat(c.etatTourneesCalculees);
         c.vue.tableViewDemandesLivraison.setVisible(false);
         c.vue.tableViewLivraisons.setVisible(true);

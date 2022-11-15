@@ -217,7 +217,6 @@ public class Journee extends Observable {
                 false);
 
         ajouterLivraisonTournee(livraison, livrAvant, livreur);
-
         return livraison;
     }
     /**
@@ -240,10 +239,12 @@ public class Journee extends Observable {
      */
     public void ajouterLivraisonTournee(Livraison livr, Livraison livrAvant,
                                         Livreur livreur) {
+
         livr.setLivreur(livreur);
         Tournee t = livreur.getTournee();
         Intersection intersectionAmont;
         int index;
+
         if(livrAvant != null) {
             index = t.getLivraisons().indexOf(livrAvant);
             intersectionAmont =
@@ -298,7 +299,6 @@ public class Journee extends Observable {
         return (this.livreurs.get(this.livreurs.size() - 1).getTournee() == null);
     }
 
-
     /**
      * Permet de supprimer une livraison d'une tournée
      * @param livreur Le livreur qui possède la tournée
@@ -341,8 +341,6 @@ public class Journee extends Observable {
         } else {
             livr.getLivreur().supprimerTournee();
         }
-        System.out.println(t.getLivraisons().size());
-
     }
     private List<Trajet> creerListTrajet(List<Livraison> livrList, GrapheComplet g) {
         List<Trajet> trajetList = new LinkedList<>();

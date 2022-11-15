@@ -27,7 +27,9 @@ public class EtatSaisieNouvelleDemandeAvecTournees extends Etat {
                 c.vue.tableViewLivraisons.setDisable(false);
                 livreur.ajouterDemandeLivraison(demande);
                 c.changementEtat(c.etatSelectionLivraisonPourNouvelleDemande);
+                c.vue.afficherDemandesLivraison(livreur, true);
                 c.vue.afficherLivraisons(livreur, true);
+                c.vue.dessinerDemandeLivraison(c.vue.canvasIntersectionsLivraisons.getGraphicsContext2D(), demande);
             }else{
                 c.vue.labelGuideUtilisateur.setText("Veuillez saisir toutes les informations");
             }

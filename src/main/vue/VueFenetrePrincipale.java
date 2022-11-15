@@ -44,48 +44,16 @@ public class VueFenetrePrincipale implements Observer {
 
     ControleurFenetrePrincipale controleur;
 
-    public final double TAILLE_RECT_PT_LIVRAISON = 8;
-    public final double TAILLE_RECT_PT_LIVRAISON_SELECTIONNE = 12;
-    public final double TAILLE_CERCLE_INTERSECTION_SELECTIONNEE = 8;
-    public final double TAILLE_CERCLE_INTERSECTION = 15;
+    public final double TAILLE_RECT_PT_LIVRAISON = 10;
+    public final double TAILLE_RECT_PT_LIVRAISON_SELECTIONNE = 14;
+    public final double TAILLE_CERCLE_INTERSECTION_SELECTIONNEE = 10;
+    public final double TAILLE_CERCLE_INTERSECTION = 14;
     public final Color COULEUR_DEPOT = Color.RED;
     public final Color COULEUR_SEGMENT = Color.BLACK;
     public final Color COULEUR_POINT_LIVRAISON_SELECTIONNE = Color.RED;
     /* Rayon en pixels définissant la zone où l'on
      reconnaît les intersections ciblées*/
     public final double RAYON_TOLERANCE_CLIC_INTERSECTION = 8;
-
-    public File choisirFichier(String titreFenetre) throws Exception {
-        File fichier;
-        FileChooser fileChooser = new FileChooser();
-        fileChooser.setInitialDirectory(new File(".\\data"));
-        fileChooser.getExtensionFilters().add(
-                new FileChooser.ExtensionFilter("Fichier XML",
-                        "*.xml", "*.XML"));
-        fileChooser.setTitle(titreFenetre);
-        try {
-            fichier = fileChooser.showOpenDialog(this.stage);
-
-            if(fichier == null) {
-                throw new Exception();
-            }
-        } catch(Exception e) {
-            throw new FichierNonConformeException("Problème lors du choix du fichier.");
-        }
-        return fichier;
-    }
-
-    public void nettoyerToutesLesInformations(ControleurFenetrePrincipale c) {
-        GraphicsContext gc = canvasPlan.getGraphicsContext2D();
-        GraphicsContext gcTrajet = canvasPlanTrajet.getGraphicsContext2D();
-        GraphicsContext gcIntersection = canvasIntersectionsLivraisons.getGraphicsContext2D();
-        gc.clearRect(0, 0, canvasPlan.getWidth(), canvasPlan.getHeight());
-        gcTrajet.clearRect(0, 0, canvasPlanTrajet.getWidth(), canvasPlanTrajet.getHeight());
-        gcIntersection.clearRect(0, 0, canvasIntersectionsLivraisons.getWidth(), canvasIntersectionsLivraisons.getHeight());
-        textfieldIdentifiantIntersectionSelection.setText("");
-        textfieldPlageHoraire.setText("");
-    }
-
     public enum FormeIntersection { RECTANGLE, CERCLE }
 
     @Getter
@@ -222,6 +190,7 @@ public class VueFenetrePrincipale implements Observer {
                 actionBoutonChargerPlan(event);
             } catch (Exception e) {
                 LOGGER.error(e);
+                labelGuideUtilisateur.setText("Impossible de charger le plan");
             }
         });
         buttonCalculerTournees.setOnAction(this::actionBoutonCalculerTournees);
@@ -349,7 +318,36 @@ public class VueFenetrePrincipale implements Observer {
         dessinerPlan();
     }
 
+    public File choisirFichier(String titreFenetre) throws Exception {
+        File fichier;
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.setInitialDirectory(new File(".\\data"));
+        fileChooser.getExtensionFilters().add(
+                new FileChooser.ExtensionFilter("Fichier XML",
+                        "*.xml", "*.XML"));
+        fileChooser.setTitle(titreFenetre);
+        try {
+            fichier = fileChooser.showOpenDialog(this.stage);
 
+            if(fichier == null) {
+                throw new Exception();
+            }
+        } catch(Exception e) {
+            throw new FichierNonConformeException("Problème lors du choix du fichier.");
+        }
+        return fichier;
+    }
+
+    public void nettoyerToutesLesInformations(ControleurFenetrePrincipale c) {
+        GraphicsContext gc = canvasPlan.getGraphicsContext2D();
+        GraphicsContext gcTrajet = canvasPlanTrajet.getGraphicsContext2D();
+        GraphicsContext gcIntersection = canvasIntersectionsLivraisons.getGraphicsContext2D();
+        gc.clearRect(0, 0, canvasPlan.getWidth(), canvasPlan.getHeight());
+        gcTrajet.clearRect(0, 0, canvasPlanTrajet.getWidth(), canvasPlanTrajet.getHeight());
+        gcIntersection.clearRect(0, 0, canvasIntersectionsLivraisons.getWidth(), canvasIntersectionsLivraisons.getHeight());
+        textfieldIdentifiantIntersectionSelection.setText("");
+        textfieldPlageHoraire.setText("");
+    }
     private void actionDeplacerPlan(MouseEvent event) {
         double x =  event.getX();
         double y = event.getY();
@@ -443,12 +441,7 @@ public class VueFenetrePrincipale implements Observer {
             gcTrajet.clearRect(0, 0, canvasPlanTrajet.getWidth(), canvasPlanTrajet.getHeight());
         }
         for(DemandeLivraison d: livreur.getDemandeLivraisons()) {
-            this.dessinerIntersection(gc,
-                    d.getIntersection(),
-                    d.getPlageHoraire().getCouleur(),
-                    this.TAILLE_RECT_PT_LIVRAISON,
-                    true,
-                    FormeIntersection.RECTANGLE);
+            this.dessinerDemandeLivraison(gc, d);
         }
     }
     public void afficherLivraisons(Livreur livreur, boolean nettoyerCanvas){
@@ -461,17 +454,28 @@ public class VueFenetrePrincipale implements Observer {
         List<Livraison> livraisons;
         if(livreur.getTournee() != null){
             livraisons = livreur.getTournee().getLivraisons();
-            dessinerTrajets(livreur.getTournee().getTrajets(), gcTrajets);
-
             for (Livraison l : livraisons) {
-                this.dessinerIntersection(gc,
-                        l.getDemandeLivraison().getIntersection(),
-                        l.getDemandeLivraison().getPlageHoraire().getCouleur(),
-                        this.TAILLE_RECT_PT_LIVRAISON,
-                        true,
-                        FormeIntersection.RECTANGLE);
+                this.dessinerLivraison(gc, l);
             }
+            dessinerTrajets(livreur.getTournee().getTrajets(), gcTrajets);
         }
+    }
+    public void dessinerDemandeLivraison(GraphicsContext gc, DemandeLivraison demande) {
+        dessinerIntersection(gc,
+                demande.getIntersection(),
+                demande.getPlageHoraire().getCouleur(),
+                this.TAILLE_RECT_PT_LIVRAISON,
+                true,
+                FormeIntersection.RECTANGLE);
+    }
+
+    private void dessinerLivraison(GraphicsContext gc, Livraison l) {
+        this.dessinerIntersection(gc,
+                l.getDemandeLivraison().getIntersection(),
+                l.getDemandeLivraison().getPlageHoraire().getCouleur(),
+                this.TAILLE_RECT_PT_LIVRAISON,
+                true,
+                FormeIntersection.RECTANGLE);
     }
 
     private void actionBoutonAjouterLivraison(ActionEvent event) {
@@ -734,8 +738,6 @@ public class VueFenetrePrincipale implements Observer {
                 tableViewLivraisons.getItems().clear();
                 tableViewLivraisons.getItems().addAll(
                         ((Livreur) o).getLivraisons());
-                System.out.println("ouibonjour");
-                System.out.println(((Livreur) o).getLivraisons().size());
                 afficherLivraisons(livreur, true);
             }
         }

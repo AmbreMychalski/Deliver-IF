@@ -131,7 +131,9 @@ public class ControleurFenetrePrincipale {
 		this.vue.comboboxLivreur.getSelectionModel().selectFirst();
 	}
 
-
+	public void viderListeDeCommandes(){
+		this.listeCommandes.getListeCommandes().clear();
+	}
 	public void touchePressee(KeyEvent ke) {
 		etatCourant.touchePressee(this, ke);
 	}

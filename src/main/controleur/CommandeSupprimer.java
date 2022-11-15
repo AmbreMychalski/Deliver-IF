@@ -25,7 +25,7 @@ public class CommandeSupprimer implements Commande {
         c.getEtatCourant().supprimerLivraison(c, livreur, livraison);
     }
     public void undoCommande (){
-        this.livraison = c.getJournee().ajouterDemandeLivraisonTournee(livraison.getDemandeLivraison(), livraisonAvant, livreur);
+        c.getJournee().ajouterLivraisonTournee(livraison, livraisonAvant, livreur);
         c.vue.afficherLivraisons(livreur, true);
     }
 
