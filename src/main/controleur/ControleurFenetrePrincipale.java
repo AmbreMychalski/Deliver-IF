@@ -31,6 +31,8 @@ public class ControleurFenetrePrincipale {
 	public static final Logger LOGGER = LogManager.getLogger(ControleurFenetrePrincipale.class);
 	final VueFenetrePrincipale vue;
 
+	private ListOfCommands liste;
+
 	// Etats
 	Etat etatCourant;
 	final EtatInitial etatInitial = new EtatInitial();
@@ -200,4 +202,8 @@ public class ControleurFenetrePrincipale {
 	public void actionClicComboboxAssisgnerLivreur() {
 		etatCourant.clicSurComboboxAssignerLivreur(this);
 	}
+
+	public void undo(){etatCourant.undo(liste);}
+
+	public void redo(){etatCourant.redo(liste);}
 }

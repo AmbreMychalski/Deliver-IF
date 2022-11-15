@@ -465,4 +465,9 @@ public abstract class Etat {
 			}
 		}
 	}
+
+	public void undo(ListOfCommands liste) {
+	}
+	public void redo(ListOfCommands liste) {
+	}
 }

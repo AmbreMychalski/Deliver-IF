@@ -48,4 +48,13 @@ public class EtatTourneesCalculees extends Etat{
     public void clicSurLivreur(ControleurFenetrePrincipale c) {
         this.changementLivreur(c);
     }
+
+    @Override
+    public void redo(ListOfCommands liste) {
+        liste.redoCommand();
+    }
+
+    public void undo(ListOfCommands liste) {
+        liste.undoCommand();
+    }
 }
