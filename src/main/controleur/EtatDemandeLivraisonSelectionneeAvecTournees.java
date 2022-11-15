@@ -65,10 +65,12 @@ public class EtatDemandeLivraisonSelectionneeAvecTournees extends Etat {
             case Z:
                 c.vue.tableViewLivraisons.getSelectionModel().selectAboveCell();
                 this.selectionnerDemande(c, true);
+                this.selectionTrajet(c);
                 break;
             case S:
                 c.vue.tableViewLivraisons.getSelectionModel().selectBelowCell();
                 this.selectionnerDemande(c, true);
+                this.selectionTrajet(c);
                 break;
         }
 

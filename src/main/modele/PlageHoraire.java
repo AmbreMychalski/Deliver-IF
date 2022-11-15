@@ -17,6 +17,7 @@ public class PlageHoraire {
     public PlageHoraire(int debut, int fin) {
         this.debut = debut;
         this.fin = fin;
+
         switch (debut) {
             case 8 :
                 this.couleur = Color.BLUEVIOLET;
@@ -55,6 +56,7 @@ public class PlageHoraire {
         }
 
         PlageHoraire other = (PlageHoraire) obj;
+
         return debut == other.debut && fin == other.fin;
     }
 }

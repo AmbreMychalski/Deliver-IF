@@ -17,7 +17,8 @@ public class DemandeLivraison {
     private Intersection intersection;
 	private PlageHoraire plageHoraire;
 	
-	public  void modifierDemandeLivraison(Intersection intersection, PlageHoraire plageHoraire) {
+	public  void modifierDemandeLivraison(Intersection intersection,
+                                          PlageHoraire plageHoraire) {
 	    if(intersection != null) {
 	        this.setIntersection(intersection);
 	    }
@@ -45,6 +46,7 @@ public class DemandeLivraison {
         }
 
         DemandeLivraison other = (DemandeLivraison) obj;
+
         return Objects.equals(intersection, other.intersection)
                && Objects.equals(plageHoraire, other.plageHoraire);
     }

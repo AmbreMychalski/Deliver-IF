@@ -20,6 +20,7 @@ public abstract class TemplateTSP implements TSP {
 		this.limiteTemps = timeLimit;
 		this.g = g;
 		meilleureSolution = new Integer[g.getNbSommets()];
+
 		ArrayList<Integer> nonVisites = new ArrayList<Integer>(g.getNbSommets() - 1);
 
 		for (int i = 1; i < g.getNbSommets(); i++) {
@@ -90,7 +91,7 @@ public abstract class TemplateTSP implements TSP {
 	    	if (g.estUnArc(sommetCourant,0)) {
 	    		if (coutCourant+g.getCout(sommetCourant,0) < coutMeilleureSolution) {
 	    			visites.toArray(meilleureSolution);
-	    			coutMeilleureSolution = coutCourant+g.getCout(sommetCourant,0);
+	    			coutMeilleureSolution = coutCourant + g.getCout(sommetCourant,0);
 	    		}
 	    	}
 	    } else if (coutCourant+bound(sommetCourant,nonVisites,g.getMatriceCouts()) < coutMeilleureSolution) {
@@ -107,5 +108,4 @@ public abstract class TemplateTSP implements TSP {
 	        }	    
 	    }
 	}
-
 }

@@ -15,7 +15,7 @@ public class GrapheComplet implements Graphe {
     private static final int COUT_MAX = 40;
     private static final int COUT_MIN = 10;
     
-    private Map<DemandeLivraison, Integer> idDemandeLivraisonToIndex = new HashMap<>();
+    private Map<DemandeLivraison, Integer>  idDemandeLivraisonToIndex = new HashMap<>();
     private Map<Integer, DemandeLivraison > idIndexToDemandeLivraison = new HashMap<>();
     int nbSommets;
     float[][] couts;
@@ -83,8 +83,10 @@ public class GrapheComplet implements Graphe {
 
     @Override
     public float getCout(int i, int j) {
-        if (i < 0 || i >= nbSommets || j < 0 || j >= nbSommets)
+        if (i < 0 || i >= nbSommets || j < 0 || j >= nbSommets) {
             return -1;
+        }
+
         return couts[i][j];
     }
 
