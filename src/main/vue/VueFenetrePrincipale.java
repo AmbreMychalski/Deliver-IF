@@ -31,8 +31,9 @@ import lombok.Setter;
 import modele.*;
 
 import java.awt.*;
-import java.io.File;
+import java.io.*;
 import java.lang.reflect.Field;
+import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Observable;
@@ -297,14 +298,8 @@ public class VueFenetrePrincipale implements Observer {
         for(Control controle : controles){
                 if(controle instanceof Button || controle instanceof TableView){
                 controle.setOnMouseEntered(event -> {
-                    if (controle.isDisable()){
-                        //this.getStage().getScene().setCursor(new ImageCursor(new Image("./data/eegyedzs.png")));
-                        //System.out.println("oui");
-                    }else{
-                        //System.out.println(new File(".").getAbsoluteFile());
-                        //this.getStage().getScene().setCursor(new ImageCursor(new Image(".\\data\\eegyedzs.png")));
+                    if (!controle.isDisable()){
                         this.getStage().getScene().setCursor(Cursor.HAND);
-                        //System.out.println("ouinon");
                     }
                 });
                 controle.setOnMouseExited(event -> {
@@ -356,11 +351,7 @@ public class VueFenetrePrincipale implements Observer {
         dernierePositionY = y;
         dernierePositionX = x;
         redessinerPlan(false, 0);
-        if(comboboxLivreur.getValue().getTournee() != null){
-            afficherLivraisons(comboboxLivreur.getValue(), true);
-        } else {
-            afficherDemandesLivraison(comboboxLivreur.getValue(), true);
-        }
+        afficherLivraisons(comboboxLivreur.getValue(), true);
     }
 
     private void actionClicComboboxAssisgnerLivreur() {
@@ -457,6 +448,7 @@ public class VueFenetrePrincipale implements Observer {
             for (Livraison l : livraisons) {
                 this.dessinerLivraison(gc, l);
             }
+            dessinerDemandeLivraison(gc, livreur.getDemandeLivraisons().get(livreur.getDemandeLivraisons().size()-1));
             dessinerTrajets(livreur.getTournee().getTrajets(), gcTrajets);
         }
     }

@@ -233,6 +233,7 @@ public abstract class Etat {
 				c.vue.dessinerPlan();
 				c.vue.titledPaneEditionDemande.setVisible(true);
 				c.vue.titlePaneSelectionDemande.setVisible(true);
+				c.vue.buttonReinitAffPlan.setVisible(true);
 				c.changementEtat(c.etatSansDemande);
 			}
 		} catch (Exception ex) {
@@ -405,9 +406,7 @@ public abstract class Etat {
 		for (int i = 1; i <= c.journee.getLivreurs().size(); i++) {
 			listStr.add(Integer.toString(i));
 		}
-		if(!c.journee.dernierLivreurEstSansTourneeCalculee()){
-			listStr.add(c.journee.getLivreurs().size()+1+" (nouveau livreur)");
-		}
+		listStr.add(c.journee.getLivreurs().size()+1+" (nouveau livreur)");
 		c.vue.comboboxAssignerLivreur.setItems(listStr);
 		c.vue.comboboxLivreur.setItems(listeLivreur);
 	}
@@ -435,7 +434,7 @@ public abstract class Etat {
 		}
 		miseAjourDonneesTableView(c, livreur);
 	}
-
+	public boolean selectionPourNouvelleDemande(ControleurFenetrePrincipale c, Livraison ligne){ return false;}
 	public void changementLivreur(ControleurFenetrePrincipale c){
 		Livreur livreur = c.vue.comboboxLivreur.getValue();
 		if(livreur != null){

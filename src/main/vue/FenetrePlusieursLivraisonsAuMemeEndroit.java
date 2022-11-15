@@ -18,7 +18,7 @@ import java.util.Arrays;
 
 public class FenetrePlusieursLivraisonsAuMemeEndroit {
 
-    public static void display (ControleurFenetrePrincipale c, ArrayList<DemandeLivraison> listeDemandes, ArrayList<Livraison> listeLivraisons) {
+    public static void display (ControleurFenetrePrincipale c, ArrayList<DemandeLivraison> listeDemandes, ArrayList<Livraison> listeLivraisons, boolean etatSelectionPourNouvelleDemande) {
         Stage window = new Stage();
         window.initModality(Modality.APPLICATION_MODAL);
         window.setTitle("Choix multiple de demande de livraison");
@@ -77,9 +77,13 @@ public class FenetrePlusieursLivraisonsAuMemeEndroit {
             selectionnerDemande.setOnAction(event -> {
                 Livraison demande = tableViewLivraisons.getSelectionModel().getSelectedItem();
                 if (demande != null) {
-                    c.getVue().tableViewLivraisons.getSelectionModel().select(demande);
-                    c.getEtatCourant().selectionnerDemande(c, true);
-                    c.changementEtat(c.getEtatDemandeLivraisonSelectionneeAvecTournees());
+                    if(etatSelectionPourNouvelleDemande){
+                        c.getEtatCourant().selectionPourNouvelleDemande(c, demande);
+                    }else{
+                        c.getVue().tableViewLivraisons.getSelectionModel().select(demande);
+                        c.getEtatCourant().selectionnerDemande(c, true);
+                        c.changementEtat(c.getEtatDemandeLivraisonSelectionneeAvecTournees());
+                    }
                     window.close();
                 }
             });

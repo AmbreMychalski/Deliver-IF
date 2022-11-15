@@ -40,4 +40,9 @@ public class ListeDeCommandes {
     public Commande getDerniereComande(){
         return listeCommandes.get(i-1);
     }
+
+    public void viderListeCommandes() {
+        this.listeCommandes.clear();
+        i=0;
+    }
 }

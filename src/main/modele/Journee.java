@@ -292,14 +292,6 @@ public class Journee extends Observable {
     }
 
     /**
-     * Vérifie si le dernier livreur a une tournée calculée
-     * @return true si le dernier livreurs n'a pas de tournée calculée, false sinon
-     */
-    public boolean dernierLivreurEstSansTourneeCalculee() {
-        return (this.livreurs.get(this.livreurs.size() - 1).getTournee() == null);
-    }
-
-    /**
      * Permet de supprimer une livraison d'une tournée
      * @param livreur Le livreur qui possède la tournée
      * @param livr La livraison qui sera supprimmée de la tournée

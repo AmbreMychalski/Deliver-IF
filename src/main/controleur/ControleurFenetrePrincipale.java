@@ -132,7 +132,7 @@ public class ControleurFenetrePrincipale {
 	}
 
 	public void viderListeDeCommandes(){
-		this.listeCommandes.getListeCommandes().clear();
+		this.listeCommandes.viderListeCommandes();
 	}
 	public void touchePressee(KeyEvent ke) {
 		etatCourant.touchePressee(this, ke);

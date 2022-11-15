@@ -34,7 +34,7 @@ public class EtatAvecDemande extends Etat {
             this.selectionnerDemande(c, false);
             c.changementEtat(c.etatDemandeLivraisonSelectionneeSansTournees);
         } else if (demandesAssociees.size() > 1) {
-            FenetrePlusieursLivraisonsAuMemeEndroit.display(c, demandesAssociees, null);
+            FenetrePlusieursLivraisonsAuMemeEndroit.display(c, demandesAssociees, null, false);
         }
     }
 
