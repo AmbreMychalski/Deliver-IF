@@ -35,11 +35,21 @@ public class Plan {
 	private List<Segment>              segments = new ArrayList<Segment>();
 	private Map<Long, List<Segment>> intersectionsVoisines = new HashMap<Long, List<Segment>>();
 	private static final Logger        LOGGER = LogManager.getLogger();
-	
+
+	/**
+	 * Constructeur de plan.
+	 * @param fichier Le fichier à lire
+	 * @throws FichierNonConformeException si le fichier n'est pas conforme
+	 */
 	public Plan(File fichier) throws FichierNonConformeException {
 		this.parseXML(fichier);
 	}
 
+	/**
+	 * Permet de vérifier si une intersection est livrable.
+	 * @param intersection L'intersection dont on veut savoir si elle est livrable
+	 * @return true si l'intersection est livrable, false sinon
+	 */
 	public boolean estLivrable(Intersection intersection) {
 		if(!sontConnectee(intersection, this.entrepot)) {
 			return false;
@@ -50,6 +60,13 @@ public class Plan {
 		return true;
 	}
 
+	/**
+	 * Permet de calculer le plus court chemin entre deux points
+	 * @param depart L'intersection de départ
+	 * @param arrivee L'intersection d'arrivée
+	 * @return La liste des segments qui composent le plus court chemin entre
+	 * le départ et l'arrivée
+	 */
 	public List<Segment> calculerPlusCourtChemin(Intersection depart, Intersection arrivee) {
 	    List <Segment>          chemin = new LinkedList<Segment>();
 	    HashMap<Long, Float>    distance = new HashMap<Long, Float>();
@@ -108,7 +125,15 @@ public class Plan {
 	    }
 	    return chemin;
 	}
-	
+
+	/**
+	 * Permet de calculer le plus court chemin entre l'intersection de départ et
+	 * chaque élément de la liste
+	 * @param listIntersections La liste des intersections que l'on veut atteindre
+	 * @param depart L'intersection de départ
+	 * @return map contenant, pour chaque élément de la liste d'intersections,
+	 * la longueur du plus court chemin à l'intersection de départ
+	 */
 	public HashMap<Intersection, Float> calculerPlusCourtsChemins(
 	        List<Intersection> listIntersections, Intersection depart) {
 	    
@@ -167,6 +192,11 @@ public class Plan {
         return res;
     }
 
+	/**
+	 * Permet la lecture du fichier de plan
+	 * @param fichier Le fichier que l'on veut lire
+	 * @throws FichierNonConformeException si le fichier n'est pas jugé conforme
+	 */
 	public void parseXML(File fichier) throws FichierNonConformeException {
         Node            node = null;
         NodeList        list = null;   
@@ -256,13 +286,19 @@ public class Plan {
 		}
 	}
 
-	private Long obtenirIntersectionLaPlusProche(Set < Long > intersectionsGrise, 
+	/**
+	 * Permet d'obtenir l'intersection la plus proche des sommets gris
+	 * @param intersectionsGrise La liste des intersections grises
+	 * @param distance La map des distances
+	 * @return L'ID de l'intersection la plus proche
+	 */
+	private Long obtenirIntersectionLaPlusProche(Set<Long> intersectionsGrise,
 	        HashMap<Long, Float> distance) {
 	    
         Long interPlusProche = null;
         float plusPetiteDist = Float.MAX_VALUE;
         
-        for (Long idInter: intersectionsGrise) {
+        for (Long idInter : intersectionsGrise) {
             float interDist = distance.get(idInter);
             
             if (interDist < plusPetiteDist) {
@@ -274,6 +310,12 @@ public class Plan {
         return interPlusProche;
     }
 
+	/**
+	 * Permet de vérifier si deux intersections sont connectées
+	 * @param depart L'intersection de départ
+	 * @param arrivee L'intersection d'arrivée
+	 * @return true si les intersections sont connectées, false sinon
+	 */
 	private boolean sontConnectee(Intersection depart, Intersection arrivee) {
 		HashMap<Long, Float>    distance = new HashMap<Long, Float>();
 		HashMap<Long, Float>    distanceAndHeuristic = new HashMap<Long, Float>();
@@ -331,6 +373,12 @@ public class Plan {
 		return false;
 	}
 
+	/**
+	 * Permet de calculer l'heuristique pour deux intersections données
+	 * @param interCourant L'intersection courante
+	 * @param interCible L'intersection cible
+	 * @return la valeur de l'heuristique
+	 */
 	private float calculHeuristique(Intersection interCourant,
 									Intersection interCible) {
 		double R = 6372.8; // Earth's Radius, in kilometers

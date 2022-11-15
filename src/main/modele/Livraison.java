@@ -25,6 +25,10 @@ public class Livraison {
 		return demandeLivraison.getIntersection().getIdIntersection();
 	}
 
+	/**
+	 * Permet de récupérer la plage horaire de la livraison courante
+	 * @return la plage horaire de la demande livraison
+	 */
 	public PlageHoraire getPlageHoraireLivraison() {
 		return demandeLivraison.getPlageHoraire();
 	}

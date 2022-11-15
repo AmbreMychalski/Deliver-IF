@@ -24,12 +24,20 @@ public class SeqIter implements Iterator<Integer> {
 			}
 		}
 	}
-	
+
+	/**
+	 * Permet de vérifier s'il reste des candidats
+	 * @return true s'il reste un élément suivant, false sinon
+	 */
 	@Override
 	public boolean hasNext() {
 		return nbCandidats > 0;
 	}
 
+	/**
+	 * Permet de récupérer le prochaine élément à traiter
+	 * @return le prochain candidat
+	 */
 	@Override
 	public Integer next() {
 		nbCandidats--;

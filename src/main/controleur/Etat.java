@@ -3,7 +3,6 @@ package controleur;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.canvas.GraphicsContext;
-import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.paint.Color;
@@ -12,6 +11,7 @@ import lombok.Getter;
 import modele.*;
 import vue.VueFenetrePrincipale;
 
+import java.awt.*;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
@@ -60,27 +60,33 @@ public abstract class Etat {
 	public void touchePressee(ControleurFenetrePrincipale c, KeyEvent ke) {
 		LOGGER.info(ke.getCode());
 		if(! c.vue.comboboxLivreur.isDisable()){
-			if(ke.getCode() == KeyCode.Q){
-				c.vue.comboboxLivreur.getSelectionModel().selectPrevious();
-				this.changementLivreur(c);
-			} else if (ke.getCode() == KeyCode.D) {
-				c.vue.comboboxLivreur.getSelectionModel().selectNext();
-				this.changementLivreur(c);
-			}else if(ke.getCode() == KeyCode.P){
-				c.vue.redessinerPlan(true,1.5);
-				if(c.vue.comboboxLivreur.getValue().getTournee() != null){
-					c.vue.afficherLivraisons(c.vue.comboboxLivreur.getValue(), true);
-				} else {
-					c.vue.afficherDemandesLivraison(c.vue.comboboxLivreur.getValue(), true);
-				}
-
-			} else if (ke.getCode() == KeyCode.M) {
-				c.vue.redessinerPlan(true,0.66);
-				if(c.vue.comboboxLivreur.getValue().getTournee() != null){
-					c.vue.afficherLivraisons(c.vue.comboboxLivreur.getValue(), true);
-				} else {
-					c.vue.afficherDemandesLivraison(c.vue.comboboxLivreur.getValue(), true);
-				}
+			switch(ke.getCode()) {
+				case Q:
+					c.vue.comboboxLivreur.getSelectionModel().selectPrevious();
+					this.changementLivreur(c);
+					break;
+				case D:
+					c.vue.comboboxLivreur.getSelectionModel().selectNext();
+					this.changementLivreur(c);
+					break;
+				case P:
+				case ADD:
+					c.vue.redessinerPlan(true,1.5);
+					if(c.vue.comboboxLivreur.getValue().getTournee() != null){
+						c.vue.afficherLivraisons(c.vue.comboboxLivreur.getValue(), true);
+					} else {
+						c.vue.afficherDemandesLivraison(c.vue.comboboxLivreur.getValue(), true);
+					}
+					break;
+				case M:
+				case SUBTRACT:
+					c.vue.redessinerPlan(true,0.66);
+					if(c.vue.comboboxLivreur.getValue().getTournee() != null){
+						c.vue.afficherLivraisons(c.vue.comboboxLivreur.getValue(), true);
+					} else {
+						c.vue.afficherDemandesLivraison(c.vue.comboboxLivreur.getValue(), true);
+					}
+					break;
 			}
 		}
 	}
@@ -228,7 +234,7 @@ public abstract class Etat {
 	protected void selectionTrajet(ControleurFenetrePrincipale c){
 		Livraison liv = c.vue.tableViewLivraisons.getSelectionModel()
 				.getSelectedItem();
-		Intersection intersectionLiv = liv.getDemandeLivraison().getIntersection();
+		liv.getDemandeLivraison().getIntersection();
 
 		Livreur livreur = c.vue.comboboxLivreur.getValue();
 		Tournee tournee = livreur.getTournee();

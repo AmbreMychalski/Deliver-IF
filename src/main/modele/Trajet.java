@@ -17,6 +17,11 @@ public class Trajet {
 	Intersection arrivee;
 	float longueur;
 
+	/**
+	 * Constructeur spécifique de la classe Trajet.
+	 * @param segments La liste des segments que l'on veut ajouter
+	 * @param longueur La longueur du trajet
+	 */
 	public Trajet(List<Segment> segments, float longueur) {
 		this.segments = new ArrayList<>(segments);
 		this.depart   = this.segments.get(0).getOrigine();
