@@ -27,10 +27,15 @@ public class EtatInitial extends Etat {
 
         try {
             fichier = fileChooser.showOpenDialog(c.vue.getStage());
+
+            if(fichier == null) {
+                throw new Exception();
+            }
         } catch(Exception e) {
-            c.vue.labelGuideUtilisateur.setText("Problème lors du chargement du fichier.");
+            c.vue.labelGuideUtilisateur.setText("Aucun fichier sélectionné. Veuillez réessayer.");
             throw new FichierNonConformeException("Problème lors du choix du fichier.");
         }
+
         LOGGER.info("Fichier choisi = " + fichier.getAbsolutePath());
 
         try {
@@ -44,35 +49,22 @@ public class EtatInitial extends Etat {
             c.vue.textfieldPlageHoraire.setText("");
             this.resetLabelRuesIntersection(c);
             if(c.journee.getLivreurs().get(0).getDemandeLivraisons().size() !=0){
-                System.out.println("ici");
-                /*for(Livreur livreur : c.journee.getLivreurs()){
-                    for(DemandeLivraison ligne : livreur.getDemandeLivraisons()) {
-                        livreur.supprimerDemandeLivraison(ligne);
-                    }
-                    for(Livraison ligne : livreur.getLivraisons()){
-                        livreur.supprimerLivraison(ligne);
-                    }
-                }
-                c.journee.setLivreurs(new ArrayList<>());*/
                 c.journee = new Journee();
                 c.journee.ajouterObservateur(c.vue);
                 Livreur.reinitializeNbLivreurs();
                 Livreur liv = new Livreur();
                 liv.ajouterObservateur(c.vue);
                 c.journee.getLivreurs().add(liv);
-
-                System.out.println(liv);
-
                 c.etatCourant.majComboboxLivreur(c);
                 c.vue.comboboxLivreur.getSelectionModel().selectFirst();
-                System.out.println(c.journee);
             }
             Plan plan;
+
             try {
                 plan = new Plan(fichier);
             } catch(Exception e) {
-                c.vue.labelGuideUtilisateur.setText("Problème lors du chargement du fichier.");
-                throw new FichierNonConformeException("Problème lors du chargement du fichier.");
+                c.vue.labelGuideUtilisateur.setText("Problème lors de la lecture du fichier.");
+                throw new FichierNonConformeException("Problème lors de la lecture du fichier.");
             }
 
             c.journee.setPlan(plan);
@@ -86,7 +78,6 @@ public class EtatInitial extends Etat {
             c.changementEtat(c.etatSansDemande);
         } catch (Exception ex) {
             c.vue.labelGuideUtilisateur.setText("Problème lors de la lecture du fichier.");
-            throw new FichierNonConformeException("Problème lors de la lecture du fichier.");
         }
     }
 }
