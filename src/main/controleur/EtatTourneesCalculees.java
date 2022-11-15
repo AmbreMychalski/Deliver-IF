@@ -70,4 +70,12 @@ public class EtatTourneesCalculees extends Etat{
                 liste.redoCommande();
         }
     }
+
+    public void chargerPlan(ControleurFenetrePrincipale c) {
+        try {
+            c.etatInitial.chargerPlan(c);
+        } catch(Exception e) {
+            c.vue.labelGuideUtilisateur.setText("Erreur lors du chargement du plan.");
+        }
+    }
 }
