@@ -2,7 +2,6 @@ package controleur;
 
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
-import modele.DemandeLivraison;
 import modele.Livraison;
 import modele.Livreur;
 
@@ -23,8 +22,6 @@ public class EtatDemandeLivraisonSelectionneeAvecTournees extends Etat {
     }
 
     public void supprimerDemande(ControleurFenetrePrincipale c) {
-        DemandeLivraison demande = c.vue.tableViewLivraisons.getSelectionModel().getSelectedItem().getDemandeLivraison();
-        c.getListeCommandes().ajouterCommand(new ReverseCommande( new AjouterCommande(demande,c)));
         supprimerLivraison(c);
     }
 
