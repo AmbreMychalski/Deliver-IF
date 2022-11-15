@@ -12,6 +12,7 @@ import lombok.Getter;
 import modele.*;
 import vue.VueFenetrePrincipale;
 
+import java.awt.*;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
@@ -66,7 +67,8 @@ public abstract class Etat {
 			} else if (ke.getCode() == KeyCode.D) {
 				c.vue.comboboxLivreur.getSelectionModel().selectNext();
 				this.changementLivreur(c);
-			}else if(ke.getCode() == KeyCode.P){
+			}else if(ke.getCode() == KeyCode.P || ke.getCode()==KeyCode.ADD){
+
 				c.vue.redessinerPlan(true,1.5);
 				if(c.vue.comboboxLivreur.getValue().getTournee() != null){
 					c.vue.afficherLivraisons(c.vue.comboboxLivreur.getValue(), true);
@@ -74,7 +76,7 @@ public abstract class Etat {
 					c.vue.afficherDemandesLivraison(c.vue.comboboxLivreur.getValue(), true);
 				}
 
-			} else if (ke.getCode() == KeyCode.M) {
+			} else if (ke.getCode() == KeyCode.M || ke.getCode()==KeyCode.SUBTRACT) {
 				c.vue.redessinerPlan(true,0.66);
 				if(c.vue.comboboxLivreur.getValue().getTournee() != null){
 					c.vue.afficherLivraisons(c.vue.comboboxLivreur.getValue(), true);
