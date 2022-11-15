@@ -19,7 +19,11 @@ public class CommandeAjouter implements Commande {
         this.c = c;
     }
     public void doCommande(){
-        this.livraison = c.getJournee().ajouterDemandeLivraisonTournee(demandeLivraison, livraisonAvant, livreur);
+        if(this.livraison == null){
+            this.livraison = c.getJournee().ajouterDemandeLivraisonTournee(demandeLivraison, livraisonAvant, livreur);
+        }else{
+            c.getJournee().ajouterLivraisonTournee(this.livraison, this.livraisonAvant, this.livreur);
+        }
         c.vue.afficherLivraisons(livreur, true);
     }
     public void undoCommande (){

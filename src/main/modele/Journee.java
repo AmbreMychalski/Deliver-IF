@@ -83,8 +83,10 @@ public class Journee extends Observable {
 
                         if(this.plan.estLivrable(this.plan.getIntersections().get(intersectionId))) {
                             DemandeLivraison demande = new DemandeLivraison(this.plan.getIntersections().get(intersectionId), new PlageHoraire(heureDebut, heureFin));
-                            livreur.ajouterDemandeLivraison(demande);
-                            demandesAjoutees.add(demande);
+                            if(!livreur.getDemandeLivraisons().contains(demande)) {
+                                livreur.ajouterDemandeLivraison(demande);
+                                demandesAjoutees.add(demande);
+                            }
                         }
                     }
                 }
