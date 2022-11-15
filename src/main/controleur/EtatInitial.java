@@ -44,28 +44,14 @@ public class EtatInitial extends Etat {
             c.vue.textfieldPlageHoraire.setText("");
             this.resetLabelRuesIntersection(c);
             if(c.journee.getLivreurs().get(0).getDemandeLivraisons().size() !=0){
-                System.out.println("ici");
-                /*for(Livreur livreur : c.journee.getLivreurs()){
-                    for(DemandeLivraison ligne : livreur.getDemandeLivraisons()) {
-                        livreur.supprimerDemandeLivraison(ligne);
-                    }
-                    for(Livraison ligne : livreur.getLivraisons()){
-                        livreur.supprimerLivraison(ligne);
-                    }
-                }
-                c.journee.setLivreurs(new ArrayList<>());*/
                 c.journee = new Journee();
                 c.journee.ajouterObservateur(c.vue);
                 Livreur.reinitializeNbLivreurs();
                 Livreur liv = new Livreur();
                 liv.ajouterObservateur(c.vue);
                 c.journee.getLivreurs().add(liv);
-
-                System.out.println(liv);
-
                 c.etatCourant.majComboboxLivreur(c);
                 c.vue.comboboxLivreur.getSelectionModel().selectFirst();
-                System.out.println(c.journee);
             }
             Plan plan;
             try {
