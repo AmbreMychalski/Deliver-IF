@@ -6,10 +6,16 @@ import exception.FichierNonConformeException;
 import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.scene.Cursor;
+import javafx.scene.ImageCursor;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.*;
+import javafx.scene.control.Button;
+import javafx.scene.control.Label;
+import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.image.Image;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
@@ -24,6 +30,7 @@ import lombok.Getter;
 import lombok.Setter;
 import modele.*;
 
+import java.awt.*;
 import java.io.File;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
@@ -316,6 +323,26 @@ public class VueFenetrePrincipale implements Observer {
             positionCouranteY = event.getY();
             positionCouranteX = event.getX();
         });
+
+        List<Control> controles = obtenirControlsVue();
+        for(Control controle : controles){
+                if(controle instanceof Button || controle instanceof TableView){
+                controle.setOnMouseEntered(event -> {
+                    if (controle.isDisable()){
+                        //this.getStage().getScene().setCursor(new ImageCursor(new Image("./data/eegyedzs.png")));
+                        //System.out.println("oui");
+                    }else{
+                        //System.out.println(new File(".").getAbsoluteFile());
+                        //this.getStage().getScene().setCursor(new ImageCursor(new Image(".\\data\\eegyedzs.png")));
+                        this.getStage().getScene().setCursor(Cursor.HAND);
+                        //System.out.println("ouinon");
+                    }
+                });
+                controle.setOnMouseExited(event -> {
+                    this.getStage().getScene().setCursor(Cursor.DEFAULT);
+                });
+            }
+        }
     }
 
     private void actionButtonReinitZoomPlan(ActionEvent actionEvent) {
@@ -707,6 +734,8 @@ public class VueFenetrePrincipale implements Observer {
                 tableViewLivraisons.getItems().clear();
                 tableViewLivraisons.getItems().addAll(
                         ((Livreur) o).getLivraisons());
+                System.out.println("ouibonjour");
+                System.out.println(((Livreur) o).getLivraisons().size());
                 afficherLivraisons(livreur, true);
             }
         }

@@ -56,24 +56,17 @@ public class EtatTourneesCalculees extends Etat{
         this.changementLivreur(c);
     }
 
-    @Override
-    public void redo(ListeDeCommandes liste) {
-        liste.redoCommande();
-    }
-
-    public void undo(ListeDeCommandes liste) {
-        liste.undoCommande();
-    }
-
     public void touchePressee(ControleurFenetrePrincipale c, KeyEvent ke){
         super.touchePressee(c,ke);
         LOGGER.info(ke.getCode());
         ListeDeCommandes liste = c.getListeCommandes();
         switch(ke.getCode()) {
-            case Z: //undo
+            case E: //undo
                 liste.undoCommande();
+                break;
             case R: //redo
                 liste.redoCommande();
+                break;
         }
     }
 

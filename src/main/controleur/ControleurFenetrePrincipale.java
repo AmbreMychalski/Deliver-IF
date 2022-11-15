@@ -210,7 +210,4 @@ public class ControleurFenetrePrincipale {
 		etatCourant.clicSurComboboxAssignerLivreur(this);
 	}
 
-	public void undo(){etatCourant.undo(listeCommandes);}
-
-	public void redo(){etatCourant.redo(listeCommandes);}
 }

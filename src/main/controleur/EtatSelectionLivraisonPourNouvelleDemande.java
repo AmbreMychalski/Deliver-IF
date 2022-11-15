@@ -47,11 +47,10 @@ public class EtatSelectionLivraisonPourNouvelleDemande extends Etat{
 
             Livreur livreur = c.vue.comboboxLivreur.getValue();
             DemandeLivraison derniereDemande = livreur.getDemandeLivraisons().get(livreur.getDemandeLivraisons().size()-1);
-            c.journee.ajouterDemandeLivraisonTournee(derniereDemande, ligne, livreur);
-            c.vue.afficherLivraisons(livreur, true);
-
-
+            Commande commandeAjout = new CommandeAjouter(c, livreur, ligne, derniereDemande);
+            c.getListeCommandes().ajouterCommande(commandeAjout);
             c.changementEtat(c.etatTourneesCalculees);
+
 
             return true;
         }

@@ -359,21 +359,25 @@ public abstract class Etat {
 	protected void supprimerLivraison(ControleurFenetrePrincipale c) {
 		Livreur livreur = c.vue.comboboxLivreur.getValue();
 		Livraison livraisonASupp = c.vue.tableViewLivraisons.getSelectionModel().getSelectedItem();
-		if(livraisonASupp != null){
-			livreur.supprimerDemandeLivraison(livraisonASupp.getDemandeLivraison());
+		Commande commandeSupprimer = new CommandeSupprimer(c, livreur, livraisonASupp);
+		c.getListeCommandes().ajouterCommande(commandeSupprimer);
+	}
+
+	protected  void supprimerLivraison(ControleurFenetrePrincipale c, Livreur livreur, Livraison livraisonASupp){
+		if(livraisonASupp != null) {
 			c.journee.supprimerLivraisonTournee(livreur, livraisonASupp);
 			c.vue.textfieldIdentifiantIntersectionSelection.setText("");
 			c.vue.textfieldPlageHoraire.setText("");
-
-			this.sortieDeSelectionDemande(c,true);
-			if(livreur.getTournee() != null){
+			this.sortieDeSelectionDemande(c, true);
+			if (livreur.getTournee() != null) {
 				c.changementEtat(c.etatTourneesCalculees);
 			} else {
-				c.vue.canvasPlanTrajet.getGraphicsContext2D().clearRect(0,0, c.vue.canvasPlanTrajet.getWidth(), c.vue.canvasPlanTrajet.getHeight());
+				c.vue.canvasPlanTrajet.getGraphicsContext2D().clearRect(0, 0, c.vue.canvasPlanTrajet.getWidth(), c.vue.canvasPlanTrajet.getHeight());
 				c.changementEtat(c.etatSansDemande);
 			}
 		}
 	}
+
 
 	protected  void annulerAjout (ControleurFenetrePrincipale c){
 		c.vue.tableViewDemandesLivraison.setDisable(false);

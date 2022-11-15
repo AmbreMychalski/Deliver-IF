@@ -12,24 +12,29 @@ public class ListeDeCommandes {
     private int i;
     private List<Commande> listeCommandes = new ArrayList<>();
 
-    public void ListeDeCommandes(){
+    public ListeDeCommandes(){
         i=0;
     }
 
-    public void ajouterCommand (Commande c){
+    public void ajouterCommande (Commande c){
+        while(i != listeCommandes.size()){
+            listeCommandes.remove(i);
+        }
         listeCommandes.add(i,c);
         c.doCommande();
         i++;
     }
     public void undoCommande(){
-        if (i >= 0) {
-            listeCommandes.get(i-1).undoCommande();;
+        if (i > 0) {
+            listeCommandes.get(i-1).undoCommande();
             i--;
         }
     }
     public  void redoCommande(){
-        listeCommandes.get(i-1).doCommande();
-        i++;
+        if(i < listeCommandes.size()) {
+            listeCommandes.get(i).doCommande();
+            i++;
+        }
     }
 
     public Commande getDerniereComande(){
