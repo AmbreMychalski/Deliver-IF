@@ -7,6 +7,7 @@ import java.util.*;
 
 @AllArgsConstructor
 public class TourneeSerialisation {
+    Plan plan;
     List<String> coordNames = Arrays.asList("N", "NE","E","SE", "S", "SW", "W", "NW", "N");
     Map<String, String> coord = new HashMap<String, String>(){{
         put("N","Nord");
@@ -19,20 +20,20 @@ public class TourneeSerialisation {
         put("NW","Nord-Ouest");
     }};
     String[] mot_liaison = new String[]{" vers "," sur "," pour suivre ",", "," pour rejoindre "};
-    StringWriter writer = new StringWriter();
-    PrintWriter out = new PrintWriter(writer);
-    Plan plan;
+    StringWriter  writer = new StringWriter();
+    PrintWriter      out = new PrintWriter(writer);
+
     public TourneeSerialisation(Plan plan) {
         this.plan = plan;
     }
     public String serialiser(Livreur livreur) throws IndexOutOfBoundsException {
-        out.println("Bienvenue sur le super sérialiseur de tournée");
+        out.println("Sérialiseur de tournée");
         int i = 1;
         Tournee tournee = livreur.getTournee();
 
         out.println("***********************************************************");
-        out.println("Tournée du livreur : " + tournee.getLivraisons().get(0).getLivreur()); //une tournée n'a pas de livreur ??
-        out.println("************* Liste des livraisons et horaire de livraison: *********** \n");
+        out.println("Tournée du livreur : " + tournee.getLivraisons().get(0).getLivreur());
+        out.println("************* Liste des livraisons et horaire de livraison : *********** \n");
 
         for(Livraison liv : tournee.getLivraisons()) {
             List<String> rues = plan.obtenirRuesIntersection(liv.getDemandeLivraison().getIntersection());
@@ -53,13 +54,12 @@ public class TourneeSerialisation {
                     + plan.obtenirRuesIntersection(trajet.getArrivee())
                     + "-----/// \n");
 
-            int a = 0;
+            int                      a = 0;
             String directionPrecedente = null;
-            String ruePrecedente = null;
-            float somme = 0;
-            boolean premiereSomme = true;
-            String phraseDirection = null;
-
+            String       ruePrecedente = null;
+            float                somme = 0;
+            boolean      premiereSomme = true;
+            String     phraseDirection = null;
 
             for(Segment segment : trajet.getSegments()) {
                 String direction = bearing(segment.getOrigine().getLatitude(),
@@ -91,7 +91,7 @@ public class TourneeSerialisation {
                         }
                         somme = segment.getLongueur();
                     }
-                    if(segment == trajet.segments.get(trajet.getSegments().size()-1)){
+                    if(segment == trajet.segments.get(trajet.getSegments().size()-1)) {
                         out.print((a + 1) + "/ ");
                         out.println(direction(directionPrecedente, direction)
                                 + mot_liaison[(int) (Math.random() * (mot_liaison.length - 1))]
@@ -107,7 +107,7 @@ public class TourneeSerialisation {
             j++;
 
             out.println();
-            out.println("*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*//*/*/*/*/*/*/*/*/*/");
+            out.println("*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/");
             out.println();
         }
         out.close();
@@ -124,14 +124,14 @@ public class TourneeSerialisation {
 
     //https://stackoverflow.com/questions/9457988/bearing-from-one-coordinate-to-another
     private String bearing(double lat1, double lon1, double lat2, double lon2) {
-        double latitude1 = Math.toRadians(lat1);
-        double latitude2 = Math.toRadians(lat2);
-        double longDiff = Math.toRadians(lon2 - lon1);
-        double y = Math.sin(longDiff)*Math.cos(latitude2);
-        double x = Math.cos(latitude1)*Math.sin(latitude2)-Math.sin(latitude1)*Math.cos(latitude2)*Math.cos(longDiff);
-        double resultDegree = (Math.toDegrees(Math.atan2(y, x))+360)%360;
-
-        double directionId = Math.round(resultDegree / 45);
+        double      latitude1 = Math.toRadians(lat1);
+        double      latitude2 = Math.toRadians(lat2);
+        double       longDiff = Math.toRadians(lon2 - lon1);
+        double              y = Math.sin(longDiff)*Math.cos(latitude2);
+        double              x = Math.cos(latitude1)*Math.sin(latitude2)
+                                - Math.sin(latitude1) * Math.cos(latitude2) * Math.cos(longDiff);
+        double   resultDegree = (Math.toDegrees(Math.atan2(y, x))+360)%360;
+        double    directionId = Math.round(resultDegree / 45);
 
         if (directionId < 0) {
             directionId = directionId + 8;
@@ -141,7 +141,7 @@ public class TourneeSerialisation {
     }
 
     private String direction (String card1, String card2) {
-        int diffIndex;
+        int    diffIndex;
         String directive;
 
         int indexCard1 = coordNames.indexOf(card1);
@@ -150,14 +150,14 @@ public class TourneeSerialisation {
         if(Objects.equals(card1, card2)) {
             diffIndex = 0;
         } else if(Objects.equals(card1, "N")) {
-            if(Math.abs(indexCard2) < Math.abs(indexCard2-(coordNames.size()-1))) {
+            if(Math.abs(indexCard2) < Math.abs(indexCard2 - (coordNames.size() - 1))) {
                 diffIndex = indexCard2 - 0;
             } else {
                 diffIndex = indexCard2 - (coordNames.size() - 1);
             }
         } else if(Objects.equals(card2, "N")) {
             if(Math.abs(0 - indexCard1) < Math.abs((coordNames.size() - 1) - indexCard1)) {
-                diffIndex = 0-indexCard1;
+                diffIndex = 0 - indexCard1;
             } else {
                 diffIndex = (coordNames.size() - 1) - indexCard1;
             }
