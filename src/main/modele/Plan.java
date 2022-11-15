@@ -88,6 +88,7 @@ public class Plan {
     	            }
     	        }
             }
+
             intersectionsGrises.remove(currentInter);
 	        intersectionsNoires.add(currentInter);
 	        
@@ -100,7 +101,9 @@ public class Plan {
 	    
 	    while(currentInter != depart.getIdIntersection()) {
 	        Segment seg = parents.get(currentInter);
+
 	        chemin.add(0, seg);
+
 	        currentInter = seg.getOrigine().getIdIntersection();
 	    }
 	    return chemin;
@@ -135,7 +138,7 @@ public class Plan {
             
             if(intersectionsVoisines.get(currentInter) != null) {
                 for(Segment seg : intersectionsVoisines.get(currentInter)) {
-                    Intersection voisin = seg.getDestination();
+                    Intersection   voisin = seg.getDestination();
                     Long 		 idVoisin = voisin.getIdIntersection();
                     
                     if(!intersectionsNoires.contains(idVoisin)) {
@@ -300,8 +303,8 @@ public class Plan {
 			long idCourrant = intersectionsGrises.poll();
 			if(intersectionsVoisines.get(idCourrant) != null) {
 				for(Segment seg : intersectionsVoisines.get(idCourrant)) {
-					Intersection voisin = seg.getDestination();
-					Long idVoisin = voisin.getIdIntersection();
+					Intersection 	 voisin = seg.getDestination();
+					Long 	   	   idVoisin = voisin.getIdIntersection();
 					float heuristiqueVoisin = calculHeuristique(voisin, arrivee);
 
 					if(idVoisin == arrivee.getIdIntersection()) {
