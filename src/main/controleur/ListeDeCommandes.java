@@ -23,12 +23,12 @@ public class ListeDeCommandes {
     }
     public void undoCommande(){
         if (i >= 0) {
-            listeCommandes.get(i).undoCommande();;
+            listeCommandes.get(i-1).undoCommande();;
             i--;
         }
     }
     public  void redoCommande(){
-        listeCommandes.get(i).doCommande();
+        listeCommandes.get(i-1).doCommande();
         i++;
     }
 
