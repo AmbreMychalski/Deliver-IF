@@ -31,6 +31,7 @@ public class EtatTourneesCalculees extends Etat{
             c.vue.tableViewLivraisons.getSelectionModel().select(livraisonsAssociees.get(0));
             this.selectionnerDemande(c, true);
             c.changementEtat(c.etatDemandeLivraisonSelectionneeAvecTournees);
+            this.selectionTrajet(c);
         } else if (livraisonsAssociees.size() > 1) {
             FenetrePlusieursLivraisonsAuMemeEndroit.display(c, null, livraisonsAssociees, false);
         }
