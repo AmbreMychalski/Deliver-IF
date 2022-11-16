@@ -11,9 +11,9 @@ public abstract class TemplateTSP implements TSP {
 	private int limiteTemps;
 	private long heureDebut;
 	
-	public void searchSolution(int timeLimit, Graphe g) {
+	public boolean searchSolution(int timeLimit, Graphe g) {
 		if (timeLimit <= 0) {
-			return;
+			return false;
 		}
 
 		heureDebut = System.currentTimeMillis();
@@ -35,6 +35,14 @@ public abstract class TemplateTSP implements TSP {
 
 		branchAndBound(visited.get(visited.size()-1), nonVisites, visited,
 				0);
+
+		boolean solutionTrouvee = true;
+		if(coutMeilleureSolution == Integer.MAX_VALUE) {
+			System.out.println("Le TSP n'a pas trouvé de solution");
+			solutionTrouvee = false;
+		}
+
+		return solutionTrouvee;
 	}
 	
 	public Integer getSolution(int i) {
@@ -78,14 +86,13 @@ public abstract class TemplateTSP implements TSP {
 	 * @param visites the sequence of vertices that have been already visited (including currentVertex)
 	 * @param coutCourant the cost of the path corresponding to <code>visited</code>
 	 */	
-	private void branchAndBound(int sommetCourant, Collection<Integer> nonVisites,
+	private void  branchAndBound(int sommetCourant, Collection<Integer> nonVisites,
 			Collection<Integer> visites, float coutCourant) {
 		if (System.currentTimeMillis() - heureDebut > limiteTemps) {
 		    if(coutMeilleureSolution == Integer.MAX_VALUE) {
 		        System.out.println("Le TSP n'a pas trouvé de solution");
+				return;
 		    }
-
-		    return;
 		}
 	    if (nonVisites.size() == 0) {
 	    	if (g.estUnArc(sommetCourant,0)) {

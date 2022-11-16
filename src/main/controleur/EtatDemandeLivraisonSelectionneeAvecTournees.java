@@ -50,6 +50,7 @@ public class EtatDemandeLivraisonSelectionneeAvecTournees extends Etat {
                 }
             }
             c.vue.comboboxAssignerLivreur.getSelectionModel().select(null);
+            c.viderListeDeCommandes();
         }
     }
     public  void touchePressee(ControleurFenetrePrincipale c, KeyEvent ke) {

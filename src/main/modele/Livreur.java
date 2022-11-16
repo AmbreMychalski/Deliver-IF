@@ -138,7 +138,6 @@ public class Livreur extends Observable {
 
     public static void reinitializeNbLivreurs(){
         nbLivreur = 0;
-        System.out.println(nbLivreur);
     }
 }
 

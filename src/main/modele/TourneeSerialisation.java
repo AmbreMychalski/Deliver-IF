@@ -59,16 +59,25 @@ public class TourneeSerialisation {
                         + " à " + liv.getHeureAffichee());
             }
 
+            String nomsRues = obtenirNomsRuesIntersection(liv.getDemandeLivraison().getIntersection());
+            out.print(i + "/");
+            out.print(nomsRues);
+            out.println(" à " + liv.getHeureAffichee());
             i++;
         }
 
-        out.println("\n *******************************************************");
-        out.println("****************** Itinéraire détaillé **************** \n");
-        out.println("La tournée est composée de " + tournee.getTrajets().size() + " trajets : \n");
+        out.println();
+        out.println("********************************* Itinéraire détaillé *****************************************");
+        out.println("La tournée est composée de " + tournee.getTrajets().size() + " trajet(s) : ");
 
         int j = 1;
-
         for(Trajet trajet : tournee.getTrajets()) {
+            out.println("***********************************************************************************************");
+            out.println("| -- " + j + ((j==1)?"er":"ème") + " trajet : -- |");
+            out.println("De "
+                    + this.obtenirNomsRuesIntersection(trajet.getDepart())+ " à "
+                    + this.obtenirNomsRuesIntersection(trajet.getArrivee())
+                    );
 
             List<String> rues1 = plan.obtenirRuesIntersection(trajet.getDepart());
             List<String> rues2 = plan.obtenirRuesIntersection(trajet.getArrivee());
@@ -102,7 +111,7 @@ public class TourneeSerialisation {
 
                 if(a == 0) {
                     out.print((a + 1) + "/ ");
-                    out.print("Prenez la rue " + segment.getNom() + " direction "
+                    out.print("Prenez " + ((segment.getNom()==null || segment.getNom().isEmpty())?"[rue inconnue]":segment.getNom()) + " direction "
                             + coord.get(direction) + " sur ");
                     somme = segment.getLongueur();
                     a++;
@@ -113,39 +122,55 @@ public class TourneeSerialisation {
                         if (premiereSomme) {
                             out.println((int) somme + " mètres.");
                             premiereSomme = false;
-                            phraseDirection = direction(directionPrecedente,direction);
                         } else {
                             out.print((a + 1) + "/ ");
                             out.println(phraseDirection
                                     + mot_liaison[(int) (Math.random() * (mot_liaison.length - 1))]
-                                    + ruePrecedente
+                                    + ((ruePrecedente==null ||ruePrecedente.isEmpty())?"[rue inconnue]":ruePrecedente)
                                     + " sur " + (int) somme + " mètres.");
                             a++;
-                            phraseDirection = direction(directionPrecedente, direction);
                         }
+                        phraseDirection = direction(directionPrecedente,direction);
                         somme = segment.getLongueur();
                     }
                     if(segment == trajet.segments.get(trajet.getSegments().size()-1)) {
                         out.print((a + 1) + "/ ");
                         out.println(direction(directionPrecedente, direction)
                                 + mot_liaison[(int) (Math.random() * (mot_liaison.length - 1))]
-                                + segment.getNom()
+                                + ((segment.getNom()==null || segment.getNom().isEmpty())?"[rue inconnue]":segment.getNom())
                                 + " sur " + (int) somme + " mètres.");
+                        if(j <= tournee.getLivraisons().size()){
+                            out.println("Vous devez déposer le colis à " + tournee.getLivraisons().get(j-1).getHeureAffichee());
+                        }else{
+                            out.println("Vous rejoignez le dépot, vous pouvez vous reposer ;-)");
+                        }
                     }
                 }
-
                 ruePrecedente = segment.getNom();
                 directionPrecedente = direction;
             }
 
             j++;
-
-            out.println();
-            out.println("*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/");
             out.println();
         }
         out.close();
         return writer.toString();
+    }
+
+    private String obtenirNomsRuesIntersection(Intersection intersection) {
+        List<String> rues = plan.obtenirRuesIntersection(intersection);
+        String texte;
+        if((rues.get(0) == null || rues.get(0).isEmpty())
+                && (rues.get(1) == null || rues.get(1).isEmpty())){
+            texte = "Aucune rue associée";
+        }else if(rues.get(1) == null || rues.get(1).isEmpty()){
+            texte = "Au bout de " + rues.get(0);
+        }else if(rues.get(0) == null|| rues.get(0).isEmpty()){
+            texte = "Au bout de "+ rues.get(1);
+        }else {
+            texte = "Croisement "+rues.get(0) + " et "+ rues.get(1);
+        }
+        return texte;
     }
 
     /**

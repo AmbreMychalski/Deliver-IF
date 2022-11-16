@@ -53,11 +53,7 @@ public class Plan {
 	public boolean estLivrable(Intersection intersection) {
 		if(!sontConnectee(intersection, this.entrepot)) {
 			return false;
-		} else if (!sontConnectee(this.entrepot, intersection)) {
-			return false;
-		}
-
-		return true;
+		} else return sontConnectee(this.entrepot, intersection);
 	}
 
 	/**
@@ -415,7 +411,6 @@ public class Plan {
 				rue2 = seg.getNom();
 			}
 		}
-
 		return Arrays.asList(rue1,rue2);
 	}
 }

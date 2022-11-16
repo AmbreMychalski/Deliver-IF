@@ -3,10 +3,10 @@ package controleur;
 import javafx.scene.input.MouseEvent;
 import modele.DemandeLivraison;
 import modele.Intersection;
-import modele.Livraison;
 import modele.Livreur;
+import vue.FenetrePlusieursLivraisonsAuMemeEndroit;
 
-import java.util.List;
+import java.util.ArrayList;
 
 public class EtatAvecDemande extends Etat {
     public EtatAvecDemande() {
@@ -23,16 +23,18 @@ public class EtatAvecDemande extends Etat {
 
     public void clicGaucheSurPlan(ControleurFenetrePrincipale c, MouseEvent event) {
         Intersection intersectionTrouvee = this.naviguerSurPlan(c, event, false);
-        DemandeLivraison demandeAssociee = null;
+        ArrayList<DemandeLivraison> demandesAssociees = new ArrayList<>();
         for (DemandeLivraison demande : c.vue.comboboxLivreur.getValue().getDemandeLivraisons()) {
             if (intersectionTrouvee == demande.getIntersection()) {
-                demandeAssociee = demande;
+                demandesAssociees.add(demande);
             }
         }
-        if (demandeAssociee != null) {
-            c.vue.tableViewDemandesLivraison.getSelectionModel().select(demandeAssociee);
+        if (demandesAssociees.size() == 1) {
+            c.vue.tableViewDemandesLivraison.getSelectionModel().select(demandesAssociees.get(0));
             this.selectionnerDemande(c, false);
             c.changementEtat(c.etatDemandeLivraisonSelectionneeSansTournees);
+        } else if (demandesAssociees.size() > 1) {
+            FenetrePlusieursLivraisonsAuMemeEndroit.display(c, demandesAssociees, null, false);
         }
     }
 
@@ -54,29 +56,29 @@ public class EtatAvecDemande extends Etat {
     public void calculerTournees(ControleurFenetrePrincipale c) {
         long startTime = System.currentTimeMillis();
         Livreur livreur = c.vue.comboboxLivreur.getValue();
-        boolean tourneeComplete;
-        tourneeComplete = c.journee.calculerTournee(livreur);
+        boolean tourneeCalcule;
+        tourneeCalcule = c.journee.calculerTournee(livreur);
 
-        ControleurFenetrePrincipale.LOGGER.debug("tourneeComplete = " + tourneeComplete);
+        ControleurFenetrePrincipale.LOGGER.debug("tourneeCalcule = " + tourneeCalcule);
         ControleurFenetrePrincipale.LOGGER.debug("Solution trouvé en :" + (System.currentTimeMillis() - startTime) + "ms ");
-
-        this.afficherTournee(c, livreur.getTournee());
-        c.changementEtat(c.etatTourneesCalculees);
-        c.vue.tableViewDemandesLivraison.setVisible(false);
-        c.vue.tableViewLivraisons.setVisible(true);
-        this.majComboboxLivreur(c);
+        
+        if (tourneeCalcule){
+            c.vue.afficherLivraisons(livreur, true);
+            c.changementEtat(c.etatTourneesCalculees);
+            c.vue.tableViewDemandesLivraison.setVisible(false);
+            c.vue.tableViewLivraisons.setVisible(true);
+            this.majComboboxLivreur(c);
+        }
+        else {
+            c.vue.labelGuideUtilisateur.setText("Il y a trop de demandes pour calculer la tournée");
+        }
     }
 
     public void clicSurLivreur(ControleurFenetrePrincipale c) {
         this.changementLivreur(c);
     }
 
-    public void chargerPlan(ControleurFenetrePrincipale c) {
-        try {
-            c.etatInitial.chargerPlan(c);
-        } catch (Exception e) {
-            c.vue.labelGuideUtilisateur.setText("Erreur lors du chargement du plan.");
-        }
-
+    public void chargerPlan(ControleurFenetrePrincipale c) throws Exception {
+        this.chargerNouveauPlan(c);
     }
 }

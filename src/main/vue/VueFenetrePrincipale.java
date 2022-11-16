@@ -2,9 +2,11 @@ package vue;
 
 
 import controleur.ControleurFenetrePrincipale;
+import exception.FichierNonConformeException;
 import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.scene.Cursor;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.*;
@@ -16,13 +18,16 @@ import javafx.scene.paint.Color;
 import javafx.scene.paint.CycleMethod;
 import javafx.scene.paint.LinearGradient;
 import javafx.scene.paint.Stop;
+import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import javafx.util.Callback;
 import lombok.Getter;
 import lombok.Setter;
 import modele.*;
 
+import java.io.File;
 import java.lang.reflect.Field;
+import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Observable;
@@ -32,20 +37,18 @@ import static controleur.ControleurFenetrePrincipale.LOGGER;
 
 public class VueFenetrePrincipale implements Observer {
 
-
     ControleurFenetrePrincipale controleur;
 
-    public final double TAILLE_RECT_PT_LIVRAISON = 8;
-    public final double TAILLE_RECT_PT_LIVRAISON_SELECTIONNE = 12;
-    public final double TAILLE_CERCLE_INTERSECTION_SELECTIONNEE = 8;
-    public final double TAILLE_CERCLE_INTERSECTION = 15;
+    public final double TAILLE_RECT_PT_LIVRAISON = 10;
+    public final double TAILLE_RECT_PT_LIVRAISON_SELECTIONNE = 14;
+    public final double TAILLE_CERCLE_INTERSECTION_SELECTIONNEE = 10;
+    public final double TAILLE_CERCLE_INTERSECTION = 14;
     public final Color COULEUR_DEPOT = Color.RED;
     public final Color COULEUR_SEGMENT = Color.BLACK;
     public final Color COULEUR_POINT_LIVRAISON_SELECTIONNE = Color.RED;
     /* Rayon en pixels définissant la zone où l'on
      reconnaît les intersections ciblées*/
     public final double RAYON_TOLERANCE_CLIC_INTERSECTION = 8;
-
     public enum FormeIntersection { RECTANGLE, CERCLE }
 
     @Getter
@@ -85,6 +88,8 @@ public class VueFenetrePrincipale implements Observer {
     public Button   buttonChargerDemandes;
     @FXML
     public Button   buttonAfficherFeuillesRoute;
+    @FXML
+    public Button buttonReinitAffPlan;
     @FXML
     public Button   buttonChargerPlan;
     @FXML
@@ -165,18 +170,22 @@ public class VueFenetrePrincipale implements Observer {
             try{
                 actionBoutonChargerDemande(event);
             } catch (Exception ex) {
-                LOGGER.error(ex);
+                LOGGER.error(ex.getMessage());
+                labelGuideUtilisateur.setText("Problème lors du chargement du fichier");
             }
         });
         buttonSauvegarderDemandes.setOnAction(this::actionBoutonSauvegarderDemandes);
         canvasIntersectionsLivraisons.setOnMouseClicked(this::actionClicSurCanvas);
         tableViewDemandesLivraison.setOnMouseClicked(this::actionClicTableau);
         tableViewLivraisons.setOnMouseClicked(this::actionClicTableau);
+        buttonReinitAffPlan.setOnAction(this::actionButtonReinitZoomPlan);
+        buttonReinitAffPlan.setVisible(false);
         buttonChargerPlan.setOnAction(event -> {
             try {
                 actionBoutonChargerPlan(event);
             } catch (Exception e) {
                 LOGGER.error(e);
+                labelGuideUtilisateur.setText("Impossible de charger le plan");
             }
         });
         buttonCalculerTournees.setOnAction(this::actionBoutonCalculerTournees);
@@ -278,8 +287,61 @@ public class VueFenetrePrincipale implements Observer {
             positionCouranteY = event.getY();
             positionCouranteX = event.getX();
         });
+
+        List<Control> controles = obtenirControlsVue();
+        for(Control controle : controles){
+                if(controle instanceof Button || controle instanceof TableView){
+                controle.setOnMouseEntered(event -> {
+                    if (!controle.isDisable()){
+                        this.getStage().getScene().setCursor(Cursor.HAND);
+                    }
+                });
+                controle.setOnMouseExited(event -> {
+                    this.getStage().getScene().setCursor(Cursor.DEFAULT);
+                });
+            }
+        }
     }
 
+    private void actionButtonReinitZoomPlan(ActionEvent actionEvent) {
+        dessinerPlan();
+        if(comboboxLivreur.getValue().getTournee() == null){
+            afficherDemandesLivraison(comboboxLivreur.getValue(), true);
+        }else{
+            afficherLivraisons(comboboxLivreur.getValue(), true);
+        }
+    }
+
+    public File choisirFichier(String titreFenetre) throws Exception {
+        File fichier;
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.setInitialDirectory(new File(System.getProperty("user.home")));
+        fileChooser.getExtensionFilters().add(
+                new FileChooser.ExtensionFilter("Fichier XML",
+                        "*.xml", "*.XML"));
+        fileChooser.setTitle(titreFenetre);
+        try {
+            fichier = fileChooser.showOpenDialog(this.stage);
+
+            if(fichier == null) {
+                throw new Exception();
+            }
+        } catch(Exception e) {
+            throw new FichierNonConformeException("Problème lors du choix du fichier.");
+        }
+        return fichier;
+    }
+
+    public void nettoyerToutesLesInformations(ControleurFenetrePrincipale c) {
+        GraphicsContext gc = canvasPlan.getGraphicsContext2D();
+        GraphicsContext gcTrajet = canvasPlanTrajet.getGraphicsContext2D();
+        GraphicsContext gcIntersection = canvasIntersectionsLivraisons.getGraphicsContext2D();
+        gc.clearRect(0, 0, canvasPlan.getWidth(), canvasPlan.getHeight());
+        gcTrajet.clearRect(0, 0, canvasPlanTrajet.getWidth(), canvasPlanTrajet.getHeight());
+        gcIntersection.clearRect(0, 0, canvasIntersectionsLivraisons.getWidth(), canvasIntersectionsLivraisons.getHeight());
+        textfieldIdentifiantIntersectionSelection.setText("");
+        textfieldPlageHoraire.setText("");
+    }
     private void actionDeplacerPlan(MouseEvent event) {
         double x =  event.getX();
         double y = event.getY();
@@ -288,10 +350,10 @@ public class VueFenetrePrincipale implements Observer {
         dernierePositionY = y;
         dernierePositionX = x;
         redessinerPlan(false, 0);
-        if(comboboxLivreur.getValue().getTournee() != null){
-            afficherLivraisons(comboboxLivreur.getValue(), true);
-        } else {
+        if(comboboxLivreur.getValue().getTournee() == null){
             afficherDemandesLivraison(comboboxLivreur.getValue(), true);
+        }else{
+            afficherLivraisons(comboboxLivreur.getValue(), true);
         }
     }
 
@@ -373,12 +435,7 @@ public class VueFenetrePrincipale implements Observer {
             gcTrajet.clearRect(0, 0, canvasPlanTrajet.getWidth(), canvasPlanTrajet.getHeight());
         }
         for(DemandeLivraison d: livreur.getDemandeLivraisons()) {
-            this.dessinerIntersection(gc,
-                    d.getIntersection(),
-                    d.getPlageHoraire().getCouleur(),
-                    this.TAILLE_RECT_PT_LIVRAISON,
-                    true,
-                    FormeIntersection.RECTANGLE);
+            this.dessinerDemandeLivraison(gc, d);
         }
     }
     public void afficherLivraisons(Livreur livreur, boolean nettoyerCanvas){
@@ -391,17 +448,29 @@ public class VueFenetrePrincipale implements Observer {
         List<Livraison> livraisons;
         if(livreur.getTournee() != null){
             livraisons = livreur.getTournee().getLivraisons();
-            dessinerTrajets(livreur.getTournee().getTrajets(), gcTrajets);
-
             for (Livraison l : livraisons) {
-                this.dessinerIntersection(gc,
-                        l.getDemandeLivraison().getIntersection(),
-                        l.getDemandeLivraison().getPlageHoraire().getCouleur(),
-                        this.TAILLE_RECT_PT_LIVRAISON,
-                        true,
-                        FormeIntersection.RECTANGLE);
+                this.dessinerLivraison(gc, l);
             }
+            dessinerDemandeLivraison(gc, livreur.getDemandeLivraisons().get(livreur.getDemandeLivraisons().size()-1));
+            dessinerTrajets(livreur.getTournee().getTrajets(), gcTrajets);
         }
+    }
+    public void dessinerDemandeLivraison(GraphicsContext gc, DemandeLivraison demande) {
+        dessinerIntersection(gc,
+                demande.getIntersection(),
+                demande.getPlageHoraire().getCouleur(),
+                this.TAILLE_RECT_PT_LIVRAISON,
+                true,
+                FormeIntersection.RECTANGLE);
+    }
+
+    private void dessinerLivraison(GraphicsContext gc, Livraison l) {
+        this.dessinerIntersection(gc,
+                l.getDemandeLivraison().getIntersection(),
+                l.getDemandeLivraison().getPlageHoraire().getCouleur(),
+                this.TAILLE_RECT_PT_LIVRAISON,
+                true,
+                FormeIntersection.RECTANGLE);
     }
 
     private void actionBoutonAjouterLivraison(ActionEvent event) {
@@ -764,6 +833,9 @@ public class VueFenetrePrincipale implements Observer {
 
         echelleLong =  canvasPlan.getWidth() / largeurPlan;
         echelleLat =  canvasPlan.getHeight() / hauteurPlan;
+
+        decalageX = 0;
+        decalageY = 0;
 
         canvasPlan.getGraphicsContext2D().clearRect(0,0, canvasPlan.getWidth(), canvasPlan.getHeight());
         for (Segment segment : controleur.getJournee().getPlan().getSegments()) {
