@@ -32,7 +32,7 @@ public class TourneeSerialisation {
     }
 
     /**
-     * Pour un livreur donné, génère la feuille de route
+     * Pour un livreur donné, génère la feuille de route.
      * @param livreur dont on veut sérialiser la tournée
      * @return le texte entier
      */
@@ -40,29 +40,52 @@ public class TourneeSerialisation {
         int i = 1;
         Tournee tournee = livreur.getTournee();
 
-        out.println("Sérialiseur de tournée");
+        out.println("Sérialiseur de tournée \n");
         out.println("***********************************************************");
-        out.println("Tournée du livreur : " + tournee.getLivraisons().get(0).getLivreur());
+        out.println("Tournée du livreur " + tournee.getLivraisons().get(0).getLivreur());
         out.println("*********** Liste des livraisons et horaire de livraison : *********** \n");
 
         for(Livraison liv : tournee.getLivraisons()) {
             List<String> rues = plan.obtenirRuesIntersection(liv.getDemandeLivraison().getIntersection());
-            out.println(i + "/ Croisement de la " + rues.get(0) + " et de la "
-                    + rues.get(1) + " à " + liv.getHeureAffichee());
+
+            if(rues.get(0) != null && rues.get(1) != null) {
+                out.println(i + "/ Croisement de la " + rues.get(0) + " et de la "
+                        + rues.get(1) + " à " + liv.getHeureAffichee());
+            } else if(rues.get(1) == null) {
+                out.println(i + "/ Croisement de la " + rues.get(0)
+                        + " à " + liv.getHeureAffichee());
+            } else if(rues.get(0) == null) {
+                out.println(i + "/ Croisement de la " + rues.get(1)
+                        + " à " + liv.getHeureAffichee());
+            }
+
             i++;
         }
 
-        out.println("*******************************************************");
-        out.println("****************** Itinéraire détaillé ****************");
+        out.println("\n *******************************************************");
+        out.println("****************** Itinéraire détaillé **************** \n");
         out.println("La tournée est composée de " + tournee.getTrajets().size() + " trajets : \n");
 
         int j = 1;
 
         for(Trajet trajet : tournee.getTrajets()) {
-            out.println("///--- /" + j + "/ de "
-                    + plan.obtenirRuesIntersection(trajet.getDepart())+ " à "
-                    + plan.obtenirRuesIntersection(trajet.getArrivee())
-                    + "-----/// \n");
+
+            List<String> rues1 = plan.obtenirRuesIntersection(trajet.getDepart());
+            List<String> rues2 = plan.obtenirRuesIntersection(trajet.getArrivee());
+
+            out.print("///--- /" + j + "/ de " + rues1.get(0));
+
+            if(rues1.get(1) != null) {
+                out.print(", " + rues1.get(1));
+            }
+
+            out.print(" à " + rues2.get(0));
+
+            if(rues2.get(1) != null) {
+                out.print(", " + rues2.get(1) + "-----/// \n \n");
+            } else {
+                out.println("-----/// \n");
+            }
 
             int                      a = 0;
             String directionPrecedente = null;

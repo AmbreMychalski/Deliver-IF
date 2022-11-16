@@ -402,9 +402,8 @@ public class Plan {
 
 	public List<String> obtenirRuesIntersection(Intersection intersection) {
 		String rue1 = null;
-		//float longueurRue1 = 0;
 		String rue2 = null;
-		//float longueurRue2=0;
+
 		for(Segment seg : segments) {
 			if (rue1 == null && (Objects.equals(seg.getOrigine().getIdIntersection(),
 					intersection.getIdIntersection()))) {
