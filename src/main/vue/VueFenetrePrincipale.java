@@ -27,11 +27,7 @@ import modele.*;
 
 import java.io.File;
 import java.lang.reflect.Field;
-import java.nio.file.Files;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Observable;
-import java.util.Observer;
+import java.util.*;
 
 import static controleur.ControleurFenetrePrincipale.LOGGER;
 
@@ -142,7 +138,6 @@ public class VueFenetrePrincipale implements Observer {
     public Label labelRuesIntersection;
     @FXML
     public Label labelLivreurNouvelleDemande;
-
 
     @FXML
     private void initialize() {
@@ -643,15 +638,17 @@ public class VueFenetrePrincipale implements Observer {
 
 
     public void dessinerTrajetLatLong(GraphicsContext gc, LinearGradient color, double lat1, double long1,
-                                      double lat2, double long2) {
+                                      double lat2, double long2, int nombreOccurence, boolean dejaDessine) {
         dessinerSegmentGradientXY(gc, color, convertirLongitudeEnX(long1),
                 convertirLatitudeEnY(lat1),
                 convertirLongitudeEnX(long2),
-                convertirLatitudeEnY(lat2));
+                convertirLatitudeEnY(lat2),
+                nombreOccurence,
+                dejaDessine);
     }
 
-    public void dessinerTrajetLatLong(GraphicsContext gc, double lat1, double long1,
-                                      double lat2, double long2) {
+    public void dessinerSurbrillanceSegment(GraphicsContext gc, double lat1, double long1,
+                                            double lat2, double long2) {
         gc.setLineWidth(4);
         gc.setStroke(Color.GREEN);
         gc.strokeLine(convertirLongitudeEnX(long1),
@@ -678,10 +675,17 @@ public class VueFenetrePrincipale implements Observer {
     }
 
     private void dessinerSegmentGradientXY(GraphicsContext gc, LinearGradient color, double x1, double y1,
-                                           double x2, double y2) {
+                                           double x2, double y2, int nombreOccurence, boolean dejaDessine) {
 
-        gc.setLineWidth(3);
         gc.setStroke(color);
+        if(nombreOccurence > 1){
+            gc.setLineDashes(20);
+            gc.setLineDashOffset(dejaDessine ? 20 : 0);
+            gc.setLineWidth(5);
+        }else{
+            gc.setLineWidth(4);
+            gc.setLineDashes();
+        }
         gc.strokeLine(x1, y1, x2, y2);
     }
 
@@ -737,15 +741,43 @@ public class VueFenetrePrincipale implements Observer {
             }
         }
     }
+    private boolean segmentOuInverseDejaDessines(List<Segment> segmentsDessines, Segment segment){
+        for(Segment segment1 : segmentsDessines){
+            if(segment1.equals(segment)){
+                return true;
+            }if(segment1.getDestination() == segment.getOrigine() && segment.getDestination() == segment1.getOrigine()){
+                return true;
+            }
+        }
+        return false;
+    }
+    private int obtenirNombreSegmentSuperpose(List<Trajet> tournee, Segment segment){
+        int res=0;
+        for(Trajet trajet: tournee) {
+            for (Segment segment1 : trajet.getSegments()) {
+                if (segment.equals(segment1) || segment1.getDestination() == segment.getOrigine() && segment.getDestination() == segment1.getOrigine()) {
+                    res++;
+                }
+            }
+        }
+        return res;
+    }
     public void dessinerTrajets(List<Trajet> trajets, GraphicsContext gc) {
         int size = 0;
+        List<Segment> segmentsDessines = new ArrayList<>();
         for(Trajet trajet : trajets){
             size+=trajet.getSegments().size();
         }
         size++;
         List<Color> couleurs = new ArrayList<>();
         for(double i = 0; i< size; i++){
-            couleurs.add(new Color(1-(i/ size), (i/ size), (i/ size), 1));
+            if(i < size/3){
+                couleurs.add(new Color(0.5, Math.max(0.35, 1-2*i/size), 1, 1));
+            } else if (i >= size/3 && i < 2*size/3) {
+                couleurs.add(new Color((3.0/2*i/size),0.35, 1, 1));
+            }else{
+                couleurs.add(new Color(1,0.35, 1-3.0*((i-(2.0*size/3)+1)/size), 1));
+            }
         }
         List<LinearGradient> linearGradients = new ArrayList<>();
         for(int i = 1; i< size; i++){
@@ -753,16 +785,21 @@ public class VueFenetrePrincipale implements Observer {
             linearGradients.add(new LinearGradient(0, 0, 1, 0, true, CycleMethod.NO_CYCLE, stops));
         }
         int i=0;
+
         for (Trajet trajet : trajets) {
             List<Segment> segments = trajet.getSegments();
             for (Segment segment : segments) {
                 dessinerTrajetLatLong(gc, linearGradients.get(i),segment.getOrigine().getLatitude(),
                         segment.getOrigine().getLongitude(),
                         segment.getDestination().getLatitude(),
-                        segment.getDestination().getLongitude());
+                        segment.getDestination().getLongitude(),
+                        obtenirNombreSegmentSuperpose(trajets, segment),
+                        segmentOuInverseDejaDessines(segmentsDessines, segment));
+                segmentsDessines.add(segment);
                 i++;
             }
         }
+        gc.setLineDashes();
         double width = 100;
         int height = 20;
         int x_shift = 150;
@@ -774,10 +811,10 @@ public class VueFenetrePrincipale implements Observer {
         }
     }
 
-    public void dessinerTrajet (Trajet trajet, GraphicsContext gc){
+    public void dessinerSurbrillanceTrajet(Trajet trajet, GraphicsContext gc){
         List<Segment> segments = trajet.getSegments();
         for (Segment segment : segments) {
-            dessinerTrajetLatLong(gc, segment.getOrigine().getLatitude(),
+            dessinerSurbrillanceSegment(gc, segment.getOrigine().getLatitude(),
                     segment.getOrigine().getLongitude(),
                     segment.getDestination().getLatitude(),
                     segment.getDestination().getLongitude());
