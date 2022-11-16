@@ -254,7 +254,7 @@ public abstract class Etat {
 		Tournee tournee = livreur.getTournee();
 
 		int indexLivr = (tournee.getLivraisons()).indexOf(liv);
-		c.vue.dessinerTrajet(tournee.getTrajets().get(indexLivr), c.vue.canvasPlanTrajet.getGraphicsContext2D());
+		c.vue.dessinerSurbrillanceTrajet(tournee.getTrajets().get(indexLivr), c.vue.canvasPlanTrajet.getGraphicsContext2D());
 	}
 	protected boolean validerAjoutDemande(ControleurFenetrePrincipale c){
 		String champIdentifiant = c.vue.textfieldIdentifiantIntersection.getText();
