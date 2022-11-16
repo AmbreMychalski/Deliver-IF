@@ -69,6 +69,9 @@ public class EtatAvecDemande extends Etat {
             c.vue.tableViewLivraisons.setVisible(true);
             this.majComboboxLivreur(c);
         }
+        else {
+            c.vue.labelGuideUtilisateur.setText("Il y a trop de demandes pour calculer la tournée");
+        }
     }
 
     public void clicSurLivreur(ControleurFenetrePrincipale c) {
