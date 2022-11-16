@@ -1,121 +1,88 @@
-Bienvenue sur la super sérialiseur de tournée
-**********************************************
+Sérialiseur de tournée
+***********************************************************
 Tournée du livreur : 1
-Liste des livraisons et horaire de livraison: 
+*********** Liste des livraisons et horaire de livraison : *********** 
 
-1/ Croisement de la Place Marengo et de la Avenue Antoine de Saint-Exupéry à 0h00
-2/ Croisement de la Rue Baraban et de la null à 7h05
-3/ Croisement de la Avenue Georges Pompidou et de la Rue Gandolière à 8h04
-4/ Croisement de la Passage Feuillat et de la Rue de Domrémy à 10h04
-5/ Croisement de la Rue Philomène Magnin et de la Rue de l'Abbé Boisard à 11h04
-6/ Croisement de la Rue de Bonnel et de la Boulevard Vivier-Merle à 11h09
-************************************************
+1/ Croisement de la Place Bellecour Rue de la Barre et de la Rue Marcel-Gabriel Rivière Rue Bellecordière Place de l'Hôpital à 8h00
+2/ Croisement de la Rue Alexis Perroncel et de la null à 10h00
+3/ Croisement de la Avenue Lacassagne et de la Boulevard Pinel à 11h00
+*******************************************************
 ****************** Itinéraire détaillé ****************
-La tournée est composée de 7 trajets : 
-///--- /1/ de [Rue Feuillat, Rue Bara] à [Place Marengo, Avenue Antoine de Saint-Exupéry]-----///
-1/Prenez sur Rue Feuillat sur 153 mètres.
-2/Continuez tout droit vers Rue Feuillat sur 153 mètres.
-3/Continuez tout droit vers Rue Feuillat sur 0 mètres.
-4/Continuez tout droit, Rue Feuillat sur 0 mètres.
-5/Continuez tout droit, Rue Meunier sur 0 mètres.
-6/Continuez tout droit pour suivre Rue Meunier sur 0 mètres.
-7/Tournez  à gauche pour suivre Place des Maisons Neuves sur 0 mètres.
-8/Tournez  à droite, Rue Frédéric Mistral sur 0 mètres.
-9/Continuez tout droit pour suivre Rue Frédéric Mistral sur 0 mètres.
-10/Continuez tout droit sur Rue Frédéric Mistral sur 0 mètres.
-11/Continuez tout droit pour suivre Rue Frédéric Mistral sur 0 mètres.
-12/Tournez légèrement à gauche sur Avenue Marc Sangnier sur 0 mètres.
-13/Tournez  à droite sur Place Marengo sur 0 mètres.
-///--- /2/ de [Place Marengo, Avenue Antoine de Saint-Exupéry] à [Rue Baraban, null]-----///
-1/Prenez sur Place Marengo sur 14 mètres.
-2/Tournez légèrement à droite pour suivre Place Marengo sur 14 mètres.
-3/Tournez légèrement à droite pour suivre Place Marengo sur 0 mètres.
-4/Tournez légèrement à gauche sur Rue François Gillet sur 0 mètres.
-5/Continuez tout droit vers Rue François Gillet sur 0 mètres.
-6/Tournez légèrement à droite vers Place de la Ferrandière sur 0 mètres.
-7/Tournez légèrement à gauche, Place de la Ferrandière sur 0 mètres.
-8/Continuez tout droit pour suivre Place de la Ferrandière sur 0 mètres.
-9/Continuez tout droit pour suivre Place de la Ferrandière sur 0 mètres.
-10/Tournez légèrement à gauche, Place de la Ferrandière sur 0 mètres.
-11/Continuez tout droit pour suivre Place de la Ferrandière sur 0 mètres.
-12/Tournez légèrement à droite pour suivre Avenue Georges Pompidou sur 0 mètres.
-13/Tournez  à gauche, Rue Baraban sur 0 mètres.
-///--- /3/ de [Rue Baraban, null] à [Avenue Georges Pompidou, Rue Gandolière]-----///
-1/Prenez sur Rue Baraban sur 29 mètres.
-2/Tournez  à gauche, Avenue Georges Pompidou sur 29 mètres.
-3/Continuez tout droit vers Avenue Georges Pompidou sur 0 mètres.
-///--- /4/ de [Avenue Georges Pompidou, Rue Gandolière] à [Passage Feuillat, Rue de Domrémy]-----///
-1/Prenez sur Avenue Georges Pompidou sur 48 mètres.
-2/Tournez  à droite pour suivre Rue Étienne Richerand sur 48 mètres.
-3/Continuez tout droit, Rue Étienne Richerand sur 0 mètres.
-4/Tournez  à gauche vers Rue Antoine Charial sur 0 mètres.
-5/Continuez tout droit sur Rue Antoine Charial sur 0 mètres.
-6/Continuez tout droit vers Rue Antoine Charial sur 0 mètres.
-7/Tournez  à droite sur Rue Turbil sur 0 mètres.
-8/Continuez tout droit sur Rue Turbil sur 0 mètres.
-9/Continuez tout droit sur Place Rouget de l'Isle sur 0 mètres.
-10/Tournez légèrement à gauche, Avenue Lacassagne sur 0 mètres.
-11/Continuez tout droit vers Avenue Lacassagne sur 0 mètres.
-12/Continuez tout droit pour suivre Avenue Lacassagne sur 0 mètres.
-13/Continuez tout droit sur Avenue Lacassagne sur 0 mètres.
-14/Continuez tout droit sur Avenue Lacassagne sur 0 mètres.
-15/Continuez tout droit pour suivre Avenue Lacassagne sur 0 mètres.
-16/Tournez  à gauche, Rue de Domrémy sur 0 mètres.
-///--- /5/ de [Passage Feuillat, Rue de Domrémy] à [Rue Philomène Magnin, Rue de l'Abbé Boisard]-----///
-1/Prenez sur Rue de Domrémy sur 67 mètres.
-2/Tournez  à gauche vers Avenue Lacassagne sur 67 mètres.
-3/Tournez légèrement à droite sur Rue du Docteur Rebatel sur 0 mètres.
-4/Continuez tout droit pour suivre Rue du Docteur Rebatel sur 0 mètres.
-5/Continuez tout droit, Rue du Docteur Rebatel sur 0 mètres.
-6/Continuez tout droit vers Rue du Docteur Rebatel sur 0 mètres.
-7/Continuez tout droit pour suivre Rue du Docteur Rebatel sur 0 mètres.
-8/Continuez tout droit sur Rue du Docteur Rebatel sur 0 mètres.
-9/Tournez  à droite vers Rue Saint-Maximin sur 0 mètres.
-10/Continuez tout droit, Rue Saint-Maximin sur 0 mètres.
-11/Continuez tout droit pour suivre Rue Saint-Maximin sur 0 mètres.
-12/Continuez tout droit sur Rue Saint-Maximin sur 0 mètres.
-13/Tournez légèrement à droite sur Rue Saint-Maximin sur 0 mètres.
-14/Tournez légèrement à gauche pour suivre Rue du Dauphiné sur 0 mètres.
-15/Continuez tout droit, Rue du Dauphiné sur 0 mètres.
-16/Tournez  à gauche, Rue du Général Mouton-Duvernet sur 0 mètres.
-17/Continuez tout droit pour suivre Rue du Général Mouton-Duvernet sur 0 mètres.
-18/Tournez complètement à droite, Cours Albert Thomas sur 0 mètres.
-19/Continuez tout droit,  sur 0 mètres.
-20/Tournez légèrement à gauche, Cours Gambetta sur 0 mètres.
-21/Tournez légèrement à droite sur Cours Gambetta sur 0 mètres.
-22/Tournez complètement à droite vers Rue de l'Abbé Boisard sur 0 mètres.
-23/Continuez tout droit, Rue de l'Abbé Boisard sur 0 mètres.
-///--- /6/ de [Rue Philomène Magnin, Rue de l'Abbé Boisard] à [Rue de Bonnel, Boulevard Vivier-Merle]-----///
-1/Prenez sur Rue de l'Abbé Boisard sur 50 mètres.
-2/Tournez  à droite pour suivre Boulevard Vivier-Merle sur 50 mètres.
-3/Tournez légèrement à gauche sur  sur 0 mètres.
-4/Tournez complètement à gauche sur Boulevard Vivier-Merle sur 0 mètres.
-5/Continuez tout droit pour suivre Boulevard Vivier-Merle sur 0 mètres.
-6/Continuez tout droit sur Boulevard Vivier-Merle sur 0 mètres.
-7/Continuez tout droit, Boulevard Vivier-Merle sur 0 mètres.
-8/Continuez tout droit sur Boulevard Vivier-Merle sur 0 mètres.
-9/Continuez tout droit pour suivre Boulevard Vivier-Merle sur 0 mètres.
-10/Continuez tout droit sur Boulevard Vivier-Merle sur 0 mètres.
-11/Continuez tout droit vers Boulevard Vivier-Merle sur 0 mètres.
-12/Continuez tout droit pour suivre Boulevard Vivier-Merle sur 0 mètres.
-///--- /7/ de [Rue de Bonnel, Boulevard Vivier-Merle] à [Rue Feuillat, Rue Bara]-----///
-1/Prenez sur Rue de Bonnel sur 207 mètres.
-2/Tournez légèrement à droite pour suivre Rue de Bonnel sur 207 mètres.
-3/Continuez tout droit sur Rue de Bonnel sur 0 mètres.
-4/Tournez  à droite vers Rue de la Villette sur 0 mètres.
-5/Tournez légèrement à gauche vers Rue de la Villette sur 0 mètres.
-6/Tournez légèrement à droite pour suivre Rue de la Villette sur 0 mètres.
-7/Tournez  à gauche sur Rue Paul Bert sur 0 mètres.
-8/Tournez légèrement à droite, Avenue Lacassagne sur 0 mètres.
-9/Continuez tout droit, Avenue Lacassagne sur 0 mètres.
-10/Continuez tout droit vers Avenue Lacassagne sur 0 mètres.
-11/Continuez tout droit sur Avenue Lacassagne sur 0 mètres.
-12/Continuez tout droit pour suivre Avenue Lacassagne sur 0 mètres.
-13/Continuez tout droit pour suivre Avenue Lacassagne sur 0 mètres.
-14/Continuez tout droit vers Avenue Lacassagne sur 0 mètres.
-15/Continuez tout droit vers Avenue Lacassagne sur 0 mètres.
-16/Continuez tout droit vers Avenue Lacassagne sur 0 mètres.
-17/Continuez tout droit vers Avenue Lacassagne sur 0 mètres.
-18/Continuez tout droit vers Avenue Lacassagne sur 0 mètres.
-19/Continuez tout droit, Avenue Lacassagne sur 0 mètres.
-20/Continuez tout droit sur Avenue Lacassagne sur 0 mètres.
+La tournée est composée de 4 trajets : 
+
+///--- /1/ de [Rue Feuillat, Rue Bara] à [Place Bellecour Rue de la Barre, Rue Marcel-Gabriel Rivière Rue Bellecordière Place de l'Hôpital]-----/// 
+
+1/ Prenez la rue Rue Feuillat direction Sud sur 64 mètres.
+2/ Tournez  à droite pour suivre Rue Fiol sur 174 mètres.
+3/ Tournez  à gauche sur Rue du Docteur Rebatel sur 224 mètres.
+4/ Tournez  à droite vers Rue Saint-Maximin sur 675 mètres.
+5/ Tournez  légèrement à gauche sur Rue du Dauphiné sur 311 mètres.
+6/ Tournez  à gauche sur Rue du Général Mouton-Duvernet sur 61 mètres.
+7/ Tournez  complètement à droite, Cours Albert Thomas sur 66 mètres.
+8/ Continuez tout droit vers  sur 10 mètres.
+9/ Tournez  légèrement à gauche, Cours Gambetta sur 1650 mètres.
+10/ Continuez tout droit, Cours Gambetta Pont de la Guillotière sur 192 mètres.
+11/ Tournez  légèrement à gauche, Pont de la Guillotière sur 97 mètres.
+12/ Continuez tout droit pour suivre Rue de la Barre sur 126 mètres.
+
+*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/
+
+///--- /2/ de [Place Bellecour Rue de la Barre, Rue Marcel-Gabriel Rivière Rue Bellecordière Place de l'Hôpital] à [Rue Alexis Perroncel, null]-----/// 
+
+1/ Prenez la rue Place Bellecour Rue de la Barre direction Ouest sur 104 mètres.
+2/ Continuez tout droit pour suivre Place Bellecour sur 26 mètres.
+3/ Tournez  à droite sur Rue du Président Édouard Herriot sur 300 mètres.
+4/ Tournez  à droite, Place de la République Rue Jean de Tournes sur 152 mètres.
+5/ Continuez tout droit sur Rue Stella sur 77 mètres.
+6/ Tournez  à gauche sur Rue Grolée sur 145 mètres.
+7/ Tournez  légèrement à droite pour suivre Rue du Président Carnot sur 209 mètres.
+8/ Tournez  légèrement à gauche vers Quai Jules Courmont sur 14 mètres.
+9/ Tournez  à droite, Pont Lafayette Quai Jules Courmont sur 230 mètres.
+10/ Continuez tout droit sur Cours Lafayette sur 870 mètres.
+11/ Tournez  légèrement à gauche sur Rue Juliette Récamier sur 351 mètres.
+12/ Tournez  légèrement à gauche, Place René Deroudille sur 25 mètres.
+13/ Tournez  légèrement à gauche sur Rue Juliette Récamier sur 336 mètres.
+14/ Continuez tout droit, Rue des Émeraudes sur 417 mètres.
+15/ Continuez tout droit sur Rue Gabriel Péri sur 289 mètres.
+16/ Tournez  légèrement à droite vers Rond-Point des Charpennes sur 24 mètres.
+17/ Tournez  légèrement à droite sur Cours André Philip sur 148 mètres.
+18/ Tournez  à gauche pour suivre Rue Pierre Larousse sur 100 mètres.
+19/ Tournez  à droite vers Place Wilson sur 18 mètres.
+20/ Continuez tout droit sur Rue Melzet sur 81 mètres.
+21/ Tournez  à gauche vers Rue Gervais Bussière sur 135 mètres.
+22/ Continuez tout droit vers Rue Alexis Perroncel sur 261 mètres.
+
+*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/
+
+///--- /3/ de [Rue Alexis Perroncel, null] à [Avenue Lacassagne, Boulevard Pinel]-----/// 
+
+1/ Prenez la rue Rue Alexis Perroncel direction Est sur 346 mètres.
+2/ Tournez  à droite sur Rue Mauvert sur 343 mètres.
+3/ Tournez  à gauche sur Rue Francis de Pressensé sur 220 mètres.
+4/ Tournez  à droite vers Rue Jean Bourgey sur 253 mètres.
+5/ Tournez  à droite vers Cours Émile Zola sur 6 mètres.
+6/ Tournez  à gauche, Rue Paul Verlaine sur 825 mètres.
+7/ Tournez  à gauche pour suivre Cours Tolstoï sur 331 mètres.
+8/ Tournez  à droite pour suivre Rue Antonin Perrin sur 764 mètres.
+9/ Continuez tout droit vers Rue Bonnand sur 710 mètres.
+10/ Tournez  à gauche, Rue Ferdinand Buisson sur 53 mètres.
+11/ Tournez  complètement à droite sur Rue Jean-Marc Bernard sur 160 mètres.
+12/ Tournez  légèrement à gauche, Avenue Lacassagne sur 838 mètres.
+13/ Tournez  à gauche pour suivre Boulevard Pinel sur 30 mètres.
+
+*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/
+
+///--- /4/ de [Avenue Lacassagne, Boulevard Pinel] à [Rue Feuillat, Rue Bara]-----/// 
+
+1/ Prenez la rue Avenue Lacassagne direction Ouest sur 519 mètres.
+2/ Tournez  légèrement à droite, Rue Constant sur 403 mètres.
+3/ Tournez  légèrement à droite, Rue Ferdinand Buisson sur 56 mètres.
+4/ Tournez  à gauche, Rue Charles Richard sur 152 mètres.
+5/ Tournez  à gauche pour suivre Cours Docteur Long sur 165 mètres.
+6/ Tournez  à droite, Rue Louise sur 76 mètres.
+7/ Tournez  légèrement à gauche sur Rue du Capitaine sur 78 mètres.
+8/ Continuez tout droit, Rue Jeanne d'Arc sur 629 mètres.
+9/ Continuez tout droit pour suivre Rue Feuillat sur 236 mètres.
+
+*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/
+

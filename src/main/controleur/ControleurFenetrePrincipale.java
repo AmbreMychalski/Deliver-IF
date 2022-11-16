@@ -33,6 +33,8 @@ public class ControleurFenetrePrincipale {
 	public static final Logger LOGGER = LogManager.getLogger(ControleurFenetrePrincipale.class);
 	final VueFenetrePrincipale vue;
 
+	private ListeDeCommandes listeCommandes = new ListeDeCommandes();
+
 	// Etats
 	Etat etatCourant;
 	final EtatInitial etatInitial = new EtatInitial();
@@ -69,6 +71,7 @@ public class ControleurFenetrePrincipale {
 					vue.buttonSauvegarderDemandes,
 					vue.buttonCalculerTournees,
 					vue.comboboxLivreur,
+					vue.buttonReinitAffPlan,
 					vue.buttonChargerPlan
 			)));
 			put(etatDemandeLivraisonSelectionneeSansTournees, new ArrayList<>(Arrays.asList(
@@ -101,7 +104,8 @@ public class ControleurFenetrePrincipale {
 					vue.buttonChargerPlan,
 					vue.buttonAutoriserAjouterLivraison,
 					vue.buttonChargerDemandes,
-					vue.comboboxLivreur
+					vue.comboboxLivreur,
+					vue.buttonReinitAffPlan
 			)));
 			put(etatSelectionLivraisonPourNouvelleDemande, new ArrayList<>(Arrays.asList(
 
@@ -110,7 +114,8 @@ public class ControleurFenetrePrincipale {
 					vue.buttonAfficherFeuillesRoute,
 					vue.buttonAutoriserAjouterLivraison,
 					vue.comboboxLivreur,
-					vue.buttonChargerPlan
+					vue.buttonChargerPlan,
+					vue.buttonReinitAffPlan
 			)));
 		}};
 
@@ -126,7 +131,9 @@ public class ControleurFenetrePrincipale {
 		this.vue.comboboxLivreur.getSelectionModel().selectFirst();
 	}
 
-
+	public void viderListeDeCommandes(){
+		this.listeCommandes.viderListeCommandes();
+	}
 	public void touchePressee(KeyEvent ke) {
 		etatCourant.touchePressee(this, ke);
 	}
@@ -204,4 +211,5 @@ public class ControleurFenetrePrincipale {
 	public void actionClicComboboxAssisgnerLivreur() {
 		etatCourant.clicSurComboboxAssignerLivreur(this);
 	}
+
 }

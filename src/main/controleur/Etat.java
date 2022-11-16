@@ -1,5 +1,6 @@
 package controleur;
 
+import exception.FichierNonConformeException;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.canvas.GraphicsContext;
@@ -11,7 +12,6 @@ import lombok.Getter;
 import modele.*;
 import vue.VueFenetrePrincipale;
 
-import java.awt.*;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
@@ -45,14 +45,6 @@ public abstract class Etat {
 	
 	public void calculerTournees(ControleurFenetrePrincipale c) {}
 	
-	public void afficherFeuillesRoute(ControleurFenetrePrincipale c) {}
-	
-	public void sauvegarderFeuillesRoute(ControleurFenetrePrincipale c) {}
-	
-	public void fermerFenetre(ControleurFenetrePrincipale c) {}
-	
-	public void quitterLogiciel(ControleurFenetrePrincipale c) {}
-	
 	public void modifierDemande(ControleurFenetrePrincipale c) {}
 
 	public void assignerAutreLivreur(ControleurFenetrePrincipale c) {}
@@ -80,7 +72,7 @@ public abstract class Etat {
 					break;
 				case M:
 				case SUBTRACT:
-					c.vue.redessinerPlan(true,0.66);
+					c.vue.redessinerPlan(true,0.6667);
 					if(c.vue.comboboxLivreur.getValue().getTournee() != null){
 						c.vue.afficherLivraisons(c.vue.comboboxLivreur.getValue(), true);
 					} else {
@@ -94,10 +86,6 @@ public abstract class Etat {
 
 	public void clicSurLivreur(ControleurFenetrePrincipale c) {}
 	public void clicSurComboboxAssignerLivreur(ControleurFenetrePrincipale controleurFenetrePrincipale) {
-	}
-	private void annulerModif(ControleurFenetrePrincipale c) {
-        c.vue.comboboxPlageHoraire.setDisable(true);
-        c.changementEtat(c.etatDemandeLivraisonSelectionneeSansTournees);
 	}
 
 	protected void sortieDeSelectionDemande(ControleurFenetrePrincipale c, boolean livraison){
@@ -118,19 +106,10 @@ public abstract class Etat {
 		c.vue.textfieldPlageHoraire.setText("");
 	}
 
-	protected  void afficherTournee(ControleurFenetrePrincipale c, Tournee tournee){
-		GraphicsContext gc = c.vue.canvasPlanTrajet.getGraphicsContext2D();
-		gc.clearRect(0, 0, c.vue.canvasPlanTrajet.getWidth(), c.vue.canvasPlanTrajet.getHeight());
-		if(tournee != null){
-			List<Trajet> trajets = tournee.getTrajets();
-			c.vue.dessinerTrajets(trajets, gc);
-		}
-	}
-
 	protected void sauvegarderListeDemandes(ControleurFenetrePrincipale c){
 		Livreur livreur = c.vue.comboboxLivreur.getValue();
 		FileChooser fileChooser = new FileChooser();
-		fileChooser.setInitialDirectory(new File(".\\data"));
+		fileChooser.setInitialDirectory(new File(System.getProperty("user.home")));
 		fileChooser.setTitle("Sauvegarder des demandes de livraison");
 		fileChooser.getExtensionFilters().add(
 				new FileChooser.ExtensionFilter("Fichier XML", "*.xml", "*.XML"));
@@ -183,7 +162,7 @@ public abstract class Etat {
 		c.vue.tableViewDemandesLivraison.setDisable(false);
 	}
 
-	protected boolean selectionnerDemande(ControleurFenetrePrincipale c, boolean livraison){
+	public boolean selectionnerDemande(ControleurFenetrePrincipale c, boolean livraison){
 		DemandeLivraison ligne = null;
 		Livraison liv = null;
 		Livreur livreur = c.vue.comboboxLivreur.getValue();
@@ -208,7 +187,7 @@ public abstract class Etat {
 				}else{
 					c.vue.afficherLivraisons(c.vue.comboboxLivreur.getValue(), true);
 				}
-
+				c.vue.comboboxAssignerLivreur.getSelectionModel().select(null);
 			}
 			c.vue.dessinerIntersection(
 					c.vue.canvasIntersectionsLivraisons.getGraphicsContext2D(),
@@ -230,11 +209,46 @@ public abstract class Etat {
 		return false;
 
 	}
+	protected  void chargerNouveauPlan(ControleurFenetrePrincipale c) throws Exception{
+		File fichier ;
+		try {
+			fichier = c.vue.choisirFichier("Choisir un plan");
+			LOGGER.info("Fichier choisi = " + fichier.getAbsolutePath());
+			Plan plan;
+			plan = new Plan(fichier);
+			if(plan.getEntrepot() != null) {
+				c.vue.nettoyerToutesLesInformations(c);
+				this.resetLabelRuesIntersection(c);
+				if (c.journee.getLivreurs().get(0).getDemandeLivraisons().size() != 0) {
+					c.journee = new Journee();
+					c.journee.ajouterObservateur(c.vue);
+					Livreur.reinitializeNbLivreurs();
+					Livreur liv = new Livreur();
+					liv.ajouterObservateur(c.vue);
+					c.journee.getLivreurs().add(liv);
+					c.etatCourant.majComboboxLivreur(c);
+					c.vue.comboboxLivreur.getSelectionModel().selectFirst();
+				}
+				c.journee.setPlan(plan);
+				c.vue.dessinerPlan();
+				c.vue.titledPaneEditionDemande.setVisible(true);
+				c.vue.titlePaneSelectionDemande.setVisible(true);
+				c.vue.buttonReinitAffPlan.setVisible(true);
+				c.vue.tableViewLivraisons.getItems().clear();
+				c.vue.tableViewLivraisons.refresh();
+				c.vue.tableViewDemandesLivraison.getItems().clear();
+				c.vue.tableViewDemandesLivraison.refresh();
+
+				c.changementEtat(c.etatSansDemande);
+			}
+		} catch (Exception ex) {
+			throw new FichierNonConformeException("Problème lors de la lecture du fichier");
+		}
+	}
 
 	protected void selectionTrajet(ControleurFenetrePrincipale c){
 		Livraison liv = c.vue.tableViewLivraisons.getSelectionModel()
 				.getSelectedItem();
-		liv.getDemandeLivraison().getIntersection();
 
 		Livreur livreur = c.vue.comboboxLivreur.getValue();
 		Tournee tournee = livreur.getTournee();
@@ -252,25 +266,36 @@ public abstract class Etat {
 			if(c.journee.getPlan().estLivrable(intersection)){
 				DemandeLivraison demande =
 						new DemandeLivraison(intersection, plageHoraire);
+				boolean dejaPresente = false;
+				for(DemandeLivraison demandeCrees : livreur.getDemandeLivraisons()){
+					if(demandeCrees.equals(demande)){
+						dejaPresente = true;
+					}
+				}
+				if(!dejaPresente) {
+					livreur.ajouterDemandeLivraison(demande);
 
-				livreur.ajouterDemandeLivraison(demande);
-
-				c.vue.comboboxPlageHoraire.setValue(null);
-				c.vue.tableViewDemandesLivraison.setDisable(false);
-				c.vue.tableViewLivraisons.setDisable(false);
-				c.vue.textfieldIdentifiantIntersection.setText("");
-				resetLabelRuesIntersection(c);
-				return true;
+					c.vue.comboboxPlageHoraire.setValue(null);
+					c.vue.tableViewDemandesLivraison.setDisable(false);
+					c.vue.tableViewLivraisons.setDisable(false);
+					c.vue.textfieldIdentifiantIntersection.setText("");
+					resetLabelRuesIntersection(c);
+					return true;
+				}else {
+					c.vue.labelGuideUtilisateur.setText("La demande est déjà présente");
+					LOGGER.warn("La demande est déjà présente");
+				}
 			}
 			else{
+				c.vue.labelGuideUtilisateur.setText("L'intersection n'est pas livrable");
 				LOGGER.warn("L'intersection n'est pas livrable");
 			}
 		} else {
+			c.vue.labelGuideUtilisateur.setText("Informations manquantes pour l'ajout de la demande");
 			LOGGER.warn("Informations manquantes pour l'ajout de la demande");
 		}
 		return false;
 	}
-
 	protected  Intersection naviguerSurPlan(ControleurFenetrePrincipale c,
 									MouseEvent event,
 									boolean tourneeCalculee){
@@ -320,23 +345,13 @@ public abstract class Etat {
 	protected void chargerDemandes(ControleurFenetrePrincipale c)
 			throws Exception {
 		Livreur livreur = c.vue.comboboxLivreur.getValue();
-		FileChooser fileChooser = new FileChooser();
-		fileChooser.setInitialDirectory(new File(".\\data"));
-		fileChooser.getExtensionFilters().add(
-				new FileChooser.ExtensionFilter("Fichier XML", "*.xml", "*.XML"));
-		fileChooser.setTitle("Charger des demandes de livraison");
-		File fichier = fileChooser.showOpenDialog(c.vue.getStage());
-		if (fichier == null) {
-			throw new Exception("Aucun fichier choisi");
-		}else{
-			LOGGER.info("Fichier choisi = " + fichier.getAbsolutePath());
-			ArrayList<DemandeLivraison> listeDemandes
-					= c.journee.chargerDemandesLivraison(fichier,livreur);
-			if (listeDemandes.size()==0){
-				throw  new Exception("Aucune demande de livraison dans le fichier");
-			}
+		File fichier = c.vue.choisirFichier("Charger des demandes de livraison");
+		LOGGER.info("Fichier choisi = " + fichier.getAbsolutePath());
+		ArrayList<DemandeLivraison> listeDemandes
+				= c.journee.chargerDemandesLivraison(fichier,livreur);
+		if (listeDemandes.size()==0){
+			throw  new Exception("Aucune demande de livraison dans le fichier");
 		}
-
 	}
 
 	protected void supprimerDemandeLivraison(ControleurFenetrePrincipale c, Livreur livreur){
@@ -353,21 +368,25 @@ public abstract class Etat {
 	protected void supprimerLivraison(ControleurFenetrePrincipale c) {
 		Livreur livreur = c.vue.comboboxLivreur.getValue();
 		Livraison livraisonASupp = c.vue.tableViewLivraisons.getSelectionModel().getSelectedItem();
-		if(livraisonASupp != null){
-			livreur.supprimerDemandeLivraison(livraisonASupp.getDemandeLivraison());
+		Commande commandeSupprimer = new CommandeSupprimer(c, livreur, livraisonASupp);
+		c.getListeCommandes().ajouterCommande(commandeSupprimer);
+	}
+
+	protected  void supprimerLivraison(ControleurFenetrePrincipale c, Livreur livreur, Livraison livraisonASupp){
+		if(livraisonASupp != null) {
 			c.journee.supprimerLivraisonTournee(livreur, livraisonASupp);
 			c.vue.textfieldIdentifiantIntersectionSelection.setText("");
 			c.vue.textfieldPlageHoraire.setText("");
-
-			this.sortieDeSelectionDemande(c,true);
-			if(livreur.getTournee() != null){
+			this.sortieDeSelectionDemande(c, true);
+			if (livreur.getTournee() != null) {
 				c.changementEtat(c.etatTourneesCalculees);
 			} else {
-				c.vue.canvasPlanTrajet.getGraphicsContext2D().clearRect(0,0, c.vue.canvasPlanTrajet.getWidth(), c.vue.canvasPlanTrajet.getHeight());
+				c.vue.canvasPlanTrajet.getGraphicsContext2D().clearRect(0, 0, c.vue.canvasPlanTrajet.getWidth(), c.vue.canvasPlanTrajet.getHeight());
 				c.changementEtat(c.etatSansDemande);
 			}
 		}
 	}
+
 
 	protected  void annulerAjout (ControleurFenetrePrincipale c){
 		c.vue.tableViewDemandesLivraison.setDisable(false);
@@ -404,9 +423,7 @@ public abstract class Etat {
 		for (int i = 1; i <= c.journee.getLivreurs().size(); i++) {
 			listStr.add(Integer.toString(i));
 		}
-		if(!c.journee.dernierLivreurEstSansTourneeCalculee()){
-			listStr.add(c.journee.getLivreurs().size()+1+" (nouveau livreur)");
-		}
+		listStr.add(c.journee.getLivreurs().size()+1+" (nouveau livreur)");
 		c.vue.comboboxAssignerLivreur.setItems(listStr);
 		c.vue.comboboxLivreur.setItems(listeLivreur);
 	}
@@ -434,7 +451,7 @@ public abstract class Etat {
 		}
 		miseAjourDonneesTableView(c, livreur);
 	}
-
+	public void selectionPourNouvelleDemande(ControleurFenetrePrincipale c, Livraison ligne){}
 	public void changementLivreur(ControleurFenetrePrincipale c){
 		Livreur livreur = c.vue.comboboxLivreur.getValue();
 		if(livreur != null){
@@ -448,6 +465,12 @@ public abstract class Etat {
 			}else{
 				c.changementEtat(c.etatTourneesCalculees);
 			}
+			c.viderListeDeCommandes();
 		}
+	}
+
+	public void undo(ListeDeCommandes liste) {
+	}
+	public void redo(ListeDeCommandes liste) {
 	}
 }

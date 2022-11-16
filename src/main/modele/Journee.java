@@ -83,8 +83,10 @@ public class Journee extends Observable {
 
                         if(this.plan.estLivrable(this.plan.getIntersections().get(intersectionId))) {
                             DemandeLivraison demande = new DemandeLivraison(this.plan.getIntersections().get(intersectionId), new PlageHoraire(heureDebut, heureFin));
-                            livreur.ajouterDemandeLivraison(demande);
-                            demandesAjoutees.add(demande);
+                            if(!livreur.getDemandeLivraisons().contains(demande)) {
+                                livreur.ajouterDemandeLivraison(demande);
+                                demandesAjoutees.add(demande);
+                            }
                         }
                     }
                 }
@@ -219,11 +221,10 @@ public class Journee extends Observable {
                                                     Livraison livrAvant,
                                                     Livreur livreur) {
 
-        Livraison livraison = new Livraison(dl,0,livrAvant.getLivreur(),
+        Livraison livraison = new Livraison(dl,0, livreur,
                 false);
 
         ajouterLivraisonTournee(livraison, livrAvant, livreur);
-
         return livraison;
     }
     /**
@@ -246,16 +247,22 @@ public class Journee extends Observable {
      */
     public void ajouterLivraisonTournee(Livraison livr, Livraison livrAvant,
                                         Livreur livreur) {
+
         livr.setLivreur(livreur);
         Tournee t = livreur.getTournee();
-        int index = t.getLivraisons().indexOf(livrAvant);
+        Intersection intersectionAmont;
+        int index;
 
-        // t.getLivraisons().add(index+1,livr);
+        if(livrAvant != null) {
+            index = t.getLivraisons().indexOf(livrAvant);
+            intersectionAmont =
+                    t.getLivraisons().get(index).getDemandeLivraison().getIntersection();
+        }else{
+            intersectionAmont = plan.getEntrepot();
+            index = -1;
+        }
         livreur.ajouterLivraisonTournee(index + 1, livr);
         t.getTrajets().remove(index + 1);
-
-        Intersection intersectionAmont =
-                t.getLivraisons().get(index).getDemandeLivraison().getIntersection();
         Intersection intersectionAval =
                 t.getLivraisons().get(index+1).getDemandeLivraison().getIntersection();
         List<Segment> lisSeg =
@@ -286,17 +293,11 @@ public class Journee extends Observable {
         }
 
         t.getTrajets().add(index + 2, new Trajet(lisSeg, dist,intersectionAmont, intersectionAval));
+        if(index == -1){
+            index = 0;
+        }
         this.majHeureLivraison(t, index);
     }
-
-    /**
-     * Vérifie si le dernier livreur a une tournée calculée
-     * @return true si le dernier livreurs n'a pas de tournée calculée, false sinon
-     */
-    public boolean dernierLivreurEstSansTourneeCalculee() {
-        return (this.livreurs.get(this.livreurs.size() - 1).getTournee() == null);
-    }
-
 
     /**
      * Permet de supprimer une livraison d'une tournée
@@ -305,7 +306,6 @@ public class Journee extends Observable {
      */
     public void supprimerLivraisonTournee(Livreur livreur, Livraison livr) {
         Tournee t = livreur.getTournee();
-
         if(t.getLivraisons().size() != 1) {
             int          index;
             Intersection intersectionAmont;
@@ -338,7 +338,6 @@ public class Journee extends Observable {
 
             t.getTrajets().add(index, new Trajet(lisSeg, dist,intersectionAmont, intersectionAval));
             this.majHeureLivraison(t, index);
-            notifierObservateurs("SuppressionLivraison");
         } else {
             livr.getLivreur().supprimerTournee();
         }

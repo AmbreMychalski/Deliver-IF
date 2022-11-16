@@ -1,12 +1,14 @@
 package controleur;
 
+import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
-import modele.DemandeLivraison;
 import modele.Intersection;
 import modele.Livraison;
-import modele.Livreur;
+import vue.FenetrePlusieursLivraisonsAuMemeEndroit;
 
-import java.util.List;
+import java.util.ArrayList;
+
+import static controleur.ControleurFenetrePrincipale.LOGGER;
 
 public class EtatTourneesCalculees extends Etat{
     public EtatTourneesCalculees() {
@@ -19,16 +21,18 @@ public class EtatTourneesCalculees extends Etat{
     }
     public void clicGaucheSurPlan(ControleurFenetrePrincipale c, MouseEvent event) {
         Intersection intersectionTrouvee = this.naviguerSurPlan(c, event, true);
-        Livraison livraisonAssociee = null;
+        ArrayList<Livraison> livraisonsAssociees = new ArrayList<>();
         for(Livraison livraison : c.vue.comboboxLivreur.getValue().getLivraisons()){
             if(intersectionTrouvee == livraison.getDemandeLivraison().getIntersection()){
-                livraisonAssociee = livraison;
+                livraisonsAssociees.add(livraison);
             }
         }
-        if (livraisonAssociee != null) {
-            c.vue.tableViewLivraisons.getSelectionModel().select(livraisonAssociee);
+        if (livraisonsAssociees.size() == 1) {
+            c.vue.tableViewLivraisons.getSelectionModel().select(livraisonsAssociees.get(0));
             this.selectionnerDemande(c, true);
             c.changementEtat(c.etatDemandeLivraisonSelectionneeAvecTournees);
+        } else if (livraisonsAssociees.size() > 1) {
+            FenetrePlusieursLivraisonsAuMemeEndroit.display(c, null, livraisonsAssociees, false);
         }
     }
     public void ajouterDemande(ControleurFenetrePrincipale c) {
@@ -49,11 +53,21 @@ public class EtatTourneesCalculees extends Etat{
         this.changementLivreur(c);
     }
 
-    public void chargerPlan(ControleurFenetrePrincipale c) {
-        try {
-            c.etatInitial.chargerPlan(c);
-        } catch(Exception e) {
-            c.vue.labelGuideUtilisateur.setText("Erreur lors du chargement du plan.");
+    public void touchePressee(ControleurFenetrePrincipale c, KeyEvent ke){
+        super.touchePressee(c,ke);
+        LOGGER.info(ke.getCode());
+        ListeDeCommandes liste = c.getListeCommandes();
+        switch(ke.getCode()) {
+            case E: //undo
+                liste.undoCommande();
+                break;
+            case R: //redo
+                liste.redoCommande();
+                break;
         }
+    }
+
+    public void chargerPlan(ControleurFenetrePrincipale c) throws Exception{
+        this.chargerNouveauPlan(c);
     }
 }
