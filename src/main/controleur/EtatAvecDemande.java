@@ -54,17 +54,19 @@ public class EtatAvecDemande extends Etat {
     public void calculerTournees(ControleurFenetrePrincipale c) {
         long startTime = System.currentTimeMillis();
         Livreur livreur = c.vue.comboboxLivreur.getValue();
-        boolean tourneeComplete;
-        tourneeComplete = c.journee.calculerTournee(livreur);
+        boolean tourneeCalcule;
+        tourneeCalcule = c.journee.calculerTournee(livreur);
 
-        ControleurFenetrePrincipale.LOGGER.debug("tourneeComplete = " + tourneeComplete);
+        ControleurFenetrePrincipale.LOGGER.debug("tourneeCalcule = " + tourneeCalcule);
         ControleurFenetrePrincipale.LOGGER.debug("Solution trouvé en :" + (System.currentTimeMillis() - startTime) + "ms ");
 
-        this.afficherTournee(c, livreur.getTournee());
-        c.changementEtat(c.etatTourneesCalculees);
-        c.vue.tableViewDemandesLivraison.setVisible(false);
-        c.vue.tableViewLivraisons.setVisible(true);
-        this.majComboboxLivreur(c);
+        if(tourneeCalcule) {
+            this.afficherTournee(c, livreur.getTournee());
+            c.changementEtat(c.etatTourneesCalculees);
+            c.vue.tableViewDemandesLivraison.setVisible(false);
+            c.vue.tableViewLivraisons.setVisible(true);
+            this.majComboboxLivreur(c);
+        }
     }
 
     public void clicSurLivreur(ControleurFenetrePrincipale c) {
