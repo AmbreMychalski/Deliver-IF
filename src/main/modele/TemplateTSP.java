@@ -101,11 +101,12 @@ public abstract class TemplateTSP implements TSP {
 	    			coutMeilleureSolution = coutCourant + g.getCout(sommetCourant,0);
 	    		}
 	    	}
-	    } else if (coutCourant+bound(sommetCourant,nonVisites,g.getMatriceCouts()) < coutMeilleureSolution) {
+	    } else if (coutCourant + bound(sommetCourant,nonVisites,g.getMatriceCouts()) < coutMeilleureSolution) {
 	        Iterator<Integer> it = iterator(sommetCourant, nonVisites, g);
 
 	        while (it.hasNext()) {
 	        	Integer sommetSuivant = it.next();
+
 	        	visites.add(sommetSuivant);
 	            nonVisites.remove(sommetSuivant);
 	            branchAndBound(sommetSuivant, nonVisites, visites,

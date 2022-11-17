@@ -413,8 +413,6 @@ public class Journee extends Observable {
             float dist = t.getTrajets().get(i).getLongueur();
             heureLivraison += dist / (15000.0f);
 
-            // Livraison vielleLivraison = new Livraison(t.getLivraisons().get(i));
-
             if(heureLivraison > t.getLivraisons().get(i).getDemandeLivraison()
                                  .getPlageHoraire().getFin()) {
                 t.getLivraisons().get(i).setDansSaPlageHoraire(false);

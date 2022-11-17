@@ -62,18 +62,16 @@ public class Plan {
 	 * le départ et l'arrivée
 	 */
 	public List<Segment> calculerPlusCourtChemin(Intersection depart, Intersection arrivee) {
-
 		if(depart == arrivee) {
 			return new LinkedList<Segment>();
 		}
 
 	    List <Segment>          chemin = new LinkedList<Segment>();
 	    HashMap<Long, Float>    distance = new HashMap<Long, Float>();
-        HashMap<Long, Segment>  parents = new HashMap<Long, Segment>(); // <Long idIntersection, Segment segParent>
-
+		// <Long idIntersection, Segment segParent>
+        HashMap<Long, Segment>  parents = new HashMap<Long, Segment>();
         Set<Long>               intersectionsGrises = new HashSet<Long>();
         Set<Long>               intersectionsNoires = new HashSet<Long>();
-        
         boolean                 arriveeIsBlack = false;
         
 	    for(Entry<Long, Intersection> entry : intersections.entrySet()) {
@@ -96,7 +94,7 @@ public class Plan {
     	                        < distance.get(successeur.getIdIntersection())
     	                        || distance.get(successeur.getIdIntersection()) == -1.0f) {
     	                    distance.put(successeur.getIdIntersection(), 
-    	                                 distance.get(currentInter)+seg.getLongueur());
+    	                                 distance.get(currentInter) + seg.getLongueur());
     	                    parents.put(successeur.getIdIntersection(), seg);
     	                }
     	                
@@ -117,10 +115,9 @@ public class Plan {
 	    
 	    while(currentInter != depart.getIdIntersection()) {
 	        Segment seg = parents.get(currentInter);
+			currentInter = seg.getOrigine().getIdIntersection();
 
 	        chemin.add(0, seg);
-
-	        currentInter = seg.getOrigine().getIdIntersection();
 	    }
 	    return chemin;
 	}
@@ -140,6 +137,7 @@ public class Plan {
         Set<Long>               intersectionsAVerifier = new HashSet<Long>();
         Set<Long>               intersectionsGrises = new HashSet<Long>();
         Set<Long>               intersectionsNoires = new HashSet<Long>();
+		Long					currentInter;
         
         for(Entry<Long, Intersection> entry : intersections.entrySet()) {
             distance.put(entry.getKey(), -1.0f);
@@ -155,14 +153,13 @@ public class Plan {
         
         while(intersectionsAVerifier.size() != 0
 				&& intersectionsGrises.size() != 0) {
-            
-            Long currentInter = obtenirIntersectionLaPlusProche(intersectionsGrises, distance);
+            currentInter = obtenirIntersectionLaPlusProche(intersectionsGrises, distance);
 
             intersectionsGrises.remove(currentInter);
             
             if(intersectionsVoisines.get(currentInter) != null) {
                 for(Segment seg : intersectionsVoisines.get(currentInter)) {
-                    Intersection   voisin = seg.getDestination();
+                    Intersection voisin = seg.getDestination();
                     Long 		 idVoisin = voisin.getIdIntersection();
                     
                     if(!intersectionsNoires.contains(idVoisin)) {
@@ -176,12 +173,12 @@ public class Plan {
                     }
                 }
             }
-            
+
             intersectionsGrises.remove(currentInter);
             intersectionsAVerifier.remove(currentInter);
             intersectionsNoires.add(currentInter);          
         }
-        
+
         HashMap<Intersection, Float> res = new HashMap<Intersection, Float>();
         
         for(Intersection inter : listIntersections) {
@@ -217,18 +214,23 @@ public class Plan {
 
 				if(node.getNodeType() == Node.ELEMENT_NODE) {
 					if(node.getNodeName() == "warehouse") {
-						entrepotId = Long.parseLong(node.getAttributes().getNamedItem("address").getNodeValue());
+						entrepotId = Long.parseLong(node.getAttributes()
+									     .getNamedItem("address").getNodeValue());
 					} else if(node.getNodeName() == "intersection") {
 						Long      intersectionId; 
 						float     latitude; 
 						float     longitude;
 						
 						attributs = node.getAttributes();
-						intersectionId = Long.parseLong(attributs.getNamedItem("id").getNodeValue());
-						latitude = Float.parseFloat(attributs.getNamedItem("latitude").getNodeValue());
-						longitude = Float.parseFloat(attributs.getNamedItem("longitude").getNodeValue());
+						intersectionId = Long.parseLong(attributs.getNamedItem("id")
+													    .getNodeValue());
+						latitude = Float.parseFloat(attributs.getNamedItem("latitude")
+												    .getNodeValue());
+						longitude = Float.parseFloat(attributs.getNamedItem("longitude")
+												     .getNodeValue());
 						
-						this.intersections.put(intersectionId, new Intersection(intersectionId, latitude, longitude));
+						this.intersections.put(intersectionId,
+								new Intersection(intersectionId, latitude, longitude));
 					} else if(node.getNodeName()== "segment") {
 						Long      destinationId; 
 						float     longueur; 
@@ -331,7 +333,8 @@ public class Plan {
 		}
 
 		distance.put(depart.getIdIntersection(), 0.0f);
-		distanceAndHeuristic.put(depart.getIdIntersection(), calculHeuristique(depart, arrivee));
+		distanceAndHeuristic.put(depart.getIdIntersection(),
+								 calculHeuristique(depart, arrivee));
 		intersectionsGrises.add(depart.getIdIntersection());
 
 		while(!intersectionsGrises.isEmpty()) {
@@ -350,8 +353,8 @@ public class Plan {
 					float f = g + heuristiqueVoisin;
 
 					if(!intersectionsNoires.contains(idVoisin)) {
-						if(g<distance.get(idVoisin)
-								||distanceAndHeuristic.get(idVoisin) == -1) {
+						if(g < distance.get(idVoisin)
+								|| distanceAndHeuristic.get(idVoisin) == -1) {
 							distance.put(idVoisin, g);
 							distanceAndHeuristic.put(idVoisin, f);
 							intersectionsGrises.add(idVoisin);
@@ -359,7 +362,6 @@ public class Plan {
 					}
 				}
 			}
-
 			intersectionsNoires.add(idCourant);
 		}
 
@@ -367,7 +369,8 @@ public class Plan {
 	}
 
 	/**
-	 * Permet de calculer l'heuristique pour deux intersections données
+	 * Permet de calculer l'heuristique pour deux intersections données, en
+	 * fonction des latitudes et longitudes
 	 * @param interCourant L'intersection courante
 	 * @param interCible L'intersection cible
 	 * @return la valeur de l'heuristique
@@ -390,9 +393,8 @@ public class Plan {
 
 	public List<String> obtenirRuesIntersection(Intersection intersection) {
 		String rue1 = null;
-		//float longueurRue1 = 0;
 		String rue2 = null;
-		//float longueurRue2=0;
+
 		for(Segment seg : segments) {
 			if (rue1 == null && (Objects.equals(seg.getOrigine().getIdIntersection(),
 					intersection.getIdIntersection()))) {

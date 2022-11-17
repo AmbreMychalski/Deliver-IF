@@ -3,7 +3,7 @@ package modele;
 public class ComparateurHeureLivraison implements java.util.Comparator<String> {
 
     /**
-     * Compare les heures.
+     * Traduit les heures (sous forme de String) en int avant de les comparer.
      * @param o1 L'heure par rapport à laquelle on compare
      * @param o2 L'heure que l'on compare
      * @return retourne la différence entre la première et la seconde.

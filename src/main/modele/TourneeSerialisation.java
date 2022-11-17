@@ -45,7 +45,8 @@ public class TourneeSerialisation {
         out.println("*********** Liste des livraisons et horaire de livraison *********** ");
 
         for(Livraison liv : tournee.getLivraisons()) {
-            String nomsRues = obtenirNomsRuesIntersection(liv.getDemandeLivraison().getIntersection());
+            String nomsRues = obtenirNomsRuesIntersection(liv.getDemandeLivraison()
+                                                          .getIntersection());
             out.print(i + "/");
             out.print(nomsRues);
             out.println(" à " + liv.getHeureAffichee());
@@ -54,7 +55,8 @@ public class TourneeSerialisation {
 
         out.println();
         out.println("********************************* Itinéraire détaillé *****************************************");
-        out.println("La tournée est composée de " + tournee.getTrajets().size() + " trajet(s) : ");
+        out.println("La tournée est composée de " + tournee.getTrajets().size()
+                    + " trajet(s) : ");
         int j = 1;
         for(Trajet trajet : tournee.getTrajets()) {
             out.println("***********************************************************************************************");
@@ -79,7 +81,10 @@ public class TourneeSerialisation {
 
                 if(a == 0) {
                     out.print((a + 1) + "/ ");
-                    out.print("Prenez " + ((segment.getNom()==null || segment.getNom().isEmpty())?"[rue inconnue]":segment.getNom()) + " direction "
+                    out.print("Prenez " + ((segment.getNom() == null
+                            || segment.getNom().isEmpty())
+                            ? "[rue inconnue]"
+                            : segment.getNom()) + " direction "
                             + coord.get(direction) + " sur ");
                     somme = segment.getLongueur();
                     a++;
@@ -94,23 +99,28 @@ public class TourneeSerialisation {
                             out.print((a + 1) + "/ ");
                             out.println(phraseDirection
                                     + mot_liaison[(int) (Math.random() * (mot_liaison.length - 1))]
-                                    + ((ruePrecedente==null ||ruePrecedente.isEmpty())?"[rue inconnue]":ruePrecedente)
+                                    + ((ruePrecedente == null
+                                        || ruePrecedente.isEmpty())
+                                        ? "[rue inconnue]":ruePrecedente)
                                     + " sur " + (int) somme + " mètres.");
                             a++;
                         }
                         phraseDirection = direction(directionPrecedente,direction);
                         somme = segment.getLongueur();
                     }
-                    if(segment == trajet.segments.get(trajet.getSegments().size()-1)) {
+                    if(segment == trajet.segments.get(trajet.getSegments().size() - 1)) {
                         out.print((a + 1) + "/ ");
                         out.println(direction(directionPrecedente, direction)
                                 + mot_liaison[(int) (Math.random() * (mot_liaison.length - 1))]
-                                + ((segment.getNom()==null || segment.getNom().isEmpty())?"[rue inconnue]":segment.getNom())
+                                + ((segment.getNom() == null
+                                    || segment.getNom().isEmpty())
+                                    ? "[rue inconnue]":segment.getNom())
                                 + " sur " + (int) somme + " mètres.");
-                        if(j <= tournee.getLivraisons().size()){
-                            out.println("Vous devez déposer le colis à " + tournee.getLivraisons().get(j-1).getHeureAffichee());
-                        }else{
-                            out.println("Vous rejoignez le dépot, vous pouvez vous reposer ;-)");
+                        if(j <= tournee.getLivraisons().size()) {
+                            out.println("Vous devez déposer le colis à "
+                                    + tournee.getLivraisons().get(j - 1).getHeureAffichee());
+                        } else {
+                            out.println("Vous rejoignez le dépôt, vous pouvez vous reposer ;-)");
                         }
                     }
                 }
@@ -168,7 +178,8 @@ public class TourneeSerialisation {
         double       longDiff = Math.toRadians(lon2 - lon1);
         double              y = Math.sin(longDiff)*Math.cos(latitude2);
         double              x = Math.cos(latitude1)*Math.sin(latitude2)
-                                - Math.sin(latitude1) * Math.cos(latitude2) * Math.cos(longDiff);
+                                - Math.sin(latitude1) * Math.cos(latitude2)
+                                * Math.cos(longDiff);
         double   resultDegree = (Math.toDegrees(Math.atan2(y, x))+360)%360;
         double    directionId = Math.round(resultDegree / 45);
 

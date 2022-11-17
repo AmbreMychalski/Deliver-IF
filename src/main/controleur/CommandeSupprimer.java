@@ -14,7 +14,8 @@ public class CommandeSupprimer implements Commande {
         this.livraison = livraison;
 
         if(livreur.getLivraisons().indexOf(livraison) - 1 >= 0) {
-            this.livraisonAvant = livreur.getLivraisons().get(livreur.getLivraisons().indexOf(livraison) - 1);
+            this.livraisonAvant = livreur.getLivraisons()
+                    .get(livreur.getLivraisons().indexOf(livraison) - 1);
         } else {
             this.livraisonAvant = null;
         }

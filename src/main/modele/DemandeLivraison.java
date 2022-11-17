@@ -19,7 +19,7 @@ public class DemandeLivraison {
 
     /**
      * Pour la demande de livraison courante, modifie son intersection et
-     * sa plage horaire
+     * sa plage horaire si celles fournies ne sont pas null.
      * @param intersection La nouvelle intersection (peut être vide)
      * @param plageHoraire La nouvelle plage horaire (peut être vide)
      */
@@ -45,7 +45,7 @@ public class DemandeLivraison {
     /**
      * Retourne la valeur de hashage pour l'intersection et la plage horaire
      * données.
-     * @return la valeur de hashage
+     * @return la valeur de hashage de la demande de livraison
      */
     @Override
     public int hashCode() {
