@@ -20,24 +20,24 @@ public class EtatSelectionLivraisonPourNouvelleDemande extends Etat{
 
     public void clicGaucheSurPlan(ControleurFenetrePrincipale c, MouseEvent event) {
         Intersection intersectionTrouvee = this.naviguerSurPlan(c, event, true);
-
-        if(intersectionTrouvee.equals(c.getJournee().getPlan().getEntrepot())) {
-            selectionPourNouvelleDemande(c, null);
-        }
-
-        ArrayList<Livraison> livraisonsAssociees = new ArrayList<>();
-
-        for(Livraison livraison : c.vue.comboboxLivreur.getValue().getLivraisons()) {
-            if(intersectionTrouvee == livraison.getDemandeLivraison().getIntersection()) {
-                livraisonsAssociees.add(livraison);
+            if (c.getJournee().getPlan().getEntrepot().equals(intersectionTrouvee)) {
+                selectionPourNouvelleDemande(c, null);
             }
-        }
+            if(intersectionTrouvee != null) {
+                ArrayList<Livraison> livraisonsAssociees = new ArrayList<>();
 
-        if (livraisonsAssociees.size() == 1) {
-            selectionPourNouvelleDemande(c, livraisonsAssociees.get(0));
-        } else if (livraisonsAssociees.size() > 1) {
-            FenetrePlusieursLivraisonsAuMemeEndroit.display(c, null, livraisonsAssociees, true);
-        }
+                for (Livraison livraison : c.vue.comboboxLivreur.getValue().getLivraisons()) {
+                    if (livraison.getDemandeLivraison().getIntersection().equals(intersectionTrouvee)) {
+                        livraisonsAssociees.add(livraison);
+                    }
+                }
+
+                if (livraisonsAssociees.size() == 1) {
+                    selectionPourNouvelleDemande(c, livraisonsAssociees.get(0));
+                } else if (livraisonsAssociees.size() > 1) {
+                    FenetrePlusieursLivraisonsAuMemeEndroit.display(c, null, livraisonsAssociees, true);
+                }
+            }
     }
 
     public void clicGaucheSurTableau(ControleurFenetrePrincipale c) {
