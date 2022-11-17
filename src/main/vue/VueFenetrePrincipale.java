@@ -122,6 +122,8 @@ public class VueFenetrePrincipale implements Observer {
     @FXML
     public ComboBox<Livreur>        comboboxLivreur;
     @FXML
+    public Button                   buttonNouveauLivreur;
+    @FXML
     public ComboBox<String>         comboboxAssignerLivreur;
     @FXML
     public TextField    textfieldIdentifiantIntersection;
@@ -170,6 +172,7 @@ public class VueFenetrePrincipale implements Observer {
                 labelGuideUtilisateur.setText("Problème lors du chargement du fichier");
             }
         });
+        buttonNouveauLivreur.setOnAction(this::actionBoutonNouveauLivreur);
         buttonSauvegarderDemandes.setOnAction(this::actionBoutonSauvegarderDemandes);
         canvasIntersectionsLivraisons.setOnMouseClicked(this::actionClicSurCanvas);
         tableViewDemandesLivraison.setOnMouseClicked(this::actionClicTableau);
@@ -310,6 +313,10 @@ public class VueFenetrePrincipale implements Observer {
         } else {
             afficherLivraisons(comboboxLivreur.getValue(), true);
         }
+    }
+
+    private void actionBoutonNouveauLivreur(ActionEvent event){
+        controleur.creerLivreur();
     }
 
     private void actionScroll(ScrollEvent event){
