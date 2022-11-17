@@ -13,6 +13,7 @@ import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.input.ScrollEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.CycleMethod;
@@ -32,6 +33,7 @@ import java.util.*;
 import static controleur.ControleurFenetrePrincipale.LOGGER;
 
 public class VueFenetrePrincipale implements Observer {
+
     ControleurFenetrePrincipale controleur;
 
     public final double TAILLE_RECT_PT_LIVRAISON = 10;
@@ -120,6 +122,8 @@ public class VueFenetrePrincipale implements Observer {
     @FXML
     public ComboBox<Livreur>        comboboxLivreur;
     @FXML
+    public Button                   buttonNouveauLivreur;
+    @FXML
     public ComboBox<String>         comboboxAssignerLivreur;
     @FXML
     public TextField    textfieldIdentifiantIntersection;
@@ -137,7 +141,7 @@ public class VueFenetrePrincipale implements Observer {
     public Label labelRuesIntersection;
     @FXML
     public Label labelLivreurNouvelleDemande;
-
+    private double echelleCourante;
     @FXML
     private void initialize() {
         controleur = new ControleurFenetrePrincipale(this);
@@ -168,6 +172,7 @@ public class VueFenetrePrincipale implements Observer {
                 labelGuideUtilisateur.setText("Problème lors du chargement du fichier");
             }
         });
+        buttonNouveauLivreur.setOnAction(this::actionBoutonNouveauLivreur);
         buttonSauvegarderDemandes.setOnAction(this::actionBoutonSauvegarderDemandes);
         canvasIntersectionsLivraisons.setOnMouseClicked(this::actionClicSurCanvas);
         tableViewDemandesLivraison.setOnMouseClicked(this::actionClicTableau);
@@ -273,6 +278,8 @@ public class VueFenetrePrincipale implements Observer {
                 });
 
         canvasIntersectionsLivraisons.setOnMouseDragged(this::actionDeplacerPlan);
+        canvasIntersectionsLivraisons.setOnScroll(this::actionScroll);
+
         canvasIntersectionsLivraisons.setOnMousePressed(event -> {
             dernierePositionY = event.getY();
             dernierePositionX = event.getX();
@@ -305,6 +312,29 @@ public class VueFenetrePrincipale implements Observer {
             afficherDemandesLivraison(comboboxLivreur.getValue(), true);
         } else {
             afficherLivraisons(comboboxLivreur.getValue(), true);
+        }
+    }
+
+    private void actionBoutonNouveauLivreur(ActionEvent event){
+        controleur.creerLivreur();
+    }
+
+    private void actionScroll(ScrollEvent event){
+
+        double deltaY = event.getDeltaY();
+        if(deltaY>0){
+            this.redessinerPlan(true,1.5);
+        }
+        else{
+            this.redessinerPlan(true,0.6667);
+        }
+
+        if(this.comboboxLivreur.getValue().getTournee() != null) {
+            this.afficherLivraisons(this.comboboxLivreur.getValue(),
+                    true);
+        } else {
+            this.afficherDemandesLivraison(this.comboboxLivreur.getValue(),
+                    true);
         }
     }
 
@@ -423,9 +453,10 @@ public class VueFenetrePrincipale implements Observer {
     }
 
     private void actionBoutonCalculerTournees(ActionEvent event) {
-        controleur.calculerTournees();
-        tableViewDemandesLivraison.setVisible(false);
-        tableViewLivraisons.setVisible(true);
+        if (controleur.calculerTournees()){
+            tableViewDemandesLivraison.setVisible(false);
+            tableViewLivraisons.setVisible(true);
+        }
     }
 
     public void afficherDemandesLivraison(Livreur livreur, boolean nettoyerCanvas) {
@@ -706,11 +737,11 @@ public class VueFenetrePrincipale implements Observer {
                                            boolean dejaDessine) {
         gc.setStroke(color);
 
-        if(nombreOccurence > 1) {
-            gc.setLineDashes(20);
-            gc.setLineDashOffset(dejaDessine ? 20 : 0);
-            gc.setLineWidth(5);
-        } else {
+        if(nombreOccurence > 1){
+            gc.setLineDashes(Math.min(6 * echelleCourante, 20));
+            gc.setLineDashOffset(dejaDessine ? Math.min(6 * echelleCourante, 20) : 0);
+            gc.setLineWidth(4);
+        }else{
             gc.setLineWidth(4);
             gc.setLineDashes();
         }
@@ -930,40 +961,30 @@ public class VueFenetrePrincipale implements Observer {
 
         echelleLong = canvasPlan.getWidth() / largeurPlan;
         echelleLat = canvasPlan.getHeight() / hauteurPlan;
-
+        echelleCourante = 1.001;
         decalageX = 0;
         decalageY = 0;
 
-        canvasPlan.getGraphicsContext2D().clearRect(0,0, canvasPlan.getWidth(),
-                canvasPlan.getHeight());
-
-        for (Segment segment : controleur.getJournee().getPlan().getSegments()) {
-            dessinerSegment(segment, COULEUR_SEGMENT);
-        }
-
-        dessinerIntersection(canvasPlan.getGraphicsContext2D(),
-                controleur.getJournee().getPlan().getEntrepot(),
-                COULEUR_DEPOT,
-                TAILLE_CERCLE_INTERSECTION,
-                true,
-                VueFenetrePrincipale.FormeIntersection.CERCLE);
+        afficherPlan();
     }
 
-    public void redessinerPlan(boolean miseAEchelle, double echelleGlobale) {
+    public void redessinerPlan(boolean miseAEchelle, double coeff) {
         if(miseAEchelle) {
-            this.echelleLat *= echelleGlobale;
-            this.echelleLong *= echelleGlobale;
-            this.decalageX = this.decalageX*echelleGlobale + this.positionCouranteX
-                    - (this.positionCouranteX * echelleGlobale);
-            this.decalageY = this.decalageY*echelleGlobale + this.positionCouranteY
-                    - (this.positionCouranteY * echelleGlobale);
+            echelleCourante *= coeff;
+            this.echelleLat *= coeff;
+            this.echelleLong *= coeff;
+            this.decalageX = this.decalageX * coeff + this.positionCouranteX
+                    - (this.positionCouranteX * coeff);
+            this.decalageY = this.decalageY * coeff + this.positionCouranteY
+                    - (this.positionCouranteY * coeff);
         }
-
-        canvasPlan.getGraphicsContext2D().clearRect(0, 0, canvasPlan.getWidth(),
-                canvasPlan.getHeight());
-
+        afficherPlan();
+    }
+    private void afficherPlan(){
+        canvasPlan.getGraphicsContext2D().clearRect(0, 0, canvasPlan.getWidth(), canvasPlan.getHeight());
         for (Segment segment : controleur.getJournee().getPlan().getSegments()) {
-            dessinerSegment(segment, COULEUR_SEGMENT);
+            dessinerSegment(segment,
+                    COULEUR_SEGMENT);
         }
         dessinerIntersection(canvasPlan.getGraphicsContext2D(),
                 controleur.getJournee().getPlan().getEntrepot(),
