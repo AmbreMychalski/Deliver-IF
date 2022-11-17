@@ -49,7 +49,7 @@
       </Pane>
       <Pane layoutX="289.0" prefHeight="735.0" prefWidth="739.0">
          <children>
-             <Button id="buttonReinitAffPlan" fx:id="buttonReinitAffPlan" layoutX="460.0" layoutY="696.0" mnemonicParsing="false" text="Réinitialiser l'affichage" />
+             <Button id="buttonReinitAffPlan" fx:id="buttonReinitAffPlan" layoutX="419.0" layoutY="696.0" mnemonicParsing="false" text="Réinitialiser l'affichage du plan" />
             <Button id="buttonChargerPlan" fx:id="buttonChargerPlan" layoutX="623.0" layoutY="696.0" mnemonicParsing="false" text="Charger un plan" />
             <Pane prefHeight="681.0" prefWidth="735.0" style="-fx-border-color: black; -fx-border-width: 2px;">
                <children>
