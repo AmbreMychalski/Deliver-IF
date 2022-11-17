@@ -9,7 +9,7 @@ public class CommandeAjouter implements Commande {
     private Livraison livraisonAvant;
     private Livreur livreur;
     private DemandeLivraison demandeLivraison;
-    private  Livraison livraison;
+    private Livraison livraison;
     ControleurFenetrePrincipale c;
 
     public CommandeAjouter(ControleurFenetrePrincipale c, Livreur livreur,
@@ -22,10 +22,11 @@ public class CommandeAjouter implements Commande {
 
     public void doCommande() {
         if(this.livraison == null) {
-            this.livraison =
-                    c.getJournee().ajouterDemandeLivraisonTournee(demandeLivraison, livraisonAvant, livreur);
+            this.livraison = c.getJournee().ajouterDemandeLivraisonTournee(
+                    demandeLivraison, livraisonAvant, livreur);
         } else {
-            c.getJournee().ajouterLivraisonTournee(this.livraison, this.livraisonAvant, this.livreur);
+            c.getJournee().ajouterLivraisonTournee(
+                    this.livraison, this.livraisonAvant, this.livreur);
         }
 
         c.vue.afficherLivraisons(livreur, true);

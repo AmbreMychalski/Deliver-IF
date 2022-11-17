@@ -11,6 +11,7 @@ import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.image.Image;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.input.ScrollEvent;
@@ -142,6 +143,8 @@ public class VueFenetrePrincipale implements Observer {
     @FXML
     public Label labelLivreurNouvelleDemande;
     private double echelleCourante;
+
+    private final Image entrepot =  new Image(new File("data/entrepot.png").toURI().toString());
     @FXML
     private void initialize() {
         controleur = new ControleurFenetrePrincipale(this);
@@ -304,7 +307,16 @@ public class VueFenetrePrincipale implements Observer {
             }
         }
     }
+    public void dessinerEntrepot(GraphicsContext gc){
+        Intersection entrepot = controleur.getJournee().getPlan().getEntrepot();
+        double w = 25*echelleCourante;
+        double h = 25*echelleCourante;
+        double x = convertirLongitudeEnX(entrepot.getLongitude()) - w/2;
+        double y = convertirLatitudeEnY(entrepot.getLatitude()) - h/2;
 
+        gc.drawImage(this.entrepot, x, y, w, h);
+
+    }
     private void actionButtonReinitZoomPlan(ActionEvent actionEvent) {
         dessinerPlan();
 
@@ -981,16 +993,12 @@ public class VueFenetrePrincipale implements Observer {
         afficherPlan();
     }
     private void afficherPlan(){
-        canvasPlan.getGraphicsContext2D().clearRect(0, 0, canvasPlan.getWidth(), canvasPlan.getHeight());
+        GraphicsContext gc = canvasPlan.getGraphicsContext2D();
+        gc.clearRect(0, 0, canvasPlan.getWidth(), canvasPlan.getHeight());
         for (Segment segment : controleur.getJournee().getPlan().getSegments()) {
             dessinerSegment(segment,
                     COULEUR_SEGMENT);
         }
-        dessinerIntersection(canvasPlan.getGraphicsContext2D(),
-                controleur.getJournee().getPlan().getEntrepot(),
-                COULEUR_DEPOT,
-                TAILLE_CERCLE_INTERSECTION,
-                true,
-                VueFenetrePrincipale.FormeIntersection.CERCLE);
+        dessinerEntrepot(gc);
     }
 }

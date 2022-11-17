@@ -23,20 +23,22 @@ public class EtatAvecDemande extends Etat {
 
     public void clicGaucheSurPlan(ControleurFenetrePrincipale c, MouseEvent event) {
         Intersection intersectionTrouvee = this.naviguerSurPlan(c, event, false);
-        ArrayList<DemandeLivraison> demandesAssociees = new ArrayList<>();
+        if(intersectionTrouvee != null) {
+            ArrayList<DemandeLivraison> demandesAssociees = new ArrayList<>();
 
-        for (DemandeLivraison demande : c.vue.comboboxLivreur.getValue().getDemandeLivraisons()) {
-            if (intersectionTrouvee == demande.getIntersection()) {
-                demandesAssociees.add(demande);
+            for (DemandeLivraison demande : c.vue.comboboxLivreur.getValue().getDemandeLivraisons()) {
+                if (demande.getIntersection().equals(intersectionTrouvee)) {
+                    demandesAssociees.add(demande);
+                }
             }
-        }
 
-        if (demandesAssociees.size() == 1) {
-            c.vue.tableViewDemandesLivraison.getSelectionModel().select(demandesAssociees.get(0));
-            this.selectionnerDemande(c, false);
-            c.changementEtat(c.etatDemandeLivraisonSelectionneeSansTournees);
-        } else if (demandesAssociees.size() > 1) {
-            FenetrePlusieursLivraisonsAuMemeEndroit.display(c, demandesAssociees, null, false);
+            if (demandesAssociees.size() == 1) {
+                c.vue.tableViewDemandesLivraison.getSelectionModel().select(demandesAssociees.get(0));
+                this.selectionnerDemande(c, false);
+                c.changementEtat(c.etatDemandeLivraisonSelectionneeSansTournees);
+            } else if (demandesAssociees.size() > 1) {
+                FenetrePlusieursLivraisonsAuMemeEndroit.display(c, demandesAssociees, null, false);
+            }
         }
     }
 

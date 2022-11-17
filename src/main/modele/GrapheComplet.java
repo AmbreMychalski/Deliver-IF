@@ -52,11 +52,8 @@ public class GrapheComplet implements Graphe {
             couts[0][index] = plusCourtsChemins.get(dl.getIntersection());
         } 
         
-        /*
-            Pour chaque point de livraison, on calcule les plus courts chemins
-            à tous les autres points de livraisons
-        */
-
+        // Pour chaque point de livraison, on calcule les plus courts chemins à
+        // tous les autres points de livraison
         for(DemandeLivraison currentDl : demandesLivraisons) {
             plusCourtsChemins = plan.calculerPlusCourtsChemins(
                     listIntersection, currentDl.getIntersection());
@@ -71,13 +68,13 @@ public class GrapheComplet implements Graphe {
                     }   
                 }
             }
-
             couts[currentIndex][0] = plusCourtsChemins.get(entrepot);
         }
     }
 
     /**
-     * Surcharge du getter pour récupérer le coût [i,j].
+     * Surcharge du getter pour récupérer le coût [i,j]. Opère des vérifications
+     * supplémentaires par rapport au getter auto-généré.
      * @param i L'indice 1
      * @param j L'indice 2
      * @return La valeur associée
@@ -91,7 +88,8 @@ public class GrapheComplet implements Graphe {
     }
 
     /**
-     * Vérifie s'il existe un chemin entre le sommet i et le sommet j
+     * Vérifie s'il existe un chemin entre le sommet d'indice i et celui d'indice
+     * j
      * @param i Le premier sommet
      * @param j Le second sommet
      * @return false s'il n'y a pas de lien entre les deux, true sinons
