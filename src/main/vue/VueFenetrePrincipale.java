@@ -138,7 +138,7 @@ public class VueFenetrePrincipale implements Observer {
     public Label labelRuesIntersection;
     @FXML
     public Label labelLivreurNouvelleDemande;
-
+    private double echelleCourante;
     @FXML
     private void initialize() {
         controleur = new ControleurFenetrePrincipale(this);
@@ -708,11 +708,11 @@ public class VueFenetrePrincipale implements Observer {
                                            boolean dejaDessine) {
         gc.setStroke(color);
 
-        if(nombreOccurence > 1) {
-            gc.setLineDashes(20);
-            gc.setLineDashOffset(dejaDessine ? 20 : 0);
-            gc.setLineWidth(5);
-        } else {
+        if(nombreOccurence > 1){
+            gc.setLineDashes(Math.min(6 * echelleCourante, 20));
+            gc.setLineDashOffset(dejaDessine ? Math.min(6 * echelleCourante, 20) : 0);
+            gc.setLineWidth(4);
+        }else{
             gc.setLineWidth(4);
             gc.setLineDashes();
         }
@@ -932,40 +932,30 @@ public class VueFenetrePrincipale implements Observer {
 
         echelleLong = canvasPlan.getWidth() / largeurPlan;
         echelleLat = canvasPlan.getHeight() / hauteurPlan;
-
+        echelleCourante = 1.001;
         decalageX = 0;
         decalageY = 0;
 
-        canvasPlan.getGraphicsContext2D().clearRect(0,0, canvasPlan.getWidth(),
-                canvasPlan.getHeight());
-
-        for (Segment segment : controleur.getJournee().getPlan().getSegments()) {
-            dessinerSegment(segment, COULEUR_SEGMENT);
-        }
-
-        dessinerIntersection(canvasPlan.getGraphicsContext2D(),
-                controleur.getJournee().getPlan().getEntrepot(),
-                COULEUR_DEPOT,
-                TAILLE_CERCLE_INTERSECTION,
-                true,
-                VueFenetrePrincipale.FormeIntersection.CERCLE);
+        afficherPlan();
     }
 
-    public void redessinerPlan(boolean miseAEchelle, double echelleGlobale) {
+    public void redessinerPlan(boolean miseAEchelle, double coeff) {
         if(miseAEchelle) {
-            this.echelleLat *= echelleGlobale;
-            this.echelleLong *= echelleGlobale;
-            this.decalageX = this.decalageX*echelleGlobale + this.positionCouranteX
-                    - (this.positionCouranteX * echelleGlobale);
-            this.decalageY = this.decalageY*echelleGlobale + this.positionCouranteY
-                    - (this.positionCouranteY * echelleGlobale);
+            echelleCourante *= coeff;
+            this.echelleLat *= coeff;
+            this.echelleLong *= coeff;
+            this.decalageX = this.decalageX * coeff + this.positionCouranteX
+                    - (this.positionCouranteX * coeff);
+            this.decalageY = this.decalageY * coeff + this.positionCouranteY
+                    - (this.positionCouranteY * coeff);
         }
-
-        canvasPlan.getGraphicsContext2D().clearRect(0, 0, canvasPlan.getWidth(),
-                canvasPlan.getHeight());
-
+        afficherPlan();
+    }
+    private void afficherPlan(){
+        canvasPlan.getGraphicsContext2D().clearRect(0, 0, canvasPlan.getWidth(), canvasPlan.getHeight());
         for (Segment segment : controleur.getJournee().getPlan().getSegments()) {
-            dessinerSegment(segment, COULEUR_SEGMENT);
+            dessinerSegment(segment,
+                    COULEUR_SEGMENT);
         }
         dessinerIntersection(canvasPlan.getGraphicsContext2D(),
                 controleur.getJournee().getPlan().getEntrepot(),
