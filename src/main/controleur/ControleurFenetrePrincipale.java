@@ -227,4 +227,7 @@ public class ControleurFenetrePrincipale {
 		etatCourant.clicSurComboboxAssignerLivreur(this);
 	}
 
+	public void majComboBox(){
+		this.etatCourant.majComboboxLivreur(this);
+	}
 }
