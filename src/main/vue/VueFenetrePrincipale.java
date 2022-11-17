@@ -779,7 +779,7 @@ public class VueFenetrePrincipale implements Observer {
         Livreur livreur = comboboxLivreur.getValue();
         if(o instanceof Journee) {
             if (arg == "AjoutLivreur") {
-                controleur.getEtatCourant().majComboboxLivreur(controleur); //pas sur que ce soit légal
+                controleur.majComboBox();
             }
         } else if(o instanceof Livreur) {
             if(arg == "ModificationAjoutSuppressionDemandeLivraison") {

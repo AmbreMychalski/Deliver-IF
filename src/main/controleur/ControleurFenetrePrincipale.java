@@ -228,6 +228,9 @@ public class ControleurFenetrePrincipale {
 		etatCourant.clicSurComboboxAssignerLivreur(this);
 	}
 
+	public void majComboBox(){
+		this.etatCourant.majComboboxLivreur(this);
+	}
 	public void zoomScroll(ScrollEvent event) {
 		etatCourant.zoomScroll(this, event);
 	}
