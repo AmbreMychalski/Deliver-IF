@@ -1,8 +1,12 @@
 package modele;
 
+import com.sun.media.jfxmedia.logging.Logger;
+
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
+import static controleur.ControleurFenetrePrincipale.LOGGER;
+
 
 public abstract class TemplateTSP implements TSP {
 	private Integer[] meilleureSolution;
@@ -38,7 +42,7 @@ public abstract class TemplateTSP implements TSP {
 
 		boolean solutionTrouvee = true;
 		if(coutMeilleureSolution == Integer.MAX_VALUE) {
-			System.out.println("Le TSP n'a pas trouvé de solution");
+			LOGGER.info("Le TSP n'a pas trouvé de solution");
 			solutionTrouvee = false;
 		}
 
@@ -90,7 +94,6 @@ public abstract class TemplateTSP implements TSP {
 			Collection<Integer> visites, float coutCourant) {
 		if (System.currentTimeMillis() - heureDebut > limiteTemps) {
 		    if(coutMeilleureSolution == Integer.MAX_VALUE) {
-		        System.out.println("Le TSP n'a pas trouvé de solution");
 				return;
 		    }
 		}

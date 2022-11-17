@@ -96,22 +96,7 @@ public class GrapheComplet implements Graphe {
      */
     @Override
     public boolean estUnArc(int i, int j) {
-        if (couts[i][j] < 0) {
-            return false;
-        }
-        return true;
-    }
-
-    /*
-        Fonction servant au débugage
-     */
-    public void afficherGraphe() {
-        for(int i = 0; i < nbSommets; i++) {
-            for(int j = 0; j < nbSommets; j++) {
-                System.out.print(couts[i][j] + " ");
-            } 
-            System.out.println();
-        }
+        return !(couts[i][j] < 0);
     }
 
     /**
