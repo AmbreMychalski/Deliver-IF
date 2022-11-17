@@ -1,7 +1,6 @@
 package controleur;
 
-import javafx.scene.input.KeyEvent;
-import javafx.scene.input.MouseEvent;
+import javafx.scene.input.*;
 import modele.Intersection;
 import modele.Livraison;
 import vue.FenetrePlusieursLivraisonsAuMemeEndroit;
@@ -67,13 +66,10 @@ public class EtatTourneesCalculees extends Etat{
 
         ListeDeCommandes liste = c.getListeCommandes();
 
-        switch(ke.getCode()) {
-            case E: //undo
-                liste.undoCommande();
-                break;
-            case R: //redo
-                liste.redoCommande();
-                break;
+        if(ke.getCode() == KeyCode.Z && ke.isControlDown()){
+            liste.undoCommande();
+        } else if (ke.getCode() == KeyCode.Y && ke.isControlDown()){
+            liste.redoCommande();
         }
     }
 
