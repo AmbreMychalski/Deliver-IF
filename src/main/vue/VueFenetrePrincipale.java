@@ -415,11 +415,10 @@ public class VueFenetrePrincipale implements Observer {
     }
 
     private void actionBoutonCalculerTournees(ActionEvent event) {
-
-        controleur.calculerTournees();
-        tableViewDemandesLivraison.setVisible(false);
-        tableViewLivraisons.setVisible(true);
-
+        if (controleur.calculerTournees()){
+            tableViewDemandesLivraison.setVisible(false);
+            tableViewLivraisons.setVisible(true);
+        }
     }
 
     public void afficherDemandesLivraison(Livreur livreur, boolean nettoyerCanvas) {

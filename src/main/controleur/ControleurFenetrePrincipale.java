@@ -178,8 +178,8 @@ public class ControleurFenetrePrincipale {
 		etatCourant.chargerListeDemandes(this);
 	}
 
-	public void calculerTournees() {
-		etatCourant.calculerTournees(this);
+	public boolean calculerTournees() {
+		return etatCourant.calculerTournees(this);
 	}
 
 	public void validerAjouterOuModifier() {

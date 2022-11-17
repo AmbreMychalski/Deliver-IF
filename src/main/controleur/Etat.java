@@ -43,7 +43,7 @@ public abstract class Etat {
 	
 	public void sauvegarderDemandes(ControleurFenetrePrincipale c) {}
 	
-	public void calculerTournees(ControleurFenetrePrincipale c) {}
+	public boolean calculerTournees(ControleurFenetrePrincipale c) { return false;}
 	
 	public void modifierDemande(ControleurFenetrePrincipale c) {}
 

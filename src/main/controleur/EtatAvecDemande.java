@@ -53,7 +53,7 @@ public class EtatAvecDemande extends Etat {
         this.sauvegarderListeDemandes(c);
     }
 
-    public void calculerTournees(ControleurFenetrePrincipale c) {
+    public boolean calculerTournees(ControleurFenetrePrincipale c) {
         long startTime = System.currentTimeMillis();
         Livreur livreur = c.vue.comboboxLivreur.getValue();
         boolean tourneeCalcule;
@@ -72,6 +72,7 @@ public class EtatAvecDemande extends Etat {
         else {
             c.vue.labelGuideUtilisateur.setText("Il y a trop de demandes pour calculer la tournée");
         }
+        return tourneeCalcule;
     }
 
     public void clicSurLivreur(ControleurFenetrePrincipale c) {
