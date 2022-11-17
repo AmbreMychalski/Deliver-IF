@@ -144,7 +144,8 @@ public class VueFenetrePrincipale implements Observer {
     public Label labelLivreurNouvelleDemande;
     private double echelleCourante;
 
-    private final Image entrepot =  new Image(new File("data/entrepot.png").toURI().toString());
+    private final Image entrepot =  new Image(getClass()
+            .getResource("/entrepot.png").toString());
     @FXML
     private void initialize() {
         controleur = new ControleurFenetrePrincipale(this);
