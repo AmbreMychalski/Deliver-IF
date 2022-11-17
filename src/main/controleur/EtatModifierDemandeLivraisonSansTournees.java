@@ -12,19 +12,23 @@ public class EtatModifierDemandeLivraisonSansTournees extends Etat {
         this.naviguerSurPlan(c, event, false);
         DemandeLivraison ligne = c.vue.tableViewDemandesLivraison
                 .getSelectionModel().getSelectedItem();
+
         if (ligne != null) {
             c.vue.dessinerIntersection(c.vue.canvasIntersectionsLivraisons.getGraphicsContext2D(),
                     ligne.getIntersection(),
                     c.vue.COULEUR_POINT_LIVRAISON_SELECTIONNE,
                     c.vue.TAILLE_RECT_PT_LIVRAISON_SELECTIONNE,
                     true,
-                    VueFenetrePrincipale.FormeIntersection.RECTANGLE);
+                    VueFenetrePrincipale.FormeIntersection.RECTANGLE
+            );
         }
     }
+
     public void validerAjouterOuModifier(ControleurFenetrePrincipale c) {
         this.effectuerModification(c);
         c.changementEtat(c.etatDemandeLivraisonSelectionneeSansTournees);
     }
+
     public void annulerAjouterOuModifier(ControleurFenetrePrincipale c) {
         this.annulerModification(c);
         c.changementEtat(c.etatDemandeLivraisonSelectionneeSansTournees);

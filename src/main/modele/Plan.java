@@ -26,9 +26,7 @@ import exception.IntersectionIntrouvableException;
 @Getter
 @Setter
 @NoArgsConstructor
-@ToString
 public class Plan {
-
 	private Intersection               entrepot;
 	private String                     nom;
 	private Map<Long, Intersection>    intersections = new HashMap<Long, Intersection>();
@@ -65,7 +63,7 @@ public class Plan {
 	 */
 	public List<Segment> calculerPlusCourtChemin(Intersection depart, Intersection arrivee) {
 
-		if(depart == arrivee){
+		if(depart == arrivee) {
 			return new LinkedList<Segment>();
 		}
 
@@ -213,16 +211,10 @@ public class Plan {
             NamedNodeMap             attributs;
 
 			list = el.getChildNodes();
-            		
-			if(list.getLength() < 1) {
-			    LOGGER.error("Le fichier XML ne contient pas d'éléments.");
-			    throw new Exception();
-			}
 			
 			for (int i = 0; i < list.getLength(); i++) {
-			    
 				node = list.item(i);
-							
+
 				if(node.getNodeType() == Node.ELEMENT_NODE) {
 					if(node.getNodeName() == "warehouse") {
 						entrepotId = Long.parseLong(node.getAttributes().getNamedItem("address").getNodeValue());
@@ -323,10 +315,10 @@ public class Plan {
 		Set<Long>               intersectionsNoires = new HashSet<Long>();
 		Queue<Long> intersectionsGrises = new PriorityQueue<Long>(20, new Comparator<Long>() {
 			public int compare(Long n1, Long n2) {
-				if(distanceAndHeuristic.get(n1)==distanceAndHeuristic.get(n2)){
+				if(distanceAndHeuristic.get(n1) == distanceAndHeuristic.get(n2)) {
 					return 0;
 				}
-				else if(distanceAndHeuristic.get(n1)<distanceAndHeuristic.get(n2)){
+				else if(distanceAndHeuristic.get(n1) < distanceAndHeuristic.get(n2)) {
 					return -1;
 				}
 				return 1;
@@ -343,9 +335,9 @@ public class Plan {
 		intersectionsGrises.add(depart.getIdIntersection());
 
 		while(!intersectionsGrises.isEmpty()) {
-			long idCourrant = intersectionsGrises.poll();
-			if(intersectionsVoisines.get(idCourrant) != null) {
-				for(Segment seg : intersectionsVoisines.get(idCourrant)) {
+			long idCourant = intersectionsGrises.poll();
+			if(intersectionsVoisines.get(idCourant) != null) {
+				for(Segment seg : intersectionsVoisines.get(idCourant)) {
 					Intersection 	 voisin = seg.getDestination();
 					Long 	   	   idVoisin = voisin.getIdIntersection();
 					float heuristiqueVoisin = calculHeuristique(voisin, arrivee);
@@ -354,21 +346,21 @@ public class Plan {
 						return true;
 					}
 
-					float g = distance.get(idCourrant)+ seg.getLongueur();
+					float g = distance.get(idCourant) + seg.getLongueur();
 					float f = g + heuristiqueVoisin;
 
 					if(!intersectionsNoires.contains(idVoisin)) {
 						if(g<distance.get(idVoisin)
 								||distanceAndHeuristic.get(idVoisin) == -1) {
-							distance.put(idVoisin,g);
-							distanceAndHeuristic.put(idVoisin,f);
+							distance.put(idVoisin, g);
+							distanceAndHeuristic.put(idVoisin, f);
 							intersectionsGrises.add(idVoisin);
 						}
 					}
 				}
 			}
 
-			intersectionsNoires.add(idCourrant);
+			intersectionsNoires.add(idCourant);
 		}
 
 		return false;

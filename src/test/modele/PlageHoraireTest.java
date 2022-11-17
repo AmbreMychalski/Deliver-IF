@@ -5,7 +5,6 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 public class PlageHoraireTest {
-
     PlageHoraire plageHoraire1 = new PlageHoraire(9, 10);
     PlageHoraire plageHoraire2 = new PlageHoraire(9, 10);
     PlageHoraire plageHoraire3 = new PlageHoraire(10, 11);

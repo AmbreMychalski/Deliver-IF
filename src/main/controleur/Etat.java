@@ -51,7 +51,8 @@ public abstract class Etat {
 
 	public void touchePressee(ControleurFenetrePrincipale c, KeyEvent ke) {
 		LOGGER.info(ke.getCode());
-		if(! c.vue.comboboxLivreur.isDisable()){
+
+		if(!c.vue.comboboxLivreur.isDisable()) {
 			switch(ke.getCode()) {
 				case Q:
 					c.vue.comboboxLivreur.getSelectionModel().selectPrevious();
@@ -64,81 +65,93 @@ public abstract class Etat {
 				case P:
 				case ADD:
 					c.vue.redessinerPlan(true,1.5);
-					if(c.vue.comboboxLivreur.getValue().getTournee() != null){
-						c.vue.afficherLivraisons(c.vue.comboboxLivreur.getValue(), true);
+
+					if(c.vue.comboboxLivreur.getValue().getTournee() != null) {
+						c.vue.afficherLivraisons(c.vue.comboboxLivreur.getValue(),
+								true);
 					} else {
-						c.vue.afficherDemandesLivraison(c.vue.comboboxLivreur.getValue(), true);
+						c.vue.afficherDemandesLivraison(c.vue.comboboxLivreur.getValue(),
+								true);
 					}
 					break;
 				case M:
 				case SUBTRACT:
 					c.vue.redessinerPlan(true,0.6667);
-					if(c.vue.comboboxLivreur.getValue().getTournee() != null){
-						c.vue.afficherLivraisons(c.vue.comboboxLivreur.getValue(), true);
+
+					if(c.vue.comboboxLivreur.getValue().getTournee() != null) {
+						c.vue.afficherLivraisons(c.vue.comboboxLivreur.getValue(),
+								true);
 					} else {
-						c.vue.afficherDemandesLivraison(c.vue.comboboxLivreur.getValue(), true);
+						c.vue.afficherDemandesLivraison(c.vue.comboboxLivreur.getValue(),
+								true);
 					}
 					break;
 			}
 		}
 	}
 
-
 	public void clicSurLivreur(ControleurFenetrePrincipale c) {}
+
 	public void clicSurComboboxAssignerLivreur(ControleurFenetrePrincipale controleurFenetrePrincipale) {
 	}
 
-	protected void sortieDeSelectionDemande(ControleurFenetrePrincipale c, boolean livraison){
+	protected void sortieDeSelectionDemande(ControleurFenetrePrincipale c,
+											boolean livraison) {
 		Livreur livreur = c.vue.comboboxLivreur.getValue();
-		if(livraison){
+
+		if(livraison) {
 			c.vue.buttonAssignerNvLivreur.setDisable(true);
-			if(c.vue.comboboxLivreur.getValue() == null){
+
+			if(c.vue.comboboxLivreur.getValue() == null) {
 				c.vue.afficherLivraisons(c.journee.getLivreurs().get(0), true);
-			}else{
+			} else {
 				c.vue.afficherLivraisons(c.vue.comboboxLivreur.getValue(),true);
 			}
-		}
-		else{
+		} else {
 			c.vue.afficherDemandesLivraison(livreur, true);
 		}
+
 		c.vue.textfieldIdentifiantIntersectionSelection.setText("");
 		resetLabelRuesIntersection(c);
 		c.vue.textfieldPlageHoraire.setText("");
 	}
 
-	protected void sauvegarderListeDemandes(ControleurFenetrePrincipale c){
+	protected void sauvegarderListeDemandes(ControleurFenetrePrincipale c) {
 		Livreur livreur = c.vue.comboboxLivreur.getValue();
 		FileChooser fileChooser = new FileChooser();
+
 		fileChooser.setInitialDirectory(new File(System.getProperty("user.home")));
 		fileChooser.setTitle("Sauvegarder des demandes de livraison");
 		fileChooser.getExtensionFilters().add(
 				new FileChooser.ExtensionFilter("Fichier XML", "*.xml", "*.XML"));
+
 		File fichier = fileChooser.showSaveDialog(c.vue.getStage());
 
 		if (fichier != null) {
-			LOGGER.info("Sauvegarde à l'emplacement "
-					+ fichier.getAbsolutePath());
+			LOGGER.info("Sauvegarde à l'emplacement " + fichier.getAbsolutePath());
 			c.journee.sauvegarderDemandesLivraison(fichier, livreur);
 		} else {
-			LOGGER
-					.error("Erreur lors de la sauvegarde des demandes");
+			LOGGER.error("Erreur lors de la sauvegarde des demandes");
 		}
 	}
 
-	protected void effectuerModification(ControleurFenetrePrincipale c){
+	protected void effectuerModification(ControleurFenetrePrincipale c) {
 		DemandeLivraison ligne;
+		Intersection intersection;
+
 		Livreur livreur = c.vue.comboboxLivreur.getValue();
 		ligne = c.vue.tableViewDemandesLivraison.getSelectionModel()
 				.getSelectedItem();
 		String champIdentifiant = c.vue.textfieldIdentifiantIntersection.getText();
 		PlageHoraire plageHoraire = c.vue.comboboxPlageHoraire.getValue();
-		Intersection intersection;
+
 		if(champIdentifiant.isEmpty()) {
 			intersection = ligne.getIntersection();
 		} else {
 			intersection = c.journee.getPlan().getIntersections()
 					.get(Long.parseLong(champIdentifiant));
 		}
+
 		c.journee.modifierDemandeLivraison(livreur, ligne, intersection, plageHoraire);
 		c.vue.dessinerIntersection(
 				c.vue.canvasIntersectionsLivraisons.getGraphicsContext2D(),
@@ -146,7 +159,8 @@ public abstract class Etat {
 				c.vue.COULEUR_POINT_LIVRAISON_SELECTIONNE,
 				c.vue.TAILLE_RECT_PT_LIVRAISON_SELECTIONNE,
 				true,
-				VueFenetrePrincipale.FormeIntersection.RECTANGLE);
+				VueFenetrePrincipale.FormeIntersection.RECTANGLE
+		);
 
 		c.vue.textfieldIdentifiantIntersectionSelection.setText(
 				ligne.getIdIntersection().toString());
@@ -157,65 +171,75 @@ public abstract class Etat {
 		c.vue.textfieldIdentifiantIntersection.setText("");
 	}
 
-	protected void annulerModification(ControleurFenetrePrincipale c){
+	protected void annulerModification(ControleurFenetrePrincipale c) {
 		c.vue.comboboxPlageHoraire.setDisable(true);
 		c.vue.tableViewDemandesLivraison.setDisable(false);
 	}
 
-	public boolean selectionnerDemande(ControleurFenetrePrincipale c, boolean livraison){
+	public boolean selectionnerDemande(ControleurFenetrePrincipale c,
+									   boolean livraison) {
 		DemandeLivraison ligne = null;
 		Livraison liv = null;
 		Livreur livreur = c.vue.comboboxLivreur.getValue();
+
 		if(!livraison) {
 			ligne = c.vue.tableViewDemandesLivraison.getSelectionModel()
 					.getSelectedItem();
-		}
-		else {
+		} else {
 			liv = c.vue.tableViewLivraisons.getSelectionModel()
 					.getSelectedItem();
 		}
-		if(liv != null){
+
+		if(liv != null) {
 			ligne = liv.getDemandeLivraison();
 		}
+
 		if (ligne != null) {
 			if(!livraison) {
 				c.vue.afficherDemandesLivraison(livreur, true);
-			}
-			else{
-				if(c.vue.comboboxLivreur.getValue() == null){
+			} else {
+				if(c.vue.comboboxLivreur.getValue() == null) {
 					c.vue.afficherLivraisons(c.journee.getLivreurs().get(0), true);
-				}else{
+				} else {
 					c.vue.afficherLivraisons(c.vue.comboboxLivreur.getValue(), true);
 				}
 				c.vue.comboboxAssignerLivreur.getSelectionModel().select(null);
 			}
+
 			c.vue.dessinerIntersection(
 					c.vue.canvasIntersectionsLivraisons.getGraphicsContext2D(),
 					ligne.getIntersection(),
 					c.vue.COULEUR_POINT_LIVRAISON_SELECTIONNE,
 					c.vue.TAILLE_RECT_PT_LIVRAISON_SELECTIONNE,
 					true,
-					VueFenetrePrincipale.FormeIntersection.RECTANGLE);
+					VueFenetrePrincipale.FormeIntersection.RECTANGLE
+			);
 
 			c.vue.titlePaneSelectionDemande.setVisible(true);
 			c.vue.textfieldIdentifiantIntersectionSelection.setText(
 													ligne
 													.getIdIntersection()
-													.toString());
+													.toString()
+			);
 			remplirLabelRuesIntersection(c, ligne.getIntersection());
 			c.vue.textfieldPlageHoraire.setText(ligne.getPlageHoraire().toString());
+
 			return true;
 		}
 		return false;
-
 	}
-	protected  void chargerNouveauPlan(ControleurFenetrePrincipale c) throws Exception{
-		File fichier ;
+
+	protected  void chargerNouveauPlan(ControleurFenetrePrincipale c) throws Exception {
+		File fichier;
+
 		try {
-			fichier = c.vue.choisirFichier("Choisir un plan");
-			LOGGER.info("Fichier choisi = " + fichier.getAbsolutePath());
 			Plan plan;
+
+			fichier = c.vue.choisirFichier("Choisir un plan");
 			plan = new Plan(fichier);
+
+			LOGGER.info("Fichier choisi = " + fichier.getAbsolutePath());
+
 			if(plan.getEntrepot() != null) {
 				c.vue.nettoyerToutesLesInformations(c);
 				this.resetLabelRuesIntersection(c);
@@ -229,6 +253,7 @@ public abstract class Etat {
 					c.etatCourant.majComboboxLivreur(c);
 					c.vue.comboboxLivreur.getSelectionModel().selectFirst();
 				}
+
 				c.journee.setPlan(plan);
 				c.vue.dessinerPlan();
 				c.vue.titledPaneEditionDemande.setVisible(true);
@@ -246,32 +271,37 @@ public abstract class Etat {
 		}
 	}
 
-	protected void selectionTrajet(ControleurFenetrePrincipale c){
+	protected void selectionTrajet(ControleurFenetrePrincipale c) {
 		Livraison liv = c.vue.tableViewLivraisons.getSelectionModel()
 				.getSelectedItem();
 
 		Livreur livreur = c.vue.comboboxLivreur.getValue();
 		Tournee tournee = livreur.getTournee();
-
 		int indexLivr = (tournee.getLivraisons()).indexOf(liv);
-		c.vue.dessinerSurbrillanceTrajet(tournee.getTrajets().get(indexLivr), c.vue.canvasPlanTrajet.getGraphicsContext2D());
+
+		c.vue.dessinerSurbrillanceTrajet(tournee.getTrajets().get(indexLivr),
+				c.vue.canvasPlanTrajet.getGraphicsContext2D());
 	}
-	protected boolean validerAjoutDemande(ControleurFenetrePrincipale c){
+	protected boolean validerAjoutDemande(ControleurFenetrePrincipale c) {
 		String champIdentifiant = c.vue.textfieldIdentifiantIntersection.getText();
 		PlageHoraire plageHoraire = c.vue.comboboxPlageHoraire.getValue();
 		Livreur livreur = c.vue.comboboxLivreur.getValue();
+
 		if(!champIdentifiant.isEmpty() && plageHoraire != null) {
 			Intersection intersection = c.journee.getPlan().getIntersections()
 					.get(Long.parseLong(champIdentifiant));
-			if(c.journee.getPlan().estLivrable(intersection)){
+
+			if(c.journee.getPlan().estLivrable(intersection)) {
 				DemandeLivraison demande =
 						new DemandeLivraison(intersection, plageHoraire);
 				boolean dejaPresente = false;
-				for(DemandeLivraison demandeCrees : livreur.getDemandeLivraisons()){
-					if(demandeCrees.equals(demande)){
+
+				for(DemandeLivraison demandeCrees : livreur.getDemandeLivraisons()) {
+					if(demandeCrees.equals(demande)) {
 						dejaPresente = true;
 					}
 				}
+
 				if(!dejaPresente) {
 					livreur.ajouterDemandeLivraison(demande);
 
@@ -280,13 +310,13 @@ public abstract class Etat {
 					c.vue.tableViewLivraisons.setDisable(false);
 					c.vue.textfieldIdentifiantIntersection.setText("");
 					resetLabelRuesIntersection(c);
+
 					return true;
-				}else {
+				} else {
 					c.vue.labelGuideUtilisateur.setText("La demande est déjà présente");
 					LOGGER.warn("La demande est déjà présente");
 				}
-			}
-			else{
+			} else {
 				c.vue.labelGuideUtilisateur.setText("L'intersection n'est pas livrable");
 				LOGGER.warn("L'intersection n'est pas livrable");
 			}
@@ -296,15 +326,19 @@ public abstract class Etat {
 		}
 		return false;
 	}
+
 	protected  Intersection naviguerSurPlan(ControleurFenetrePrincipale c,
 									MouseEvent event,
-									boolean tourneeCalculee){
+									boolean tourneeCalculee) {
 		Livreur livreur = c.vue.comboboxLivreur.getValue();
 		Intersection intersectionTrouvee = null;
+
 		if (c.journee.getPlan() != null) {
-			intersectionTrouvee =
-					c.vue.trouverIntersectionCoordoneesPixels(event.getX(),
-							event.getY());
+			intersectionTrouvee = c.vue.trouverIntersectionCoordoneesPixels(
+					event.getX(),
+					event.getY()
+			);
+
 			if (intersectionTrouvee != null) {
 				c.vue.textfieldIdentifiantIntersection.setText(
 						intersectionTrouvee.getIdIntersection().toString());
@@ -315,30 +349,34 @@ public abstract class Etat {
 						c.vue.canvasIntersectionsLivraisons.getHeight());
 				remplirLabelRuesIntersection(c, intersectionTrouvee);
 
-				if(tourneeCalculee){
-					if(c.vue.comboboxLivreur.getValue() == null){
-						c.vue.afficherLivraisons(c.journee.getLivreurs().get(0), true);
-					}else {
-						c.vue.afficherLivraisons(c.vue.comboboxLivreur.getValue(), true);
+				if(tourneeCalculee) {
+					if(c.vue.comboboxLivreur.getValue() == null) {
+						c.vue.afficherLivraisons(c.journee.getLivreurs().get(0),
+								true);
+					} else {
+						c.vue.afficherLivraisons(c.vue.comboboxLivreur.getValue(),
+								true);
 					}
-
 				} else {
 					c.vue.afficherDemandesLivraison(livreur, false);
 				}
+
 				c.vue.dessinerIntersection(gc,
 						intersectionTrouvee,
 						Color.DARKORCHID,
 						c.vue.TAILLE_CERCLE_INTERSECTION_SELECTIONNEE,
 						true,
-						VueFenetrePrincipale.FormeIntersection.CERCLE);
+						VueFenetrePrincipale.FormeIntersection.CERCLE
+				);
 			} else {
 				c.vue.textfieldIdentifiantIntersection.setText("");
 				resetLabelRuesIntersection(c);
 			}
 		} else {
-			LOGGER.debug("Clic sur le canvas, (x,y)=("
+			LOGGER.debug("Clic sur le canvas, (x,y) = ("
 					+ event.getX() + "," + event.getY() + ")");
 		}
+
 		return intersectionTrouvee;
 	}
 
@@ -346,38 +384,47 @@ public abstract class Etat {
 			throws Exception {
 		Livreur livreur = c.vue.comboboxLivreur.getValue();
 		File fichier = c.vue.choisirFichier("Charger des demandes de livraison");
+
 		LOGGER.info("Fichier choisi = " + fichier.getAbsolutePath());
+
 		ArrayList<DemandeLivraison> listeDemandes
-				= c.journee.chargerDemandesLivraison(fichier,livreur);
-		if (listeDemandes.size()==0){
+				= c.journee.chargerDemandesLivraison(fichier, livreur);
+
+		if (listeDemandes.size() == 0) {
 			throw  new Exception("Aucune demande de livraison dans le fichier");
 		}
 	}
 
-	protected void supprimerDemandeLivraison(ControleurFenetrePrincipale c, Livreur livreur){
+	protected void supprimerDemandeLivraison(ControleurFenetrePrincipale c,
+											 Livreur livreur) {
 		DemandeLivraison ligne = c.vue.tableViewDemandesLivraison.getSelectionModel()
 				.getSelectedItem();
+
 		if(ligne != null) {
 			livreur.supprimerDemandeLivraison(ligne);
 			c.vue.textfieldIdentifiantIntersectionSelection.setText("");
 			resetLabelRuesIntersection(c);
 			c.vue.textfieldPlageHoraire.setText("");
-
 		}
 	}
+
 	protected void supprimerLivraison(ControleurFenetrePrincipale c) {
 		Livreur livreur = c.vue.comboboxLivreur.getValue();
 		Livraison livraisonASupp = c.vue.tableViewLivraisons.getSelectionModel().getSelectedItem();
 		Commande commandeSupprimer = new CommandeSupprimer(c, livreur, livraisonASupp);
+
 		c.getListeCommandes().ajouterCommande(commandeSupprimer);
 	}
 
-	protected  void supprimerLivraison(ControleurFenetrePrincipale c, Livreur livreur, Livraison livraisonASupp){
+	protected  void supprimerLivraison(ControleurFenetrePrincipale c,
+									   Livreur livreur,
+									   Livraison livraisonASupp) {
 		if(livraisonASupp != null) {
 			c.journee.supprimerLivraisonTournee(livreur, livraisonASupp);
 			c.vue.textfieldIdentifiantIntersectionSelection.setText("");
 			c.vue.textfieldPlageHoraire.setText("");
 			this.sortieDeSelectionDemande(c, true);
+
 			if (livreur.getTournee() != null) {
 				c.changementEtat(c.etatTourneesCalculees);
 			} else {
@@ -387,82 +434,99 @@ public abstract class Etat {
 		}
 	}
 
-
-	protected  void annulerAjout (ControleurFenetrePrincipale c){
+	protected  void annulerAjout (ControleurFenetrePrincipale c) {
 		c.vue.tableViewDemandesLivraison.setDisable(false);
 		c.vue.tableViewLivraisons.setDisable(false);
 		c.vue.textfieldIdentifiantIntersection.setText("");
 		resetLabelRuesIntersection(c);
 		c.vue.comboboxPlageHoraire.setValue(null);
 	}
+
 	protected void remplirLabelRuesIntersection(ControleurFenetrePrincipale c,
-												Intersection intersection){
-		List<String> rues = c.getJournee().getPlan().obtenirRuesIntersection(intersection);
+												Intersection intersection) {
 		String texte;
+
+		List<String> rues = c.getJournee().getPlan().obtenirRuesIntersection(intersection);
+
 		if((rues.get(0) == null || rues.get(0).isEmpty())
-				&& (rues.get(1) == null || rues.get(1).isEmpty())){
+				&& (rues.get(1) == null || rues.get(1).isEmpty())) {
 			texte = "Aucune rue associée";
-		}else if(rues.get(1) == null || rues.get(1).isEmpty()){
+		} else if(rues.get(1) == null || rues.get(1).isEmpty()) {
 			texte = rues.get(0);
-		}else if(rues.get(0) == null|| rues.get(0).isEmpty()){
+		} else if(rues.get(0) == null|| rues.get(0).isEmpty()) {
 			texte = rues.get(1);
-		}else {
+		} else {
 			texte = "Croisement \n "+rues.get(0) + " \n et \n"+ rues.get(1);
 		}
+
 		c.vue.labelRuesIntersection.setText(texte);
 	}
 
-	protected void resetLabelRuesIntersection(ControleurFenetrePrincipale c){
+	protected void resetLabelRuesIntersection(ControleurFenetrePrincipale c) {
 		c.vue.labelRuesIntersection.setText("Aucune intersection selectionnée");
 	}
 
 	public void majComboboxLivreur(ControleurFenetrePrincipale c) {
 		ObservableList<Livreur> listeLivreur = FXCollections.observableArrayList();
 		ObservableList<String> listStr = FXCollections.observableArrayList();
+
 		listeLivreur.addAll(c.journee.getLivreurs());
+
 		for (int i = 1; i <= c.journee.getLivreurs().size(); i++) {
 			listStr.add(Integer.toString(i));
 		}
-		listStr.add(c.journee.getLivreurs().size()+1+" (nouveau livreur)");
+
+		listStr.add(c.journee.getLivreurs().size() + 1 + " (nouveau livreur)");
 		c.vue.comboboxAssignerLivreur.setItems(listStr);
 		c.vue.comboboxLivreur.setItems(listeLivreur);
 	}
 
-	protected void miseAjourDonneesTableView(ControleurFenetrePrincipale c, Livreur livreur){
+	protected void miseAjourDonneesTableView(ControleurFenetrePrincipale c,
+											 Livreur livreur) {
 		c.vue.tableViewLivraisons.getItems().clear();
 		c.vue.tableViewDemandesLivraison.getItems().clear();
-		if(livreur.getTournee() != null){
+
+		if(livreur.getTournee() != null) {
 			c.vue.tableViewLivraisons.setVisible(true);
 			c.vue.tableViewDemandesLivraison.setVisible(false);
 			c.vue.tableViewLivraisons.getItems().addAll(livreur.getTournee().getLivraisons());
-		}else{
+		} else {
 			c.vue.tableViewLivraisons.setVisible(false);
 			c.vue.tableViewDemandesLivraison.setVisible(true);
 			c.vue.tableViewDemandesLivraison.getItems().addAll(livreur.getDemandeLivraisons());
 		}
+
 		c.vue.tableViewLivraisons.refresh();
 		c.vue.tableViewDemandesLivraison.refresh();
 	}
-	protected void changerLivreur(ControleurFenetrePrincipale c, Livreur livreur) {
-		if(livreur.getTournee() != null){
+
+	protected void changerLivreur(ControleurFenetrePrincipale c,
+								  Livreur livreur) {
+		if(livreur.getTournee() != null) {
 			c.vue.afficherLivraisons(livreur, true);
-		}else{
+		} else {
 			c.vue.afficherDemandesLivraison(livreur, true);
 		}
+
 		miseAjourDonneesTableView(c, livreur);
 	}
-	public void selectionPourNouvelleDemande(ControleurFenetrePrincipale c, Livraison ligne){}
-	public void changementLivreur(ControleurFenetrePrincipale c){
+
+	public void selectionPourNouvelleDemande(ControleurFenetrePrincipale c, Livraison ligne){
+		// ?
+	}
+	public void changementLivreur(ControleurFenetrePrincipale c) {
 		Livreur livreur = c.vue.comboboxLivreur.getValue();
-		if(livreur != null){
+
+		if(livreur != null) {
 			this.changerLivreur(c, livreur);
-			if(livreur.getTournee() == null){
-				if(livreur.getDemandeLivraisons().size() == 0){
+
+			if(livreur.getTournee() == null) {
+				if(livreur.getDemandeLivraisons().size() == 0) {
 					c.changementEtat(c.etatSansDemande);
-				}else{
+				} else {
 					c.changementEtat(c.etatAvecDemande);
 				}
-			}else{
+			} else {
 				c.changementEtat(c.etatTourneesCalculees);
 			}
 			c.viderListeDeCommandes();

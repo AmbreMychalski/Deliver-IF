@@ -284,37 +284,42 @@ public class VueFenetrePrincipale implements Observer {
         });
 
         List<Control> controles = obtenirControlsVue();
-        for(Control controle : controles){
-                if(controle instanceof Button || controle instanceof TableView){
+
+        for(Control controle : controles) {
+                if(controle instanceof Button || controle instanceof TableView) {
                 controle.setOnMouseEntered(event -> {
-                    if (!controle.isDisable()){
+                    if (!controle.isDisable()) {
                         this.getStage().getScene().setCursor(Cursor.HAND);
                     }
                 });
-                controle.setOnMouseExited(event -> {
-                    this.getStage().getScene().setCursor(Cursor.DEFAULT);
-                });
+
+                controle.setOnMouseExited(event ->
+                        this.getStage().getScene().setCursor(Cursor.DEFAULT));
             }
         }
     }
 
     private void actionButtonReinitZoomPlan(ActionEvent actionEvent) {
         dessinerPlan();
-        if(comboboxLivreur.getValue().getTournee() == null){
+
+        if(comboboxLivreur.getValue().getTournee() == null) {
             afficherDemandesLivraison(comboboxLivreur.getValue(), true);
-        }else{
+        } else {
             afficherLivraisons(comboboxLivreur.getValue(), true);
         }
     }
 
     public File choisirFichier(String titreFenetre) throws Exception {
         File fichier;
+
         FileChooser fileChooser = new FileChooser();
+
         fileChooser.setInitialDirectory(new File(System.getProperty("user.home")));
         fileChooser.getExtensionFilters().add(
                 new FileChooser.ExtensionFilter("Fichier XML",
                         "*.xml", "*.XML"));
         fileChooser.setTitle(titreFenetre);
+
         try {
             fichier = fileChooser.showOpenDialog(this.stage);
 
@@ -331,12 +336,14 @@ public class VueFenetrePrincipale implements Observer {
         GraphicsContext gc = canvasPlan.getGraphicsContext2D();
         GraphicsContext gcTrajet = canvasPlanTrajet.getGraphicsContext2D();
         GraphicsContext gcIntersection = canvasIntersectionsLivraisons.getGraphicsContext2D();
+
         gc.clearRect(0, 0, canvasPlan.getWidth(), canvasPlan.getHeight());
         gcTrajet.clearRect(0, 0, canvasPlanTrajet.getWidth(), canvasPlanTrajet.getHeight());
         gcIntersection.clearRect(0, 0, canvasIntersectionsLivraisons.getWidth(), canvasIntersectionsLivraisons.getHeight());
         textfieldIdentifiantIntersectionSelection.setText("");
         textfieldPlageHoraire.setText("");
     }
+
     private void actionDeplacerPlan(MouseEvent event) {
         double x =  event.getX();
         double y = event.getY();
@@ -344,22 +351,24 @@ public class VueFenetrePrincipale implements Observer {
         decalageY += y - dernierePositionY;
         dernierePositionY = y;
         dernierePositionX = x;
+
         redessinerPlan(false, 0);
-        if(comboboxLivreur.getValue().getTournee() == null){
+
+        if(comboboxLivreur.getValue().getTournee() == null) {
             afficherDemandesLivraison(comboboxLivreur.getValue(), true);
-        }else{
+        } else {
             afficherLivraisons(comboboxLivreur.getValue(), true);
         }
     }
 
     private void actionClicComboboxAssisgnerLivreur() {
-        controleur.actionClicComboboxAssisgnerLivreur();
+        controleur.actionClicComboboxAssignerLivreur();
     }
 
     private void actionBoutonAfficherFeulleDeRoute(ActionEvent event) {
         if(this.comboboxLivreur.getValue() != null){
             vue.FenetreFeuilleDeRoute.display(controleur, this.comboboxLivreur.getValue());
-        }else{
+        } else {
             vue.FenetreFeuilleDeRoute.display(controleur, controleur.getJournee().getLivreurs().get(0));
         }
 
@@ -424,38 +433,51 @@ public class VueFenetrePrincipale implements Observer {
     public void afficherDemandesLivraison(Livreur livreur, boolean nettoyerCanvas) {
         GraphicsContext gc = canvasIntersectionsLivraisons.getGraphicsContext2D();
         GraphicsContext gcTrajet = canvasPlanTrajet.getGraphicsContext2D();
-        if(nettoyerCanvas){
-            gc.clearRect(0, 0, canvasIntersectionsLivraisons.getWidth(), canvasIntersectionsLivraisons.getHeight());
-            gcTrajet.clearRect(0, 0, canvasPlanTrajet.getWidth(), canvasPlanTrajet.getHeight());
+
+        if(nettoyerCanvas) {
+            gc.clearRect(0, 0, canvasIntersectionsLivraisons.getWidth(),
+                    canvasIntersectionsLivraisons.getHeight());
+            gcTrajet.clearRect(0, 0, canvasPlanTrajet.getWidth(),
+                    canvasPlanTrajet.getHeight());
         }
+
         for(DemandeLivraison d: livreur.getDemandeLivraisons()) {
             this.dessinerDemandeLivraison(gc, d);
         }
     }
-    public void afficherLivraisons(Livreur livreur, boolean nettoyerCanvas){
+
+    public void afficherLivraisons(Livreur livreur, boolean nettoyerCanvas) {
         GraphicsContext gc = canvasIntersectionsLivraisons.getGraphicsContext2D();
         GraphicsContext gcTrajets = canvasPlanTrajet.getGraphicsContext2D();
+
         if (nettoyerCanvas) {
             gc.clearRect(0, 0, canvasIntersectionsLivraisons.getWidth(), canvasIntersectionsLivraisons.getHeight());
             gcTrajets.clearRect(0, 0, canvasPlanTrajet.getWidth(), canvasPlanTrajet.getHeight());
         }
+
         List<Livraison> livraisons;
-        if(livreur.getTournee() != null){
+
+        if(livreur.getTournee() != null) {
             livraisons = livreur.getTournee().getLivraisons();
+
             for (Livraison l : livraisons) {
                 this.dessinerLivraison(gc, l);
             }
-            dessinerDemandeLivraison(gc, livreur.getDemandeLivraisons().get(livreur.getDemandeLivraisons().size()-1));
+
+            dessinerDemandeLivraison(gc, livreur.getDemandeLivraisons()
+                    .get(livreur.getDemandeLivraisons().size()-1));
             dessinerTrajets(livreur.getTournee().getTrajets(), gcTrajets);
         }
     }
+
     public void dessinerDemandeLivraison(GraphicsContext gc, DemandeLivraison demande) {
         dessinerIntersection(gc,
                 demande.getIntersection(),
                 demande.getPlageHoraire().getCouleur(),
                 this.TAILLE_RECT_PT_LIVRAISON,
                 true,
-                FormeIntersection.RECTANGLE);
+                FormeIntersection.RECTANGLE
+        );
     }
 
     private void dessinerLivraison(GraphicsContext gc, Livraison l) {
@@ -464,7 +486,8 @@ public class VueFenetrePrincipale implements Observer {
                 l.getDemandeLivraison().getPlageHoraire().getCouleur(),
                 this.TAILLE_RECT_PT_LIVRAISON,
                 true,
-                FormeIntersection.RECTANGLE);
+                FormeIntersection.RECTANGLE
+        );
     }
 
     private void actionBoutonAjouterLivraison(ActionEvent event) {
@@ -485,7 +508,7 @@ public class VueFenetrePrincipale implements Observer {
         controleur.sauvegarderDemandes();
     }
 
-    public void updateLabelGuideUtilisateur(String texte){
+    public void updateLabelGuideUtilisateur(String texte) {
         labelGuideUtilisateur.setText(texte);
     }
 
@@ -504,6 +527,7 @@ public class VueFenetrePrincipale implements Observer {
         if (controleur.getJournee().getPlan() != null) {
             // trouver les intersections de la zone de clic
             List<Intersection> candidats = new ArrayList<>();
+
             for (Intersection intersection : controleur.getJournee().getPlan().getIntersections().values()) {
                 if (distance(convertirLongitudeEnX(intersection.getLongitude()),
                         convertirLatitudeEnY(intersection.getLatitude()),
@@ -512,6 +536,7 @@ public class VueFenetrePrincipale implements Observer {
                     candidats.add(intersection);
                 }
             }
+
             // sélectionner l'intersection à retourner
             if (candidats.isEmpty()) {
                 return null;
@@ -588,6 +613,7 @@ public class VueFenetrePrincipale implements Observer {
                                 FormeIntersection forme) {
         if(remplir) {
             gc.setFill(couleur);
+
             switch(forme) {
                 case RECTANGLE:
                     gc.fillRect(x - (taille /2),
@@ -636,8 +662,10 @@ public class VueFenetrePrincipale implements Observer {
     }
 
 
-    public void dessinerTrajetLatLong(GraphicsContext gc, LinearGradient color, double lat1, double long1,
-                                      double lat2, double long2, int nombreOccurence, boolean dejaDessine) {
+    public void dessinerTrajetLatLong(GraphicsContext gc, LinearGradient color,
+                                      double lat1, double long1, double lat2,
+                                      double long2, int nombreOccurence,
+                                      boolean dejaDessine) {
         dessinerSegmentGradientXY(gc, color, convertirLongitudeEnX(long1),
                 convertirLatitudeEnY(lat1),
                 convertirLongitudeEnX(long2),
@@ -646,8 +674,9 @@ public class VueFenetrePrincipale implements Observer {
                 dejaDessine);
     }
 
-    public void dessinerSurbrillanceSegment(GraphicsContext gc, double lat1, double long1,
-                                            double lat2, double long2) {
+    public void dessinerSurbrillanceSegment(GraphicsContext gc, double lat1,
+                                            double long1, double lat2,
+                                            double long2) {
         gc.setLineWidth(4);
         gc.setStroke(Color.GREEN);
         gc.strokeLine(convertirLongitudeEnX(long1),
@@ -665,26 +694,29 @@ public class VueFenetrePrincipale implements Observer {
      * @param y2 Coordonnée sur l'axe y du second point
      * @param couleur couleur du segment
      */
-    void dessinerSegmentXY(double x1, double y1,
-                           double x2, double y2,
+    void dessinerSegmentXY(double x1, double y1, double x2, double y2,
                            Color couleur) {
         GraphicsContext gc = canvasPlan.getGraphicsContext2D();
+
         gc.setStroke(couleur);
         gc.strokeLine(x1, y1, x2, y2);
     }
 
-    private void dessinerSegmentGradientXY(GraphicsContext gc, LinearGradient color, double x1, double y1,
-                                           double x2, double y2, int nombreOccurence, boolean dejaDessine) {
-
+    private void dessinerSegmentGradientXY(GraphicsContext gc, LinearGradient color,
+                                           double x1, double y1, double x2,
+                                           double y2, int nombreOccurence,
+                                           boolean dejaDessine) {
         gc.setStroke(color);
-        if(nombreOccurence > 1){
+
+        if(nombreOccurence > 1) {
             gc.setLineDashes(20);
             gc.setLineDashOffset(dejaDessine ? 20 : 0);
             gc.setLineWidth(5);
-        }else{
+        } else {
             gc.setLineWidth(4);
             gc.setLineDashes();
         }
+
         gc.strokeLine(x1, y1, x2, y2);
     }
 
@@ -703,11 +735,14 @@ public class VueFenetrePrincipale implements Observer {
      * @return coordonnée Y sur le Canvas
      */
     double convertirLatitudeEnY(double y) {
-        // quand on retourne la carte, elle n'est pas calée en haut,
-        // on la cale donc en lui retirant "aRemonter"
-        double aRemonter = this.canvasPlan.getHeight() - (this.latMax - this.latMin) * this.echelleLat;
+        // quand on retourne la carte, elle n'est pas calée en haut
 
-        double latitudeYPx = (this.canvasPlan.getHeight() - (y - this.latMin) * this.echelleLat);
+        // on la cale donc en lui retirant "aRemonter"
+        double aRemonter = this.canvasPlan.getHeight()
+                - (this.latMax - this.latMin) * this.echelleLat;
+        double latitudeYPx = (this.canvasPlan.getHeight() - (y - this.latMin)
+                * this.echelleLat);
+
         return  decalageY + latitudeYPx - aRemonter;
 
     }
@@ -719,13 +754,13 @@ public class VueFenetrePrincipale implements Observer {
             if (arg == "AjoutLivreur") {
                 controleur.getEtatCourant().majComboboxLivreur(controleur); //pas sur que ce soit légal
             }
-        }else if(o instanceof Livreur){
+        } else if(o instanceof Livreur) {
             if(arg == "ModificationAjoutSuppressionDemandeLivraison") {
                 tableViewDemandesLivraison.getItems().clear();
                 tableViewDemandesLivraison.getItems().addAll(
                         ((Livreur) o).getDemandeLivraisons());
                 afficherDemandesLivraison(livreur, true);
-            }else if(arg == "SuppressionTournee"){
+            }else if(arg == "SuppressionTournee") {
                     tableViewLivraisons.getItems().clear();
                     tableViewDemandesLivraison.setVisible(true);
                     tableViewLivraisons.setVisible(false);
@@ -740,55 +775,77 @@ public class VueFenetrePrincipale implements Observer {
             }
         }
     }
-    private boolean segmentOuInverseDejaDessines(List<Segment> segmentsDessines, Segment segment){
-        for(Segment segment1 : segmentsDessines){
-            if(segment1.equals(segment)){
+
+    private boolean segmentOuInverseDejaDessines(List<Segment> segmentsDessines,
+                                                 Segment segment) {
+        for(Segment segment1 : segmentsDessines) {
+            if(segment1.equals(segment)) {
                 return true;
-            }if(segment1.getDestination() == segment.getOrigine() && segment.getDestination() == segment1.getOrigine()){
+            }if(segment1.getDestination() == segment.getOrigine()
+                    && segment.getDestination() == segment1.getOrigine()) {
                 return true;
             }
         }
+
         return false;
     }
-    private int obtenirNombreSegmentSuperpose(List<Trajet> tournee, Segment segment){
-        int res=0;
+
+    private int obtenirNombreSegmentSuperpose(List<Trajet> tournee, Segment segment) {
+        int res = 0;
+
         for(Trajet trajet: tournee) {
             for (Segment segment1 : trajet.getSegments()) {
-                if (segment.equals(segment1) || segment1.getDestination() == segment.getOrigine() && segment.getDestination() == segment1.getOrigine()) {
+                if (segment.equals(segment1)
+                        || segment1.getDestination() == segment.getOrigine()
+                        && segment.getDestination() == segment1.getOrigine()) {
                     res++;
                 }
             }
         }
+
         return res;
     }
+
     public void dessinerTrajets(List<Trajet> trajets, GraphicsContext gc) {
         int size = 0;
         List<Segment> segmentsDessines = new ArrayList<>();
-        for(Trajet trajet : trajets){
-            size+=trajet.getSegments().size();
+
+        for(Trajet trajet : trajets) {
+            size += trajet.getSegments().size();
         }
+
         size++;
         List<Color> couleurs = new ArrayList<>();
-        for(double i = 0; i< size; i++){
-            if(i < size/3){
+
+        for(double i = 0; i< size; i++) {
+            if(i < size/3) {
                 couleurs.add(new Color(0.5, Math.max(0.35, 1-2*i/size), 1, 1));
-            } else if (i >= size/3 && i < 2*size/3) {
-                couleurs.add(new Color((3.0/2*i/size),0.35, 1, 1));
-            }else{
-                couleurs.add(new Color(1,0.35, 1-3.0*((i-(2.0*size/3)+1)/size), 1));
+            } else if (i >= size / 3 && i < 2 * size / 3) {
+                couleurs.add(new Color((3.0 / 2 * i / size),0.35, 1, 1));
+            } else {
+                couleurs.add(new Color(1,0.35, 1 - 3.0 * ((i - (2.0 * size / 3) + 1) / size), 1));
             }
         }
+
         List<LinearGradient> linearGradients = new ArrayList<>();
-        for(int i = 1; i< size; i++){
-            Stop[] stops = new Stop[] { new Stop(0, couleurs.get(i-1)), new Stop(1, couleurs.get(i))};
-            linearGradients.add(new LinearGradient(0, 0, 1, 0, true, CycleMethod.NO_CYCLE, stops));
+
+        for(int i = 1; i< size; i++) {
+            Stop[] stops = new Stop[] {
+                    new Stop(0, couleurs.get(i-1)),
+                    new Stop(1, couleurs.get(i))
+            };
+            linearGradients.add(new LinearGradient(0, 0, 1, 0, true,
+                    CycleMethod.NO_CYCLE, stops));
         }
-        int i=0;
+
+        int i = 0;
 
         for (Trajet trajet : trajets) {
             List<Segment> segments = trajet.getSegments();
+
             for (Segment segment : segments) {
-                dessinerTrajetLatLong(gc, linearGradients.get(i),segment.getOrigine().getLatitude(),
+                dessinerTrajetLatLong(gc, linearGradients.get(i),
+                        segment.getOrigine().getLatitude(),
                         segment.getOrigine().getLongitude(),
                         segment.getDestination().getLatitude(),
                         segment.getDestination().getLongitude(),
@@ -798,19 +855,23 @@ public class VueFenetrePrincipale implements Observer {
                 i++;
             }
         }
+
         gc.setLineDashes();
+
         double width = 100;
         int height = 20;
         int x_shift = 150;
         int y_shift = 20;
+
         size--;
-        for(i = 0; i< size; i++){
+
+        for(i = 0; i < size; i++) {
             gc.setFill(linearGradients.get(i));
             gc.fillRect(x_shift + i*(width/size) , y_shift, width/size, height);
         }
     }
 
-    public void dessinerSurbrillanceTrajet(Trajet trajet, GraphicsContext gc){
+    public void dessinerSurbrillanceTrajet(Trajet trajet, GraphicsContext gc) {
         List<Segment> segments = trajet.getSegments();
         for (Segment segment : segments) {
             dessinerSurbrillanceSegment(gc, segment.getOrigine().getLatitude(),
@@ -828,6 +889,7 @@ public class VueFenetrePrincipale implements Observer {
     public ArrayList<Control> obtenirControlsVue() {
         Field [] attributes = this.getClass().getDeclaredFields();
         ArrayList<Control> controls = new ArrayList<>();
+
         for (Field attribute : attributes) {
             try {
                 if (attribute.get(this) instanceof Control
@@ -840,6 +902,7 @@ public class VueFenetrePrincipale implements Observer {
                 throw new RuntimeException(e);
             }
         }
+
         return controls;
     }
 
@@ -850,7 +913,7 @@ public class VueFenetrePrincipale implements Observer {
         }
     }
 
-    public void dessinerPlan(){
+    public void dessinerPlan() {
         latMax = controleur.getJournee().getPlan().getIntersections().values().stream()
                 .map(Intersection::getLatitude)
                 .max(Float::compare).orElse(0f);
@@ -867,16 +930,17 @@ public class VueFenetrePrincipale implements Observer {
         largeurPlan = longMax - longMin;
         hauteurPlan = latMax - latMin;
 
-        echelleLong =  canvasPlan.getWidth() / largeurPlan;
-        echelleLat =  canvasPlan.getHeight() / hauteurPlan;
+        echelleLong = canvasPlan.getWidth() / largeurPlan;
+        echelleLat = canvasPlan.getHeight() / hauteurPlan;
 
         decalageX = 0;
         decalageY = 0;
 
-        canvasPlan.getGraphicsContext2D().clearRect(0,0, canvasPlan.getWidth(), canvasPlan.getHeight());
+        canvasPlan.getGraphicsContext2D().clearRect(0,0, canvasPlan.getWidth(),
+                canvasPlan.getHeight());
+
         for (Segment segment : controleur.getJournee().getPlan().getSegments()) {
-            dessinerSegment(segment,
-                    COULEUR_SEGMENT);
+            dessinerSegment(segment, COULEUR_SEGMENT);
         }
 
         dessinerIntersection(canvasPlan.getGraphicsContext2D(),
@@ -885,21 +949,23 @@ public class VueFenetrePrincipale implements Observer {
                 TAILLE_CERCLE_INTERSECTION,
                 true,
                 VueFenetrePrincipale.FormeIntersection.CERCLE);
-
     }
 
-    public void redessinerPlan(boolean miseAEchelle, double echelleGlobale){
+    public void redessinerPlan(boolean miseAEchelle, double echelleGlobale) {
         if(miseAEchelle) {
             this.echelleLat *= echelleGlobale;
             this.echelleLong *= echelleGlobale;
-            this.decalageX = this.decalageX*echelleGlobale + this.positionCouranteX-(this.positionCouranteX * echelleGlobale);
-            this.decalageY = this.decalageY*echelleGlobale + this.positionCouranteY-(this.positionCouranteY * echelleGlobale);
+            this.decalageX = this.decalageX*echelleGlobale + this.positionCouranteX
+                    - (this.positionCouranteX * echelleGlobale);
+            this.decalageY = this.decalageY*echelleGlobale + this.positionCouranteY
+                    - (this.positionCouranteY * echelleGlobale);
         }
 
-        canvasPlan.getGraphicsContext2D().clearRect(0, 0, canvasPlan.getWidth(), canvasPlan.getHeight());
+        canvasPlan.getGraphicsContext2D().clearRect(0, 0, canvasPlan.getWidth(),
+                canvasPlan.getHeight());
+
         for (Segment segment : controleur.getJournee().getPlan().getSegments()) {
-            dessinerSegment(segment,
-                    COULEUR_SEGMENT);
+            dessinerSegment(segment, COULEUR_SEGMENT);
         }
         dessinerIntersection(canvasPlan.getGraphicsContext2D(),
                 controleur.getJournee().getPlan().getEntrepot(),
