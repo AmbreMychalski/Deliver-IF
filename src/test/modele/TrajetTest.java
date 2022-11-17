@@ -6,7 +6,6 @@ import org.junit.jupiter.api.Test;
 import java.util.ArrayList;
 
 public class TrajetTest {
-
     Intersection intersection1 = new Intersection(1L, 10, 20);
     Intersection intersection2 = new Intersection(2L, 20, 10);
     Intersection intersection3 = new Intersection(3L, 30, 10);

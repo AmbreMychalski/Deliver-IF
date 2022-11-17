@@ -5,7 +5,6 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 public class IntersectionTest {
-
     Intersection intersection = new Intersection(1L,20, 20);
 
     @Test
@@ -13,6 +12,7 @@ public class IntersectionTest {
     void isEgalTest() {
         Assertions.assertNotEquals(null, intersection);
         Assertions.assertEquals(intersection, intersection);
+        Assertions.assertTrue(intersection.equals(null) == false);
 
         Plan plan = new Plan();
 

@@ -23,23 +23,28 @@ public class EtatAvecDemande extends Etat {
 
     public void clicGaucheSurPlan(ControleurFenetrePrincipale c, MouseEvent event) {
         Intersection intersectionTrouvee = this.naviguerSurPlan(c, event, false);
-        ArrayList<DemandeLivraison> demandesAssociees = new ArrayList<>();
-        for (DemandeLivraison demande : c.vue.comboboxLivreur.getValue().getDemandeLivraisons()) {
-            if (intersectionTrouvee == demande.getIntersection()) {
-                demandesAssociees.add(demande);
+        if(intersectionTrouvee != null) {
+            ArrayList<DemandeLivraison> demandesAssociees = new ArrayList<>();
+
+            for (DemandeLivraison demande : c.vue.comboboxLivreur.getValue().getDemandeLivraisons()) {
+                if (demande.getIntersection().equals(intersectionTrouvee)) {
+                    demandesAssociees.add(demande);
+                }
             }
-        }
-        if (demandesAssociees.size() == 1) {
-            c.vue.tableViewDemandesLivraison.getSelectionModel().select(demandesAssociees.get(0));
-            this.selectionnerDemande(c, false);
-            c.changementEtat(c.etatDemandeLivraisonSelectionneeSansTournees);
-        } else if (demandesAssociees.size() > 1) {
-            FenetrePlusieursLivraisonsAuMemeEndroit.display(c, demandesAssociees, null, false);
+
+            if (demandesAssociees.size() == 1) {
+                c.vue.tableViewDemandesLivraison.getSelectionModel().select(demandesAssociees.get(0));
+                this.selectionnerDemande(c, false);
+                c.changementEtat(c.etatDemandeLivraisonSelectionneeSansTournees);
+            } else if (demandesAssociees.size() > 1) {
+                FenetrePlusieursLivraisonsAuMemeEndroit.display(c, demandesAssociees, null, false);
+            }
         }
     }
 
     public void clicGaucheSurTableau(ControleurFenetrePrincipale c) {
         boolean demandeSelectionee = this.selectionnerDemande(c, false);
+
         if (demandeSelectionee) {
             c.changementEtat(c.etatDemandeLivraisonSelectionneeSansTournees);
         }
@@ -53,25 +58,28 @@ public class EtatAvecDemande extends Etat {
         this.sauvegarderListeDemandes(c);
     }
 
-    public void calculerTournees(ControleurFenetrePrincipale c) {
+    public boolean calculerTournees(ControleurFenetrePrincipale c) {
+        boolean tourneeCalculee;
+
         long startTime = System.currentTimeMillis();
         Livreur livreur = c.vue.comboboxLivreur.getValue();
-        boolean tourneeCalcule;
-        tourneeCalcule = c.journee.calculerTournee(livreur);
+        tourneeCalculee = c.journee.calculerTournee(livreur);
 
-        ControleurFenetrePrincipale.LOGGER.debug("tourneeCalcule = " + tourneeCalcule);
-        ControleurFenetrePrincipale.LOGGER.debug("Solution trouvé en :" + (System.currentTimeMillis() - startTime) + "ms ");
+        ControleurFenetrePrincipale.LOGGER.debug("tourneeCalculee = "
+                + tourneeCalculee);
+        ControleurFenetrePrincipale.LOGGER.debug("Solution trouvé en :"
+                + (System.currentTimeMillis() - startTime) + "ms ");
         
-        if (tourneeCalcule){
+        if (tourneeCalculee) {
             c.vue.afficherLivraisons(livreur, true);
             c.changementEtat(c.etatTourneesCalculees);
             c.vue.tableViewDemandesLivraison.setVisible(false);
             c.vue.tableViewLivraisons.setVisible(true);
             this.majComboboxLivreur(c);
-        }
-        else {
+        } else {
             c.vue.labelGuideUtilisateur.setText("Il y a trop de demandes pour calculer la tournée");
         }
+        return tourneeCalculee;
     }
 
     public void clicSurLivreur(ControleurFenetrePrincipale c) {

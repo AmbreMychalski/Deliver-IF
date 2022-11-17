@@ -22,7 +22,7 @@ public class PlanTest {
         File fichierPlan = new File("data\\testPlan.xml");
         Plan plan = new Plan(fichierPlan);
 
-        Intersection entrepot = new Intersection(0L, Float.valueOf(2), Float.valueOf(2));
+        Intersection entrepot = new Intersection(0L, 2F, 2F);
 
         Assertions.assertEquals(entrepot, plan.getEntrepot());
         Assertions.assertEquals("Rue Danton", plan.getSegments().get(0).getNom());
@@ -39,7 +39,7 @@ public class PlanTest {
     void exceptionFichierNonConformeTest() {
         File fichierPlan = new File("data/testExceptionPlan.xml");
 
-        Assertions.assertThrows(FichierNonConformeException.class,() -> new Plan(fichierPlan));
+        Assertions.assertThrows(FichierNonConformeException.class, () -> new Plan(fichierPlan));
     }
 
     @Test
@@ -48,11 +48,11 @@ public class PlanTest {
         File fichierPlan = new File("data\\testPlan.xml");
         Plan plan = new Plan(fichierPlan);
 
-        logger.error("Valeurs : " + plan.getIntersections().get(Long.valueOf(7)));
+        logger.error("Valeurs : " + plan.getIntersections().get(7L));
 
-        Assertions.assertTrue(plan.estLivrable(plan.getIntersections().get(Long.valueOf(1))));
-        Assertions.assertFalse(plan.estLivrable(plan.getIntersections().get(Long.valueOf(7))));
-        Assertions.assertFalse(plan.estLivrable(plan.getIntersections().get(Long.valueOf(8))));
+        Assertions.assertTrue(plan.estLivrable(plan.getIntersections().get(1L)));
+        Assertions.assertFalse(plan.estLivrable(plan.getIntersections().get(7L)));
+        Assertions.assertFalse(plan.estLivrable(plan.getIntersections().get(8L)));
     }
 
     @Test
@@ -61,8 +61,8 @@ public class PlanTest {
         File fichierPlan = new File("data\\testPlan.xml");
         Plan plan = new Plan(fichierPlan);
 
-        Intersection intersection0 = plan.getIntersections().get(Long.valueOf(0));
-        Intersection intersection4 = plan.getIntersections().get(Long.valueOf(4));
+        Intersection intersection0 = plan.getIntersections().get(0L);
+        Intersection intersection4 = plan.getIntersections().get(4L);
 
         List<Segment> listeSegments = new ArrayList<>();
 
@@ -71,6 +71,7 @@ public class PlanTest {
         listeSegments.add(plan.getSegments().get(4));
         listeSegments.add(plan.getSegments().get(7));
 
+        Assertions.assertEquals(plan.calculerPlusCourtChemin(intersection0, intersection0).size(), 0);
         Assertions.assertEquals(plan.calculerPlusCourtChemin(intersection0, intersection4), listeSegments);
     }
 
@@ -81,16 +82,17 @@ public class PlanTest {
         Plan plan = new Plan(fichierPlan);
 
         List<Intersection> listeIntersections = new ArrayList<>();
-        listeIntersections.add(plan.getIntersections().get(Long.valueOf(0)));
-        listeIntersections.add(plan.getIntersections().get(Long.valueOf(3)));
-        listeIntersections.add(plan.getIntersections().get(Long.valueOf(7)));
+        listeIntersections.add(plan.getIntersections().get(0L));
+        listeIntersections.add(plan.getIntersections().get(3L));
 
-        Intersection depart = plan.getIntersections().get(Long.valueOf(5));
+        listeIntersections.add(plan.getIntersections().get(7L));
+
+        Intersection depart = plan.getIntersections().get(5L);
 
         HashMap<Intersection, Float> hashMap = new HashMap<>();
-        hashMap.put(listeIntersections.get(0), Float.valueOf(16));
-        hashMap.put(listeIntersections.get(1), Float.valueOf(15));
-        hashMap.put(listeIntersections.get(2), Float.valueOf(19));
+        hashMap.put(listeIntersections.get(0), 16F);
+        hashMap.put(listeIntersections.get(1), 15F);
+        hashMap.put(listeIntersections.get(2), 19F);
 
         Assertions.assertEquals(hashMap, plan.calculerPlusCourtsChemins(listeIntersections, depart));
     }
@@ -128,7 +130,7 @@ public class PlanTest {
         File fichierPlan = new File("data\\testPlan.xml");
         Plan plan = new Plan(fichierPlan);
 
-        Intersection intersection4 = plan.getIntersections().get(Long.valueOf(4));
+        Intersection intersection4 = plan.getIntersections().get(4L);
 
         List<String> listeRues = new ArrayList<>();
 

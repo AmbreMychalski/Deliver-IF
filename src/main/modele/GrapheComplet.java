@@ -26,7 +26,6 @@ public class GrapheComplet implements Graphe {
      */
     public GrapheComplet(List<DemandeLivraison> demandesLivraisons, Plan plan,
                          Intersection entrepot) {
-
         nbSommets = demandesLivraisons.size() + 1;
         couts = new float[demandesLivraisons.size() + 1][demandesLivraisons.size() + 1];
 
@@ -37,7 +36,7 @@ public class GrapheComplet implements Graphe {
         Integer index = 1;      
         ArrayList<Intersection> listIntersection = new ArrayList<>();
 
-        for(DemandeLivraison dl: demandesLivraisons) {
+        for(DemandeLivraison dl : demandesLivraisons) {
             idDemandeLivraisonToIndex.put(dl, index);
             idIndexToDemandeLivraison.put(index, dl);
             listIntersection.add(dl.getIntersection());
@@ -53,14 +52,11 @@ public class GrapheComplet implements Graphe {
             couts[0][index] = plusCourtsChemins.get(dl.getIntersection());
         } 
         
-        /*
-            Pour chaque point de livraison, on calcule les plus courts chemins
-            à tous les autres points de livraisons
-        */
-
-        for(DemandeLivraison currentDl: demandesLivraisons) {
-            plusCourtsChemins =
-                    plan.calculerPlusCourtsChemins(listIntersection, currentDl.getIntersection());
+        // Pour chaque point de livraison, on calcule les plus courts chemins à
+        // tous les autres points de livraison
+        for(DemandeLivraison currentDl : demandesLivraisons) {
+            plusCourtsChemins = plan.calculerPlusCourtsChemins(
+                    listIntersection, currentDl.getIntersection());
             Integer currentIndex = idDemandeLivraisonToIndex.get(currentDl);
 
             for(DemandeLivraison dl : demandesLivraisons) {
@@ -72,13 +68,13 @@ public class GrapheComplet implements Graphe {
                     }   
                 }
             }
-
             couts[currentIndex][0] = plusCourtsChemins.get(entrepot);
         }
     }
 
     /**
-     * Surcharge du getter pour récupérer le coût [i,j].
+     * Surcharge du getter pour récupérer le coût [i,j]. Opère des vérifications
+     * supplémentaires par rapport au getter auto-généré.
      * @param i L'indice 1
      * @param j L'indice 2
      * @return La valeur associée
@@ -88,12 +84,12 @@ public class GrapheComplet implements Graphe {
         if (i < 0 || i >= nbSommets || j < 0 || j >= nbSommets) {
             return -1;
         }
-
         return couts[i][j];
     }
 
     /**
-     * Vérifie s'il existe un chemin entre le sommet i et le sommet j
+     * Vérifie s'il existe un chemin entre le sommet d'indice i et celui d'indice
+     * j
      * @param i Le premier sommet
      * @param j Le second sommet
      * @return false s'il n'y a pas de lien entre les deux, true sinons

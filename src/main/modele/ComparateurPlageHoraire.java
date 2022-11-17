@@ -5,7 +5,7 @@ import java.util.Comparator;
 public class ComparateurPlageHoraire implements Comparator<PlageHoraire> {
 
     /**
-     * Compare les heures de début de deux plages bhoraires.
+     * Compare les heures de début de deux plages horaires.
      * @param o1 La prmeière plage horaire
      * @param o2 La seconde plage horaire
      * @return La différence entre les heures de début des plages horaires.

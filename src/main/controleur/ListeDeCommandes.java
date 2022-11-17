@@ -16,21 +16,24 @@ public class ListeDeCommandes {
         i=0;
     }
 
-    public void ajouterCommande (Commande c){
-        while(i != listeCommandes.size()){
+    public void ajouterCommande (Commande c) {
+        while(i != listeCommandes.size()) {
             listeCommandes.remove(i);
         }
-        listeCommandes.add(i,c);
+
+        listeCommandes.add(i, c);
         c.doCommande();
         i++;
     }
-    public void undoCommande(){
+
+    public void undoCommande() {
         if (i > 0) {
             listeCommandes.get(i-1).undoCommande();
             i--;
         }
     }
-    public  void redoCommande(){
+
+    public  void redoCommande() {
         if(i < listeCommandes.size()) {
             listeCommandes.get(i).doCommande();
             i++;
@@ -38,11 +41,11 @@ public class ListeDeCommandes {
     }
 
     public Commande getDerniereComande(){
-        return listeCommandes.get(i-1);
+        return listeCommandes.get(i - 1);
     }
 
     public void viderListeCommandes() {
         this.listeCommandes.clear();
-        i=0;
+        i = 0;
     }
 }

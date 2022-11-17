@@ -10,25 +10,31 @@ public class EtatDemandeLivraisonSelectionneeSansTournees extends Etat {
         super.message = "Cliquez sur le plan ou appuyez sur échap " +
                 "pour quitter la sélection";
     }
+
     public void clicGaucheSurPlan(ControleurFenetrePrincipale c, MouseEvent event) {
         this.sortieDeSelectionDemande(c,false);
         c.changementEtat(c.etatAvecDemande);
     }
+
     public void clicGaucheSurTableau(ControleurFenetrePrincipale c) {
         this.selectionnerDemande(c,false);
     }
+
     public void supprimerDemande(ControleurFenetrePrincipale c) {
         Livreur livreur = c.vue.comboboxLivreur.getValue();
         this.supprimerDemandeLivraison(c, livreur);
         this.sortieDeSelectionDemande(c,false);
-        if(livreur.getDemandeLivraisons().size() > 0){
+
+        if(livreur.getDemandeLivraisons().size() > 0) {
             c.changementEtat(c.etatAvecDemande);
         } else {
             c.changementEtat(c.etatSansDemande);
         }
     }
+
     public void modifierDemande(ControleurFenetrePrincipale c) {
         DemandeLivraison ligne = c.vue.tableViewDemandesLivraison.getSelectionModel().getSelectedItem();
+
         c.vue.textfieldIdentifiantIntersectionSelection.setText(ligne.getIdIntersection().toString());
         c.vue.textfieldIdentifiantIntersection.setText(ligne.getIdIntersection().toString());
         c.vue.comboboxPlageHoraire.setDisable(false);
@@ -37,8 +43,10 @@ public class EtatDemandeLivraisonSelectionneeSansTournees extends Etat {
         c.vue.tableViewDemandesLivraison.setDisable(true);
         c.changementEtat(c.etatModifierDemandeLivraisonSansTournees);
     }
+
     public  void touchePressee(ControleurFenetrePrincipale c, KeyEvent ke) {
         super.touchePressee(c, ke);
+
         switch (ke.getCode()) {
             case ESCAPE:
                 this.sortieDeSelectionDemande(c,false);
@@ -54,6 +62,7 @@ public class EtatDemandeLivraisonSelectionneeSansTournees extends Etat {
                 } else {
                     c.changementEtat(c.etatSansDemande);
                 }
+                
                 break;
             case Z:
                 c.vue.tableViewDemandesLivraison.getSelectionModel().selectAboveCell();
