@@ -1,9 +1,11 @@
 package controleur;
 
 import javafx.scene.input.*;
+import javafx.scene.paint.Color;
 import modele.Intersection;
 import modele.Livraison;
 import vue.FenetrePlusieursLivraisonsAuMemeEndroit;
+import vue.VueFenetrePrincipale;
 
 import java.util.ArrayList;
 
@@ -75,5 +77,35 @@ public class EtatTourneesCalculees extends Etat{
 
     public void chargerPlan(ControleurFenetrePrincipale c) throws Exception {
         this.chargerNouveauPlan(c);
+    }
+
+    public void zoomScroll(ControleurFenetrePrincipale c, ScrollEvent event) {
+        double deltaY = event.getDeltaY();
+        if(deltaY>0){
+            c.vue.redessinerPlan(true,1.5);
+        }
+        else{
+            c.vue.redessinerPlan(true,0.6667);
+        }
+
+        if(c.vue.comboboxLivreur.getValue().getTournee() != null) {
+            c.vue.afficherLivraisons(c.vue.comboboxLivreur.getValue(),
+                    true);
+        } else {
+            c.vue.afficherDemandesLivraison(c.vue.comboboxLivreur.getValue(),
+                    true);
+        }
+
+        if(!c.vue.textfieldIdentifiantIntersection.getText().isEmpty()){
+            long idIntersection = Long.parseLong(c.vue.textfieldIdentifiantIntersection.getText());
+
+            c.vue.dessinerIntersection(c.vue.canvasIntersectionsLivraisons.getGraphicsContext2D(),
+                    c.journee.getPlan().getIntersections().get(idIntersection),
+                    Color.DARKORCHID,
+                    c.vue.TAILLE_CERCLE_INTERSECTION_SELECTIONNEE,
+                    true,
+                    VueFenetrePrincipale.FormeIntersection.CERCLE
+            );
+        }
     }
 }

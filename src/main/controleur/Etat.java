@@ -6,6 +6,7 @@ import javafx.collections.ObservableList;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.input.ScrollEvent;
 import javafx.scene.paint.Color;
 import javafx.stage.FileChooser;
 import lombok.Getter;
@@ -64,30 +65,6 @@ public abstract class Etat {
 				case D:
 					c.vue.comboboxLivreur.getSelectionModel().selectNext();
 					this.changementLivreur(c);
-					break;
-				case P:
-				case ADD:
-					c.vue.redessinerPlan(true,1.5);
-
-					if(c.vue.comboboxLivreur.getValue().getTournee() != null) {
-						c.vue.afficherLivraisons(c.vue.comboboxLivreur.getValue(),
-								true);
-					} else {
-						c.vue.afficherDemandesLivraison(c.vue.comboboxLivreur.getValue(),
-								true);
-					}
-					break;
-				case M:
-				case SUBTRACT:
-					c.vue.redessinerPlan(true,0.6667);
-
-					if(c.vue.comboboxLivreur.getValue().getTournee() != null) {
-						c.vue.afficherLivraisons(c.vue.comboboxLivreur.getValue(),
-								true);
-					} else {
-						c.vue.afficherDemandesLivraison(c.vue.comboboxLivreur.getValue(),
-								true);
-					}
 					break;
 			}
 		}
@@ -539,5 +516,9 @@ public abstract class Etat {
 	public void undo(ListeDeCommandes liste) {
 	}
 	public void redo(ListeDeCommandes liste) {
+	}
+
+	public void zoomScroll(ControleurFenetrePrincipale c,ScrollEvent event) {
+
 	}
 }

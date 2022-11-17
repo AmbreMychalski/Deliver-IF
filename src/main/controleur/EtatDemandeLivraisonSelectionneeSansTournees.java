@@ -2,8 +2,12 @@ package controleur;
 
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.input.ScrollEvent;
 import modele.DemandeLivraison;
+import modele.Livraison;
 import modele.Livreur;
+import modele.Tournee;
+import vue.VueFenetrePrincipale;
 
 public class EtatDemandeLivraisonSelectionneeSansTournees extends Etat {
     public EtatDemandeLivraisonSelectionneeSansTournees() {
@@ -73,5 +77,36 @@ public class EtatDemandeLivraisonSelectionneeSansTournees extends Etat {
                 this.selectionnerDemande(c, false);
                 break;
         }
+    }
+
+    public void zoomScroll(ControleurFenetrePrincipale c, ScrollEvent event) {
+        double deltaY = event.getDeltaY();
+        if(deltaY>0){
+            c.vue.redessinerPlan(true,1.5);
+        }
+        else{
+            c.vue.redessinerPlan(true,0.6667);
+        }
+
+        if(c.vue.comboboxLivreur.getValue().getTournee() != null) {
+            c.vue.afficherLivraisons(c.vue.comboboxLivreur.getValue(),
+                    true);
+        } else {
+            c.vue.afficherDemandesLivraison(c.vue.comboboxLivreur.getValue(),
+                    true);
+        }
+
+
+        DemandeLivraison ligne = c.vue.tableViewDemandesLivraison.getSelectionModel()
+                .getSelectedItem();
+
+        c.vue.dessinerIntersection(
+                c.vue.canvasIntersectionsLivraisons.getGraphicsContext2D(),
+                ligne.getIntersection(),
+                c.vue.COULEUR_POINT_LIVRAISON_SELECTIONNE,
+                c.vue.TAILLE_RECT_PT_LIVRAISON_SELECTIONNE,
+                true,
+                VueFenetrePrincipale.FormeIntersection.RECTANGLE
+        );
     }
 }

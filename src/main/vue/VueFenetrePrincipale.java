@@ -332,21 +332,8 @@ public class VueFenetrePrincipale implements Observer {
 
     private void actionScroll(ScrollEvent event){
 
-        double deltaY = event.getDeltaY();
-        if(deltaY>0){
-            this.redessinerPlan(true,1.5);
-        }
-        else{
-            this.redessinerPlan(true,0.6667);
-        }
+        this.controleur.zoomScroll(event);
 
-        if(this.comboboxLivreur.getValue().getTournee() != null) {
-            this.afficherLivraisons(this.comboboxLivreur.getValue(),
-                    true);
-        } else {
-            this.afficherDemandesLivraison(this.comboboxLivreur.getValue(),
-                    true);
-        }
     }
 
     public File choisirFichier(String titreFenetre) throws Exception {

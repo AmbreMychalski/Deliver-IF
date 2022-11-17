@@ -2,8 +2,11 @@ package controleur;
 
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.input.ScrollEvent;
 import modele.Livraison;
 import modele.Livreur;
+import modele.Tournee;
+import vue.VueFenetrePrincipale;
 
 public class EtatDemandeLivraisonSelectionneeAvecTournees extends Etat {
     public EtatDemandeLivraisonSelectionneeAvecTournees() {
@@ -98,5 +101,41 @@ public class EtatDemandeLivraisonSelectionneeAvecTournees extends Etat {
                 c.vue.buttonAssignerNvLivreur.setDisable(false);
             }
         }
+    }
+    public void zoomScroll(ControleurFenetrePrincipale c, ScrollEvent event) {
+        double deltaY = event.getDeltaY();
+        if(deltaY>0){
+            c.vue.redessinerPlan(true,1.5);
+        }
+        else{
+            c.vue.redessinerPlan(true,0.6667);
+        }
+
+        if(c.vue.comboboxLivreur.getValue().getTournee() != null) {
+            c.vue.afficherLivraisons(c.vue.comboboxLivreur.getValue(),
+                    true);
+        } else {
+            c.vue.afficherDemandesLivraison(c.vue.comboboxLivreur.getValue(),
+                    true);
+        }
+
+        Livraison liv = c.vue.tableViewLivraisons.getSelectionModel()
+                .getSelectedItem();
+
+        Livreur livreur = c.vue.comboboxLivreur.getValue();
+        Tournee tournee = livreur.getTournee();
+        int indexLivr = (tournee.getLivraisons()).indexOf(liv);
+
+        c.vue.dessinerSurbrillanceTrajet(tournee.getTrajets().get(indexLivr),
+                c.vue.canvasPlanTrajet.getGraphicsContext2D());
+
+        c.vue.dessinerIntersection(
+                c.vue.canvasIntersectionsLivraisons.getGraphicsContext2D(),
+                liv.getDemandeLivraison().getIntersection(),
+                c.vue.COULEUR_POINT_LIVRAISON_SELECTIONNE,
+                c.vue.TAILLE_RECT_PT_LIVRAISON_SELECTIONNE,
+                true,
+                VueFenetrePrincipale.FormeIntersection.RECTANGLE
+        );
     }
 }
