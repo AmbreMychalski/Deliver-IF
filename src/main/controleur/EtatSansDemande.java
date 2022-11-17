@@ -2,6 +2,8 @@ package controleur;
 
 import javafx.scene.input.MouseEvent;
 import javafx.scene.input.ScrollEvent;
+import javafx.scene.paint.Color;
+import vue.VueFenetrePrincipale;
 
 public class EtatSansDemande extends Etat{
     public EtatSansDemande() {
@@ -51,6 +53,17 @@ public class EtatSansDemande extends Etat{
         } else {
             c.vue.afficherDemandesLivraison(c.vue.comboboxLivreur.getValue(),
                     true);
+        }
+        if(!c.vue.textfieldIdentifiantIntersection.getText().isEmpty()){
+            long idIntersection = Long.parseLong(c.vue.textfieldIdentifiantIntersection.getText());
+
+            c.vue.dessinerIntersection(c.vue.canvasIntersectionsLivraisons.getGraphicsContext2D(),
+                    c.journee.getPlan().getIntersections().get(idIntersection),
+                    Color.DARKORCHID,
+                    c.vue.TAILLE_CERCLE_INTERSECTION_SELECTIONNEE,
+                    true,
+                    VueFenetrePrincipale.FormeIntersection.CERCLE
+            );
         }
     }
 }

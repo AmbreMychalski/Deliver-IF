@@ -66,30 +66,6 @@ public abstract class Etat {
 					c.vue.comboboxLivreur.getSelectionModel().selectNext();
 					this.changementLivreur(c);
 					break;
-				case P:
-				case ADD:
-					c.vue.redessinerPlan(true,1.5);
-
-					if(c.vue.comboboxLivreur.getValue().getTournee() != null) {
-						c.vue.afficherLivraisons(c.vue.comboboxLivreur.getValue(),
-								true);
-					} else {
-						c.vue.afficherDemandesLivraison(c.vue.comboboxLivreur.getValue(),
-								true);
-					}
-					break;
-				case M:
-				case SUBTRACT:
-					c.vue.redessinerPlan(true,0.6667);
-
-					if(c.vue.comboboxLivreur.getValue().getTournee() != null) {
-						c.vue.afficherLivraisons(c.vue.comboboxLivreur.getValue(),
-								true);
-					} else {
-						c.vue.afficherDemandesLivraison(c.vue.comboboxLivreur.getValue(),
-								true);
-					}
-					break;
 			}
 		}
 	}
