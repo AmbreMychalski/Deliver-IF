@@ -40,8 +40,6 @@ public class VueFenetrePrincipale implements Observer {
     public final double TAILLE_RECT_PT_LIVRAISON = 10;
     public final double TAILLE_RECT_PT_LIVRAISON_SELECTIONNE = 14;
     public final double TAILLE_CERCLE_INTERSECTION_SELECTIONNEE = 10;
-    public final double TAILLE_CERCLE_INTERSECTION = 14;
-    public final Color COULEUR_DEPOT = Color.RED;
     public final Color COULEUR_SEGMENT = Color.BLACK;
     public final Color COULEUR_POINT_LIVRAISON_SELECTIONNE = Color.RED;
     /* Rayon en pixels définissant la zone où l'on

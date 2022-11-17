@@ -67,8 +67,8 @@ public class ControleurFenetrePrincipale {
 		final LoggerContext context = (LoggerContext) LogManager.getContext(false);
 		final org.apache.logging.log4j.core.config.Configuration config = context.getConfiguration();
 
-		config.getLoggerConfig(LogManager.ROOT_LOGGER_NAME).setLevel(Level.ALL);
-		config.getLoggerConfig(ControleurFenetrePrincipale.class.getPackage().getName()).setLevel(Level.ALL);
+		config.getLoggerConfig(LogManager.ROOT_LOGGER_NAME).setLevel(Level.ERROR);
+		config.getLoggerConfig(ControleurFenetrePrincipale.class.getPackage().getName()).setLevel(Level.ERROR);
 		context.updateLoggers(config);
 
 		controlsActivesParEtat = new HashMap<Etat, ArrayList<Control>>() {{

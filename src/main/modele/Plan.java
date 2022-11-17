@@ -266,6 +266,8 @@ public class Plan {
 							this.intersectionsVoisines.get(origineId).add(
 									segments.get(segments.size() - 1));
 							break;
+						default :
+							throw new Exception("Identificateur xml inconnu");
 					}
 				}
 			}
@@ -275,7 +277,7 @@ public class Plan {
 			this.intersections =  new HashMap<>();
 			this.segments =  new ArrayList<>();
 			this.entrepot = null;
-
+			LOGGER.error(e.getMessage());
 			LOGGER.error("Erreur lors du parsing du fichier " + fichier);
 			throw new FichierNonConformeException("Fichier non conforme");
 		}
