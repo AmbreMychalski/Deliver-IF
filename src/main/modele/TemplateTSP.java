@@ -1,7 +1,5 @@
 package modele;
 
-import com.sun.media.jfxmedia.logging.Logger;
-
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
@@ -25,7 +23,7 @@ public abstract class TemplateTSP implements TSP {
 		this.g = g;
 		meilleureSolution = new Integer[g.getNbSommets()];
 
-		ArrayList<Integer> nonVisites = new ArrayList<Integer>(g.getNbSommets() - 1);
+		ArrayList<Integer> nonVisites = new ArrayList<>(g.getNbSommets() - 1);
 
 		for (int i = 1; i < g.getNbSommets(); i++) {
 			nonVisites.add(i);
@@ -33,7 +31,7 @@ public abstract class TemplateTSP implements TSP {
 
 		// The first visited vertex is 0
 		coutMeilleureSolution = Integer.MAX_VALUE;
-		ArrayList<Integer> visited = new ArrayList<Integer>(g.getNbSommets());
+		ArrayList<Integer> visited = new ArrayList<>(g.getNbSommets());
 
 		visited.add(0);
 

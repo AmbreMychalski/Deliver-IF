@@ -21,15 +21,15 @@ import vue.VueFenetrePrincipale;
  */
 public class LanceurApplication extends Application {
 	@Override
-	public void start(Stage primaryStage) throws Exception {
+	public void start(Stage primaryStage) {
 		try {
 			
 			FXMLLoader loader = new FXMLLoader(getClass()
 			        .getResource("/FenetrePrincipale.fxml"));
-	        Parent root = (Parent)loader.load();
+	        Parent root = loader.load();
 			VueFenetrePrincipale controleur = loader.getController();
 			controleur.setStage(primaryStage);
-	        primaryStage.setTitle("Calcul de tournées");
+	        primaryStage.setTitle("Deliver'IF");
 	        primaryStage.setScene(new Scene(root));
 	        primaryStage.show();
 			
