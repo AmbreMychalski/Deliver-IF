@@ -26,7 +26,6 @@ public class GrapheComplet implements Graphe {
      */
     public GrapheComplet(List<DemandeLivraison> demandesLivraisons, Plan plan,
                          Intersection entrepot) {
-
         nbSommets = demandesLivraisons.size() + 1;
         couts = new float[demandesLivraisons.size() + 1][demandesLivraisons.size() + 1];
 
@@ -37,7 +36,7 @@ public class GrapheComplet implements Graphe {
         Integer index = 1;      
         ArrayList<Intersection> listIntersection = new ArrayList<>();
 
-        for(DemandeLivraison dl: demandesLivraisons) {
+        for(DemandeLivraison dl : demandesLivraisons) {
             idDemandeLivraisonToIndex.put(dl, index);
             idIndexToDemandeLivraison.put(index, dl);
             listIntersection.add(dl.getIntersection());
@@ -58,9 +57,9 @@ public class GrapheComplet implements Graphe {
             à tous les autres points de livraisons
         */
 
-        for(DemandeLivraison currentDl: demandesLivraisons) {
-            plusCourtsChemins =
-                    plan.calculerPlusCourtsChemins(listIntersection, currentDl.getIntersection());
+        for(DemandeLivraison currentDl : demandesLivraisons) {
+            plusCourtsChemins = plan.calculerPlusCourtsChemins(
+                    listIntersection, currentDl.getIntersection());
             Integer currentIndex = idDemandeLivraisonToIndex.get(currentDl);
 
             for(DemandeLivraison dl : demandesLivraisons) {
@@ -88,7 +87,6 @@ public class GrapheComplet implements Graphe {
         if (i < 0 || i >= nbSommets || j < 0 || j >= nbSommets) {
             return -1;
         }
-
         return couts[i][j];
     }
 

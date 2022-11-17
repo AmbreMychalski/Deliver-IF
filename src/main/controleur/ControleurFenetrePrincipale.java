@@ -40,13 +40,19 @@ public class ControleurFenetrePrincipale {
 	final EtatInitial etatInitial = new EtatInitial();
 	final EtatSansDemande etatSansDemande = new EtatSansDemande();
 	final EtatAvecDemande etatAvecDemande = new EtatAvecDemande();
-	final EtatDemandeLivraisonSelectionneeAvecTournees etatDemandeLivraisonSelectionneeAvecTournees = new EtatDemandeLivraisonSelectionneeAvecTournees();
-	final EtatDemandeLivraisonSelectionneeSansTournees etatDemandeLivraisonSelectionneeSansTournees = new EtatDemandeLivraisonSelectionneeSansTournees();
-	final EtatModifierDemandeLivraisonSansTournees etatModifierDemandeLivraisonSansTournees = new EtatModifierDemandeLivraisonSansTournees();
-	final EtatSaisieNouvelleDemandeAvecTournees etatSaisieNouvelleDemandeAvecTournees = new EtatSaisieNouvelleDemandeAvecTournees();
-	final EtatSaisieNouvelleDemandeSansTournees etatSaisieNouvelleDemandeSansTournees = new EtatSaisieNouvelleDemandeSansTournees();
+	final EtatDemandeLivraisonSelectionneeAvecTournees etatDemandeLivraisonSelectionneeAvecTournees =
+			new EtatDemandeLivraisonSelectionneeAvecTournees();
+	final EtatDemandeLivraisonSelectionneeSansTournees etatDemandeLivraisonSelectionneeSansTournees =
+			new EtatDemandeLivraisonSelectionneeSansTournees();
+	final EtatModifierDemandeLivraisonSansTournees etatModifierDemandeLivraisonSansTournees =
+			new EtatModifierDemandeLivraisonSansTournees();
+	final EtatSaisieNouvelleDemandeAvecTournees etatSaisieNouvelleDemandeAvecTournees =
+			new EtatSaisieNouvelleDemandeAvecTournees();
+	final EtatSaisieNouvelleDemandeSansTournees etatSaisieNouvelleDemandeSansTournees =
+			new EtatSaisieNouvelleDemandeSansTournees();
 	final EtatTourneesCalculees etatTourneesCalculees = new EtatTourneesCalculees();
-	final EtatSelectionLivraisonPourNouvelleDemande etatSelectionLivraisonPourNouvelleDemande = new EtatSelectionLivraisonPourNouvelleDemande();
+	final EtatSelectionLivraisonPourNouvelleDemande etatSelectionLivraisonPourNouvelleDemande =
+			new EtatSelectionLivraisonPourNouvelleDemande();
 
 	// Map qui associe les états à l'état des boutons sur lesquels on peut cliquer
 	private final HashMap<Etat, ArrayList<Control>> controlsActivesParEtat;
@@ -60,6 +66,7 @@ public class ControleurFenetrePrincipale {
 		// Initilisation et configuration du LOGGER
 		final LoggerContext context = (LoggerContext) LogManager.getContext(false);
 		final org.apache.logging.log4j.core.config.Configuration config = context.getConfiguration();
+
 		config.getLoggerConfig(LogManager.ROOT_LOGGER_NAME).setLevel(Level.ALL);
 		config.getLoggerConfig(ControleurFenetrePrincipale.class.getPackage().getName()).setLevel(Level.ALL);
 		context.updateLoggers(config);
@@ -120,10 +127,11 @@ public class ControleurFenetrePrincipale {
 		}};
 
 		this.changementEtat(etatInitial);
+
 		this.journee = new Journee();
 		this.journee.ajouterObservateur(vue);
-
 		Livreur liv = new Livreur();
+
 		liv.ajouterObservateur(vue);
 		this.journee.getLivreurs().add(liv);
 
@@ -131,7 +139,7 @@ public class ControleurFenetrePrincipale {
 		this.vue.comboboxLivreur.getSelectionModel().selectFirst();
 	}
 
-	public void viderListeDeCommandes(){
+	public void viderListeDeCommandes() {
 		this.listeCommandes.viderListeCommandes();
 	}
 	public void touchePressee(KeyEvent ke) {
@@ -192,8 +200,10 @@ public class ControleurFenetrePrincipale {
 
 	public void changementEtat(Etat nouvelEtat) {
 		this.etatCourant = nouvelEtat;
+
 		this.vue.updateLabelGuideUtilisateur(this.etatCourant.getMessage());
 		this.vue.activerExclusivementBoutons(controlsActivesParEtat.get(nouvelEtat));
+
 		LOGGER.debug("Nouvel état : " + nouvelEtat.getClass().getName());
 	}
 
@@ -203,12 +213,14 @@ public class ControleurFenetrePrincipale {
 
 	public Livreur creerLivreur() {
 		Livreur livreur = new Livreur();
+
 		livreur.ajouterObservateur(vue);
 		journee.ajouterLivreur(livreur);
+
 		return livreur;
 	}
 
-	public void actionClicComboboxAssisgnerLivreur() {
+	public void actionClicComboboxAssignerLivreur() {
 		etatCourant.clicSurComboboxAssignerLivreur(this);
 	}
 

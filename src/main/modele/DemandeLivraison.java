@@ -28,13 +28,14 @@ public class DemandeLivraison {
 	    if(intersection != null) {
 	        this.setIntersection(intersection);
 	    }
+
 	    if(plageHoraire != null) {
 	        this.setPlageHoraire(plageHoraire);
 	    }
 	}
 
     /**
-     *
+     * Permet de récupérer l'ID de l'intersection où se situe la demande
      * @return l'ID de l'intersection où se situe la demande
      */
 	public Long getIdIntersection() {
@@ -42,8 +43,9 @@ public class DemandeLivraison {
 	}
 
     /**
-     *
-     * @return
+     * Retourne la valeur de hashage pour l'intersection et la plage horaire
+     * données.
+     * @return la valeur de hashage
      */
     @Override
     public int hashCode() {

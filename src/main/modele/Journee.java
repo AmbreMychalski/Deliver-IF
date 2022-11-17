@@ -42,7 +42,8 @@ public class Journee extends Observable {
     }
 
     /**
-     * Permet de charger un fichier de demandes de livraison.
+     * Permet de charger un fichier de demandes de livraison. Traite une
+     * exception dans le cas d'un souci de lecture.
      * @param fichier Le fichier que l'on veut charger
      * @param livreur Le livreur auquel on associera les demandes
      * @return La liste des demandes de livraison qui ont pu être lues
@@ -73,16 +74,23 @@ public class Journee extends Observable {
                         int  heureFin;
 
                         attributs = node.getAttributes();
-                        intersectionId = Long.parseLong(attributs.getNamedItem("intersectionId").getNodeValue());
-                        heureDebut = Integer.parseInt(attributs.getNamedItem("heureDebut").getNodeValue());
-                        heureFin = Integer.parseInt(attributs.getNamedItem("heureFin").getNodeValue());
+                        intersectionId = Long.parseLong(attributs
+                                .getNamedItem("intersectionId").getNodeValue());
+                        heureDebut = Integer.parseInt(attributs
+                                .getNamedItem("heureDebut").getNodeValue());
+                        heureFin = Integer.parseInt(attributs
+                                .getNamedItem("heureFin").getNodeValue());
 
                         if(heureFin - heureDebut != 1) {
                             throw new Exception("Plage horaire incompatible");
                         }
 
                         if(this.plan.estLivrable(this.plan.getIntersections().get(intersectionId))) {
-                            DemandeLivraison demande = new DemandeLivraison(this.plan.getIntersections().get(intersectionId), new PlageHoraire(heureDebut, heureFin));
+                            DemandeLivraison demande = new DemandeLivraison(
+                                    this.plan.getIntersections().get(intersectionId),
+                                    new PlageHoraire(heureDebut, heureFin)
+                            );
+
                             if(!livreur.getDemandeLivraisons().contains(demande)) {
                                 livreur.ajouterDemandeLivraison(demande);
                                 demandesAjoutees.add(demande);
@@ -94,6 +102,7 @@ public class Journee extends Observable {
         } catch(Exception e) {
             LOGGER.error("Problème lors de la lecture du fichier \n "+ e);
         }
+
         notifierObservateurs("AjoutListeDemandeLivraison");
         return demandesAjoutees;
     }
@@ -107,8 +116,8 @@ public class Journee extends Observable {
         try {
             DocumentBuilderFactory documentFactory = DocumentBuilderFactory.newInstance();
             DocumentBuilder        documentBuilder = documentFactory.newDocumentBuilder();
-            Document                      document = documentBuilder.newDocument();
-            Element                           root = document.createElement("listeDemandes");
+            Document               document = documentBuilder.newDocument();
+            Element                root = document.createElement("listeDemandes");
 
             document.appendChild(root);
 
@@ -116,15 +125,18 @@ public class Journee extends Observable {
                 Element demandeLivraison = document.createElement("demandeLivraison");
 
                 root.appendChild(demandeLivraison);
-                demandeLivraison.setAttribute("intersectionId", demande.getIntersection().getIdIntersection().toString());
-                demandeLivraison.setAttribute("heureDebut", Integer.toString(demande.getPlageHoraire().getDebut()));
-                demandeLivraison.setAttribute("heureFin", Integer.toString(demande.getPlageHoraire().getFin()));
+                demandeLivraison.setAttribute("intersectionId",
+                        demande.getIntersection().getIdIntersection().toString());
+                demandeLivraison.setAttribute("heureDebut",
+                        Integer.toString(demande.getPlageHoraire().getDebut()));
+                demandeLivraison.setAttribute("heureFin",
+                        Integer.toString(demande.getPlageHoraire().getFin()));
             }
 
             TransformerFactory transformerFactory = TransformerFactory.newInstance();
-            Transformer               transformer = transformerFactory.newTransformer();
-            DOMSource                   domSource = new DOMSource(document);
-            StreamResult             streamResult = new StreamResult(fichier);
+            Transformer        transformer = transformerFactory.newTransformer();
+            DOMSource          domSource = new DOMSource(document);
+            StreamResult       streamResult = new StreamResult(fichier);
 
             transformer.transform(domSource, streamResult);
         } catch (Exception e) {
@@ -138,17 +150,14 @@ public class Journee extends Observable {
      * @return true si la tournée est complète (et valide), false sinon
      */
     public boolean calculerTournee(Livreur livreur) {
-
-        boolean            tourneeCalcule = true;
         List<DemandeLivraison> listDemande = new LinkedList<>(livreur.getDemandeLivraisons());
-        List<Livraison>           livrList = new LinkedList<>();
-        GrapheComplet                    g = new GrapheComplet(listDemande,this.plan, this.plan.getEntrepot());
-        TSP                            tsp = new TSP1();
-
-        boolean solutionTrouvee = tsp.searchSolution(20000, g);
+        List<Livraison>        livrList = new LinkedList<>();
+        GrapheComplet          g = new GrapheComplet(listDemande,this.plan, this.plan.getEntrepot());
+        boolean                tourneeCalcule = true;
+        TSP                    tsp = new TSP1();
+        boolean                solutionTrouvee = tsp.searchSolution(20000, g);
 
         if(solutionTrouvee) {
-
             for (int i = 1; i < listDemande.size() + 1; i++) {
                 int x = tsp.getSolution(i);
                 DemandeLivraison demande = g.getIdIndexToDemandeLivraison().get(x);
@@ -162,11 +171,10 @@ public class Journee extends Observable {
 
             livreur.modifierTournee(t);
             this.majHeureLivraison(t, 0);
-
-        }
-        else{
+        } else {
             tourneeCalcule = false;
         }
+
         LOGGER.info("solutionTrouvee = " + solutionTrouvee);
 
         return tourneeCalcule;
@@ -233,7 +241,8 @@ public class Journee extends Observable {
      * @param livreur Le livreur a qui on va ajouter la livraison
      * @param ancienLivreur Le livreur qui va perdre la livraison
      */
-    public void assignerLivraisonNouveauLivreur(Livraison livr, Livreur livreur, Livreur ancienLivreur) {
+    public void assignerLivraisonNouveauLivreur(Livraison livr, Livreur livreur,
+                                                Livreur ancienLivreur) {
         supprimerLivraisonTournee(ancienLivreur, livr);
         livr.setLivreur(livreur);
         livreur.ajouterDemandeLivraison(livr.getDemandeLivraison());
@@ -307,9 +316,9 @@ public class Journee extends Observable {
     public void supprimerLivraisonTournee(Livreur livreur, Livraison livr) {
         Tournee t = livreur.getTournee();
         if(t.getLivraisons().size() != 1) {
-            int          index;
             Intersection intersectionAmont;
             Intersection intersectionAval;
+            int          index;
 
             index = t.getLivraisons().indexOf(livr);
 
@@ -330,35 +339,35 @@ public class Journee extends Observable {
             }
 
             List<Segment> lisSeg = plan.calculerPlusCourtChemin(intersectionAmont, intersectionAval);
-            float           dist = 0;
+            float         dist = 0;
 
             for (Segment seg : lisSeg) {
                 dist += seg.getLongueur();
             }
 
-            t.getTrajets().add(index, new Trajet(lisSeg, dist,intersectionAmont, intersectionAval));
+            t.getTrajets().add(index, new Trajet(lisSeg, dist, intersectionAmont,
+                    intersectionAval));
             this.majHeureLivraison(t, index);
         } else {
             livr.getLivreur().supprimerTournee();
         }
     }
     private List<Trajet> creerListTrajet(List<Livraison> livrList, GrapheComplet g) {
-        List<Trajet> trajetList = new LinkedList<>();
-        List<Segment>    lisSeg = plan.calculerPlusCourtChemin(
-                plan.getEntrepot(),livrList.get(0).getDemandeLivraison().getIntersection());
-        int      indexCurrentDl =
-                g.getIdDemandeLivraisonToIndex().get(livrList.get(0).getDemandeLivraison());
-        int     indexPreviousDl = 0;
-        float              dist = g.getCout(indexPreviousDl, indexCurrentDl);
+        List<Trajet>  trajetList = new LinkedList<>();
+        List<Segment> lisSeg = plan.calculerPlusCourtChemin(plan.getEntrepot(),
+                livrList.get(0).getDemandeLivraison().getIntersection());
+        int           indexCurrentDl = g.getIdDemandeLivraisonToIndex().get(livrList.get(0).getDemandeLivraison());
+        int           indexPreviousDl = 0;
+        float         dist = g.getCout(indexPreviousDl, indexCurrentDl);
 
         trajetList.add(new Trajet(lisSeg, dist,plan.getEntrepot(),
                 livrList.get(0).getDemandeLivraison().getIntersection()));
 
         for(int i = 0; i < livrList.size() - 1; i++) {
-            indexCurrentDl = g.getIdDemandeLivraisonToIndex().get(livrList.get(i+1).getDemandeLivraison());
-            indexPreviousDl = g.getIdDemandeLivraisonToIndex().get(livrList.get(i).getDemandeLivraison());
-            // dist = g.getCout(indexPreviousDl, indexCurrentDl);
-            // lisSeg = plan.calculerPlusCourtChemin(livrList.get(i).getDemandeLivraison().getIntersection(),livrList.get(i+1).getDemandeLivraison().getIntersection());
+            indexCurrentDl = g.getIdDemandeLivraisonToIndex()
+                    .get(livrList.get(i+1).getDemandeLivraison());
+            indexPreviousDl = g.getIdDemandeLivraisonToIndex()
+                    .get(livrList.get(i).getDemandeLivraison());
             dist = g.getCout(indexPreviousDl, indexCurrentDl);
             lisSeg = plan.calculerPlusCourtChemin(
                     livrList.get(i).getDemandeLivraison().getIntersection(),
@@ -370,7 +379,6 @@ public class Journee extends Observable {
 
         lisSeg = plan.calculerPlusCourtChemin(
                 livrList.get(livrList.size() - 1).getDemandeLivraison().getIntersection(),plan.getEntrepot());
-
         indexCurrentDl = 0;
         indexPreviousDl = g.getIdDemandeLivraisonToIndex().get(livrList.get(livrList.size()-1).getDemandeLivraison());
         dist = g.getCout(indexPreviousDl, indexCurrentDl);
@@ -389,8 +397,8 @@ public class Journee extends Observable {
         float heureLivraison;
 
         if(startIndex == 0) {
-            heureLivraison =
-                    t.getLivraisons().get(0).getDemandeLivraison().getPlageHoraire().getDebut();
+            heureLivraison = t.getLivraisons().get(0).getDemandeLivraison()
+                              .getPlageHoraire().getDebut();
 
             t.getLivraisons().get(0).setHeure(heureLivraison);
             t.getLivraisons().get(0).setDansSaPlageHoraire(true);
@@ -407,14 +415,17 @@ public class Journee extends Observable {
 
             // Livraison vielleLivraison = new Livraison(t.getLivraisons().get(i));
 
-            if(heureLivraison > t.getLivraisons().get(i).getDemandeLivraison().getPlageHoraire().getFin()) {
+            if(heureLivraison > t.getLivraisons().get(i).getDemandeLivraison()
+                                 .getPlageHoraire().getFin()) {
                 t.getLivraisons().get(i).setDansSaPlageHoraire(false);
             } else {
                 t.getLivraisons().get(i).setDansSaPlageHoraire(true);
             }
 
-            if(heureLivraison < t.getLivraisons().get(i).getDemandeLivraison().getPlageHoraire().getDebut()) {
-                heureLivraison = t.getLivraisons().get(i).getDemandeLivraison().getPlageHoraire().getDebut();
+            if(heureLivraison < t.getLivraisons().get(i).getDemandeLivraison()
+                                 .getPlageHoraire().getDebut()) {
+                heureLivraison = t.getLivraisons().get(i).getDemandeLivraison()
+                                  .getPlageHoraire().getDebut();
             }
 
             t.getLivraisons().get(i).setHeure(heureLivraison);
