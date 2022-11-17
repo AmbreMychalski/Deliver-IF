@@ -13,6 +13,7 @@ import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.input.ScrollEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.CycleMethod;
@@ -274,6 +275,8 @@ public class VueFenetrePrincipale implements Observer {
                 });
 
         canvasIntersectionsLivraisons.setOnMouseDragged(this::actionDeplacerPlan);
+        canvasIntersectionsLivraisons.setOnScroll(this::actionScroll);
+
         canvasIntersectionsLivraisons.setOnMousePressed(event -> {
             dernierePositionY = event.getY();
             dernierePositionX = event.getX();
@@ -306,6 +309,25 @@ public class VueFenetrePrincipale implements Observer {
             afficherDemandesLivraison(comboboxLivreur.getValue(), true);
         } else {
             afficherLivraisons(comboboxLivreur.getValue(), true);
+        }
+    }
+
+    private void actionScroll(ScrollEvent event){
+
+        double deltaY = event.getDeltaY();
+        if(deltaY>0){
+            this.redessinerPlan(true,1.5);
+        }
+        else{
+            this.redessinerPlan(true,0.6667);
+        }
+
+        if(this.comboboxLivreur.getValue().getTournee() != null) {
+            this.afficherLivraisons(this.comboboxLivreur.getValue(),
+                    true);
+        } else {
+            this.afficherDemandesLivraison(this.comboboxLivreur.getValue(),
+                    true);
         }
     }
 
