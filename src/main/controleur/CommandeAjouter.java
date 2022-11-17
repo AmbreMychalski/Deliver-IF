@@ -4,6 +4,9 @@ import modele.DemandeLivraison;
 import modele.Livraison;
 import modele.Livreur;
 
+/**
+ * Implémentation de la commande liée à l'ajout
+ */
 public class CommandeAjouter implements Commande {
 
     private Livraison livraisonAvant;

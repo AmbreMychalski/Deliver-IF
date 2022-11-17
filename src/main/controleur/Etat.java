@@ -18,6 +18,9 @@ import java.util.List;
 
 import static controleur.ControleurFenetrePrincipale.LOGGER;
 
+/**
+ * Classe abstraite Etat, dont héritent toutes les autres classes d'états
+ */
 @Getter
 public abstract class Etat {
 	protected String message;

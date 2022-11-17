@@ -12,7 +12,6 @@ import lombok.ToString;
 @Getter
 @Setter
 @AllArgsConstructor
-@ToString
 public class DemandeLivraison {
     private Intersection intersection;
 	private PlageHoraire plageHoraire;
@@ -70,6 +69,6 @@ public class DemandeLivraison {
         DemandeLivraison other = (DemandeLivraison) obj;
 
         return Objects.equals(intersection, other.intersection)
-               && Objects.equals(plageHoraire, other.plageHoraire);
+                && Objects.equals(plageHoraire, other.plageHoraire);
     }
 }

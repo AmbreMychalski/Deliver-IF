@@ -3,6 +3,9 @@ package controleur;
 import modele.Livraison;
 import modele.Livreur;
 
+/**
+ * Implémentation de la commande liée à la suppression
+ */
 public class CommandeSupprimer implements Commande {
     private Livreur livreur;
     private  Livraison livraison;

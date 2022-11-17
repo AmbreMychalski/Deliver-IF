@@ -28,7 +28,6 @@ public class Trajet {
 		this.segments = new ArrayList<>(segments);
 		this.depart   = dep;
 		this.arrivee  = arr;
-
 		this.longueur = longueur;
 	}
 
