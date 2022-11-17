@@ -32,7 +32,7 @@ public class FenetrePlusieursLivraisonsAuMemeEndroit {
         window.setMaxWidth(1000);
 
         VBox layout = new VBox(10);
-        Button selectionnerDemande = new Button("Selectionner");
+        Button selectionnerDemande = new Button("Sélectionner");
 
         if(listeDemandes != null) {
             TableView<DemandeLivraison> tableViewLivraisons = new TableView<>();
