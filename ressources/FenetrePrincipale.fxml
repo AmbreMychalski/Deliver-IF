@@ -43,7 +43,7 @@
             </TitledPane>
             <Button id="buttonSauvegarderDemandes" fx:id="buttonSauvegarderDemandes" layoutX="6.0" layoutY="397.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="276.0" text="Sauvegarder les demandes de livraison" textAlignment="CENTER" wrapText="true" />
             <Button id="buttonChargerDemandes" fx:id="buttonChargerDemandes" layoutX="6.0" layoutY="429.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="276.0" text="Charger des demandes de livraisons" textAlignment="CENTER" />
-            <Button id="buttonAfficherFeuillesRoute" fx:id="buttonAfficherFeuillesRoute" layoutX="7.0" layoutY="462.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="276.0" text="Afficher les feuilles de route" textAlignment="CENTER" />
+            <Button id="buttonAfficherFeuillesRoute" fx:id="buttonAfficherFeuillesRoute" layoutX="7.0" layoutY="462.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="276.0" text="Afficher la feuille de route du livreur" textAlignment="CENTER" />
             <Button id="buttonCalculerTournees" fx:id="buttonCalculerTournees" layoutX="6.0" layoutY="495.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="276.0" text="Calculer les tournées" textAlignment="CENTER" />
          </children>
       </Pane>
