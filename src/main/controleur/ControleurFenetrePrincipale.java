@@ -9,6 +9,7 @@ package controleur;
 import javafx.scene.control.Control;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.input.ScrollEvent;
 import lombok.Getter;
 import modele.Journee;
 import modele.Livreur;
@@ -227,4 +228,7 @@ public class ControleurFenetrePrincipale {
 		etatCourant.clicSurComboboxAssignerLivreur(this);
 	}
 
+	public void zoomScroll(ScrollEvent event) {
+		etatCourant.zoomScroll(this, event);
+	}
 }

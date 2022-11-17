@@ -6,6 +6,7 @@ import javafx.collections.ObservableList;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.input.ScrollEvent;
 import javafx.scene.paint.Color;
 import javafx.stage.FileChooser;
 import lombok.Getter;
@@ -539,5 +540,9 @@ public abstract class Etat {
 	public void undo(ListeDeCommandes liste) {
 	}
 	public void redo(ListeDeCommandes liste) {
+	}
+
+	public void zoomScroll(ControleurFenetrePrincipale c,ScrollEvent event) {
+
 	}
 }

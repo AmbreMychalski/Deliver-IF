@@ -1,6 +1,7 @@
 package controleur;
 
 import javafx.scene.input.MouseEvent;
+import javafx.scene.input.ScrollEvent;
 
 public class EtatSansDemande extends Etat{
     public EtatSansDemande() {
@@ -33,5 +34,23 @@ public class EtatSansDemande extends Etat{
     @Override
     public void clicSurLivreur(ControleurFenetrePrincipale c) {
         this.changementLivreur(c);
+    }
+
+    public void zoomScroll(ControleurFenetrePrincipale c, ScrollEvent event) {
+        double deltaY = event.getDeltaY();
+        if(deltaY>0){
+            c.vue.redessinerPlan(true,1.5);
+        }
+        else{
+            c.vue.redessinerPlan(true,0.6667);
+        }
+
+        if(c.vue.comboboxLivreur.getValue().getTournee() != null) {
+            c.vue.afficherLivraisons(c.vue.comboboxLivreur.getValue(),
+                    true);
+        } else {
+            c.vue.afficherDemandesLivraison(c.vue.comboboxLivreur.getValue(),
+                    true);
+        }
     }
 }
