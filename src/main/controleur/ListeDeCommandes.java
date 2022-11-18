@@ -6,6 +6,10 @@ import lombok.Setter;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Classe implémentant la liste des commandes que l'on conserve en mémoire, afin
+ * de pouvoir annuler ou rétablir une action
+ */
 @Getter
 @Setter
 public class ListeDeCommandes {
@@ -13,7 +17,7 @@ public class ListeDeCommandes {
     private List<Commande> listeCommandes = new ArrayList<>();
 
     public ListeDeCommandes(){
-        i=0;
+        i = 0;
     }
 
     public void ajouterCommande (Commande c) {
@@ -28,7 +32,7 @@ public class ListeDeCommandes {
 
     public void undoCommande() {
         if (i > 0) {
-            listeCommandes.get(i-1).undoCommande();
+            listeCommandes.get(i - 1).undoCommande();
             i--;
         }
     }

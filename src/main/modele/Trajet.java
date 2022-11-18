@@ -7,9 +7,12 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 
+/**
+ * Classe implémentant les trajets, composés d'une suite de segment, avec un
+ * départ et une arrivée, ainsi que la longueur totale du trajet
+ */
 @Getter
 @Setter
-@ToString
 public class Trajet {
 	List<Segment> segments;
 	Intersection depart;
@@ -30,5 +33,4 @@ public class Trajet {
 		this.arrivee  = arr;
 		this.longueur = longueur;
 	}
-
 }

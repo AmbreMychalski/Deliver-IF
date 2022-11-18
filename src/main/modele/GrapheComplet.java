@@ -9,6 +9,9 @@ import java.util.Map;
 import lombok.Getter;
 import lombok.Setter;
 
+/**
+ * Classe implémentant le graphe servant à la résolution du calcul des trajets
+ */
 @Getter
 @Setter
 public class GrapheComplet implements Graphe {

@@ -1,7 +1,10 @@
 package controleur;
 
 import javafx.scene.input.MouseEvent;
-
+/**
+ * Classe implémentant l'état où aucune tournée n'a été calculée, et où l'on
+ * saisit une nouvelle demande
+ */
 public class EtatSaisieNouvelleDemandeSansTournees extends Etat{
 
     public EtatSaisieNouvelleDemandeSansTournees() {

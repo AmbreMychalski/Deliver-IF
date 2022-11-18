@@ -3,7 +3,12 @@ package controleur;
 import javafx.scene.input.MouseEvent;
 import modele.*;
 
+/**
+ * Classe implémentant l'état où une tournée a été calculée, et où on souhaite
+ * saisir une nouvelle demande
+ */
 public class EtatSaisieNouvelleDemandeAvecTournees extends Etat {
+
     public EtatSaisieNouvelleDemandeAvecTournees() {
         super.message = "Cliquez sur le plan pour choisir une "
                 + "intersection, puis choisissez la plage horaire";

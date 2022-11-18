@@ -6,6 +6,10 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
 
+/**
+ * Classe permettant de gérer une demande livraison, avec l'intersection qui
+ * lui est associée et sa plage horaire.
+ */
 @Getter
 @Setter
 @AllArgsConstructor

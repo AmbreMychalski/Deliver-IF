@@ -1,5 +1,8 @@
 package modele;
 
+/**
+ * Classe permettant de comparer des heures de livraison
+ */
 public class ComparateurHeureLivraison implements java.util.Comparator<String> {
 
     /**

@@ -1,6 +1,5 @@
 package vue;
 
-
 import controleur.ControleurFenetrePrincipale;
 import exception.FichierNonConformeException;
 import javafx.collections.FXCollections;
@@ -33,8 +32,10 @@ import java.util.*;
 
 import static controleur.ControleurFenetrePrincipale.LOGGER;
 
+/**
+ * Fenêtre principale de l'application
+ */
 public class VueFenetrePrincipale implements Observer {
-
     ControleurFenetrePrincipale controleur;
 
     public final double TAILLE_RECT_PT_LIVRAISON = 10;
@@ -978,7 +979,7 @@ public class VueFenetrePrincipale implements Observer {
         }
         afficherPlan();
     }
-    private void afficherPlan(){
+    private void afficherPlan() {
         GraphicsContext gc = canvasPlan.getGraphicsContext2D();
         gc.clearRect(0, 0, canvasPlan.getWidth(), canvasPlan.getHeight());
         for (Segment segment : controleur.getJournee().getPlan().getSegments()) {

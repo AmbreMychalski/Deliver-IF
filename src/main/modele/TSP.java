@@ -16,11 +16,5 @@ public interface TSP {
 	 * (-1 if <code>searcheSolution</code> has not been called yet, or if i < 0 or i >= g.getNbSommets())
 	 */
 	public Integer getSolution(int i);
-	
-	/** 
-	 * @return the total cost of the solution computed by <code>searchSolution</code> 
-	 * (-1 if <code>searcheSolution</code> has not been called yet).
-	 */
-	public float getSolutionCost();
 
 }

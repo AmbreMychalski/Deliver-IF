@@ -9,6 +9,10 @@ import modele.Livreur;
 import modele.Tournee;
 import vue.VueFenetrePrincipale;
 
+/**
+ * Classe implémentant l'état quand la tournée n'a pas été calculée, et que
+ * l'on a selectionné une demande dans la liste de droite
+ */
 public class EtatDemandeLivraisonSelectionneeSansTournees extends Etat {
     public EtatDemandeLivraisonSelectionneeSansTournees() {
         super.message = "Cliquez sur le plan ou appuyez sur échap " +

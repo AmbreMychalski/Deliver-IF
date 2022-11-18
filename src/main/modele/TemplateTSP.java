@@ -5,7 +5,9 @@ import java.util.Collection;
 import java.util.Iterator;
 import static controleur.ControleurFenetrePrincipale.LOGGER;
 
-
+/**
+ * Classe du template du TSP
+ */
 public abstract class TemplateTSP implements TSP {
 	private Integer[] meilleureSolution;
 	protected Graphe g;
@@ -51,15 +53,6 @@ public abstract class TemplateTSP implements TSP {
 		if (g != null && i >= 0 && i < g.getNbSommets()) {
 			return meilleureSolution[i];
 		}
-
-		return -1;
-	}
-	
-	public float getSolutionCost() {
-		if (g != null) {
-			return coutMeilleureSolution;
-		}
-
 		return -1;
 	}
 	

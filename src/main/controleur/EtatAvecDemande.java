@@ -11,6 +11,9 @@ import vue.VueFenetrePrincipale;
 
 import java.util.ArrayList;
 
+/**
+ * Classe implémentant l'état quand au moins une demande est chargée
+ */
 public class EtatAvecDemande extends Etat {
     public EtatAvecDemande() {
         super.message = "Ajoutez, chargez, sauvegardez ou " +
@@ -26,6 +29,7 @@ public class EtatAvecDemande extends Etat {
 
     public void clicGaucheSurPlan(ControleurFenetrePrincipale c, MouseEvent event) {
         Intersection intersectionTrouvee = this.naviguerSurPlan(c, event, false);
+
         if(intersectionTrouvee != null) {
             ArrayList<DemandeLivraison> demandesAssociees = new ArrayList<>();
 
@@ -82,6 +86,7 @@ public class EtatAvecDemande extends Etat {
         } else {
             c.vue.labelGuideUtilisateur.setText("Il y a trop de demandes pour calculer la tournée");
         }
+
         return tourneeCalculee;
     }
 
@@ -95,10 +100,9 @@ public class EtatAvecDemande extends Etat {
 
     public void zoomScroll(ControleurFenetrePrincipale c, ScrollEvent event) {
         double deltaY = event.getDeltaY();
-        if(deltaY>0){
+        if(deltaY > 0){
             c.vue.redessinerPlan(true,1.5);
-        }
-        else{
+        } else {
             c.vue.redessinerPlan(true,0.6667);
         }
 
@@ -110,7 +114,7 @@ public class EtatAvecDemande extends Etat {
                     true);
         }
 
-        if(!c.vue.textfieldIdentifiantIntersection.getText().isEmpty()){
+        if(!c.vue.textfieldIdentifiantIntersection.getText().isEmpty()) {
             long idIntersection = Long.parseLong(c.vue.textfieldIdentifiantIntersection.getText());
 
             c.vue.dessinerIntersection(c.vue.canvasIntersectionsLivraisons.getGraphicsContext2D(),
@@ -122,5 +126,4 @@ public class EtatAvecDemande extends Etat {
             );
         }
     }
-
 }

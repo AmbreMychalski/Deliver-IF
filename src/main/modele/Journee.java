@@ -22,12 +22,14 @@ import org.w3c.dom.NodeList;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
-import lombok.ToString;
 
+/**
+ * Classe implémentant une journée. Une journée est associée à un plan, et à
+ * une liste de livreurs.
+ */
 @Getter
 @Setter
 @AllArgsConstructor
-@ToString
 public class Journee extends Observable {
 
     public static final Logger LOGGER = LogManager.getLogger(ControleurFenetrePrincipale.class);
@@ -48,7 +50,8 @@ public class Journee extends Observable {
      * @param livreur Le livreur auquel on associera les demandes
      * @return La liste des demandes de livraison qui ont pu être lues
      */
-    public ArrayList<DemandeLivraison> chargerDemandesLivraison(File fichier, Livreur livreur) {
+    public ArrayList<DemandeLivraison> chargerDemandesLivraison(File fichier, Livreur livreur)
+            throws Exception {
         Node node;
         NodeList list;
 
@@ -101,6 +104,7 @@ public class Journee extends Observable {
             }
         } catch(Exception e) {
             LOGGER.error("Problème lors de la lecture du fichier \n "+ e);
+            throw e;
         }
 
         notifierObservateurs("AjoutListeDemandeLivraison");
@@ -236,7 +240,8 @@ public class Journee extends Observable {
         return livraison;
     }
     /**
-     * Permet de changer le livreur d'une livraison
+     * Permet de changer le livreur associé à une livraison en supprimant
+     * la livraison pour l'ancien livreur avant de l'affecter au nouveau
      * @param livr La livraison que l'on veut modifier
      * @param livreur Le livreur a qui on va ajouter la livraison
      * @param ancienLivreur Le livreur qui va perdre la livraison
@@ -266,10 +271,11 @@ public class Journee extends Observable {
             index = t.getLivraisons().indexOf(livrAvant);
             intersectionAmont =
                     t.getLivraisons().get(index).getDemandeLivraison().getIntersection();
-        }else{
+        } else {
             intersectionAmont = plan.getEntrepot();
             index = -1;
         }
+
         livreur.ajouterLivraisonTournee(index + 1, livr);
         t.getTrajets().remove(index + 1);
         Intersection intersectionAval =
@@ -282,7 +288,7 @@ public class Journee extends Observable {
             dist += seg.getLongueur();
         }
 
-        t.getTrajets().add(index + 1, new Trajet(lisSeg, dist,intersectionAmont, intersectionAval));
+        t.getTrajets().add(index + 1, new Trajet(lisSeg, dist, intersectionAmont, intersectionAval));
 
         intersectionAmont =
                 t.getLivraisons().get(index + 1).getDemandeLivraison().getIntersection();

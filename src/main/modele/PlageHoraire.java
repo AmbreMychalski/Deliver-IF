@@ -6,9 +6,12 @@ import javafx.scene.paint.Color;
 import lombok.Getter;
 import lombok.Setter;
 
+/**
+ * Classe implémentant une plage horaire, avec une heure de début et une heure
+ * de fin
+ */
 @Getter
 @Setter
-
 public class PlageHoraire {
     int debut;
     int fin;
@@ -60,7 +63,7 @@ public class PlageHoraire {
     }
 
     /**
-     * Permet de vérifie l'égalité entre deux plages horaires.
+     * Permet de vérifier l'égalité entre deux plages horaires.
      * @param obj L'objet par rapport auquel on veut comparer la plage horaire courante.
      * @return true si les objets sont égaux, false sinon
      */

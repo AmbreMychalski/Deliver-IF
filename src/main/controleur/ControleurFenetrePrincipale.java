@@ -1,9 +1,3 @@
-/*
- * ControleurFenetrePrincipale
- * 
- * Version 1.0
- */
-
 package controleur;
 
 import javafx.scene.control.Control;

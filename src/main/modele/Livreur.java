@@ -7,9 +7,13 @@ import java.util.List;
 import java.util.Observable;
 import java.util.Observer;
 
+/**
+ * Classe implémentant un livreur. Le nombre de livreurs est static, et chaque
+ * livreur possède un numéro, une tournée (null si elle n'a pas été calculée),
+ * une liste de demandes de livraison et de livraisons associées.
+ */
 @Getter
 @Setter
-
 public class Livreur extends Observable {
     static int nbLivreur = 0;
     private int numero;

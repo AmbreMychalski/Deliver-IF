@@ -31,18 +31,19 @@ public class LanceurApplication extends Application {
 			        .getResource("/FenetrePrincipale.fxml"));
 	        Parent root = loader.load();
 			VueFenetrePrincipale controleur = loader.getController();
+
 			controleur.setStage(primaryStage);
 	        primaryStage.setTitle("Deliver'IF");
 	        primaryStage.setScene(new Scene(root));
+
 			URL urlLogo = getClass().getResource("/cycling.png");
+
 			if (urlLogo != null) {
 				primaryStage.getIcons().add(new Image(urlLogo.toString()));
 			}
 	        primaryStage.show();
-			
 	    } catch(Exception e) {
 	        e.printStackTrace();
 	    }
 	}
-	
 }

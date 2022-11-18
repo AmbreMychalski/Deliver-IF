@@ -31,9 +31,9 @@ public abstract class Etat {
 
 	public void chargerPlan(ControleurFenetrePrincipale c) throws Exception {}
 	
-	public void ajouterDemande(ControleurFenetrePrincipale c){}
+	public void ajouterDemande(ControleurFenetrePrincipale c) {}
 	
-	public void clicGaucheSurPlan(ControleurFenetrePrincipale c, MouseEvent event){}
+	public void clicGaucheSurPlan(ControleurFenetrePrincipale c, MouseEvent event) {}
 	
 	public void clicGaucheSurTableau(ControleurFenetrePrincipale c) {}
 
@@ -47,7 +47,9 @@ public abstract class Etat {
 	
 	public void sauvegarderDemandes(ControleurFenetrePrincipale c) {}
 	
-	public boolean calculerTournees(ControleurFenetrePrincipale c) { return false;}
+	public boolean calculerTournees(ControleurFenetrePrincipale c) {
+		return false;
+	}
 	
 	public void modifierDemande(ControleurFenetrePrincipale c) {}
 
@@ -72,8 +74,7 @@ public abstract class Etat {
 
 	public void clicSurLivreur(ControleurFenetrePrincipale c) {}
 
-	public void clicSurComboboxAssignerLivreur(ControleurFenetrePrincipale controleurFenetrePrincipale) {
-	}
+	public void clicSurComboboxAssignerLivreur(ControleurFenetrePrincipale controleurFenetrePrincipale) {}
 
 	protected void sortieDeSelectionDemande(ControleurFenetrePrincipale c,
 											boolean livraison) {

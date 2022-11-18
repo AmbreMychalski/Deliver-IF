@@ -3,6 +3,9 @@ package modele;
 import java.util.Collection;
 import java.util.Iterator;
 
+/**
+ * Classe implémentant les itérations
+ */
 public class SeqIter implements Iterator<Integer> {
 	private Integer[] candidats;
 	private int nbCandidats;

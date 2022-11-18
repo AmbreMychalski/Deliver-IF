@@ -19,6 +19,9 @@ import java.io.File;
 
 import static controleur.ControleurFenetrePrincipale.LOGGER;
 
+/**
+ * Fenêtre spécifique à l'affichage de la feuille de route
+ */
 public class FenetreFeuilleDeRoute {
     public static void display (ControleurFenetrePrincipale c, Livreur livreur) {
         Stage window = new Stage();

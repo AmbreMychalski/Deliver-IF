@@ -16,6 +16,10 @@ import java.awt.*;
 import java.util.ArrayList;
 import java.util.Arrays;
 
+/**
+ * Fenêtre spécifique pour le cas où plusieurs demandes de trouvent au même
+ * endroit, afin de pouvoir en sélectionner une
+ */
 public class FenetrePlusieursLivraisonsAuMemeEndroit {
 
     public static void display (ControleurFenetrePrincipale c,

@@ -5,15 +5,19 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 
+/**
+ * Classe implémentant une livraison, associée à une demande de livraison, une
+ * heure (différente de la plage horaire définie dans la demande de livraison),
+ * un livreur et un booléen permettant de savoir si la livraison est dans sa
+ * plage horaire.
+ */
 @Getter
 @Setter
 @AllArgsConstructor
-@ToString
 public class Livraison {
 	private DemandeLivraison demandeLivraison;
 	private float heure;
 	private Livreur livreur;
-
 	private boolean dansSaPlageHoraire;
 
 	/**
@@ -56,5 +60,4 @@ public class Livraison {
 		this.livreur = livraison.getLivreur();
 		this.dansSaPlageHoraire = livraison.dansSaPlageHoraire;
 	}
-
 }

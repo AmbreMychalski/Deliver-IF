@@ -11,7 +11,12 @@ import javafx.scene.input.MouseEvent;
 
 import java.util.ArrayList;
 
-public class EtatSelectionLivraisonPourNouvelleDemande extends Etat{
+/**
+ * Classe implémentant l'état où l'on veut sélectionner une livraison pour
+ * ajouter une nouvelle demande
+ */
+public class EtatSelectionLivraisonPourNouvelleDemande extends Etat {
+
     public EtatSelectionLivraisonPourNouvelleDemande() {
         super.message = "Sélectionner la livraison qui précédera" +
                 " la nouvelle demande, ou l'entrepot si vous"

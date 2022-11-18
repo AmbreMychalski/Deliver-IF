@@ -6,6 +6,10 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.ToString;
 
+/**
+ * Classe implémentant les intersections, avec un id, une latitude et une
+ * longitude. Les intersections sont définies à la lecture d'un fichier.
+ */
 @Getter
 @AllArgsConstructor
 @ToString

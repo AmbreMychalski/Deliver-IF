@@ -4,6 +4,9 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
 
+/**
+ * Classe implémentant l'algorithme de calcul de tournée
+ */
 public class TSP1 extends TemplateTSP {
 	@Override
 	protected float bound(Integer sommetCourant, Collection<Integer> nonVisites, float[][] couts) {

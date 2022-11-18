@@ -4,10 +4,16 @@ import javafx.scene.input.MouseEvent;
 import modele.DemandeLivraison;
 import vue.VueFenetrePrincipale;
 
+/**
+ * Classe implémentant l'état où aucune tournée n'a été calculée, et où on effectue
+ * une modification d'une demande de livraison
+ */
 public class EtatModifierDemandeLivraisonSansTournees extends Etat {
+
     public EtatModifierDemandeLivraisonSansTournees() {
         super.message = "Validez ou annulez les modifications";
     }
+
     public void clicGaucheSurPlan(ControleurFenetrePrincipale c, MouseEvent event) {
         this.naviguerSurPlan(c, event, false);
         DemandeLivraison ligne = c.vue.tableViewDemandesLivraison

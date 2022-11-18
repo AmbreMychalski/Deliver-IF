@@ -22,6 +22,11 @@ import lombok.Setter;
 import exception.FichierNonConformeException;
 import exception.IntersectionIntrouvableException;
 
+/**
+ * Classe permettant la gestion du plan. On identifie plus spécifiquement
+ * l'intersection de l'entrepôt ; on aura également une map d'intersections,
+ * d'intersections voisines, une liste de segments et le nom du plan chargé.
+ */
 @Getter
 @Setter
 @NoArgsConstructor

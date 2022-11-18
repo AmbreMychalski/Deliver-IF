@@ -2,6 +2,9 @@ package modele;
 
 import java.util.Comparator;
 
+/**
+ * Classe permettant de comparer des plages horaires
+ */
 public class ComparateurPlageHoraire implements Comparator<PlageHoraire> {
 
     /**

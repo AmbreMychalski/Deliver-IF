@@ -8,6 +8,10 @@ import modele.Livreur;
 import modele.Tournee;
 import vue.VueFenetrePrincipale;
 
+/**
+ * Classe implémentant l'état quand une tournée a été calculée, et que l'on a
+ * selectionné une demande dans la liste de droite
+ */
 public class EtatDemandeLivraisonSelectionneeAvecTournees extends Etat {
     public EtatDemandeLivraisonSelectionneeAvecTournees() {
         super.message = "Cliquez sur le plan ou appuyez sur " +
@@ -102,9 +106,10 @@ public class EtatDemandeLivraisonSelectionneeAvecTournees extends Etat {
             }
         }
     }
+
     public void zoomScroll(ControleurFenetrePrincipale c, ScrollEvent event) {
         double deltaY = event.getDeltaY();
-        if(deltaY>0){
+        if(deltaY > 0){
             c.vue.redessinerPlan(true,1.5);
         }
         else{

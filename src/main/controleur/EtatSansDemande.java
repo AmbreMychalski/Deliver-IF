@@ -5,6 +5,10 @@ import javafx.scene.input.ScrollEvent;
 import javafx.scene.paint.Color;
 import vue.VueFenetrePrincipale;
 
+/**
+ * Classe implémentant l'état où on a chargé un plan, mais où l'on a pas chargé
+ * ou saisi de demande
+ */
 public class EtatSansDemande extends Etat{
     public EtatSansDemande() {
         super.message = "Ajoutez ou chargez des demandes de livraison";

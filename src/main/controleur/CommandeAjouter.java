@@ -34,7 +34,8 @@ public class CommandeAjouter implements Commande {
 
         c.vue.afficherLivraisons(livreur, true);
     }
-    public void undoCommande () {
+
+    public void undoCommande() {
         c.getEtatCourant().supprimerLivraison(c, livreur, livraison);
     }
 }

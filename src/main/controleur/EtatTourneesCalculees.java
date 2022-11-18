@@ -11,6 +11,9 @@ import java.util.ArrayList;
 
 import static controleur.ControleurFenetrePrincipale.LOGGER;
 
+/**
+ * Classe implémentant l'état où l'on a calculé une tournée
+ */
 public class EtatTourneesCalculees extends Etat{
     public EtatTourneesCalculees() {
         super.message = "Ajoutez des demandes, visualisez les "
@@ -20,6 +23,7 @@ public class EtatTourneesCalculees extends Etat{
     public  void sauvegarderDemandes(ControleurFenetrePrincipale c) {
         this.sauvegarderListeDemandes(c);
     }
+
     public void clicGaucheSurPlan(ControleurFenetrePrincipale c, MouseEvent event) {
         Intersection intersectionTrouvee = this.naviguerSurPlan(c, event, true);
         if(intersectionTrouvee != null) {

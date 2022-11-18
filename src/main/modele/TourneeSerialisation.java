@@ -5,6 +5,9 @@ import lombok.AllArgsConstructor;
 import java.io.*;
 import java.util.*;
 
+/**
+ * Classe permettant l'affichage des feuilles de route
+ */
 @AllArgsConstructor
 public class TourneeSerialisation {
     Plan plan;
