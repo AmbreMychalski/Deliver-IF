@@ -66,12 +66,12 @@ public class TourneeSerialisation {
                     + this.obtenirNomsRuesIntersection(trajet.getArrivee())
                     );
 
-            int                      a = 0;
-            String directionPrecedente = null;
-            String       ruePrecedente = null;
-            float                somme = 0;
-            boolean      premiereSomme = true;
-            String     phraseDirection = null;
+            int     a = 0;
+            String  directionPrecedente = null;
+            String  ruePrecedente = null;
+            float   somme = 0;
+            boolean premiereSomme = true;
+            String  phraseDirection = null;
 
             for(Segment segment : trajet.getSegments()) {
                 String direction = bearing(segment.getOrigine().getLatitude(),
@@ -108,6 +108,7 @@ public class TourneeSerialisation {
                         phraseDirection = direction(directionPrecedente,direction);
                         somme = segment.getLongueur();
                     }
+
                     if(segment == trajet.segments.get(trajet.getSegments().size() - 1)) {
                         out.print((a + 1) + "/ ");
                         out.println(direction(directionPrecedente, direction)

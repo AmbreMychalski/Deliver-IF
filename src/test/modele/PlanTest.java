@@ -30,7 +30,7 @@ public class PlanTest {
     
     @Test
     @DisplayName("Test de l'exception en cas de fichier null en entrée")
-    void exceptionFichierNullTest() {        
+    void exceptionFichierNullTest() {
         Assertions.assertThrows(Exception.class, () -> new Plan(null));
     }
     
@@ -84,7 +84,6 @@ public class PlanTest {
         List<Intersection> listeIntersections = new ArrayList<>();
         listeIntersections.add(plan.getIntersections().get(0L));
         listeIntersections.add(plan.getIntersections().get(3L));
-
         listeIntersections.add(plan.getIntersections().get(7L));
 
         Intersection depart = plan.getIntersections().get(5L);
@@ -96,27 +95,6 @@ public class PlanTest {
 
         Assertions.assertEquals(hashMap, plan.calculerPlusCourtsChemins(listeIntersections, depart));
     }
-
-    @Test
-    @DisplayName("Test de la méthode : obtenirIntersectionLaPlusProche")
-    void obtenirIntersectionLaPlusProcheTest() {
-
-    }
-
-/*    @Test
-    @DisplayName("Test de la méthode : sontConnectees")
-    void sontConnecteesTest() throws Exception {
-        File fichierPlan = new File("data\\testPlan.xml");
-        Plan plan = new Plan(fichierPlan);
-
-        Intersection depart1 = plan.getIntersections().get(Long.valueOf("7"));
-        Intersection depart2 = plan.getIntersections().get(Long.valueOf("5"));
-        Intersection arrivee = plan.getIntersections().get(Long.valueOf("0"));
-
-        Assertions.assertTrue(plan.sontConnectee(depart2, arrivee));
-        Assertions.assertTrue(plan.sontConnectee(depart2, arrivee));
-
-    }*/
 
     @Test
     @DisplayName("Test de la méthode : calculHeuristique")
@@ -133,8 +111,6 @@ public class PlanTest {
         Intersection intersection4 = plan.getIntersections().get(4L);
 
         List<String> listeRues = new ArrayList<>();
-
-        // On ne prend que les deux premières rues de la liste
         listeRues.add("Rue Rousseau");
         listeRues.add("Rue Bellecour");
 

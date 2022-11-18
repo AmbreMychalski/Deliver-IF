@@ -5,12 +5,12 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 public class DemandeLivraisonTest {
-    Intersection intersection1                 = new Intersection(1L,20, 20);
-    Intersection intersection2                 = new Intersection(5L,21, 21);
-    PlageHoraire plageHoraire1                 = new PlageHoraire(10, 11);
-    PlageHoraire plageHoraire2                 = new PlageHoraire(11, 12);
-    DemandeLivraison demandeLivraison1         = new DemandeLivraison(intersection1, plageHoraire1);
-    DemandeLivraison demandeLivraison2         = new DemandeLivraison(intersection2, plageHoraire1);
+    Intersection intersection1 = new Intersection(1L,20, 20);
+    Intersection intersection2 = new Intersection(5L,21, 21);
+    PlageHoraire plageHoraire1 = new PlageHoraire(10, 11);
+    PlageHoraire plageHoraire2 = new PlageHoraire(11, 12);
+    DemandeLivraison demandeLivraison1 = new DemandeLivraison(intersection1, plageHoraire1);
+    DemandeLivraison demandeLivraison2 = new DemandeLivraison(intersection2, plageHoraire1);
     DemandeLivraison demandeLivraisonAModifier = new DemandeLivraison(intersection2, plageHoraire1);
 
     @Test

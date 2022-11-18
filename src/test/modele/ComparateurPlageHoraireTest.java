@@ -13,8 +13,8 @@ public class ComparateurPlageHoraireTest {
     @Test
     @DisplayName("Test de la comparaison des plages horaires")
     void comparerTest() {
-        Assertions.assertEquals(0,  comparateurPlageHoraire.compare(plageHoraire1, plageHoraire1));
-        Assertions.assertEquals(-1,  comparateurPlageHoraire.compare(plageHoraire1, plageHoraire2));
-        Assertions.assertEquals(1,  comparateurPlageHoraire.compare(plageHoraire3, plageHoraire2));
+        Assertions.assertEquals(0, comparateurPlageHoraire.compare(plageHoraire1, plageHoraire1));
+        Assertions.assertEquals(-1, comparateurPlageHoraire.compare(plageHoraire1, plageHoraire2));
+        Assertions.assertEquals(1, comparateurPlageHoraire.compare(plageHoraire3, plageHoraire2));
     }
 }

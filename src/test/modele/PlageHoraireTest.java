@@ -1,5 +1,6 @@
 package modele;
 
+import javafx.scene.paint.Color;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -20,5 +21,20 @@ public class PlageHoraireTest {
 
         Assertions.assertEquals(plageHoraire1, plageHoraire2);
         Assertions.assertNotEquals(plageHoraire1, plageHoraire3);
+    }
+
+    @Test
+    @DisplayName("Test du constructeur, pour vérifier les couleurs")
+    void plageHoraireTest() {
+        PlageHoraire plageHoraire = new PlageHoraire(11, 12);
+
+        Assertions.assertEquals(Color.DEEPPINK, plageHoraire.getCouleur());
+    }
+
+    @Test
+    @DisplayName("Test du toString")
+    void toStringTest() {
+        PlageHoraire plageHoraire = new PlageHoraire(11, 12);
+        Assertions.assertEquals("De 11h à 12h", plageHoraire.toString());
     }
 }
