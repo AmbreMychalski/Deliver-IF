@@ -372,19 +372,21 @@ public class VueFenetrePrincipale implements Observer {
     }
 
     private void actionDeplacerPlan(MouseEvent event) {
-        double x =  event.getX();
-        double y = event.getY();
-        decalageX += x - dernierePositionX;
-        decalageY += y - dernierePositionY;
-        dernierePositionY = y;
-        dernierePositionX = x;
+        if(controleur.getJournee().getPlan() != null) {
+            double x = event.getX();
+            double y = event.getY();
+            decalageX += x - dernierePositionX;
+            decalageY += y - dernierePositionY;
+            dernierePositionY = y;
+            dernierePositionX = x;
 
-        redessinerPlan(false, 0);
+            redessinerPlan(false, 0);
 
-        if(comboboxLivreur.getValue().getTournee() == null) {
-            afficherDemandesLivraison(comboboxLivreur.getValue(), true);
-        } else {
-            afficherLivraisons(comboboxLivreur.getValue(), true);
+            if (comboboxLivreur.getValue().getTournee() == null) {
+                afficherDemandesLivraison(comboboxLivreur.getValue(), true);
+            } else {
+                afficherLivraisons(comboboxLivreur.getValue(), true);
+            }
         }
     }
 
