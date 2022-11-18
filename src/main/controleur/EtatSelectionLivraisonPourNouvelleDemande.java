@@ -13,9 +13,9 @@ import java.util.ArrayList;
 
 public class EtatSelectionLivraisonPourNouvelleDemande extends Etat{
     public EtatSelectionLivraisonPourNouvelleDemande() {
-        super.message = "Sélectionner la livraison qui viendra avant la "
-                + "livraison correspondant à la nouvelle demande, ou sur "
-                + "l'entrepot si c'est la première livraison";
+        super.message = "Sélectionner la livraison qui précédera" +
+                " la nouvelle demande, ou l'entrepot si vous"
+                + " souhaitez la mettre en première position";
     }
 
     public void clicGaucheSurPlan(ControleurFenetrePrincipale c, MouseEvent event) {

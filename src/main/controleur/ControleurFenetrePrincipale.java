@@ -9,6 +9,7 @@ package controleur;
 import javafx.scene.control.Control;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.input.ScrollEvent;
 import lombok.Getter;
 import modele.Journee;
 import modele.Livreur;
@@ -67,8 +68,8 @@ public class ControleurFenetrePrincipale {
 		final LoggerContext context = (LoggerContext) LogManager.getContext(false);
 		final org.apache.logging.log4j.core.config.Configuration config = context.getConfiguration();
 
-		config.getLoggerConfig(LogManager.ROOT_LOGGER_NAME).setLevel(Level.ALL);
-		config.getLoggerConfig(ControleurFenetrePrincipale.class.getPackage().getName()).setLevel(Level.ALL);
+		config.getLoggerConfig(LogManager.ROOT_LOGGER_NAME).setLevel(Level.ERROR);
+		config.getLoggerConfig(ControleurFenetrePrincipale.class.getPackage().getName()).setLevel(Level.ERROR);
 		context.updateLoggers(config);
 
 		controlsActivesParEtat = new HashMap<Etat, ArrayList<Control>>() {{
@@ -227,4 +228,10 @@ public class ControleurFenetrePrincipale {
 		etatCourant.clicSurComboboxAssignerLivreur(this);
 	}
 
+	public void majComboBox(){
+		this.etatCourant.majComboboxLivreur(this);
+	}
+	public void zoomScroll(ScrollEvent event) {
+		etatCourant.zoomScroll(this, event);
+	}
 }

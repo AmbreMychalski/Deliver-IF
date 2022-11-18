@@ -3,6 +3,8 @@ package modele;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
+import static controleur.ControleurFenetrePrincipale.LOGGER;
+
 
 public abstract class TemplateTSP implements TSP {
 	private Integer[] meilleureSolution;
@@ -21,7 +23,7 @@ public abstract class TemplateTSP implements TSP {
 		this.g = g;
 		meilleureSolution = new Integer[g.getNbSommets()];
 
-		ArrayList<Integer> nonVisites = new ArrayList<Integer>(g.getNbSommets() - 1);
+		ArrayList<Integer> nonVisites = new ArrayList<>(g.getNbSommets() - 1);
 
 		for (int i = 1; i < g.getNbSommets(); i++) {
 			nonVisites.add(i);
@@ -29,7 +31,7 @@ public abstract class TemplateTSP implements TSP {
 
 		// The first visited vertex is 0
 		coutMeilleureSolution = Integer.MAX_VALUE;
-		ArrayList<Integer> visited = new ArrayList<Integer>(g.getNbSommets());
+		ArrayList<Integer> visited = new ArrayList<>(g.getNbSommets());
 
 		visited.add(0);
 
@@ -38,7 +40,7 @@ public abstract class TemplateTSP implements TSP {
 
 		boolean solutionTrouvee = true;
 		if(coutMeilleureSolution == Integer.MAX_VALUE) {
-			System.out.println("Le TSP n'a pas trouvé de solution");
+			LOGGER.info("Le TSP n'a pas trouvé de solution");
 			solutionTrouvee = false;
 		}
 
@@ -90,7 +92,6 @@ public abstract class TemplateTSP implements TSP {
 			Collection<Integer> visites, float coutCourant) {
 		if (System.currentTimeMillis() - heureDebut > limiteTemps) {
 		    if(coutMeilleureSolution == Integer.MAX_VALUE) {
-		        System.out.println("Le TSP n'a pas trouvé de solution");
 				return;
 		    }
 		}

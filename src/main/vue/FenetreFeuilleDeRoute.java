@@ -46,7 +46,6 @@ public class FenetreFeuilleDeRoute {
         Button sauvegarderFeuilleDeRoute = new Button("Sauvegarder la feuille de route");
         sauvegarderFeuilleDeRoute.setOnAction(e -> {
             FileChooser fileChooser = new FileChooser();
-            fileChooser.setInitialDirectory(new File(".\\data"));
             fileChooser.setTitle("Sauvegarder la feuille de route");
             fileChooser.getExtensionFilters().add(
                     new FileChooser.ExtensionFilter("Fichier TXT", "*.txt", "*.TXT"));

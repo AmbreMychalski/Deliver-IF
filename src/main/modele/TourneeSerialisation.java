@@ -39,10 +39,10 @@ public class TourneeSerialisation {
     public String serialiser(Livreur livreur) {
         int i = 1;
         Tournee tournee = livreur.getTournee();
-        out.println("Sérialiseur de tournée");
+        out.println("Feuilles de route");
         out.println("***********************************************************");
         out.println("Tournée du livreur : " + tournee.getLivraisons().get(0).getLivreur());
-        out.println("*********** Liste des livraisons et horaire de livraison *********** ");
+        out.println("*********** Liste des livraisons et horaires de livraison *********** ");
 
         for(Livraison liv : tournee.getLivraisons()) {
             String nomsRues = obtenirNomsRuesIntersection(liv.getDemandeLivraison()
@@ -56,7 +56,7 @@ public class TourneeSerialisation {
         out.println();
         out.println("********************************* Itinéraire détaillé *****************************************");
         out.println("La tournée est composée de " + tournee.getTrajets().size()
-                    + " trajet(s) : ");
+                    + ((tournee.getTrajets().size() > 1 ) ? " trajets : " : "trajet : "));
         int j = 1;
         for(Trajet trajet : tournee.getTrajets()) {
             out.println("***********************************************************************************************");
@@ -228,15 +228,15 @@ public class TourneeSerialisation {
             }
         }
 
-        String[] adverbes = new String[]{"", " légèrement", "", " complètement", ""};
+        String[] adverbes = new String[]{" ", " légèrement ", " ", " complètement ", " "};
 
         if (Math.abs(diffIndex) == 0) {
             directive = "Continuez tout droit";
         } else if (Math.abs(diffIndex) == 4) {
             directive = "Faites presque demi-tour";
         } else {
-            directive = "Tournez " + adverbes[Math.abs(diffIndex)]
-                    + (diffIndex < 0 ? " à gauche" : " à droite");
+            directive = "Tournez" + adverbes[Math.abs(diffIndex)]
+                    + (diffIndex < 0 ? "à gauche" : "à droite");
         }
 
         return directive;

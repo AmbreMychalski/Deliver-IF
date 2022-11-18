@@ -36,8 +36,8 @@ public class FenetrePlusieursLivraisonsAuMemeEndroit {
 
         if(listeDemandes != null) {
             TableView<DemandeLivraison> tableViewLivraisons = new TableView<>();
-            TableColumn<DemandeLivraison, Long> columnIdentifiantLivraison = new TableColumn<>();
-            TableColumn<DemandeLivraison, PlageHoraire> columnPlageHoraireLivraison = new TableColumn<>();
+            TableColumn<DemandeLivraison, Long> columnIdentifiantLivraison = new TableColumn<>("Identifiant livraison");
+            TableColumn<DemandeLivraison, PlageHoraire> columnPlageHoraireLivraison = new TableColumn<>("Plage horaire");
 
             tableViewLivraisons.setItems(FXCollections.observableArrayList());
             columnIdentifiantLivraison.setCellValueFactory(
@@ -68,9 +68,9 @@ public class FenetrePlusieursLivraisonsAuMemeEndroit {
             layout.getChildren().addAll(tableViewLivraisons, selectionnerDemande);
         } else {
             TableView<Livraison> tableViewLivraisons = new TableView<>();
-            TableColumn<Livraison, Long> columnIdentifiantLivraison = new TableColumn<>();
-            TableColumn<Livraison, PlageHoraire> columnPlageHoraireLivraison = new TableColumn<>();
-            TableColumn<Livraison, String> columnHeure = new TableColumn<>();
+            TableColumn<Livraison, Long> columnIdentifiantLivraison = new TableColumn<>("Identifiant intersection");
+            TableColumn<Livraison, PlageHoraire> columnPlageHoraireLivraison = new TableColumn<>("Plage horaire");
+            TableColumn<Livraison, String> columnHeure = new TableColumn<>("Heure de passage");
 
             tableViewLivraisons.setItems(FXCollections.observableArrayList());
 

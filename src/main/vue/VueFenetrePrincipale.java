@@ -40,8 +40,6 @@ public class VueFenetrePrincipale implements Observer {
     public final double TAILLE_RECT_PT_LIVRAISON = 10;
     public final double TAILLE_RECT_PT_LIVRAISON_SELECTIONNE = 14;
     public final double TAILLE_CERCLE_INTERSECTION_SELECTIONNEE = 10;
-    public final double TAILLE_CERCLE_INTERSECTION = 14;
-    public final Color COULEUR_DEPOT = Color.RED;
     public final Color COULEUR_SEGMENT = Color.BLACK;
     public final Color COULEUR_POINT_LIVRAISON_SELECTIONNE = Color.RED;
     /* Rayon en pixels définissant la zone où l'on
@@ -334,21 +332,8 @@ public class VueFenetrePrincipale implements Observer {
 
     private void actionScroll(ScrollEvent event){
 
-        double deltaY = event.getDeltaY();
-        if(deltaY>0){
-            this.redessinerPlan(true,1.5);
-        }
-        else{
-            this.redessinerPlan(true,0.6667);
-        }
+        this.controleur.zoomScroll(event);
 
-        if(this.comboboxLivreur.getValue().getTournee() != null) {
-            this.afficherLivraisons(this.comboboxLivreur.getValue(),
-                    true);
-        } else {
-            this.afficherDemandesLivraison(this.comboboxLivreur.getValue(),
-                    true);
-        }
     }
 
     public File choisirFichier(String titreFenetre) throws Exception {
@@ -794,7 +779,7 @@ public class VueFenetrePrincipale implements Observer {
         Livreur livreur = comboboxLivreur.getValue();
         if(o instanceof Journee) {
             if (arg == "AjoutLivreur") {
-                controleur.getEtatCourant().majComboboxLivreur(controleur); //pas sur que ce soit légal
+                controleur.majComboBox();
             }
         } else if(o instanceof Livreur) {
             if(arg == "ModificationAjoutSuppressionDemandeLivraison") {
